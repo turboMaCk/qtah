@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QAbstractItemView (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportBitspace, ExportEnum, ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -34,9 +33,9 @@ import Foreign.Hoppy.Generator.Spec (
   mkMethod,
   mkMethod',
   mkProp,
+  np,
   )
 import Foreign.Hoppy.Generator.Types (
-  bitspaceT,
   boolT,
   enumT,
   intT,
@@ -44,6 +43,7 @@ import Foreign.Hoppy.Generator.Types (
   ptrT,
   voidT,
   )
+import Graphics.UI.Qtah.Generator.Flags (flagsT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QAbstractItemModel (c_QAbstractItemModel)
 import Graphics.UI.Qtah.Generator.Interface.Core.QItemSelectionModel (c_QItemSelectionModel)
 import Graphics.UI.Qtah.Generator.Interface.Core.QModelIndex (c_QModelIndex)
@@ -56,9 +56,9 @@ import Graphics.UI.Qtah.Generator.Interface.Core.Types (
   e_TextElideMode,
   )
 import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
-  c_Listener,
-  c_ListenerQModelIndex,
-  c_ListenerQSize,
+  listener,
+  listenerQModelIndex,
+  listenerQSize,
   )
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QAbstractItemDelegate (c_QAbstractItemDelegate)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QAbstractScrollArea (c_QAbstractScrollArea)
@@ -71,15 +71,15 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QAbstractItemView"] $
-  QtExport (ExportClass c_QAbstractItemView) :
+  qtExport c_QAbstractItemView :
   map QtExportSignal signals ++
-  [ QtExport $ ExportEnum e_DragDropMode
-  , QtExport $ ExportEnum e_EditTrigger
-  , QtExport $ ExportBitspace bs_EditTriggers
-  , QtExport $ ExportEnum e_ScrollHint
-  , QtExport $ ExportEnum e_ScrollMode
-  , QtExport $ ExportEnum e_SelectionBehavior
-  , QtExport $ ExportEnum e_SelectionMode
+  [ qtExport e_DragDropMode
+  , qtExport e_EditTrigger
+  , qtExport fl_EditTriggers
+  , qtExport e_ScrollHint
+  , qtExport e_ScrollMode
+  , qtExport e_SelectionBehavior
+  , qtExport e_SelectionMode
   ]
 
 c_QAbstractItemView =
@@ -89,7 +89,7 @@ c_QAbstractItemView =
   [ mkProp "alternatingRowColors" boolT
   , mkBoolHasProp "autoScroll"
   , mkProp "autoScrollMargin" intT
-  , mkMethod "clearSelection" [] voidT
+  , mkMethod "clearSelection" np voidT
   , mkMethod "closePersistentEditor" [objT c_QModelIndex] voidT
   , mkProp "currentIndex" $ objT c_QModelIndex
   , mkProp "defaultDropAction" $ enumT e_DropAction
@@ -97,12 +97,12 @@ c_QAbstractItemView =
   , mkProp "dragDropOverwriteMode" boolT
   , mkProp "dragEnabled" boolT
   , mkMethod "edit" [objT c_QModelIndex] voidT
-  , mkProp "editTriggers" $ bitspaceT bs_EditTriggers
+  , mkProp "editTriggers" $ flagsT fl_EditTriggers
   , mkProp "horizontalScrollMode" $ enumT e_ScrollMode
   , mkProp "iconSize" $ objT c_QSize
   , mkConstMethod "indexAt" [objT c_QPoint] $ objT c_QModelIndex
   , mkConstMethod "indexWidget" [objT c_QModelIndex] $ ptrT $ objT c_QWidget
-  , mkConstMethod' "itemDelegate" "itemDelegate" [] $
+  , mkConstMethod' "itemDelegate" "itemDelegate" np $
     ptrT $ objT c_QAbstractItemDelegate
   , mkConstMethod' "itemDelegate" "itemDelegateAt" [objT c_QModelIndex] $
     ptrT $ objT c_QAbstractItemDelegate
@@ -113,13 +113,13 @@ c_QAbstractItemView =
   , mkMethod "keyboardSearch" [objT c_QString] voidT
   , mkProp "model" $ ptrT $ objT c_QAbstractItemModel
   , mkMethod "openPersistentEditor" [objT c_QModelIndex] voidT
-  , mkMethod "reset" [] voidT
+  , mkMethod "reset" np voidT
   , mkProp "rootIndex" $ objT c_QModelIndex
   , mkMethod' "scrollTo" "scrollTo" [objT c_QModelIndex] voidT
   , mkMethod' "scrollTo" "scrollToWithHint" [objT c_QModelIndex, enumT e_ScrollHint] voidT
-  , mkMethod "scrollToBottom" [] voidT
-  , mkMethod "scrollToTop" [] voidT
-  , mkMethod "selectAll" [] voidT
+  , mkMethod "scrollToBottom" np voidT
+  , mkMethod "scrollToTop" np voidT
+  , mkMethod "selectAll" np voidT
   , mkProp "selectionBehavior" $ enumT e_SelectionBehavior
   , mkProp "selectionMode" $ enumT e_SelectionMode
   , mkProp "selectionModel" $ ptrT $ objT c_QItemSelectionModel
@@ -128,7 +128,7 @@ c_QAbstractItemView =
   , mkMethod "setItemDelegate" [ptrT $ objT c_QAbstractItemDelegate] voidT
   , mkMethod "setItemDelegateForColumn" [intT, ptrT $ objT c_QAbstractItemDelegate] voidT
   , mkMethod "setItemDelegateForRow" [intT, ptrT $ objT c_QAbstractItemDelegate] voidT
-  , mkConstMethod "showDropIndicator" [] boolT
+  , mkConstMethod "showDropIndicator" np boolT
   , mkConstMethod "sizeHintForColumn" [intT] intT
   , mkConstMethod "sizeHintForIndex" [objT c_QModelIndex] $ objT c_QSize
   , mkConstMethod "sizeHintForRow" [intT] intT
@@ -140,62 +140,62 @@ c_QAbstractItemView =
   ]
 
 signals =
-  [ makeSignal c_QAbstractItemView "activated" c_ListenerQModelIndex
-  , makeSignal c_QAbstractItemView "clicked" c_ListenerQModelIndex
-  , makeSignal c_QAbstractItemView "doubleClicked" c_ListenerQModelIndex
-  , makeSignal c_QAbstractItemView "entered" c_ListenerQModelIndex
-  , makeSignal c_QAbstractItemView "iconSizeChanged" c_ListenerQSize
-  , makeSignal c_QAbstractItemView "pressed" c_ListenerQModelIndex
-  , makeSignal c_QAbstractItemView "viewportEntered" c_Listener
+  [ makeSignal c_QAbstractItemView "activated" listenerQModelIndex
+  , makeSignal c_QAbstractItemView "clicked" listenerQModelIndex
+  , makeSignal c_QAbstractItemView "doubleClicked" listenerQModelIndex
+  , makeSignal c_QAbstractItemView "entered" listenerQModelIndex
+  , makeSignal c_QAbstractItemView "iconSizeChanged" listenerQSize
+  , makeSignal c_QAbstractItemView "pressed" listenerQModelIndex
+  , makeSignal c_QAbstractItemView "viewportEntered" listener
   ]
 
 e_DragDropMode =
   makeQtEnum (ident1 "QAbstractItemView" "DragDropMode") [includeStd "QAbstractItemView"]
-  [ (0, ["no", "drag", "drop"])
-  , (1, ["drag", "only"])
-  , (2, ["drop", "only"])
-  , (3, ["drag", "drop"])
-  , (4, ["internal", "move"])
+  [ "NoDragDrop"
+  , "DragOnly"
+  , "DropOnly"
+  , "DragDrop"
+  , "InternalMove"
   ]
 
-(e_EditTrigger, bs_EditTriggers) =
-  makeQtEnumBitspace (ident1 "QAbstractItemView" "EditTrigger") "EditTriggers"
+(e_EditTrigger, fl_EditTriggers) =
+  makeQtEnumAndFlags (ident1 "QAbstractItemView" "EditTrigger") "EditTriggers"
   [includeStd "QAbstractItemView"]
-  [ (0, ["no", "edit", "triggers"])
-  , (1, ["current", "changed"])
-  , (2, ["double", "clicked"])
-  , (4, ["selected", "clicked"])
-  , (8, ["edit", "key", "pressed"])
-  , (16, ["any", "key", "pressed"])
-  , (31, ["all", "edit", "triggers"])
+  [ "NoEditTriggers"
+  , "CurrentChanged"
+  , "DoubleClicked"
+  , "SelectedClicked"
+  , "EditKeyPressed"
+  , "AnyKeyPressed"
+  , "AllEditTriggers"
   ]
 
 e_ScrollHint =
   makeQtEnum (ident1 "QAbstractItemView" "ScrollHint") [includeStd "QAbstractItemView"]
-  [ (0, ["ensure", "visible"])
-  , (1, ["position", "at", "top"])
-  , (2, ["position", "at", "bottom"])
-  , (3, ["position", "at", "center"])
+  [ "EnsureVisible"
+  , "PositionAtTop"
+  , "PositionAtBottom"
+  , "PositionAtCenter"
   ]
 
 e_ScrollMode =
   makeQtEnum (ident1 "QAbstractItemView" "ScrollMode") [includeStd "QAbstractItemView"]
-  [ (0, ["scroll", "per", "item"])
-  , (1, ["scroll", "per", "pixel"])
+  [ "ScrollPerItem"
+  , "ScrollPerPixel"
   ]
 
 e_SelectionBehavior =
   makeQtEnum (ident1 "QAbstractItemView" "SelectionBehavior") [includeStd "QAbstractItemView"]
-  [ (0, ["select", "items"])
-  , (1, ["select", "rows"])
-  , (2, ["select", "columns"])
+  [ "SelectItems"
+  , "SelectRows"
+  , "SelectColumns"
   ]
 
 e_SelectionMode =
   makeQtEnum (ident1 "QAbstractItemView" "SelectionMode") [includeStd "QAbstractItemView"]
-  [ (0, ["no", "selection"])
-  , (1, ["single", "selection"])
-  , (2, ["multi", "selection"])
-  , (3, ["extended", "selection"])
-  , (4, ["contiguous", "selection"])
+  [ "NoSelection"
+  , "SingleSelection"
+  , "MultiSelection"
+  , "ExtendedSelection"
+  , "ContiguousSelection"
   ]

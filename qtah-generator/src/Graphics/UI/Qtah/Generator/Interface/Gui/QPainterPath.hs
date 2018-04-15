@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Gui.QPainterPath (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetConversionToGc,
   classSetEntityPrefix,
@@ -30,6 +29,7 @@ import Foreign.Hoppy.Generator.Spec (
   makeClass,
   mkCtor,
   mkMethod',
+  np,
   )
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Assignable, Copyable, Equatable),
@@ -46,7 +46,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Gui", "QPainterPath"]
-  [ QtExport $ ExportClass c_QPainterPath ]
+  [ qtExport c_QPainterPath ]
 
 c_QPainterPath =
   addReqIncludes [includeStd "QPainterPath"] $
@@ -55,7 +55,7 @@ c_QPainterPath =
   classSetEntityPrefix "" $
   makeClass (ident "QPainterPath") Nothing [] $
   collect
-  [ just $ mkCtor "new" []
+  [ just $ mkCtor "new" np
   , just $ mkMethod' "addRect" "addRectRaw" [qreal, qreal, qreal, qreal] voidT
   ]
 

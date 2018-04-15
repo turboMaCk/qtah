@@ -22,7 +22,6 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QTreeView (
 
 import Foreign.Hoppy.Generator.Spec (
   Class,
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -32,10 +31,11 @@ import Foreign.Hoppy.Generator.Spec (
   mkCtor,
   mkMethod,
   mkProp,
+  np,
   )
 import Foreign.Hoppy.Generator.Types (boolT, intT, objT, voidT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.QModelIndex (c_QModelIndex)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QAbstractItemView (c_QAbstractItemView)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
@@ -47,7 +47,7 @@ aModule :: AModule
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QTreeView"] $
-  QtExport (ExportClass c_QTreeView) :
+  qtExport c_QTreeView :
   map QtExportSignal signals
 
 c_QTreeView :: Class
@@ -70,12 +70,12 @@ c_QTreeView =
   , just $ mkProp "uniformRowHeights" boolT
   , test (qtVersion >= [4, 3]) $ mkProp "wordWrap" boolT
   -- Public Functions
-  , just $ mkCtor "new" []
+  , just $ mkCtor "new" np
   -- Public Slots
   , just $ mkMethod "collapse" [objT c_QModelIndex] voidT
-  , test (qtVersion >= [4, 2]) $ mkMethod "collapseAll" [] voidT
+  , test (qtVersion >= [4, 2]) $ mkMethod "collapseAll" np voidT
   , just $ mkMethod "expand" [objT c_QModelIndex] voidT
-  , test (qtVersion >= [4, 2]) $ mkMethod "expandAll" [] voidT
+  , test (qtVersion >= [4, 2]) $ mkMethod "expandAll" np voidT
   , test (qtVersion >= [4, 3]) $ mkMethod "expandToDepth" [intT] voidT
   , just $ mkMethod "hideColumn" [intT] voidT
   , just $ mkMethod "resizeColumnToContents" [intT] voidT

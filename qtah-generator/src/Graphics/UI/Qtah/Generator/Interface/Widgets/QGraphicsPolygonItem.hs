@@ -21,13 +21,13 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QGraphicsPolygonItem (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
   includeStd,
   makeClass,
   mkCtor,
+  np,
   )
 import Foreign.Hoppy.Generator.Types ()
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
@@ -40,12 +40,12 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QGraphicsPolygonItem"]
-  [ QtExport $ ExportClass c_QGraphicsPolygonItem
+  [ qtExport c_QGraphicsPolygonItem
   ]
 
 c_QGraphicsPolygonItem =
   addReqIncludes [includeStd "QGraphicsPolygonItem"] $
   classSetEntityPrefix "" $
   makeClass (ident "QGraphicsPolygonItem") Nothing [c_QAbstractGraphicsShapeItem]
-  [ mkCtor "new" []
+  [ mkCtor "new" np
   ]

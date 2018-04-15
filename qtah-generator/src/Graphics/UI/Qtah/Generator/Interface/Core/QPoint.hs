@@ -31,7 +31,6 @@ import Foreign.Hoppy.Generator.Spec (
     classHaskellConversionToCppFn,
     classHaskellConversionType
   ),
-  Export (ExportClass),
   Operator (OpAddAssign, OpDivideAssign, OpMultiplyAssign, OpSubtractAssign),
   addReqIncludes,
   classSetEntityPrefix,
@@ -47,6 +46,7 @@ import Foreign.Hoppy.Generator.Spec (
   mkMethod',
   mkProp,
   mkStaticMethod,
+  np,
   operatorPreferredExtName',
   )
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
@@ -55,7 +55,7 @@ import Foreign.Hoppy.Generator.Spec.ClassFeature (
   )
 import Foreign.Hoppy.Generator.Types (boolT, intT, objT, refT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (qreal)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
@@ -70,7 +70,7 @@ import Language.Haskell.Syntax (
 aModule =
   AQtModule $
   makeQtModule ["Core", "QPoint"]
-  [ QtExport $ ExportClass c_QPoint ]
+  [ qtExport c_QPoint ]
 
 c_QPoint =
   addReqIncludes [includeStd "QPoint"] $
@@ -92,11 +92,11 @@ c_QPoint =
   classSetEntityPrefix "" $
   makeClass (ident "QPoint") Nothing [] $
   collect
-  [ just $ mkCtor "newNull" []
+  [ just $ mkCtor "newNull" np
   , just $ mkCtor "new" [intT, intT]
   , test (qtVersion >= [5, 1]) $ mkStaticMethod "dotProduct" [objT c_QPoint, objT c_QPoint] intT
-  , just $ mkConstMethod "isNull" [] boolT
-  , just $ mkConstMethod "manhattanLength" [] intT
+  , just $ mkConstMethod "isNull" np boolT
+  , just $ mkConstMethod "manhattanLength" np intT
   , just $ mkProp "x" intT
   , just $ mkProp "y" intT
   , just $ mkMethod OpAddAssign [objT c_QPoint] $ refT $ objT c_QPoint

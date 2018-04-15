@@ -19,7 +19,7 @@ module Graphics.UI.Qtah.Generator.Interface.Internal.Callback where
 
 import Foreign.Hoppy.Generator.Spec (
   Callback,
-  Export (ExportCallback),
+  Export (Export),
   addReqIncludes,
   includeStd,
   makeCallback,
@@ -27,10 +27,10 @@ import Foreign.Hoppy.Generator.Spec (
   moduleAddExports,
   moduleAddHaskellName,
   moduleModify',
+  np,
   toExtName,
   )
 import Foreign.Hoppy.Generator.Types (
-  bitspaceT,
   boolT,
   constT,
   doubleT,
@@ -43,7 +43,8 @@ import Foreign.Hoppy.Generator.Types (
   voidT,
   )
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
+import Graphics.UI.Qtah.Generator.Flags (flagsT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QAbstractItemModel (c_QAbstractItemModel)
 import Graphics.UI.Qtah.Generator.Interface.Core.QDate (c_QDate)
 import Graphics.UI.Qtah.Generator.Interface.Core.QEvent (c_QEvent)
@@ -56,11 +57,11 @@ import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Core.QVector (c_QVectorInt)
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (
   e_DockWidgetArea,
-  bs_DockWidgetAreas,
-  bs_ToolBarAreas,
+  fl_DockWidgetAreas,
   e_Orientation,
   e_ScreenOrientation,
   e_ScreenOrientation_minVersion,
+  fl_ToolBarAreas,
   e_ToolButtonStyle,
   e_WindowModality,
   e_WindowState,
@@ -75,7 +76,7 @@ import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Widgets.QAbstractButt
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Widgets.QAbstractSlider (e_SliderAction)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Widgets.QAction (c_QAction)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Widgets.QDockWidget (
-  bs_DockWidgetFeatures,
+  fl_DockWidgetFeatures,
   )
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QGraphicsItem (c_QGraphicsItem)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Widgets.QSystemTrayIcon (
@@ -92,49 +93,49 @@ aModule =
   moduleModify' (makeModule "callback" "b_callback.hpp" "b_callback.cpp") $ do
     moduleAddHaskellName ["Internal", "Callback"]
     moduleAddExports $ collect
-      [ just $ ExportCallback cb_BoolVoid
-      , just $ ExportCallback cb_DockWidgetAreaVoid
-      , just $ ExportCallback cb_DockWidgetAreasVoid
-      , just $ ExportCallback cb_DoubleVoid
-      , just $ ExportCallback cb_IntVoid
-      , just $ ExportCallback cb_IntBoolVoid
-      , just $ ExportCallback cb_IntIntVoid
-      , just $ ExportCallback cb_OrientationVoid
-      , just $ ExportCallback cb_PtrQAbstractButtonVoid
-      , just $ ExportCallback cb_PtrQAbstractButtonBoolVoid
-      , just $ ExportCallback cb_PtrQAbstractItemModelVoid
-      , just $ ExportCallback cb_PtrQActionVoid
-      , just $ ExportCallback cb_PtrQGraphicsItemPtrQEventBool
-      , just $ ExportCallback cb_PtrQObjectPtrQEventBool
-      , just $ ExportCallback cb_PtrQObjectVoid
-      , just $ ExportCallback cb_PtrQPaintEventVoid
-      , just $ ExportCallback cb_PtrQTreeWidgetItemVoid
-      , just $ ExportCallback cb_PtrQTreeWidgetItemIntVoid
-      , just $ ExportCallback cb_PtrQTreeWidgetItemPtrQTreeWidgetItemVoid
-      , just $ ExportCallback cb_PtrQWidgetPtrQWidgetVoid
-      , just $ ExportCallback cb_QAbstractSliderActionVoid
-      , just $ ExportCallback cb_QClipboardModeVoid
-      , just $ ExportCallback cb_QDateVoid
-      , just $ ExportCallback cb_QDockWidgetFeaturesVoid
-      , just $ ExportCallback cb_QModelIndexVoid
-      , just $ ExportCallback cb_QModelIndexIntIntVoid
-      , just $ ExportCallback cb_QModelIndexIntIntQModelIndexIntVoid
-      , just $ ExportCallback cb_QModelIndexQModelIndexVoid
-      , just $ ExportCallback cb_QModelIndexQModelIndexQVectorIntVoid
-      , test (qtVersion >= QWindow.minVersion) $ ExportCallback cb_QWindowVisibilityVoid
-      , just $ ExportCallback cb_QPointVoid
-      , just $ ExportCallback cb_QrealVoid
-      , just $ ExportCallback cb_QSizeVoid
-      , just $ ExportCallback cb_QStringVoid
-      , just $ ExportCallback cb_QSystemTrayIconActivationReasonVoid
-      , just $ ExportCallback cb_RefConstQIconVoid
-      , just $ ExportCallback cb_RefConstQItemSelectionRefConstQItemSelectionVoid
-      , test (qtVersion >= e_ScreenOrientation_minVersion) $ ExportCallback cb_ScreenOrientationVoid
-      , just $ ExportCallback cb_ToolBarAreasVoid
-      , just $ ExportCallback cb_ToolButtonStyleVoid
-      , just $ ExportCallback cb_WindowModalityVoid
-      , just $ ExportCallback cb_WindowStateVoid
-      , just $ ExportCallback cb_Void
+      [ just $ Export cb_BoolVoid
+      , just $ Export cb_DockWidgetAreaVoid
+      , just $ Export cb_DockWidgetAreasVoid
+      , just $ Export cb_DoubleVoid
+      , just $ Export cb_IntVoid
+      , just $ Export cb_IntBoolVoid
+      , just $ Export cb_IntIntVoid
+      , just $ Export cb_OrientationVoid
+      , just $ Export cb_PtrQAbstractButtonVoid
+      , just $ Export cb_PtrQAbstractButtonBoolVoid
+      , just $ Export cb_PtrQAbstractItemModelVoid
+      , just $ Export cb_PtrQActionVoid
+      , just $ Export cb_PtrQGraphicsItemPtrQEventBool
+      , just $ Export cb_PtrQObjectPtrQEventBool
+      , just $ Export cb_PtrQObjectVoid
+      , just $ Export cb_PtrQPaintEventVoid
+      , just $ Export cb_PtrQTreeWidgetItemVoid
+      , just $ Export cb_PtrQTreeWidgetItemIntVoid
+      , just $ Export cb_PtrQTreeWidgetItemPtrQTreeWidgetItemVoid
+      , just $ Export cb_PtrQWidgetPtrQWidgetVoid
+      , just $ Export cb_QAbstractSliderActionVoid
+      , just $ Export cb_QClipboardModeVoid
+      , just $ Export cb_QDateVoid
+      , just $ Export cb_QDockWidgetFeaturesVoid
+      , just $ Export cb_QModelIndexVoid
+      , just $ Export cb_QModelIndexIntIntVoid
+      , just $ Export cb_QModelIndexIntIntQModelIndexIntVoid
+      , just $ Export cb_QModelIndexQModelIndexVoid
+      , just $ Export cb_QModelIndexQModelIndexQVectorIntVoid
+      , test (qtVersion >= QWindow.minVersion) $ Export cb_QWindowVisibilityVoid
+      , just $ Export cb_QPointVoid
+      , just $ Export cb_QrealVoid
+      , just $ Export cb_QSizeVoid
+      , just $ Export cb_QStringVoid
+      , just $ Export cb_QSystemTrayIconActivationReasonVoid
+      , just $ Export cb_RefConstQIconVoid
+      , just $ Export cb_RefConstQItemSelectionRefConstQItemSelectionVoid
+      , test (qtVersion >= e_ScreenOrientation_minVersion) $ Export cb_ScreenOrientationVoid
+      , just $ Export cb_ToolBarAreasVoid
+      , just $ Export cb_ToolButtonStyleVoid
+      , just $ Export cb_WindowModalityVoid
+      , just $ Export cb_WindowStateVoid
+      , just $ Export cb_Void
       ]
 
 cb_BoolVoid =
@@ -147,7 +148,7 @@ cb_DockWidgetAreaVoid =
 
 cb_DockWidgetAreasVoid =
   makeCallback (toExtName "CallbackDockWidgetAreasVoid")
-  [bitspaceT bs_DockWidgetAreas] voidT
+  [flagsT fl_DockWidgetAreas] voidT
 
 cb_DoubleVoid =
   makeCallback (toExtName "CallbackDoubleVoid")
@@ -235,7 +236,7 @@ cb_QDateVoid =
 cb_QDockWidgetFeaturesVoid =
   addReqIncludes [includeStd "QDockWidget"] $
   makeCallback (toExtName "CallbackQDockWidgetFeaturesVoid")
-  [bitspaceT bs_DockWidgetFeatures] voidT
+  [flagsT fl_DockWidgetFeatures] voidT
 
 cb_QModelIndexVoid =
   makeCallback (toExtName "CallbackQModelIndexVoid")
@@ -295,7 +296,7 @@ cb_ScreenOrientationVoid =
 
 cb_ToolBarAreasVoid =
   makeCallback (toExtName "CallbackToolBarAreasVoid")
-  [bitspaceT bs_ToolBarAreas] voidT
+  [flagsT fl_ToolBarAreas] voidT
 
 cb_ToolButtonStyleVoid =
   makeCallback (toExtName "CallbackToolButtonStyleVoid")
@@ -311,4 +312,4 @@ cb_WindowStateVoid =
 
 cb_Void =
   makeCallback (toExtName "CallbackVoid")
-  [] voidT
+  np voidT

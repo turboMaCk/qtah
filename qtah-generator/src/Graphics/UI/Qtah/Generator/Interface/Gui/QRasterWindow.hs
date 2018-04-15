@@ -22,13 +22,13 @@ module Graphics.UI.Qtah.Generator.Interface.Gui.QRasterWindow (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
   includeStd,
   makeClass,
   mkCtor,
+  np,
   )
 import Foreign.Hoppy.Generator.Types (objT, ptrT)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QPaintDeviceWindow (c_QPaintDeviceWindow)
@@ -43,12 +43,12 @@ minVersion = [5, 4]
 aModule =
   AQtModule $
   makeQtModuleWithMinVersion ["Gui", "QRasterWindow"] minVersion
-  [ QtExport $ ExportClass c_QRasterWindow ]
+  [ qtExport c_QRasterWindow ]
 
 c_QRasterWindow =
   addReqIncludes [includeStd "QRasterWindow"] $
   classSetEntityPrefix "" $
   makeClass (ident "QRasterWindow") Nothing [c_QPaintDeviceWindow]
-  [ mkCtor "new" []
+  [ mkCtor "new" np
   , mkCtor "newWithParent" [ptrT $ objT c_QWindow]
   ]

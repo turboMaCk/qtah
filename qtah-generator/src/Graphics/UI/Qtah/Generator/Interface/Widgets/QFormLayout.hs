@@ -20,7 +20,6 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QFormLayout (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass, ExportEnum),
   MethodApplicability (MConst),
   Purity (Nonpure),
   addReqIncludes,
@@ -38,10 +37,12 @@ import Foreign.Hoppy.Generator.Spec (
   mkMethod,
   mkMethod',
   mkProp,
+  np,
   )
-import Foreign.Hoppy.Generator.Types (bitspaceT, constT, enumT, intT, objT, ptrT, refT, voidT)
+import Foreign.Hoppy.Generator.Types (constT, enumT, intT, objT, ptrT, refT, voidT)
+import Graphics.UI.Qtah.Generator.Flags (flagsT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
-import Graphics.UI.Qtah.Generator.Interface.Core.Types (bs_Alignment)
+import Graphics.UI.Qtah.Generator.Interface.Core.Types (fl_Alignment)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QLayout (c_QLayout)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QLayoutItem (c_QLayoutItem)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QWidget (c_QWidget)
@@ -55,10 +56,10 @@ minVersion = [4, 4]
 aModule =
   AQtModule $
   makeQtModuleWithMinVersion ["Widgets", "QFormLayout"] minVersion
-  [ QtExport $ ExportClass c_QFormLayout
-  , QtExport $ ExportEnum e_FieldGrowthPolicy
-  , QtExport $ ExportEnum e_ItemRole
-  , QtExport $ ExportEnum e_RowWrapPolicy
+  [ qtExport c_QFormLayout
+  , qtExport e_FieldGrowthPolicy
+  , qtExport e_ItemRole
+  , qtExport e_RowWrapPolicy
   ]
 
 c_QFormLayout =
@@ -66,7 +67,7 @@ c_QFormLayout =
                   includeLocal "wrap_qformlayout.hpp"] $
   classSetEntityPrefix "" $
   makeClass (ident "QFormLayout") Nothing [c_QLayout]
-  [ mkCtor "new" []
+  [ mkCtor "new" np
   , mkCtor "newWithParent" [ptrT $ objT c_QWidget]
   , mkMethod' "addRow" "addRowWidgetWidget" [ptrT $ objT c_QWidget, ptrT $ objT c_QWidget] voidT
   , mkMethod' "addRow" "addRowWidgetLayout" [ptrT $ objT c_QWidget, ptrT $ objT c_QLayout] voidT
@@ -75,7 +76,7 @@ c_QFormLayout =
   , mkMethod' "addRow" "addRowWidget" [ptrT $ objT c_QWidget] voidT
   , mkMethod' "addRow" "addRowLayout" [ptrT $ objT c_QLayout] voidT
   , mkProp "fieldGrowthPolicy" $ enumT e_FieldGrowthPolicy
-  , mkProp "formAlignment" $ bitspaceT bs_Alignment
+  , mkProp "formAlignment" $ flagsT fl_Alignment
   , makeFnMethod (ident2 "qtah" "qformlayout" "getItemRow") "getItemRow" MConst Nonpure
     [refT $ constT $ objT c_QFormLayout, intT] intT
   , makeFnMethod (ident2 "qtah" "qformlayout" "getItemRole") "getItemRole" MConst Nonpure
@@ -100,12 +101,12 @@ c_QFormLayout =
   , mkMethod' "insertRow" "insertRowWidget" [intT, ptrT $ objT c_QWidget] voidT
   , mkMethod' "insertRow" "insertRowLayout" [intT, ptrT $ objT c_QLayout] voidT
   , mkConstMethod "itemAt" [intT, enumT e_ItemRole] $ ptrT $ objT c_QLayoutItem
-  , mkProp "labelAlignment" $ bitspaceT bs_Alignment
+  , mkProp "labelAlignment" $ flagsT fl_Alignment
   , mkConstMethod' "labelForField" "labelForFieldWidget"
     [ptrT $ objT c_QWidget] $ ptrT $ objT c_QWidget
   , mkConstMethod' "labelForField" "labelForFieldLayout"
     [ptrT $ objT c_QLayout] $ ptrT $ objT c_QWidget
-  , mkConstMethod "rowCount" [] intT
+  , mkConstMethod "rowCount" np intT
   , mkProp "rowWrapPolicy" $ enumT e_RowWrapPolicy
   , mkMethod "setItem" [intT, enumT e_ItemRole, ptrT $ objT c_QLayoutItem] voidT
   , mkMethod "setLayout" [intT, enumT e_ItemRole, ptrT $ objT c_QLayout] voidT
@@ -116,21 +117,21 @@ c_QFormLayout =
 
 e_FieldGrowthPolicy =
   makeQtEnum (ident1 "QFormLayout" "FieldGrowthPolicy") [includeStd "QFormLayout"]
-  [ (0, ["fields", "stay", "at", "size", "hint"])
-  , (1, ["expanding", "fields", "grow"])
-  , (2, ["all", "non", "fixed", "fields", "grow"])
+  [ "FieldsStayAtSizeHint"
+  , "ExpandingFieldsGrow"
+  , "AllNonFixedFieldsGrow"
   ]
 
 e_ItemRole =
   makeQtEnum (ident1 "QFormLayout" "ItemRole") [includeStd "QFormLayout"]
-  [ (0, ["label", "role"])
-  , (1, ["field", "role"])
-  , (2, ["spanning", "role"])
+  [ "LabelRole"
+  , "FieldRole"
+  , "SpanningRole"
   ]
 
 e_RowWrapPolicy =
   makeQtEnum (ident1 "QFormLayout" "RowWrapPolicy") [includeStd "QFormLayout"]
-  [ (0, ["dont", "wrap", "rows"])
-  , (1, ["wrap", "long", "rows"])
-  , (2, ["wrap", "all", "rows"])
+  [ "DontWrapRows"
+  , "WrapLongRows"
+  , "WrapAllRows"
   ]

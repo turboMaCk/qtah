@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Gui.QIcon (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass, ExportEnum),
   addReqIncludes,
   classSetConversionToGc,
   classSetEntityPrefix,
@@ -36,13 +35,13 @@ import Foreign.Hoppy.Generator.Spec (
   mkMethod',
   mkStaticMethod,
   mkStaticMethod',
+  np,
   )
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Assignable, Copyable),
   classAddFeatures,
   )
 import Foreign.Hoppy.Generator.Types (
-  bitspaceT,
   boolT,
   enumT,
   intT,
@@ -53,13 +52,14 @@ import Foreign.Hoppy.Generator.Types (
   voidT,
   )
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
+import Graphics.UI.Qtah.Generator.Flags (flagsT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QList (c_QListQSize)
 import Graphics.UI.Qtah.Generator.Interface.Core.QRect (c_QRect)
 import Graphics.UI.Qtah.Generator.Interface.Core.QSize (c_QSize)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Graphics.UI.Qtah.Generator.Interface.Core.QStringList (c_QStringList)
-import Graphics.UI.Qtah.Generator.Interface.Core.Types (bs_Alignment)
+import Graphics.UI.Qtah.Generator.Interface.Core.Types (fl_Alignment)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QPainter (c_QPainter)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QPixmap (c_QPixmap)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Gui.QWindow (c_QWindow)
@@ -71,9 +71,9 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Gui", "QIcon"]
-  [ QtExport $ ExportClass c_QIcon
-  , QtExport $ ExportEnum e_Mode
-  , QtExport $ ExportEnum e_State
+  [ qtExport c_QIcon
+  , qtExport e_Mode
+  , qtExport e_State
   ]
 
 c_QIcon =
@@ -83,7 +83,7 @@ c_QIcon =
   classSetEntityPrefix "" $
   makeClass (ident "QIcon") Nothing [] $
   collect
-  [ just $ mkCtor "new" []
+  [ just $ mkCtor "new" np
     -- TODO QIcon(QIconEngine*)
   , just $ mkCtor "newWithFile" [objT c_QString]
   , just $ mkCtor "newWithPixmap" [objT c_QPixmap]
@@ -100,26 +100,26 @@ c_QIcon =
     voidT
   , just $ mkMethod' "addPixmap" "addPixmap" [objT c_QPixmap] voidT
   , just $ mkMethod' "addPixmap" "addPixmapAll" [objT c_QPixmap, enumT e_Mode, enumT e_State] voidT
-  , just $ mkConstMethod' "availableSizes" "availableSizes" [] $ objT c_QListQSize
+  , just $ mkConstMethod' "availableSizes" "availableSizes" np $ objT c_QListQSize
   , just $ mkConstMethod' "availableSizes" "availableSizesAll" [enumT e_Mode, enumT e_State] $
     objT c_QListQSize
-  , just $ mkConstMethod "cacheKey" [] int64T
+  , just $ mkConstMethod "cacheKey" np int64T
   , just $ mkStaticMethod' "fromTheme" "fromTheme" [objT c_QString] $ objT c_QIcon
   , just $ mkStaticMethod' "fromTheme" "fromThemeWithFallback" [objT c_QString, objT c_QIcon] $
     objT c_QIcon
   , just $ mkStaticMethod "hasThemeIcon" [objT c_QString] boolT
-  , test (qtVersion >= [5, 6]) $ mkConstMethod "isMask" [] boolT
-  , just $ mkConstMethod "isNull" [] boolT
-  , just $ mkConstMethod "name" [] $ objT c_QString
+  , test (qtVersion >= [5, 6]) $ mkConstMethod "isMask" np boolT
+  , just $ mkConstMethod "isNull" np boolT
+  , just $ mkConstMethod "name" np $ objT c_QString
   , just $ mkConstMethod' "paint" "paintWithRect"
     [ptrT $ objT c_QPainter, objT c_QRect] voidT
   , just $ mkConstMethod' "paint" "paintWithRectAll"
-    [ptrT $ objT c_QPainter, objT c_QRect, bitspaceT bs_Alignment, enumT e_Mode, enumT e_State]
+    [ptrT $ objT c_QPainter, objT c_QRect, flagsT fl_Alignment, enumT e_Mode, enumT e_State]
     voidT
   , just $ mkConstMethod' "paint" "paintWithRaw"
     [ptrT $ objT c_QPainter, intT, intT, intT, intT] voidT
   , just $ mkConstMethod' "paint" "paintWithRawAll"
-    [ptrT $ objT c_QPainter, intT, intT, intT, intT, bitspaceT bs_Alignment, enumT e_Mode,
+    [ptrT $ objT c_QPainter, intT, intT, intT, intT, flagsT fl_Alignment, enumT e_Mode,
      enumT e_State]
     voidT
   , test (qtVersion >= [5, 1]) $ mkConstMethod' "pixmap" "pixmapExtent" [intT] $ objT c_QPixmap
@@ -135,21 +135,21 @@ c_QIcon =
   , just $ mkStaticMethod "setThemeName" [objT c_QString] voidT
   , just $ mkStaticMethod "setThemeSearchPaths" [objT c_QStringList] voidT
   , just $ mkMethod "swap" [refT $ objT c_QIcon] voidT
-  , just $ mkStaticMethod "themeName" [] $ objT c_QString
-  , just $ mkStaticMethod "themeSearchPaths" [] $ objT c_QStringList
+  , just $ mkStaticMethod "themeName" np $ objT c_QString
+  , just $ mkStaticMethod "themeSearchPaths" np $ objT c_QStringList
     -- TODO operator QVariant() const
   ]
 
 e_Mode =
   makeQtEnum (ident1 "QIcon" "Mode") [includeStd "QIcon"]
-  [ (0, ["normal"])
-  , (1, ["disabled"])
-  , (2, ["active"])
-  , (3, ["selected"])
+  [ "Normal"
+  , "Disabled"
+  , "Active"
+  , "Selected"
   ]
 
 e_State =
   makeQtEnum (ident1 "QIcon" "State") [includeStd "QIcon"]
-  [ (0, ["on"])
-  , (1, ["off"])
+  [ "On"
+  , "Off"
   ]

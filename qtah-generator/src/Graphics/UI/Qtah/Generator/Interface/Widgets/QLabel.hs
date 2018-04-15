@@ -20,7 +20,6 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QLabel (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -32,9 +31,9 @@ import Foreign.Hoppy.Generator.Spec (
   mkMethod',
   mkMethod,
   mkProp,
+  np,
   )
 import Foreign.Hoppy.Generator.Types (
-  bitspaceT,
   boolT,
   constT,
   doubleT,
@@ -44,14 +43,15 @@ import Foreign.Hoppy.Generator.Types (
   ptrT,
   voidT,
   )
+import Graphics.UI.Qtah.Generator.Flags (flagsT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (
-  bs_Alignment,
-  bs_TextInteractionFlags,
+  fl_Alignment,
   e_TextFormat,
+  fl_TextInteractionFlags,
   )
 import Graphics.UI.Qtah.Generator.Interface.Gui.QPixmap (c_QPixmap)
-import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (c_ListenerQString)
+import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (listenerQString)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QFrame (c_QFrame)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QWidget (c_QWidget)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
@@ -62,31 +62,31 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QLabel"] $
-  QtExport (ExportClass c_QLabel) :
+  qtExport c_QLabel :
   map QtExportSignal signals
 
 c_QLabel =
   addReqIncludes [includeStd "QLabel"] $
   classSetEntityPrefix "" $
   makeClass (ident "QLabel") Nothing [c_QFrame]
-  [ mkCtor "new" []
+  [ mkCtor "new" np
   , mkCtor "newWithParent" [ptrT $ objT c_QWidget]
   , mkCtor "newWithText" [objT c_QString]
   , mkCtor "newWithTextAndParent" [objT c_QString, ptrT $ objT c_QWidget]
     -- TODO Ctors taking Qt::WindowFlags.
-  , mkProp "alignment" $ bitspaceT bs_Alignment
+  , mkProp "alignment" $ flagsT fl_Alignment
   , mkProp "buddy" $ ptrT $ objT c_QWidget
-  , mkMethod "clear" [] voidT
-  , mkConstMethod "hasSelectedText" [] boolT
+  , mkMethod "clear" np voidT
+  , mkConstMethod "hasSelectedText" np boolT
   , mkProp "indent" intT
   , mkProp "margin" intT
     -- TODO movie
   , mkProp "openExternalLinks" boolT
     -- TODO picture
-  , mkConstMethod "pixmap" [] $ ptrT $ constT $ objT c_QPixmap
+  , mkConstMethod "pixmap" np $ ptrT $ constT $ objT c_QPixmap
   , mkBoolHasProp "scaledContents"
-  , mkConstMethod "selectedText" [] $ objT c_QString
-  , mkConstMethod "selectionStart" [] intT
+  , mkConstMethod "selectedText" np $ objT c_QString
+  , mkConstMethod "selectionStart" np intT
     -- TODO mkProp "movie" $ ptrT $ objT c_QMovie
   , mkMethod' "setNum" "setInt" [intT] voidT
   , mkMethod' "setNum" "setDouble" [doubleT] voidT
@@ -94,11 +94,11 @@ c_QLabel =
   , mkMethod "setSelection" [intT, intT] voidT
   , mkProp "text" $ objT c_QString
   , mkProp "textFormat" $ enumT e_TextFormat
-  , mkProp "textInteractionFlags" $ bitspaceT bs_TextInteractionFlags
+  , mkProp "textInteractionFlags" $ flagsT fl_TextInteractionFlags
   , mkProp "wordWrap" boolT
   ]
 
 signals =
-  [ makeSignal c_QLabel "linkActivated" c_ListenerQString
-  , makeSignal c_QLabel "linkHovered" c_ListenerQString
+  [ makeSignal c_QLabel "linkActivated" listenerQString
+  , makeSignal c_QLabel "linkHovered" listenerQString
   ]

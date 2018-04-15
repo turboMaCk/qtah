@@ -20,13 +20,13 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QListView (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
   includeStd,
   makeClass,
   mkCtor,
+  np,
   )
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QAbstractItemView (c_QAbstractItemView)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
@@ -37,12 +37,12 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QListView"]
-  [ QtExport $ ExportClass c_QListView ]
+  [ qtExport c_QListView ]
 
 c_QListView =
   addReqIncludes [includeStd "QListView"] $
   classSetEntityPrefix "" $
   makeClass (ident "QListView") Nothing [c_QAbstractItemView]
-  [ mkCtor "new" []
+  [ mkCtor "new" np
     -- TODO
   ]

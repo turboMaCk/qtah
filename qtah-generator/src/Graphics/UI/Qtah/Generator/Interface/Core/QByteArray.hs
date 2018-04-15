@@ -34,7 +34,6 @@ import Foreign.Hoppy.Generator.Spec (
     classHaskellConversionToCppFn,
     classHaskellConversionType
   ),
-  Export (ExportClass),
   addAddendumHaskell,
   addReqIncludes,
   classSetEntityPrefix,
@@ -48,6 +47,7 @@ import Foreign.Hoppy.Generator.Spec (
   mkCtor,
   mkMethod,
   mkMethod',
+  np,
   )
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Assignable, Copyable, Comparable, Equatable),
@@ -70,7 +70,7 @@ aModule :: AModule
 aModule =
   AQtModule $
   makeQtModule ["Core", "QByteArray"]
-  [ QtExport $ ExportClass c_QByteArray
+  [ qtExport c_QByteArray
   ]
 
 c_QByteArray :: Class
@@ -82,17 +82,17 @@ c_QByteArray =
   classSetEntityPrefix "" $
   makeClass (ident "QByteArray") Nothing [] $
   collect
-  [ just $ mkCtor "new" []
+  [ just $ mkCtor "new" np
   , just $ mkCtor "newFromData" [ptrT $ constT charT]
   , just $ mkCtor "newFromDataAndSize" [ptrT $ constT charT, intT]
   , just $ mkCtor "newFromRepeatedChar" [intT, charT]
   , just $ mkConstMethod "at" [intT] charT
-  , just $ mkMethod "clear" [] voidT
-  , just $ mkMethod' "data" "getData" [] $ ptrT charT
-  , just $ mkConstMethod' "data" "getDataConst" [] $ ptrT $ constT charT
-  , just $ mkConstMethod "isEmpty" [] boolT
-  , just $ mkConstMethod "isNull" [] boolT
-  , just $ mkConstMethod "size" [] intT
+  , just $ mkMethod "clear" np voidT
+  , just $ mkMethod' "data" "getData" np $ ptrT charT
+  , just $ mkConstMethod' "data" "getDataConst" np $ ptrT $ constT charT
+  , just $ mkConstMethod "isEmpty" np boolT
+  , just $ mkConstMethod "isNull" np boolT
+  , just $ mkConstMethod "size" np intT
     -- TODO Lots more methods.
   ]
 

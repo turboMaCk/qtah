@@ -20,7 +20,6 @@ module Graphics.UI.Qtah.Generator.Interface.Internal.SceneEventListener (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident2,
@@ -28,6 +27,7 @@ import Foreign.Hoppy.Generator.Spec (
   makeClass,
   mkCtor,
   mkMethod,
+  np,
   )
 import Foreign.Hoppy.Generator.Types (callbackT, objT, ptrT, voidT)
 import Graphics.UI.Qtah.Generator.Interface.Internal.Callback
@@ -41,7 +41,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Internal", "SceneEventListener"]
-  [ QtExport $ ExportClass c_SceneEventListener ]
+  [ qtExport c_SceneEventListener ]
 
 c_SceneEventListener =
   addReqIncludes [includeLocal "event.hpp"] $
@@ -49,5 +49,5 @@ c_SceneEventListener =
   makeClass (ident2 "qtah" "event" "SceneEventListener") Nothing [c_QGraphicsItem]
   [ mkCtor "new"
       [ptrT $ objT c_QGraphicsItem, callbackT cb_PtrQGraphicsItemPtrQEventBool, callbackT cb_Void]
-  , mkMethod "doNotNotifyOnDelete" [] voidT
+  , mkMethod "doNotNotifyOnDelete" np voidT
   ]

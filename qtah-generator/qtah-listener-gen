@@ -257,11 +257,12 @@ if [[ -n $hsDir ]]; then
     say 'module Graphics.UI.Qtah.Generator.Interface.Internal.Listener where'
     say
     say 'import qualified Foreign.Hoppy.Generator.Version as V'
-    say 'import qualified Graphics.UI.Qtah.Generator.Flags as F'
+    say 'import qualified Graphics.UI.Qtah.Generator.Config as Config'
     say 'import qualified Foreign.Hoppy.Generator.Spec as S'
     say 'import qualified Foreign.Hoppy.Generator.Types as S'
     say 'import qualified Foreign.Hoppy.Generator.Std.String as String'
     say 'import qualified Graphics.UI.Qtah.Generator.Module as M'
+    say 'import qualified Graphics.UI.Qtah.Generator.Types as T'
     say 'import qualified Graphics.UI.Qtah.Generator.Interface.Core.QObject as QObject'
     say 'import qualified Graphics.UI.Qtah.Generator.Interface.Internal.Callback as C'
     say
@@ -272,6 +273,7 @@ if [[ -n $hsDir ]]; then
         local -r className="Listener${name}"
         local -r classVar="c_${className}"
         local -r callbackVar="cb_${name}Void"
+        local -r listenerVar="listener${name}"
 
         say
         say "${classVar} ="
@@ -282,6 +284,8 @@ if [[ -n $hsDir ]]; then
         say "  , S.mkMethod \"connectListener\""
         say "    [S.ptrT \$ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT"
         say "  ]"
+        say
+        say "${listenerVar} = T.ListenerInfo ${classVar} C.${callbackVar}"
     }
     forEachListener writeHs
 
@@ -301,9 +305,9 @@ if [[ -n $hsDir ]]; then
         local -r classVar="c_${className}"
 
         if [[ -n $minVersion ]]; then
-            say "      ${cont} V.test (F.qtVersion >= ${minVersion}) \$ S.ExportClass ${classVar}"
+            say "      ${cont} V.test (Config.qtVersion >= ${minVersion}) \$ S.Export ${classVar}"
         else
-            say "      ${cont} V.just \$ S.ExportClass ${classVar}"
+            say "      ${cont} V.just \$ S.Export ${classVar}"
         fi
         if [[ $cont = '[' ]]; then cont=','; fi
     }
@@ -325,14 +329,17 @@ if [[ -n $hsDir ]]; then
     say 'module Graphics.UI.Qtah.Generator.Interface.Internal.Listener where'
     say
     say 'import Foreign.Hoppy.Generator.Spec (Class)'
+    say 'import Graphics.UI.Qtah.Generator.Types (ListenerInfo)'
     say
 
     writeHs() {
         local -r name="${1?}"
         local -r className="Listener${name}"
         local -r classVar="c_${className}"
+        local -r listenerVar="listener${name}"
 
         say "${classVar} :: Class"
+        say "${listenerVar} :: ListenerInfo"
     }
     forEachListener writeHs
 

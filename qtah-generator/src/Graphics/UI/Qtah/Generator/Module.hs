@@ -31,7 +31,7 @@ import Control.Monad.Except (throwError)
 import Data.Char (toLower)
 import Data.Foldable (forM_)
 import Data.List (find, intersperse, sort)
-import Data.Maybe (isJust, mapMaybe)
+import Data.Maybe (isJust)
 import Data.Monoid (mconcat)
 import Foreign.Hoppy.Generator.Language.Cpp (execChunkWriter, sayType)
 import Foreign.Hoppy.Generator.Language.Haskell (
@@ -52,33 +52,23 @@ import Foreign.Hoppy.Generator.Language.Haskell (
   prettyPrint,
   sayLn,
   saysLn,
-  toHsBitspaceClassName',
-  toHsBitspaceToNumName',
-  toHsBitspaceTypeName',
-  toHsBitspaceValueName',
-  toHsCastMethodName',
-  toHsDataTypeName',
-  toHsDownCastMethodName',
-  toHsEnumTypeName',
   toHsFnName',
-  toHsPtrClassName',
-  toHsValueClassName',
   )
 import Foreign.Hoppy.Generator.Spec (
   Class,
   Constness (Const, Nonconst),
   Ctor,
-  Export (ExportBitspace, ExportCallback, ExportClass, ExportEnum, ExportFn, ExportVariable),
   ExtName,
   FnName (FnName),
+  ForeignLanguage (Haskell),
   Function,
   Method,
   MethodImpl (RealMethod),
   Module,
-  Type (Internal_TCallback),
+  Type,
   addAddendumHaskell,
-  bitspaceValueNames,
   callbackParams,
+  castExport,
   classCtors,
   classEntityForeignName,
   classExtName,
@@ -86,7 +76,7 @@ import Foreign.Hoppy.Generator.Spec (
   classHaskellConversionToCppFn,
   classMethods,
   ctorExtName,
-  ctorParams,
+  enumValueMapNames,
   fnExtName,
   fromExtName,
   getPrimaryExtName,
@@ -99,23 +89,36 @@ import Foreign.Hoppy.Generator.Spec (
   moduleAddExports,
   moduleAddHaskellName,
   moduleModify',
+  parameterType,
   varGetterExtName,
   varIsConst,
   varSetterExtName,
   )
+import Foreign.Hoppy.Generator.Spec.Callback (callbackT)
+import Foreign.Hoppy.Generator.Spec.Class (
+  toHsCastMethodName',
+  toHsDataTypeName',
+  toHsDownCastMethodName',
+  toHsPtrClassName',
+  toHsValueClassName',
+  )
+import Foreign.Hoppy.Generator.Spec.Enum (enumGetOverriddenEntryName, enumValues, toHsEnumTypeName')
 import Foreign.Hoppy.Generator.Types (objT)
-import Graphics.UI.Qtah.Generator.Flags (Version, qrealFloat, qtVersion)
+import Graphics.UI.Qtah.Generator.Config (Version, qrealFloat, qtVersion)
 import Graphics.UI.Qtah.Generator.Common (fromMaybeM)
+import Graphics.UI.Qtah.Generator.Flags (flagsEnum, toHsFlagsBindingName', toHsFlagsTypeName')
 import Graphics.UI.Qtah.Generator.Types (
-  QtExport (QtExport,
-            QtExportEvent,
-            QtExportSceneEvent,
-            QtExportFnRenamed,
-            QtExportSignal,
-            QtExportSpecials
-           ),
+  QtExport (
+    QtExport,
+    QtExportEvent,
+    QtExportFnRenamed,
+    QtExportSceneEvent,
+    QtExportSignal,
+    QtExportSpecials
+  ),
   Signal,
-  qtExportToExport,
+  qtExportToExports,
+  signalCallback,
   signalClass,
   signalCName,
   signalHaskellName,
@@ -163,7 +166,7 @@ makeQtModule modulePath@(_:moduleNameParts) qtExports =
                       (concat ["b_", lowerName, ".hpp"])
                       (concat ["b_", lowerName, ".cpp"])) $ do
          moduleAddHaskellName $ "Generated" : modulePath
-         moduleAddExports $ mapMaybe qtExportToExport qtExports
+         moduleAddExports $ concatMap qtExportToExports qtExports
      , qtModuleHoppyWrapper =
        addAddendumHaskell (sayWrapperModule modulePath qtExports) $
        moduleModify' (makeModule (lowerName ++ "wrap")
@@ -190,7 +193,7 @@ sayWrapperModule modulePath qtExports = inFunction "<Qtah generateModule>" $ do
   addImports $ hsImports "Prelude" []
 
   -- Import the underlying Hoppy module wholesale.
-  case mapMaybe qtExportToExport qtExports of
+  case concatMap qtExportToExports qtExports of
     [] -> return ()
     export:_ -> importWholeModuleForExtName $ getPrimaryExtName export
 
@@ -274,31 +277,11 @@ handleEventKind path eventKind cls = do
 
 sayQtExport :: [String] -> QtExport -> Generator ()
 sayQtExport path qtExport = case qtExport of
-  QtExport (ExportVariable v) -> do
-    addExport $ toHsFnName' $ varGetterExtName v
-    unless (varIsConst v) $ addExport $ toHsFnName' $ varSetterExtName v
-
-  QtExport (ExportEnum e) -> do
-    let spec = toHsEnumTypeName' e ++ " (..)"
-    addExport spec
-
-  QtExport (ExportBitspace b) -> do
-    addExport $ toHsBitspaceTypeName' b
-    addExport $ toHsBitspaceToNumName' b
-    addExport $ toHsBitspaceClassName' b ++ " (..)"
-    forM_ (bitspaceValueNames b) $ \(_, valueName) ->
-      addExport $ toHsBitspaceValueName' b valueName
-
-  QtExport (ExportFn fn) ->
-    addExport $ getFnReexportName fn
+  QtExport export -> doExport export
 
   QtExportFnRenamed fn rename -> do
     addExport rename
     sayBind rename $ getFnImportName fn
-
-  QtExport (ExportCallback _) -> return ()
-
-  QtExport (ExportClass cls) -> sayExportClass cls
 
   QtExportSignal sig -> sayExportSignal sig
 
@@ -321,6 +304,40 @@ sayQtExport path qtExport = case qtExport of
     addExport "QReal"
     ln
     saysLn ["type QReal = ", if qrealFloat then "QtahP.Float" else "QtahP.Double"]
+
+  where doExport export = case castExport export of
+          Just c -> doExportClass c
+          Nothing -> case castExport export of
+            Just e -> doExportEnum e
+            Nothing -> case castExport export of
+              Just flags -> doExportFlags flags
+              Nothing -> case castExport export of
+                Just f -> doExportFunction f
+                Nothing -> case castExport export of
+                  Just v -> doExportVariable v
+                  Nothing -> return ()
+
+        doExportClass cls = sayExportClass cls
+
+        doExportEnum e = do
+          let spec = toHsEnumTypeName' e ++ " (..)"
+          addExport spec
+
+        doExportFlags flags = do
+          let enum = flagsEnum flags
+              typeName = toHsFlagsTypeName' flags
+          -- Re-export the data type.
+          addExport typeName
+          -- Re-export the entries' bindings.
+          forM_ (enumValueMapNames $ enumValues enum) $ \words -> do
+            let words' = enumGetOverriddenEntryName Haskell enum words
+            addExport $ toHsFlagsBindingName' flags words'
+
+        doExportFunction f = addExport $ getFnReexportName f
+
+        doExportVariable v = do
+          addExport $ toHsFnName' $ varGetterExtName v
+          unless (varIsConst v) $ addExport $ toHsFnName' $ varSetterExtName v
 
 sayExportClass :: Class -> Generator ()
 sayExportClass cls = do
@@ -373,11 +390,9 @@ sayExportSignal signal = inFunction "sayExportSignal" $ do
                 ["Couldn't find an appropriate ",
                 show (fromExtName $ classExtName listenerClass),
                 " constructor for signal ", show name]) $
-    flip find (classCtors listenerClass) $ \ctor -> case ctorParams ctor of
-      [Internal_TCallback {}] -> True
-      _ -> False
-  let [callbackType@(Internal_TCallback callback)] = ctorParams listenerCtor
-      paramTypes = callbackParams callback
+    flip find (classCtors listenerClass) $ \ctor -> fromExtName (ctorExtName ctor) == "new"
+  let callback = signalCallback signal
+      paramTypes = map parameterType $ callbackParams callback
 
   -- Also find the 'connectListener' method.
   listenerConnectMethod <-
@@ -386,7 +401,7 @@ sayExportSignal signal = inFunction "sayExportSignal" $ do
                  show listenerClass, " for signal ", show name]) $
     find ((RealMethod (FnName "connectListener") ==) . methodImpl) $ classMethods listenerClass
 
-  callbackHsType <- cppTypeToHsTypeAndUse HsHsSide callbackType
+  callbackHsType <- cppTypeToHsTypeAndUse HsHsSide $ callbackT callback
 
   let varType = HsQualType [(UnQual $ HsIdent ptrClassName, [HsTyVar $ HsIdent "object"])] $
                 HsTyApp (HsTyApp (HsTyCon $ UnQual $ HsIdent "QtahSignal.Signal") $

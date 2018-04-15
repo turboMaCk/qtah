@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QMetaClassInfo (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   MethodApplicability (MConst),
   Purity (Nonpure),
   addReqIncludes,
@@ -48,7 +47,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Core", "QMetaClassInfo"]
-  [ QtExport $ ExportClass c_QMetaClassInfo ]
+  [ qtExport c_QMetaClassInfo ]
 
 c_QMetaClassInfo =
   addReqIncludes [ includeStd "QMetaClassInfo"

@@ -27,6 +27,7 @@ import Foreign.Hoppy.Generator.Spec (
   includeStd,
   makeClass,
   mkConstMethod,
+  np,
   )
 import Foreign.Hoppy.Generator.Types (objT, ptrT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QEvent (c_QEvent)
@@ -46,5 +47,5 @@ c_QGraphicsSceneEvent =
   addReqIncludes [includeStd "QGraphicsSceneEvent"] $
   classSetEntityPrefix "" $
   makeClass (ident "QGraphicsSceneEvent") Nothing [c_QEvent]
-  [ mkConstMethod "widget" [] $ ptrT $ objT c_QWidget
+  [ mkConstMethod "widget" np $ ptrT $ objT c_QWidget
   ]

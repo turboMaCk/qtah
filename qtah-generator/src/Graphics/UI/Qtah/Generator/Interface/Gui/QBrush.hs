@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Gui.QBrush (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetConversionToGc,
   classSetEntityPrefix,
@@ -33,6 +32,7 @@ import Foreign.Hoppy.Generator.Spec (
   mkMethod,
   mkMethod',
   mkProp,
+  np,
   )
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Assignable, Copyable, Equatable),
@@ -52,7 +52,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Gui", "QBrush"]
-  [ QtExport $ ExportClass c_QBrush ]
+  [ qtExport c_QBrush ]
 
 c_QBrush =
   addReqIncludes [includeStd "QBrush"] $
@@ -60,11 +60,11 @@ c_QBrush =
   classAddFeatures [Assignable, Copyable, Equatable] $
   classSetEntityPrefix "" $
   makeClass (ident "QBrush") Nothing []
-  [ mkCtor "new" []
+  [ mkCtor "new" np
   , mkCtor "newWithColor" [objT c_QColor]
   , mkProp "color" $ objT c_QColor
-    -- TODO mkConstMethod "gradient" [] $ ptrT $ constT $ objT c_QGradient
-  , mkConstMethod "isOpaque" [] boolT
+    -- TODO mkConstMethod "gradient" np $ ptrT $ constT $ objT c_QGradient
+  , mkConstMethod "isOpaque" np boolT
     -- TODO mkProp "matrix" $ objT c_QMatrix
   , mkMethod' "setColor" "setGlobalColor" [enumT e_GlobalColor] voidT
   , mkProp "style" $ enumT e_BrushStyle

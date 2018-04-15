@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Gui.QCursor (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetConversionToGc,
   classSetEntityPrefix,
@@ -31,6 +30,7 @@ import Foreign.Hoppy.Generator.Spec (
   mkCtor,
   mkStaticMethod,
   mkStaticMethod',
+  np,
   )
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Assignable, Copyable, Equatable),
@@ -38,7 +38,7 @@ import Foreign.Hoppy.Generator.Spec.ClassFeature (
   )
 import Foreign.Hoppy.Generator.Types (enumT, intT, objT, voidT)
 import Foreign.Hoppy.Generator.Version (collect, just)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.QPoint (c_QPoint)
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (e_CursorShape)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
@@ -49,7 +49,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Gui", "QCursor"]
-  [ QtExport $ ExportClass c_QCursor ]
+  [ qtExport c_QCursor ]
 
 c_QCursor =
   addReqIncludes [includeStd "QCursor"] $
@@ -60,12 +60,12 @@ c_QCursor =
   classSetEntityPrefix "" $
   makeClass (ident "QCursor") Nothing [] $
   collect
-  [ just $ mkCtor "new" []
+  [ just $ mkCtor "new" np
   , just $ mkCtor "newWithCursorShape" [enumT e_CursorShape]
     -- TODO Methods.
 
     -- Static methods.
-  , just $ mkStaticMethod "pos" [] $ objT c_QPoint
+  , just $ mkStaticMethod "pos" np $ objT c_QPoint
     -- TODO QPoint pos(const QScreen*)
   , just $ mkStaticMethod "setPos" [objT c_QPoint] voidT
   , just $ mkStaticMethod' "setPos" "setPosRaw" [intT, intT] voidT

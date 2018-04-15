@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QMenuBar (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -33,16 +32,17 @@ import Foreign.Hoppy.Generator.Spec (
   mkMethod,
   mkMethod',
   mkProp,
+  np,
   )
 import Foreign.Hoppy.Generator.Types (enumT, objT, ptrT, voidT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (wsWince)
+import Graphics.UI.Qtah.Generator.Config (wsWince)
 import Graphics.UI.Qtah.Generator.Interface.Core.QPoint (c_QPoint)
 import Graphics.UI.Qtah.Generator.Interface.Core.QRect (c_QRect)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (e_Corner)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QIcon (c_QIcon)
-import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (c_ListenerPtrQAction)
+import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (listenerPtrQAction)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QAction (c_QAction)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QMenu (c_QMenu)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QWidget (c_QWidget)
@@ -52,7 +52,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QMenuBar"] $
-  QtExport (ExportClass c_QMenuBar) :
+  qtExport c_QMenuBar :
   map QtExportSignal signals
 
 c_QMenuBar =
@@ -60,7 +60,7 @@ c_QMenuBar =
   classSetEntityPrefix "" $
   makeClass (ident "QMenuBar") Nothing [c_QWidget] $
   collect
-  [ just $ mkCtor "new" []
+  [ just $ mkCtor "new" np
   , just $ mkCtor "newWithParent" [ptrT $ objT c_QWidget]
   , just $ mkConstMethod "actionAt" [objT c_QPoint] $ ptrT $ objT c_QAction
   , just $ mkConstMethod "actionGeometry" [ptrT $ objT c_QAction] $ objT c_QRect
@@ -71,8 +71,8 @@ c_QMenuBar =
   , just $ mkMethod' "addMenu" "addNewMenu" [objT c_QString] $ ptrT $ objT c_QMenu
   , just $ mkMethod' "addMenu" "addNewMenuWithIcon" [objT c_QIcon, objT c_QString] $
     ptrT $ objT c_QMenu
-  , just $ mkMethod "addSeparator" [] $ ptrT $ objT c_QAction
-  , just $ mkMethod "clear" [] voidT
+  , just $ mkMethod "addSeparator" np $ ptrT $ objT c_QAction
+  , just $ mkMethod "clear" np voidT
   , just $ mkConstMethod "cornerWidget" [enumT e_Corner] $ ptrT $ objT c_QWidget
   , test wsWince $ mkProp "defaultAction" $ ptrT $ objT c_QAction
   , just $ mkBoolIsProp "defaultUp"
@@ -84,6 +84,6 @@ c_QMenuBar =
   ]
 
 signals =
-  [ makeSignal c_QMenuBar "hovered" c_ListenerPtrQAction
-  , makeSignal c_QMenuBar "triggered" c_ListenerPtrQAction
+  [ makeSignal c_QMenuBar "hovered" listenerPtrQAction
+  , makeSignal c_QMenuBar "triggered" listenerPtrQAction
   ]

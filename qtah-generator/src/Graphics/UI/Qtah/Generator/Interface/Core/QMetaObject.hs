@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QMetaObject (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   MethodApplicability (MConst),
   Purity (Nonpure),
   addReqIncludes,
@@ -34,6 +33,7 @@ import Foreign.Hoppy.Generator.Spec (
   makeClass,
   makeFnMethod,
   mkConstMethod,
+  np,
   )
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Copyable),
@@ -53,7 +53,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Core", "QMetaObject"]
-  [ QtExport $ ExportClass c_QMetaObject ]
+  [ qtExport c_QMetaObject ]
 
 c_QMetaObject =
   addReqIncludes [ includeStd "QMetaObject"
@@ -64,13 +64,13 @@ c_QMetaObject =
   classSetEntityPrefix "" $
   makeClass (ident "QMetaObject") Nothing []
   [ mkConstMethod "classInfo" [intT] $ objT c_QMetaClassInfo
-  , mkConstMethod "classInfoCount" [] intT
-  , mkConstMethod "classInfoOffset" [] intT
+  , mkConstMethod "classInfoCount" np intT
+  , mkConstMethod "classInfoOffset" np intT
   , mkConstMethod "constructor" [intT] $ objT c_QMetaMethod
-  , mkConstMethod "constructorCount" [] intT
+  , mkConstMethod "constructorCount" np intT
   , mkConstMethod "enumerator" [intT] $ objT c_QMetaEnum
-  , mkConstMethod "enumeratorCount" [] intT
-  , mkConstMethod "enumeratorOffset" [] intT
+  , mkConstMethod "enumeratorCount" np intT
+  , mkConstMethod "enumeratorOffset" np intT
   , makeFnMethod (ident2 "qtah" "qmetaobject" "indexOfClassInfo") "indexOfClassInfo"
     MConst Nonpure [objT c_QMetaObject, objT c_QString] intT
   , makeFnMethod (ident2 "qtah" "qmetaobject" "indexOfConstructor") "indexOfConstructor"
@@ -87,14 +87,14 @@ c_QMetaObject =
     MConst Nonpure [objT c_QMetaObject, objT c_QString] intT
   , mkConstMethod "inherits" [ptrT $ constT $ objT c_QMetaObject] boolT
   , mkConstMethod "method" [intT] $ objT c_QMetaMethod
-  , mkConstMethod "methodCount" [] intT
-  , mkConstMethod "methodOffset" [] intT
+  , mkConstMethod "methodCount" np intT
+  , mkConstMethod "methodOffset" np intT
     -- TODO newInstance
   , mkConstMethod "property" [intT] $ objT c_QMetaProperty
-  , mkConstMethod "propertyCount" [] intT
-  , mkConstMethod "propertyOffset" [] intT
-  , mkConstMethod "superClass" [] $ ptrT $ constT $ objT c_QMetaObject
-  , mkConstMethod "userProperty" [] $ objT c_QMetaProperty
+  , mkConstMethod "propertyCount" np intT
+  , mkConstMethod "propertyOffset" np intT
+  , mkConstMethod "superClass" np $ ptrT $ constT $ objT c_QMetaObject
+  , mkConstMethod "userProperty" np $ objT c_QMetaProperty
 
     -- TODO Static methods
   ]

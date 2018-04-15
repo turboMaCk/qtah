@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Gui.QPixmap (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetConversionToGc,
   classSetEntityPrefix,
@@ -36,13 +35,13 @@ import Foreign.Hoppy.Generator.Spec (
   mkProp,
   mkStaticMethod,
   mkStaticMethod',
+  np,
   )
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Assignable, Copyable),
   classAddFeatures,
   )
 import Foreign.Hoppy.Generator.Types (
-  bitspaceT,
   boolT,
   enumT,
   intT,
@@ -53,13 +52,14 @@ import Foreign.Hoppy.Generator.Types (
   voidT,
   )
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
+import Graphics.UI.Qtah.Generator.Flags (flagsT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QRect (c_QRect)
 import Graphics.UI.Qtah.Generator.Interface.Core.QSize (c_QSize)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (
-  bs_ImageConversionFlags,
   e_AspectRatioMode,
+  fl_ImageConversionFlags,
   e_TransformationMode,
   qreal,
   )
@@ -76,7 +76,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Gui", "QPixmap"]
-  [ QtExport $ ExportClass c_QPixmap
+  [ qtExport c_QPixmap
   ]
 
 c_QPixmap =
@@ -86,40 +86,40 @@ c_QPixmap =
   classSetEntityPrefix "" $
   makeClass (ident "QPixmap") Nothing [c_QPaintDevice] $
   collect
-  [ just $ mkCtor "new" []
+  [ just $ mkCtor "new" np
   , just $ mkCtor "newWithSize" [objT c_QSize]
   , just $ mkCtor "newWithSizeRaw" [intT, intT]
   , just $ mkCtor "newWithFile" [objT c_QString]
     -- TODO QPixmap(const QString&, const char*, Qt::ImageConversionFlags)
-    -- TODO QPixmap(const char* const[] xpm)  (Does this copy the data?)
-  , just $ mkConstMethod "cacheKey" [] int64T
+    -- TODO QPixmap(const char* constnp xpm)  (Does this copy the data?)
+  , just $ mkConstMethod "cacheKey" np int64T
   , just $ mkMethod' "convertFromImage" "convertFromImage" [objT c_QImage] boolT
   , just $ mkMethod' "convertFromImage" "convertFromImageAll"
-    [objT c_QImage, bitspaceT bs_ImageConversionFlags] boolT
+    [objT c_QImage, flagsT fl_ImageConversionFlags] boolT
   , just $ mkConstMethod' "copy" "copyRect" [objT c_QRect] $ objT c_QPixmap
   , just $ mkConstMethod' "copy" "copyRaw" [intT, intT, intT, intT] $ objT c_QPixmap
     -- TODO QBitmap createHeuristicMask(bool =) const
     -- TODO QBitmap createMaskFromColor(const QColor&, Qt::MaskMode =) const
-  , just $ mkStaticMethod "defaultDepth" [] intT
-  , just $ mkConstMethod "depth" [] intT
-  , just $ mkMethod "detach" [] voidT
+  , just $ mkStaticMethod "defaultDepth" np intT
+  , just $ mkConstMethod "depth" np intT
+  , just $ mkMethod "detach" np voidT
   , test (qtVersion >= [5, 0]) $ mkProp "devicePixelRatio" qreal
-  , just $ mkMethod' "fill" "fill" [] voidT
+  , just $ mkMethod' "fill" "fill" np voidT
   , just $ mkMethod' "fill" "fillWithColor" [objT c_QColor] voidT
   , just $ mkStaticMethod' "fromImage" "fromImage" [objT c_QImage] $ objT c_QPixmap
   , just $ mkStaticMethod' "fromImage" "fromImageAll"
-    [objT c_QImage, bitspaceT bs_ImageConversionFlags] $ objT c_QPixmap
+    [objT c_QImage, flagsT fl_ImageConversionFlags] $ objT c_QPixmap
     -- TODO QPixmap fromImageReader(QImageReader*, ...)
-  , just $ mkConstMethod "hasAlpha" [] boolT
-  , just $ mkConstMethod "hasAlphaChannel" [] boolT
-  , just $ mkConstMethod "height" [] intT
-  , just $ mkConstMethod "isNull" [] boolT
-  , just $ mkConstMethod "isQBitmap" [] boolT
+  , just $ mkConstMethod "hasAlpha" np boolT
+  , just $ mkConstMethod "hasAlphaChannel" np boolT
+  , just $ mkConstMethod "height" np intT
+  , just $ mkConstMethod "isNull" np boolT
+  , just $ mkConstMethod "isQBitmap" np boolT
   , just $ mkMethod' "load" "load" [objT c_QString] boolT
     -- TODO load(const QString&, const char*, Qt::ImageConversionFlags)
     -- TODO loadFromData
     -- TODO mask
-  , just $ mkConstMethod "rect" [] $ objT c_QRect
+  , just $ mkConstMethod "rect" np $ objT c_QRect
   , just $ mkConstMethod "save" [objT c_QString] boolT
     -- TODO bool save(const QString&, const char*, int)
     -- TODO save(QIODevice*, ...)
@@ -141,9 +141,9 @@ c_QPixmap =
   , just $ mkMethod' "scroll" "scrollRect" [intT, intT, objT c_QRect] voidT
   , just $ mkMethod' "scroll" "scrollRectAll" [intT, intT, objT c_QRect, ptrT $ objT c_QRegion]
     voidT
-  , just $ mkConstMethod "size" [] $ objT c_QSize
+  , just $ mkConstMethod "size" np $ objT c_QSize
   , just $ mkMethod "swap" [refT $ objT c_QPixmap] voidT
-  , just $ mkConstMethod "toImage" [] $ objT c_QImage
+  , just $ mkConstMethod "toImage" np $ objT c_QImage
   , just $ mkConstMethod' "transformed" "transformed" [objT c_QTransform] $ objT c_QPixmap
   , just $ mkConstMethod' "transformed" "transformedAll"
     [objT c_QTransform, enumT e_TransformationMode] $ objT c_QPixmap
@@ -151,6 +151,6 @@ c_QPixmap =
   , just $ mkStaticMethod' "trueMatrix" "trueMatrixTransform" [objT c_QTransform, intT, intT] $
     objT c_QTransform
     -- TODO QPixmap trueMatrix(const QMatrix&, ...)
-  , just $ mkConstMethod "width" [] intT
+  , just $ mkConstMethod "width" np intT
     -- OMIT bool operator!() (It's just isNull).
   ]

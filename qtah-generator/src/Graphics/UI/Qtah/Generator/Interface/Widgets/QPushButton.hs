@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QPushButton (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -31,6 +30,7 @@ import Foreign.Hoppy.Generator.Spec (
   mkCtor,
   mkMethod,
   mkProp,
+  np,
   )
 import Foreign.Hoppy.Generator.Types (boolT, objT, ptrT, voidT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
@@ -46,14 +46,14 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QPushButton"]
-  [ QtExport $ ExportClass c_QPushButton ]
+  [ qtExport c_QPushButton ]
 
 c_QPushButton =
   addReqIncludes [includeStd "QPushButton"] $
   classSetEntityPrefix "" $
   makeClass (ident "QPushButton") Nothing
   [ c_QAbstractButton ]
-  [ mkCtor "new" []
+  [ mkCtor "new" np
   , mkCtor "newWithParent" [ptrT $ objT c_QWidget]
   , mkCtor "newWithText" [objT c_QString]
   , mkCtor "newWithTextAndParent" [objT c_QString, ptrT $ objT c_QWidget]
@@ -63,5 +63,5 @@ c_QPushButton =
   , mkBoolIsProp "default"
   , mkBoolIsProp "flat"
   , mkProp "menu" $ ptrT $ objT c_QMenu
-  , mkMethod "showMenu" [] voidT
+  , mkMethod "showMenu" np voidT
   ]

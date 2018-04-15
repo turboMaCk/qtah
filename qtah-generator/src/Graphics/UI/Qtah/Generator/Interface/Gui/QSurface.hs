@@ -22,7 +22,6 @@ module Graphics.UI.Qtah.Generator.Interface.Gui.QSurface (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass, ExportEnum),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -30,10 +29,11 @@ import Foreign.Hoppy.Generator.Spec (
   includeStd,
   makeClass,
   mkConstMethod,
+  np,
   )
 import Foreign.Hoppy.Generator.Types (boolT, enumT, objT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.QSize (c_QSize)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModuleWithMinVersion)
 import Graphics.UI.Qtah.Generator.Types
@@ -45,9 +45,9 @@ minVersion = [5, 0]
 aModule =
   AQtModule $
   makeQtModuleWithMinVersion ["Gui", "QSurface"] minVersion
-  [ QtExport $ ExportClass c_QSurface
-  , QtExport $ ExportEnum e_SurfaceClass
-  , QtExport $ ExportEnum e_SurfaceType
+  [ qtExport c_QSurface
+  , qtExport e_SurfaceClass
+  , qtExport e_SurfaceType
   ]
 
 c_QSurface =
@@ -56,22 +56,23 @@ c_QSurface =
   makeClass (ident "QSurface") Nothing [] $
   collect
   [ -- TODO mkConstMethod "surfaceFormat" $ objT c_QSurfaceFormat
-    just $ mkConstMethod "size" [] $ objT c_QSize
-  , test (qtVersion >= [5, 3]) $ mkConstMethod "supportsOpenGL" [] boolT
-  , just $ mkConstMethod "surfaceClass" [] $ enumT e_SurfaceClass
-    -- TODO mkConstMethod "surfaceHandle" [] $ ptrT $ objT c_QPlatformSurface
-  , just $ mkConstMethod "surfaceType" [] $ enumT e_SurfaceType
+    just $ mkConstMethod "size" np $ objT c_QSize
+  , test (qtVersion >= [5, 3]) $ mkConstMethod "supportsOpenGL" np boolT
+  , just $ mkConstMethod "surfaceClass" np $ enumT e_SurfaceClass
+    -- TODO mkConstMethod "surfaceHandle" np $ ptrT $ objT c_QPlatformSurface
+  , just $ mkConstMethod "surfaceType" np $ enumT e_SurfaceType
   ]
 
 e_SurfaceClass =
   makeQtEnum (ident1 "QSurface" "SurfaceClass") [includeStd "QSurface"]
-  [ (0, ["window"])
-  , (1, ["offscreen"])
+  [ "Window"
+  , "Offscreen"
   ]
 
 e_SurfaceType =
   makeQtEnum (ident1 "QSurface" "SurfaceType") [includeStd "QSurface"]
-  [ (0, ["raster", "surface"])
-  , (1, ["open", "g", "l", "surface"])
-  , (2, ["raster", "g", "l", "surface"])
+  [ "RasterSurface"
+  , "OpenGLSurface"
+  , "RasterGLSurface"
+    -- TODO OpenVGSurface, VulkanSurface.  Since when?
   ]

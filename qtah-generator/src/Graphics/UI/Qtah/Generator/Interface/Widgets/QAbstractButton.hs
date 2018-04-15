@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QAbstractButton (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -31,12 +30,13 @@ import Foreign.Hoppy.Generator.Spec (
   mkConstMethod,
   mkMethod,
   mkProp,
+  np,
   )
 import Foreign.Hoppy.Generator.Types (boolT, intT, objT, ptrT, voidT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QSize (c_QSize)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QIcon (c_QIcon)
-import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (c_Listener, c_ListenerBool)
+import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (listener, listenerBool)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QButtonGroup (c_QButtonGroup)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QWidget (c_QWidget)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
@@ -47,7 +47,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QAbstractButton"] $
-  QtExport (ExportClass c_QAbstractButton) :
+  qtExport c_QAbstractButton :
   map QtExportSignal signals
 
 c_QAbstractButton =
@@ -62,19 +62,19 @@ c_QAbstractButton =
   , mkProp "autoRepeatInterval" intT
   , mkBoolIsProp "checkable"
   , mkBoolIsProp "checked"
-  , mkMethod "click" [] voidT
+  , mkMethod "click" np voidT
   , mkBoolIsProp "down"
-  , mkConstMethod "group" [] $ ptrT $ objT c_QButtonGroup
+  , mkConstMethod "group" np $ ptrT $ objT c_QButtonGroup
   , mkProp "icon" $ objT c_QIcon
   , mkProp "iconSize" $ objT c_QSize
     -- TODO shortcut
   , mkProp "text" $ objT c_QString
-  , mkMethod "toggle" [] voidT
+  , mkMethod "toggle" np voidT
   ]
 
 signals =
-  [ makeSignal c_QAbstractButton "clicked" c_ListenerBool
-  , makeSignal c_QAbstractButton "pressed" c_Listener
-  , makeSignal c_QAbstractButton "released" c_Listener
-  , makeSignal c_QAbstractButton "toggled" c_ListenerBool
+  [ makeSignal c_QAbstractButton "clicked" listenerBool
+  , makeSignal c_QAbstractButton "pressed" listener
+  , makeSignal c_QAbstractButton "released" listener
+  , makeSignal c_QAbstractButton "toggled" listenerBool
   ]

@@ -21,8 +21,10 @@
 module Graphics.UI.Qtah.Generator.Interface.Imports (
   importForByteString,
   importForByteStringUnsafe,
+  importForBits,
   importForChar,
   importForEvent,
+  importForFlags,
   importForForeign,
   importForForeignC,
   importForPrelude,
@@ -39,11 +41,17 @@ importForByteString = hsQualifiedImport "Data.ByteString" "QtahDBS"
 importForByteStringUnsafe :: HsImportSet
 importForByteStringUnsafe = hsQualifiedImport "Data.ByteString.Unsafe" "QtahDBSU"
 
+importForBits :: HsImportSet
+importForBits = hsQualifiedImport "Data.Bits" "QtahDB"
+
 importForChar :: HsImportSet
 importForChar = hsQualifiedImport "Data.Char" "QtahDC"
 
 importForEvent :: HsImportSet
 importForEvent = hsQualifiedImport "Graphics.UI.Qtah.Event" "QtahEvent"
+
+importForFlags :: HsImportSet
+importForFlags = hsQualifiedImport "Graphics.UI.Qtah.Flags" "QtahFlags"
 
 importForForeign :: HsImportSet
 importForForeign = hsQualifiedImport "Foreign" "QtahF"

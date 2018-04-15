@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QSpinBox (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -31,14 +30,15 @@ import Foreign.Hoppy.Generator.Spec (
   mkCtor,
   mkMethod,
   mkProp,
+  np,
   )
 import Foreign.Hoppy.Generator.Types (intT, objT, ptrT, voidT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
-  c_ListenerInt,
-  c_ListenerQString,
+  listenerInt,
+  listenerQString,
   )
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QAbstractSpinBox (c_QAbstractSpinBox)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QWidget (c_QWidget)
@@ -50,7 +50,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QSpinBox"] $
-  QtExport (ExportClass c_QSpinBox) :
+  qtExport c_QSpinBox :
   map QtExportSignal signals
 
 c_QSpinBox =
@@ -58,9 +58,9 @@ c_QSpinBox =
   classSetEntityPrefix "" $
   makeClass (ident "QSpinBox") Nothing [c_QAbstractSpinBox] $
   collect
-  [ just $ mkCtor "new" []
+  [ just $ mkCtor "new" np
   , just $ mkCtor "newWithParent" [ptrT $ objT c_QWidget]
-  , just $ mkConstMethod "cleanText" [] $ objT c_QString
+  , just $ mkConstMethod "cleanText" np $ objT c_QString
   , test (qtVersion >= [5, 2]) $ mkProp "displayIntegerBase" intT
   , just $ mkProp "maximum" intT
   , just $ mkProp "minimum" intT
@@ -72,6 +72,6 @@ c_QSpinBox =
   ]
 
 signals =
-  [ makeSignal' c_QSpinBox "valueChanged" "valueChangedInt" c_ListenerInt
-  , makeSignal' c_QSpinBox "valueChanged" "valueChangedString" c_ListenerQString
+  [ makeSignal' c_QSpinBox "valueChanged" "valueChangedInt" listenerInt
+  , makeSignal' c_QSpinBox "valueChanged" "valueChangedString" listenerQString
   ]

@@ -19,14 +19,12 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QDir (
   aModule,
   c_QDir,
   e_Filter,
-  bs_Filters,
+  fl_Filters,
   e_SortFlag,
-  bs_SortFlags,
+  fl_SortFlags,
   ) where
 
-import Data.Bits ((.|.))
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportBitspace, ExportEnum, ExportClass),
   Operator (OpArray),
   addReqIncludes,
   classSetConversionToGc,
@@ -41,14 +39,16 @@ import Foreign.Hoppy.Generator.Spec (
   mkMethod,
   mkProp,
   mkStaticMethod,
+  np,
   )
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Assignable, Copyable, Equatable),
   classAddFeatures,
   )
-import Foreign.Hoppy.Generator.Types (bitspaceT, boolT, intT, objT, refT, voidT)
+import Foreign.Hoppy.Generator.Types (boolT, intT, objT, refT, voidT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
+import Graphics.UI.Qtah.Generator.Flags (flagsT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QChar (c_QChar)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
@@ -59,11 +59,11 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Core", "QDir"]
-  [ QtExport $ ExportClass c_QDir
-  , QtExport $ ExportEnum e_Filter
-  , QtExport $ ExportBitspace bs_Filters
-  , QtExport $ ExportEnum e_SortFlag
-  , QtExport $ ExportBitspace bs_SortFlags
+  [ qtExport c_QDir
+  , qtExport e_Filter
+  , qtExport fl_Filters
+  , qtExport e_SortFlag
+  , qtExport fl_SortFlags
   ]
 
 c_QDir =
@@ -75,110 +75,93 @@ c_QDir =
   collect
   [ just $ mkCtor "new" [objT c_QString]
   , just $ mkConstMethod "absoluteFilePath" [objT c_QString] $ objT c_QString
-  , just $ mkConstMethod "absolutePath" [] $ objT c_QString
+  , just $ mkConstMethod "absolutePath" np $ objT c_QString
   , test (qtVersion >= [4, 3]) $
     mkStaticMethod "addSearchPath" [objT c_QString, objT c_QString] voidT
-  , just $ mkConstMethod "canonicalPath" [] $ objT c_QString
+  , just $ mkConstMethod "canonicalPath" np $ objT c_QString
   , just $ mkMethod "cd" [objT c_QString] boolT
-  , just $ mkMethod "cdUp" [] boolT
+  , just $ mkMethod "cdUp" np boolT
   , just $ mkStaticMethod "cleanPath" [objT c_QString] $ objT c_QString
-  , just $ mkConstMethod "count" [] intT
-  , just $ mkStaticMethod "current" [] $ objT c_QDir
-  , just $ mkStaticMethod "currentPath" [] $ objT c_QString
-  , just $ mkConstMethod "dirName" [] $ objT c_QString
+  , just $ mkConstMethod "count" np intT
+  , just $ mkStaticMethod "current" np $ objT c_QDir
+  , just $ mkStaticMethod "currentPath" np $ objT c_QString
+  , just $ mkConstMethod "dirName" np $ objT c_QString
     -- TODO drives
     -- TODO entryInfoList
     -- TODO entryList
-  , just $ mkConstMethod' "exists" "exists" [] boolT
+  , just $ mkConstMethod' "exists" "exists" np boolT
   , just $ mkConstMethod' "exists" "entryExists" [objT c_QString] boolT
   , just $ mkConstMethod "filePath" [objT c_QString] $ objT c_QString
-  , just $ mkProp "filter" $ bitspaceT bs_Filters
+  , just $ mkProp "filter" $ flagsT fl_Filters
   , test (qtVersion >= [4, 2]) $
     mkStaticMethod "fromNativeSeparators" [objT c_QString] $ objT c_QString
-  , just $ mkStaticMethod "home" [] $ objT c_QDir
-  , just $ mkStaticMethod "homePath" [] $ objT c_QString
-  , just $ mkConstMethod "isAbsolute" [] boolT
+  , just $ mkStaticMethod "home" np $ objT c_QDir
+  , just $ mkStaticMethod "homePath" np $ objT c_QString
+  , just $ mkConstMethod "isAbsolute" np boolT
   , just $ mkStaticMethod "isAbsolutePath" [objT c_QString] boolT
-  , just $ mkConstMethod "isReadable" [] boolT
-  , just $ mkConstMethod "isRelative" [] boolT
+  , just $ mkConstMethod "isReadable" np boolT
+  , just $ mkConstMethod "isRelative" np boolT
   , just $ mkStaticMethod "isRelativePath" [objT c_QString] boolT
-  , just $ mkConstMethod "isRoot" [] boolT
-  , just $ mkMethod "makeAbsolute" [] boolT
+  , just $ mkConstMethod "isRoot" np boolT
+  , just $ mkMethod "makeAbsolute" np boolT
   , just $ mkStaticMethod "match" [objT c_QString, objT c_QString] boolT
     -- TODO match(QStringList, QString)
   , just $ mkConstMethod "mkdir" [objT c_QString] boolT
   , just $ mkConstMethod "mkpath" [objT c_QString] boolT
     -- TODO nameFilters
   , just $ mkProp "path" $ objT c_QString
-  , just $ mkMethod "refresh" [] voidT
+  , just $ mkMethod "refresh" np voidT
   , just $ mkConstMethod "relativeFilePath" [objT c_QString] $ objT c_QString
   , just $ mkMethod "remove" [objT c_QString] boolT
-  , test (qtVersion >= [5, 0]) $ mkMethod "removeRecursively" [] boolT
+  , test (qtVersion >= [5, 0]) $ mkMethod "removeRecursively" np boolT
   , just $ mkMethod "rename" [objT c_QString, objT c_QString] boolT
   , just $ mkConstMethod "rmdir" [objT c_QString] boolT
   , just $ mkConstMethod "rmpath" [objT c_QString] boolT
-  , just $ mkStaticMethod "root" [] $ objT c_QDir
-  , just $ mkStaticMethod "rootPath" [] $ objT c_QString
+  , just $ mkStaticMethod "root" np $ objT c_QDir
+  , just $ mkStaticMethod "rootPath" np $ objT c_QString
     -- TODO searchPaths (>=4.3)
-  , just $ mkStaticMethod "separator" [] $ objT c_QChar
+  , just $ mkStaticMethod "separator" np $ objT c_QChar
   , just $ mkStaticMethod "setCurrent" [objT c_QString] boolT
-  , just $ mkProp "sorting" $ bitspaceT bs_SortFlags
+  , just $ mkProp "sorting" $ flagsT fl_SortFlags
   , test (qtVersion >= [5, 0]) $ mkMethod "swap" [refT $ objT c_QDir] voidT
-  , just $ mkStaticMethod "temp" [] $ objT c_QDir
-  , just $ mkStaticMethod "tempPath" [] $ objT c_QString
+  , just $ mkStaticMethod "temp" np $ objT c_QDir
+  , just $ mkStaticMethod "tempPath" np $ objT c_QString
   , test (qtVersion >= [4, 2]) $
     mkStaticMethod "toNativeSeparators" [objT c_QString] $ objT c_QString
   , just $ mkConstMethod OpArray [intT] $ objT c_QString
   ]
 
-(e_Filter, bs_Filters) =
-  makeQtEnumBitspace (ident1 "QDir" "Filter") "Filters" [includeStd "QDir"] $
-  let dirs = 0x1
-      allDirs = 0x400
-      files = 0x2
-      drives = 0x4
-      noSymLinks = 0x8
-      noDotAndDotDot = noDot .|. noDotDot
-      noDot = 0x2000
-      noDotDot = 0x4000
-      allEntries = dirs .|. files .|. drives
-      readable = 0x10
-      writable = 0x20
-      executable = 0x40
-      modified = 0x80
-      hidden = 0x100
-      system = 0x200
-      caseSensitive = 0x800
-  in [ (dirs, ["dirs"])
-     , (allDirs, ["all", "dirs"])
-     , (files, ["files"])
-     , (drives, ["drives"])
-     , (noSymLinks, ["no", "sym", "links"])
-     , (noDotAndDotDot, ["no", "dot", "and", "dot", "dot"])
-     , (noDot, ["no", "dot"])
-     , (noDotDot, ["no", "dot", "dot"])
-     , (allEntries, ["all", "entries"])
-     , (readable, ["readable"])
-     , (writable, ["writable"])
-     , (executable, ["executable"])
-     , (modified, ["modified"])
-     , (hidden, ["hidden"])
-     , (system, ["system"])
-     , (caseSensitive, ["case", "sensitive"])
-     ]
+(e_Filter, fl_Filters) =
+  makeQtEnumAndFlags (ident1 "QDir" "Filter") "Filters" [includeStd "QDir"] $
+  [ "Dirs"
+  , "AllDirs"
+  , "Files"
+  , "Drives"
+  , "NoSymLinks"
+  , "NoDotAndDotDot"
+  , "NoDot"
+  , "NoDotDot"
+  , "AllEntries"
+  , "Readable"
+  , "Writable"
+  , "Executable"
+  , "Modified"
+  , "Hidden"
+  , "System"
+  , "CaseSensitive"
+  ]
 
-(e_SortFlag, bs_SortFlags) =
-  makeQtEnumBitspace (ident1 "QDir" "SortFlag") "SortFlags" [includeStd "QDir"]
-  [ (0x00, ["name"])
-  , (0x01, ["time"])
-  , (0x02, ["size"])
-  , (0x80, ["typ"])  -- "type" is a Haskell keyword.
-  , (0x03, ["unsorted"])
-    -- QDir::NoSort = -1.  Not sure this is needed (it's used for parameter
-    -- defaults).  Would need to check if negative values work as expected.
-  , (0x04, ["dirs", "first"])
-  , (0x20, ["dirs", "last"])
-  , (0x08, ["reversed"])
-  , (0x10, ["ignore", "case"])
-  , (0x40, ["locale", "aware"])
+(e_SortFlag, fl_SortFlags) =
+  makeQtEnumAndFlags (ident1 "QDir" "SortFlag") "SortFlags" [includeStd "QDir"]
+  [ "Name"
+  , "Time"
+  , "Size"
+  , "Type"
+  , "Unsorted"
+  , "NoSort"
+  , "DirsFirst"
+  , "DirsLast"
+  , "Reversed"
+  , "IgnoreCase"
+  , "LocaleAware"
   ]

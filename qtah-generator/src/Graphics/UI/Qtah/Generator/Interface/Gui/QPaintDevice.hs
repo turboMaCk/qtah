@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Gui.QPaintDevice (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass, ExportEnum),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -29,10 +28,11 @@ import Foreign.Hoppy.Generator.Spec (
   includeStd,
   makeClass,
   mkConstMethod,
+  np,
   )
 import Foreign.Hoppy.Generator.Types (boolT, intT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (qreal)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
@@ -42,8 +42,8 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Gui", "QPaintDevice"]
-  [ QtExport $ ExportClass c_QPaintDevice
-  , QtExport $ ExportEnum e_PaintDeviceMetric
+  [ qtExport c_QPaintDevice
+  , qtExport e_PaintDeviceMetric
   ]
 
 c_QPaintDevice =
@@ -51,34 +51,34 @@ c_QPaintDevice =
   classSetEntityPrefix "" $
   makeClass (ident "QPaintDevice") Nothing [] $
   collect
-  [ just $ mkConstMethod "colorCount" [] intT
-  , just $ mkConstMethod "depth" [] intT
-  , test (qtVersion >= [5, 0]) $ mkConstMethod "devicePixelRatio" [] intT
-  , test (qtVersion >= [5, 6]) $ mkConstMethod "devicePixelRatioF" [] qreal
-  , just $ mkConstMethod "height" [] intT
-  , just $ mkConstMethod "heightMM" [] intT
-  , just $ mkConstMethod "logicalDpiX" [] intT
-  , just $ mkConstMethod "logicalDpiY" [] intT
+  [ just $ mkConstMethod "colorCount" np intT
+  , just $ mkConstMethod "depth" np intT
+  , test (qtVersion >= [5, 0]) $ mkConstMethod "devicePixelRatio" np intT
+  , test (qtVersion >= [5, 6]) $ mkConstMethod "devicePixelRatioF" np qreal
+  , just $ mkConstMethod "height" np intT
+  , just $ mkConstMethod "heightMM" np intT
+  , just $ mkConstMethod "logicalDpiX" np intT
+  , just $ mkConstMethod "logicalDpiY" np intT
     -- TODO paintEngine
-  , just $ mkConstMethod "paintingActive" [] boolT
-  , just $ mkConstMethod "physicalDpiX" [] intT
-  , just $ mkConstMethod "physicalDpiY" [] intT
-  , just $ mkConstMethod "width" [] intT
-  , just $ mkConstMethod "widthMM" [] intT
+  , just $ mkConstMethod "paintingActive" np boolT
+  , just $ mkConstMethod "physicalDpiX" np intT
+  , just $ mkConstMethod "physicalDpiY" np intT
+  , just $ mkConstMethod "width" np intT
+  , just $ mkConstMethod "widthMM" np intT
   ]
 
 e_PaintDeviceMetric =
   makeQtEnum (ident1 "QPaintDevice" "PaintDeviceMetric") [includeStd "QPaintDevice"]
-  [ (1, ["pdm", "width"])
-  , (2, ["pdm", "height"])
-  , (3, ["pdm", "width", "mm"])
-  , (4, ["pdm", "height", "mm"])
-  , (5, ["pdm", "num", "colors"])
-  , (6, ["pdm", "depth"])
-  , (7, ["pdm", "dpi", "x"])
-  , (8, ["pdm", "dpi", "y"])
-  , (9, ["pdm", "physical", "dpi", "x"])
-  , (10, ["pdm", "physical", "dpi", "y"])
-  , (11, ["pdm", "device", "pixel", "ratio"])
-  , (12, ["pdm", "device", "pixel", "ratio", "scaled"])
+  [ "PdmWidth"
+  , "PdmHeight"
+  , "PdmWidthMM"
+  , "PdmHeightMM"
+  , "PdmNumColors"
+  , "PdmDepth"
+  , "PdmDpiX"
+  , "PdmDpiY"
+  , "PdmPhysicalDpiX"
+  , "PdmPhysicalDpiY"
+  , "PdmDevicePixelRatio"
+  , "PdmDevicePixelRatioScaled"
   ]

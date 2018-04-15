@@ -39,13 +39,10 @@ import Foreign.Hoppy.Generator.Language.Haskell (
   prettyPrint,
   sayLn,
   saysLn,
-  toHsClassEntityName',
-  toHsDataTypeName,
   )
 import Foreign.Hoppy.Generator.Spec (
   Class,
   Constness (Const, Nonconst),
-  Export (ExportClass),
   Operator (OpAdd, OpArray),
   Reqs,
   Type,
@@ -63,8 +60,13 @@ import Foreign.Hoppy.Generator.Spec (
   mkCtor,
   mkMethod,
   mkMethod',
+  np,
   reqInclude,
   toExtName,
+  )
+import Foreign.Hoppy.Generator.Spec.Class (
+  toHsClassEntityName',
+  toHsDataTypeName,
   )
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Assignable, Copyable),
@@ -72,7 +74,7 @@ import Foreign.Hoppy.Generator.Spec.ClassFeature (
   )
 import Foreign.Hoppy.Generator.Types (boolT, constT, intT, objT, ptrT, refT, toGcT, voidT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.QPoint (c_QPoint)
 import Graphics.UI.Qtah.Generator.Interface.Core.QPointF (c_QPointF)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QColor (qrgb)
@@ -119,34 +121,34 @@ instantiate' vectorName t tReqs opts =
         classSetEntityPrefix "" $
         makeClass (identT "QVector" [t]) (Just $ toExtName vectorName) [] $
         collect
-        [ just $ mkCtor "new" []
+        [ just $ mkCtor "new" np
         , just $ mkCtor "newWithSize" [intT]
         , just $ mkCtor "newWithSizeAndValue" [intT, t]
         , just $ mkMethod' "append" "append" [t] voidT
         , test (qtVersion >= [5, 5]) $ mkMethod' "append" "appendVector" [objT vector] voidT
         , just $ mkMethod' OpArray "at" [intT] $ refT t
         , just $ mkConstMethod' "at" "atConst" [intT] $ refT $ constT t
-        , just $ mkConstMethod "capacity" [] intT
+        , just $ mkConstMethod "capacity" np intT
           -- OMIT back
           -- OMIT begin
           -- OMIT cbegin
           -- OMIT cend
-        , just $ mkMethod "clear" [] voidT
+        , just $ mkMethod "clear" np voidT
           -- OMIT constBegin
           -- OMIT constData
           -- OMIT constEnd
         , just $ mkConstMethod "contains" [t] boolT
           -- OMIT count()
         , just $ mkConstMethod "count" [t] intT
-        , just $ mkMethod' "data" "array" [] $ ptrT t
-        , just $ mkConstMethod' "data" "arrayConst" [] $ ptrT $ constT t
+        , just $ mkMethod' "data" "array" np $ ptrT t
+        , just $ mkConstMethod' "data" "arrayConst" np $ ptrT $ constT t
           -- OMIT empty
         , test (qtVersion >= [4, 5]) $ mkConstMethod "endsWith" [t] boolT
           -- OMIT erase
         , just $ mkMethod' "fill" "fill" [t] voidT
         , just $ mkMethod' "fill" "fillResize" [t, intT] voidT
-        , just $ mkMethod' "first" "first" [] $ refT t
-        , just $ mkConstMethod' "first" "firstConst" [] $ refT $ constT t
+        , just $ mkMethod' "first" "first" np $ refT t
+        , just $ mkConstMethod' "first" "firstConst" np $ refT $ constT t
           -- TODO fromList
           -- TODO fromStdVector
           -- OMIT front
@@ -155,9 +157,9 @@ instantiate' vectorName t tReqs opts =
         , just $ mkConstMethod' "indexOf" "indexOfFrom" [t, intT] intT
         , just $ mkMethod' "insert" "insert" [intT, t] voidT
         , just $ mkMethod' "insert" "insertMany" [intT, intT, t] voidT
-        , just $ mkConstMethod "isEmpty" [] boolT
-        , just $ mkMethod' "last" "last" [] $ refT t
-        , just $ mkConstMethod' "last" "lastConst" [] $ refT $ constT t
+        , just $ mkConstMethod "isEmpty" np boolT
+        , just $ mkMethod' "last" "last" np $ refT t
+        , just $ mkConstMethod' "last" "lastConst" np $ refT $ constT t
         , just $ mkConstMethod' "lastIndexOf" "lastIndexOf" [t] intT
         , just $ mkConstMethod' "lastIndexOf" "lastIndexOfFrom" [t, intT] intT
           -- OMIT length
@@ -172,19 +174,19 @@ instantiate' vectorName t tReqs opts =
         , just $ mkMethod' "remove" "removeMany" [intT, intT] voidT
         , test (qtVersion >= [5, 4]) $ mkMethod "removeAll" [t] intT
           -- OMIT removeAt
-        , test (qtVersion >= [5, 1]) $ mkMethod "removeFirst" [] voidT
-        , test (qtVersion >= [5, 1]) $ mkMethod "removeLast" [] voidT
+        , test (qtVersion >= [5, 1]) $ mkMethod "removeFirst" np voidT
+        , test (qtVersion >= [5, 1]) $ mkMethod "removeLast" np voidT
         , test (qtVersion >= [5, 4]) $ mkMethod "removeOne" [t] boolT
         , just $ mkMethod "replace" [intT, t] voidT
         , just $ mkMethod "reserve" [intT] voidT
         , just $ mkMethod "resize" [intT] voidT
-        , just $ mkConstMethod "size" [] intT
-        , just $ mkMethod "squeeze" [] voidT
+        , just $ mkConstMethod "size" np intT
+        , just $ mkMethod "squeeze" np voidT
         , test (qtVersion >= [4, 5]) $ mkConstMethod "startsWith" [t] boolT
         , test (qtVersion >= [4, 8]) $ mkMethod "swap" [refT $ objT vector] voidT
         , test (qtVersion >= [5, 2]) $ mkMethod "takeAt" [intT] t
-        , test (qtVersion >= [5, 1]) $ mkMethod "takeFirst" [] t
-        , test (qtVersion >= [5, 1]) $ mkMethod "takeLast" [] t
+        , test (qtVersion >= [5, 1]) $ mkMethod "takeFirst" np t
+        , test (qtVersion >= [5, 1]) $ mkMethod "takeLast" np t
           -- TODO toList
           -- TODO toStdVector
         , just $ mkConstMethod' "value" "value" [intT] t
@@ -241,7 +243,7 @@ instantiate' vectorName t tReqs opts =
 -- | Converts an instantiation into a list of exports to be included in a
 -- module.
 toExports :: Contents -> [QtExport]
-toExports m = [QtExport $ ExportClass $ c_QVector m]
+toExports m = [qtExport $ c_QVector m]
 
 createModule :: String -> Contents -> QtModule
 createModule name contents = makeQtModule ["Core", "QVector", name] $ toExports contents

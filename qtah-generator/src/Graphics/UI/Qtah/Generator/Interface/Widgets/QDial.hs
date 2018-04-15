@@ -20,7 +20,6 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QDial (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -29,6 +28,7 @@ import Foreign.Hoppy.Generator.Spec (
   mkConstMethod,
   mkCtor,
   mkProp,
+  np,
   )
 import Foreign.Hoppy.Generator.Types (boolT, intT, objT, ptrT)
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (qreal)
@@ -42,15 +42,15 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QDial"]
-  [ QtExport $ ExportClass c_QDial ]
+  [ qtExport c_QDial ]
 
 c_QDial =
   addReqIncludes [includeStd "QDial"] $
   classSetEntityPrefix "" $
   makeClass (ident "QDial") Nothing [c_QAbstractSlider]
-  [ mkCtor "new" []
+  [ mkCtor "new" np
   , mkCtor "newWithParent" [ptrT $ objT c_QWidget]
-  , mkConstMethod "notchSize" [] intT
+  , mkConstMethod "notchSize" np intT
   , mkProp "notchTarget" qreal
   , mkProp "notchesVisible" boolT
   , mkProp "wrapping" boolT

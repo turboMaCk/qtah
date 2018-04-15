@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QBoxLayout (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportEnum, ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -32,9 +31,11 @@ import Foreign.Hoppy.Generator.Spec (
   mkMethod,
   mkMethod',
   mkProp,
+  np,
   )
-import Foreign.Hoppy.Generator.Types (bitspaceT, boolT, enumT, intT, objT, ptrT, voidT)
-import Graphics.UI.Qtah.Generator.Interface.Core.Types (bs_Alignment)
+import Foreign.Hoppy.Generator.Types (boolT, enumT, intT, objT, ptrT, voidT)
+import Graphics.UI.Qtah.Generator.Flags (flagsT)
+import Graphics.UI.Qtah.Generator.Interface.Core.Types (fl_Alignment)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QLayout (c_QLayout)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QWidget (c_QWidget)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
@@ -45,8 +46,8 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QBoxLayout"]
-  [ QtExport $ ExportClass c_QBoxLayout
-  , QtExport $ ExportEnum e_Direction
+  [ qtExport c_QBoxLayout
+  , qtExport e_Direction
   ]
 
 c_QBoxLayout =
@@ -58,13 +59,13 @@ c_QBoxLayout =
   , mkMethod' "addLayout" "addLayout" [ptrT $ objT c_QLayout] voidT
   , mkMethod' "addLayout" "addLayoutWithStretch" [ptrT $ objT c_QLayout, intT] voidT
   , mkMethod "addSpacing" [intT] voidT
-  , mkMethod' "addStretch" "addStretch" [] voidT
+  , mkMethod' "addStretch" "addStretch" np voidT
   , mkMethod' "addStretch" "addStretchOf" [intT] voidT
   , mkMethod "addStrut" [intT] voidT
   , mkMethod' "addWidget" "addWidget" [ptrT $ objT c_QWidget] voidT
   , mkMethod' "addWidget" "addWidgetWithStretch" [ptrT $ objT c_QWidget, intT] voidT
   , mkMethod' "addWidget" "addWidgetWithStretchAndAlignment"
-    [ptrT $ objT c_QWidget, intT, bitspaceT bs_Alignment] voidT
+    [ptrT $ objT c_QWidget, intT, flagsT fl_Alignment] voidT
   , mkProp "direction" $ enumT e_Direction
   , mkMethod' "insertLayout" "insertLayout" [intT, ptrT $ objT c_QLayout] voidT
   , mkMethod' "insertLayout" "insertLayoutWithStretch" [intT, ptrT $ objT c_QLayout, intT] voidT
@@ -75,7 +76,7 @@ c_QBoxLayout =
   , mkMethod' "insertWidget" "insertWidget" [intT, ptrT $ objT c_QWidget] voidT
   , mkMethod' "insertWidget" "insertWidgetWithStretch" [intT, ptrT $ objT c_QWidget, intT] voidT
   , mkMethod' "insertWidget" "insertWidgetWithStretchAndAlignment"
-    [intT, ptrT $ objT c_QWidget, intT, bitspaceT bs_Alignment] voidT
+    [intT, ptrT $ objT c_QWidget, intT, flagsT fl_Alignment] voidT
   , mkMethod "setStretch" [intT, intT] voidT
   , mkMethod' "setStretchFactor" "setWidgetStretchFactor" [ptrT $ objT c_QWidget, intT] boolT
   , mkMethod' "setStretchFactor" "setLayoutStretchFactor" [ptrT $ objT c_QLayout, intT] boolT
@@ -84,8 +85,8 @@ c_QBoxLayout =
 
 e_Direction =
   makeQtEnum (ident1 "QBoxLayout" "Direction") [includeStd "QBoxLayout"]
-  [ (0, ["left", "to", "right"])
-  , (1, ["right", "to", "left"])
-  , (2, ["top", "to", "bottom"])
-  , (3, ["bottom", "to", "top"])
+  [ "LeftToRight"
+  , "RightToLeft"
+  , "TopToBottom"
+  , "BottomToTop"
   ]

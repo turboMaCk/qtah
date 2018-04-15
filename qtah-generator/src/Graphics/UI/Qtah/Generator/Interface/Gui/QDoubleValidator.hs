@@ -22,7 +22,6 @@ module Graphics.UI.Qtah.Generator.Interface.Gui.QDoubleValidator (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportEnum, ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -32,10 +31,11 @@ import Foreign.Hoppy.Generator.Spec (
   mkCtor,
   mkMethod',
   mkProp,
+  np,
   )
 import Foreign.Hoppy.Generator.Types (doubleT, enumT, intT, objT, ptrT, voidT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.QObject (c_QObject)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QValidator (c_QValidator)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
@@ -46,9 +46,9 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Gui", "QDoubleValidator"] $
-  (map QtExport . collect)
-  [ just $ ExportClass c_QDoubleValidator
-  , test (qtVersion >= [4, 3]) $ ExportEnum e_Notation
+  collect
+  [ just $ qtExport c_QDoubleValidator
+  , test (qtVersion >= [4, 3]) $ qtExport e_Notation
   ]
 
 c_QDoubleValidator =
@@ -56,7 +56,7 @@ c_QDoubleValidator =
   classSetEntityPrefix "" $
   makeClass (ident "QDoubleValidator") Nothing [c_QValidator] $
   collect
-  [ just $ mkCtor "new" []
+  [ just $ mkCtor "new" np
   , just $ mkCtor "newWithParent" [ptrT $ objT c_QObject]
   , just $ mkCtor "newWithOptions" [doubleT, doubleT, intT]
   , just $ mkCtor "newWithOptionsAndParent" [doubleT, doubleT, intT, ptrT $ objT c_QObject]
@@ -70,6 +70,6 @@ c_QDoubleValidator =
 
 e_Notation =
   makeQtEnum (ident1 "QDoubleValidator" "Notation") [includeStd "QDoubleValidator"]
-  [ (0, ["standard", "notation"])
-  , (1, ["scientific", "notation"])
+  [ "StandardNotation"
+  , "ScientificNotation"
   ]

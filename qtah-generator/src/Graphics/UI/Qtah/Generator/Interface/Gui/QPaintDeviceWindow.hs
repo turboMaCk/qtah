@@ -21,13 +21,13 @@ module Graphics.UI.Qtah.Generator.Interface.Gui.QPaintDeviceWindow (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
   includeStd,
   makeClass,
   mkMethod',
+  np,
   )
 import Foreign.Hoppy.Generator.Types (objT, voidT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QRect (c_QRect)
@@ -44,14 +44,14 @@ minVersion = [5, 4]
 aModule =
   AQtModule $
   makeQtModuleWithMinVersion ["Gui", "QPaintDeviceWindow"] minVersion
-  [ QtExport $ ExportClass c_QPaintDeviceWindow
+  [ qtExport c_QPaintDeviceWindow
   ]
 
 c_QPaintDeviceWindow =
   addReqIncludes [includeStd "QPaintDeviceWindow"] $
   classSetEntityPrefix "" $
   makeClass (ident "QPaintDeviceWindow") Nothing [c_QWindow, c_QPaintDevice]
-  [ mkMethod' "update" "update" [] voidT
+  [ mkMethod' "update" "update" np voidT
   , mkMethod' "update" "updateRect" [objT c_QRect] voidT
   , mkMethod' "update" "updateRegion" [objT c_QRegion] voidT
   ]

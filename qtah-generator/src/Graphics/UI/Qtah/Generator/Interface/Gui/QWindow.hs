@@ -23,7 +23,6 @@ module Graphics.UI.Qtah.Generator.Interface.Gui.QWindow (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass, ExportEnum),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -37,10 +36,12 @@ import Foreign.Hoppy.Generator.Spec (
   mkMethod,
   mkMethod',
   mkProp,
+  np,
   )
-import Foreign.Hoppy.Generator.Types (bitspaceT, boolT, enumT, intT, objT, ptrT, voidT)
+import Foreign.Hoppy.Generator.Types (boolT, enumT, intT, objT, ptrT, voidT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
+import Graphics.UI.Qtah.Generator.Flags (flagsT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QMargins (c_QMargins)
 import Graphics.UI.Qtah.Generator.Interface.Core.QObject (c_QObject)
 import Graphics.UI.Qtah.Generator.Interface.Core.QPoint (c_QPoint)
@@ -48,8 +49,8 @@ import Graphics.UI.Qtah.Generator.Interface.Core.QRect (c_QRect)
 import Graphics.UI.Qtah.Generator.Interface.Core.QSize (c_QSize)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (
-  bs_WindowFlags,
   e_ScreenOrientation,
+  fl_WindowFlags,
   e_WindowModality,
   e_WindowState,
   e_WindowType,
@@ -60,16 +61,16 @@ import Graphics.UI.Qtah.Generator.Interface.Gui.QIcon (c_QIcon)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QRegion (c_QRegion)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QSurface (c_QSurface, e_SurfaceType)
 import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
-  c_Listener,
-  c_ListenerBool,
-  c_ListenerInt,
-  c_ListenerPtrQObject,
-  c_ListenerQreal,
-  c_ListenerQString,
-  c_ListenerQWindowVisibility,
-  c_ListenerScreenOrientation,
-  c_ListenerWindowModality,
-  c_ListenerWindowState,
+  listener,
+  listenerBool,
+  listenerInt,
+  listenerPtrQObject,
+  listenerQreal,
+  listenerQString,
+  listenerQWindowVisibility,
+  listenerScreenOrientation,
+  listenerWindowModality,
+  listenerWindowState,
   )
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModuleWithMinVersion)
 import Graphics.UI.Qtah.Generator.Types
@@ -81,10 +82,10 @@ minVersion = [5, 0]
 aModule =
   AQtModule $
   makeQtModuleWithMinVersion ["Gui", "QWindow"] minVersion $
-  [ QtExport $ ExportClass c_QWindow ] ++
+  [ qtExport c_QWindow ] ++
   map QtExportSignal signals ++
-  [ QtExport $ ExportEnum e_AncestorMode
-  , QtExport $ ExportEnum e_Visibility
+  [ qtExport e_AncestorMode
+  , qtExport e_Visibility
   ]
 
 c_QWindow =
@@ -92,33 +93,33 @@ c_QWindow =
   classSetEntityPrefix "" $
   makeClass (ident "QWindow") Nothing [c_QObject, c_QSurface] $
   collect
-  [ just $ mkCtor "new" []
+  [ just $ mkCtor "new" np
   , just $ mkCtor "newWithParent" [ptrT $ objT c_QWindow]
     -- TODO mkCtor "newWithScreen" [ptrT $ objT c_QScreen]
   , test (qtVersion >= [5, 1]) $ mkMethod "alert" [intT] voidT
   , just $ mkProp "baseSize" $ objT c_QSize
-  , just $ mkMethod "close" [] voidT
-  , just $ mkConstMethod "contentOrientation" [] $ enumT e_ScreenOrientation
-  , just $ mkMethod "create" [] voidT
+  , just $ mkMethod "close" np voidT
+  , just $ mkConstMethod "contentOrientation" np $ enumT e_ScreenOrientation
+  , just $ mkMethod "create" np voidT
   , just $ mkProp "cursor" $ objT c_QCursor
-  , just $ mkMethod "destroy" [] voidT
-  , just $ mkConstMethod "devicePixelRatio" [] qreal
+  , just $ mkMethod "destroy" np voidT
+  , just $ mkConstMethod "devicePixelRatio" np qreal
   , just $ mkProp "filePath" $ objT c_QString
-  , just $ mkProp "flags" $ bitspaceT bs_WindowFlags
-  , just $ mkConstMethod "focusObject" [] $ ptrT $ objT c_QObject
-  , just $ mkConstMethod "frameGeometry" [] $ objT c_QRect
-  , just $ mkConstMethod "frameMargins" [] $ objT c_QMargins
+  , just $ mkProp "flags" $ flagsT fl_WindowFlags
+  , just $ mkConstMethod "focusObject" np $ ptrT $ objT c_QObject
+  , just $ mkConstMethod "frameGeometry" np $ objT c_QRect
+  , just $ mkConstMethod "frameMargins" np $ objT c_QMargins
   , just $ mkProp "framePosition" $ objT c_QPoint
   , just $ mkProp "geometry" $ objT c_QRect
   , just $ mkProp "height" intT
-  , just $ mkMethod "hide" [] voidT
+  , just $ mkMethod "hide" np voidT
   , just $ mkProp "icon" $ objT c_QIcon
-  , test (qtVersion >= [5, 1]) $ mkConstMethod "isActive" [] boolT
+  , test (qtVersion >= [5, 1]) $ mkConstMethod "isActive" np boolT
   , just $ mkConstMethod "isAncestorOf" [ptrT $ objT c_QWindow, enumT e_AncestorMode] boolT
-  , just $ mkConstMethod "isExposed" [] boolT
-  , just $ mkConstMethod "isModal" [] boolT
-  , just $ mkConstMethod "isTopLevel" [] boolT
-  , just $ mkMethod "lower" [] voidT
+  , just $ mkConstMethod "isExposed" np boolT
+  , just $ mkConstMethod "isModal" np boolT
+  , just $ mkConstMethod "isTopLevel" np boolT
+  , just $ mkMethod "lower" np voidT
   , just $ mkConstMethod "mapFromGlobal" [objT c_QPoint] $ objT c_QPoint
   , just $ mkConstMethod "mapToGlobal" [objT c_QPoint] $ objT c_QPoint
   , just $ mkProp "mask" $ objT c_QRegion
@@ -132,11 +133,11 @@ c_QWindow =
   , test (qtVersion >= [5, 1]) $ mkProp "opacity" qreal
   , just $ mkProp "parent" $ ptrT $ objT c_QWindow
   , just $ mkProp "position" $ objT c_QPoint
-  , just $ mkMethod "raise" [] voidT
+  , just $ mkMethod "raise" np voidT
   , just $ mkMethod "reportContentOrientationChange" [enumT e_ScreenOrientation] voidT
-  , just $ mkMethod "requestActivate" [] voidT
-  , test (qtVersion >= [5, 5]) $ mkMethod "requestUpdate" [] voidT
-    -- TODO mkConstMethod "requestedFormat" [] $ objT c_QSurfaceFormat
+  , just $ mkMethod "requestActivate" np voidT
+  , test (qtVersion >= [5, 5]) $ mkMethod "requestUpdate" np voidT
+    -- TODO mkConstMethod "requestedFormat" np $ objT c_QSurfaceFormat
   , just $ mkMethod' "resize" "resize" [objT c_QSize] voidT
   , just $ mkMethod' "resize" "resizeRaw" [intT, intT] voidT
     -- TODO mkProp "screen" $ ptrT $ objT c_QScreen
@@ -146,16 +147,16 @@ c_QWindow =
   , just $ mkMethod "setMouseGrabEnabled" [boolT] voidT
   , just $ mkMethod' "setPosition" "setPositionRaw" [intT, intT] voidT
   , just $ mkMethod "setSurfaceType" [enumT e_SurfaceType] voidT
-  , just $ mkMethod "show" [] voidT
-  , just $ mkMethod "showFullScreen" [] voidT
-  , just $ mkMethod "showMaximized" [] voidT
-  , just $ mkMethod "showMinimized" [] voidT
-  , just $ mkMethod "showNormal" [] voidT
+  , just $ mkMethod "show" np voidT
+  , just $ mkMethod "showFullScreen" np voidT
+  , just $ mkMethod "showMaximized" np voidT
+  , just $ mkMethod "showMinimized" np voidT
+  , just $ mkMethod "showNormal" np voidT
   , just $ mkProp "sizeIncrement" $ objT c_QSize
   , just $ mkProp "title" $ objT c_QString
   , just $ mkProp "transientParent" $ ptrT $ objT c_QWindow
-  , just $ mkConstMethod' "type" "getType" [] $ enumT e_WindowType
-  , just $ mkMethod "unsetCursor" [] voidT
+  , just $ mkConstMethod' "type" "getType" np $ enumT e_WindowType
+  , just $ mkMethod "unsetCursor" np voidT
   , test (qtVersion >= [5, 1]) $ mkProp "visibility" $ enumT e_Visibility
   , just $ mkBoolIsProp "visible"
   , just $ mkProp "width" intT
@@ -166,38 +167,38 @@ c_QWindow =
   ]
 
 signals =
-  [ makeSignal c_QWindow "activeChanged" c_Listener
-  , makeSignal c_QWindow "contentOrientationChanged" c_ListenerScreenOrientation
-  , makeSignal c_QWindow "focusObjectChanged" c_ListenerPtrQObject
-  , makeSignal c_QWindow "heightChanged" c_ListenerInt
-  , makeSignal c_QWindow "maximumHeightChanged" c_ListenerInt
-  , makeSignal c_QWindow "maximumWidthChanged" c_ListenerInt
-  , makeSignal c_QWindow "minimumHeightChanged" c_ListenerInt
-  , makeSignal c_QWindow "minimumWidthChanged" c_ListenerInt
-  , makeSignal c_QWindow "modalityChanged" c_ListenerWindowModality
-  , makeSignal c_QWindow "opacityChanged" c_ListenerQreal
-    -- TODO makeSignal c_QWindow "screenChanged" c_ListenerPtrQScreen
-  , makeSignal c_QWindow "visibilityChanged" c_ListenerQWindowVisibility
-  , makeSignal c_QWindow "visibleChanged" c_ListenerBool
-  , makeSignal c_QWindow "widthChanged" c_ListenerInt
-  , makeSignal c_QWindow "windowStateChanged" c_ListenerWindowState
-  , makeSignal c_QWindow "windowTitleChanged" c_ListenerQString
-  , makeSignal c_QWindow "xChanged" c_ListenerInt
-  , makeSignal c_QWindow "yChanged" c_ListenerInt
+  [ makeSignal c_QWindow "activeChanged" listener
+  , makeSignal c_QWindow "contentOrientationChanged" listenerScreenOrientation
+  , makeSignal c_QWindow "focusObjectChanged" listenerPtrQObject
+  , makeSignal c_QWindow "heightChanged" listenerInt
+  , makeSignal c_QWindow "maximumHeightChanged" listenerInt
+  , makeSignal c_QWindow "maximumWidthChanged" listenerInt
+  , makeSignal c_QWindow "minimumHeightChanged" listenerInt
+  , makeSignal c_QWindow "minimumWidthChanged" listenerInt
+  , makeSignal c_QWindow "modalityChanged" listenerWindowModality
+  , makeSignal c_QWindow "opacityChanged" listenerQreal
+    -- TODO makeSignal c_QWindow "screenChanged" listenerPtrQScreen
+  , makeSignal c_QWindow "visibilityChanged" listenerQWindowVisibility
+  , makeSignal c_QWindow "visibleChanged" listenerBool
+  , makeSignal c_QWindow "widthChanged" listenerInt
+  , makeSignal c_QWindow "windowStateChanged" listenerWindowState
+  , makeSignal c_QWindow "windowTitleChanged" listenerQString
+  , makeSignal c_QWindow "xChanged" listenerInt
+  , makeSignal c_QWindow "yChanged" listenerInt
   ]
 
 e_AncestorMode =
   makeQtEnum (ident1 "QWindow" "AncestorMode") [includeStd "QWindow"]
-  [ (0, ["exclude", "transients"])
-  , (1, ["include", "transients"])
+  [ "ExcludeTransients"
+  , "IncludeTransients"
   ]
 
 e_Visibility =
   makeQtEnum (ident1 "QWindow" "Visibility") [includeStd "QWindow"]
-  [ (0, ["hidden"])
-  , (1, ["automatic", "visibility"])
-  , (2, ["windowed"])
-  , (3, ["minimized"])
-  , (4, ["maximized"])
-  , (5, ["full", "screen"])
+  [ "Hidden"
+  , "AutomaticVisibility"
+  , "Windowed"
+  , "Minimized"
+  , "Maximized"
+  , "FullScreen"
   ]

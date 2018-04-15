@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QAbstractItemModel (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportEnum, ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -32,9 +31,9 @@ import Foreign.Hoppy.Generator.Spec (
   mkConstMethod',
   mkMethod,
   mkMethod',
+  np,
   )
 import Foreign.Hoppy.Generator.Types (
-  bitspaceT,
   boolT,
   enumT,
   intT,
@@ -42,22 +41,23 @@ import Foreign.Hoppy.Generator.Types (
   voidT,
   )
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
+import Graphics.UI.Qtah.Generator.Flags (flagsT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QModelIndex (c_QModelIndex)
 import Graphics.UI.Qtah.Generator.Interface.Core.QObject (c_QObject)
 import Graphics.UI.Qtah.Generator.Interface.Core.QSize (c_QSize)
 import Graphics.UI.Qtah.Generator.Interface.Core.QVariant (c_QVariant)
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (
-  bs_ItemFlags,
   e_ItemDataRole,
+  fl_ItemFlags,
   e_Orientation,
   e_SortOrder,
   )
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
-  c_Listener,
-  c_ListenerQModelIndexIntInt,
-  c_ListenerQModelIndexIntIntQModelIndexInt,
-  c_ListenerQModelIndexQModelIndexQVectorInt,
+  listener,
+  listenerQModelIndexIntInt,
+  listenerQModelIndexIntIntQModelIndexInt,
+  listenerQModelIndexQModelIndexQVectorInt,
   )
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
@@ -67,9 +67,9 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Core", "QAbstractItemModel"] $
-  QtExport (ExportClass c_QAbstractItemModel) :
+  qtExport c_QAbstractItemModel :
   map QtExportSignal signals ++
-  [ QtExport $ ExportEnum e_LayoutChangeHint ]
+  [ qtExport e_LayoutChangeHint ]
 
 c_QAbstractItemModel =
   addReqIncludes [includeStd "QAbstractItemModel"] $
@@ -79,15 +79,15 @@ c_QAbstractItemModel =
   [ just $ mkConstMethod "buddy" [objT c_QModelIndex] $ objT c_QModelIndex
     -- TODO canDropMimeData
   , just $ mkConstMethod "canFetchMore" [objT c_QModelIndex] boolT
-  , just $ mkConstMethod' "columnCount" "columnCount" [] intT
+  , just $ mkConstMethod' "columnCount" "columnCount" np intT
   , just $ mkConstMethod' "columnCount" "columnCountAt" [objT c_QModelIndex] intT
   , just $ mkConstMethod' "data" "getData" [objT c_QModelIndex] $ objT c_QVariant
   , just $ mkConstMethod' "data" "getDataWithRole"
     [objT c_QModelIndex, enumT e_ItemDataRole] $ objT c_QVariant
     -- TODO dropMimeData
   , just $ mkMethod "fetchMore" [objT c_QModelIndex] voidT
-  , just $ mkConstMethod "flags" [objT c_QModelIndex] $ bitspaceT bs_ItemFlags
-  , just $ mkConstMethod' "hasChildren" "hasChildren" [] boolT
+  , just $ mkConstMethod "flags" [objT c_QModelIndex] $ flagsT fl_ItemFlags
+  , just $ mkConstMethod' "hasChildren" "hasChildren" np boolT
   , just $ mkConstMethod' "hasChildren" "hasChildrenAt" [objT c_QModelIndex] boolT
   , just $ mkConstMethod' "hasIndex" "hasIndex" [intT, intT] boolT
   , just $ mkConstMethod' "hasIndex" "hasIndexAt" [intT, intT, objT c_QModelIndex] boolT
@@ -125,9 +125,9 @@ c_QAbstractItemModel =
   , just $ mkMethod' "removeRow" "removeRowAt" [intT, objT c_QModelIndex] boolT
   , just $ mkMethod' "removeRows" "removeRows" [intT, intT] boolT
   , just $ mkMethod' "removeRows" "removeRowsAt" [intT, intT, objT c_QModelIndex] boolT
-  , just $ mkMethod "revert" [] voidT
+  , just $ mkMethod "revert" np voidT
     -- TODO roleNames (>=4.6)
-  , just $ mkConstMethod' "rowCount" "rowCount" [] intT
+  , just $ mkConstMethod' "rowCount" "rowCount" np intT
   , just $ mkConstMethod' "rowCount" "rowCountAt" [objT c_QModelIndex] intT
   , just $ mkMethod' "setData" "setData" [objT c_QModelIndex, objT c_QVariant] boolT
   , just $ mkMethod' "setData" "setDataWithRole"
@@ -141,39 +141,39 @@ c_QAbstractItemModel =
   , just $ mkMethod' "sort" "sort" [intT] voidT
   , just $ mkMethod' "sort" "sortWithOrder" [intT, enumT e_SortOrder] voidT
   , just $ mkConstMethod "span" [objT c_QModelIndex] $ objT c_QSize
-  , just $ mkMethod "submit" [] boolT
+  , just $ mkMethod "submit" np boolT
     -- TODO suportedDragActions
     -- TODO supportedDropActions (>=4.2)
   ]
 
 signals =
   collect
-  [ just $ makeSignal c_QAbstractItemModel "columnsAboutToBeInserted" c_ListenerQModelIndexIntInt
+  [ just $ makeSignal c_QAbstractItemModel "columnsAboutToBeInserted" listenerQModelIndexIntInt
   , test (qtVersion >= [4, 6]) $ makeSignal c_QAbstractItemModel "columnsAboutToBeMoved"
-    c_ListenerQModelIndexIntIntQModelIndexInt
-  , just $ makeSignal c_QAbstractItemModel "columnsAboutToBeRemoved" c_ListenerQModelIndexIntInt
-  , just $ makeSignal c_QAbstractItemModel "columnsInserted" c_ListenerQModelIndexIntInt
+    listenerQModelIndexIntIntQModelIndexInt
+  , just $ makeSignal c_QAbstractItemModel "columnsAboutToBeRemoved" listenerQModelIndexIntInt
+  , just $ makeSignal c_QAbstractItemModel "columnsInserted" listenerQModelIndexIntInt
   , test (qtVersion >= [4, 6]) $ makeSignal c_QAbstractItemModel "columnsMoved"
-    c_ListenerQModelIndexIntIntQModelIndexInt
-  , just $ makeSignal c_QAbstractItemModel "columnsRemoved" c_ListenerQModelIndexIntInt
-  , just $ makeSignal c_QAbstractItemModel "dataChanged" c_ListenerQModelIndexQModelIndexQVectorInt
+    listenerQModelIndexIntIntQModelIndexInt
+  , just $ makeSignal c_QAbstractItemModel "columnsRemoved" listenerQModelIndexIntInt
+  , just $ makeSignal c_QAbstractItemModel "dataChanged" listenerQModelIndexQModelIndexQVectorInt
     -- TODO layoutAboutToBeChanged (>=5.0)
     -- TODO layoutChanged (>=5.0)
-  , test (qtVersion >= [4, 2]) $ makeSignal c_QAbstractItemModel "modelAboutToBeReset" c_Listener
-  , test (qtVersion >= [4, 1]) $ makeSignal c_QAbstractItemModel "modelReset" c_Listener
-  , just $ makeSignal c_QAbstractItemModel "rowsAboutToBeInserted" c_ListenerQModelIndexIntInt
+  , test (qtVersion >= [4, 2]) $ makeSignal c_QAbstractItemModel "modelAboutToBeReset" listener
+  , test (qtVersion >= [4, 1]) $ makeSignal c_QAbstractItemModel "modelReset" listener
+  , just $ makeSignal c_QAbstractItemModel "rowsAboutToBeInserted" listenerQModelIndexIntInt
   , test (qtVersion >= [4, 6]) $ makeSignal c_QAbstractItemModel "rowsAboutToBeMoved"
-    c_ListenerQModelIndexIntIntQModelIndexInt
-  , just $ makeSignal c_QAbstractItemModel "rowsAboutToBeRemoved" c_ListenerQModelIndexIntInt
-  , just $ makeSignal c_QAbstractItemModel "rowsInserted" c_ListenerQModelIndexIntInt
+    listenerQModelIndexIntIntQModelIndexInt
+  , just $ makeSignal c_QAbstractItemModel "rowsAboutToBeRemoved" listenerQModelIndexIntInt
+  , just $ makeSignal c_QAbstractItemModel "rowsInserted" listenerQModelIndexIntInt
   , test (qtVersion >= [4, 6]) $ makeSignal c_QAbstractItemModel "rowsMoved"
-    c_ListenerQModelIndexIntIntQModelIndexInt
-  , just $ makeSignal c_QAbstractItemModel "rowsRemoved" c_ListenerQModelIndexIntInt
+    listenerQModelIndexIntIntQModelIndexInt
+  , just $ makeSignal c_QAbstractItemModel "rowsRemoved" listenerQModelIndexIntInt
   ]
 
 e_LayoutChangeHint =
   makeQtEnum (ident1 "QAbstractItemModel" "LayoutChangeHint") [includeStd "QAbstractItemModel"]
-  [ (0, ["no", "layout", "change", "hint"])
-  , (1, ["vertical", "sort", "hint"])
-  , (2, ["horizontal", "sort", "hint"])
+  [ "NoLayoutChangeHint"
+  , "VerticalSortHint"
+  , "HorizontalSortHint"
   ]

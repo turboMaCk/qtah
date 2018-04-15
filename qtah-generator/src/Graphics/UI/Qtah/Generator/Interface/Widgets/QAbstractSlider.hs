@@ -22,7 +22,6 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QAbstractSlider (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass, ExportEnum),
   addReqIncludes,
   classSetEntityPrefix,
   enumSetValuePrefix,
@@ -36,15 +35,16 @@ import Foreign.Hoppy.Generator.Spec (
   mkCtor,
   mkMethod,
   mkProp,
+  np,
   toExtName,
   )
 import Foreign.Hoppy.Generator.Types (boolT, enumT, intT, objT, ptrT, voidT)
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (e_Orientation)
 import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
-  c_Listener,
-  c_ListenerInt,
-  c_ListenerIntInt,
-  c_ListenerQAbstractSliderAction,
+  listener,
+  listenerInt,
+  listenerIntInt,
+  listenerQAbstractSliderAction,
   )
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QWidget (c_QWidget)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
@@ -55,15 +55,15 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QAbstractSlider"] $
-  QtExport (ExportClass c_QAbstractSlider) :
+  qtExport c_QAbstractSlider :
   map QtExportSignal signals ++
-  [ QtExport $ ExportEnum e_SliderAction ]
+  [ qtExport e_SliderAction ]
 
 c_QAbstractSlider =
   addReqIncludes [includeStd "QAbstractSlider"] $
   classSetEntityPrefix "" $
   makeClass (ident "QAbstractSlider") Nothing [c_QWidget]
-  [ mkCtor "new" []
+  [ mkCtor "new" np
   , mkCtor "newWithParent" [ptrT $ objT c_QWidget]
   , mkProp "invertedAppearance" boolT
   , mkProp "invertedControls" boolT
@@ -80,12 +80,12 @@ c_QAbstractSlider =
   ]
 
 signals =
-  [ makeSignal c_QAbstractSlider "actionTriggered" c_ListenerQAbstractSliderAction
-  , makeSignal c_QAbstractSlider "rangeChanged" c_ListenerIntInt
-  , makeSignal c_QAbstractSlider "sliderMoved" c_ListenerInt
-  , makeSignal c_QAbstractSlider "sliderPressed" c_Listener
-  , makeSignal c_QAbstractSlider "sliderReleased" c_Listener
-  , makeSignal c_QAbstractSlider "valueChanged" c_ListenerInt
+  [ makeSignal c_QAbstractSlider "actionTriggered" listenerQAbstractSliderAction
+  , makeSignal c_QAbstractSlider "rangeChanged" listenerIntInt
+  , makeSignal c_QAbstractSlider "sliderMoved" listenerInt
+  , makeSignal c_QAbstractSlider "sliderPressed" listener
+  , makeSignal c_QAbstractSlider "sliderReleased" listener
+  , makeSignal c_QAbstractSlider "valueChanged" listenerInt
   ]
 
 -- This uses 'makeEnum' rather than 'makeQtEnum' in order to use the external

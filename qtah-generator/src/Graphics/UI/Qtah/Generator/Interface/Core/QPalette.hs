@@ -21,8 +21,7 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QPalette (
   e_ColorRole
   ) where
 
-import Foreign.Hoppy.Generator.Spec (Export (ExportEnum), Include, ident1, includeStd)
-import Foreign.Hoppy.Generator.Version (collect, just)
+import Foreign.Hoppy.Generator.Spec (Include, ident1, includeStd)
 import Graphics.UI.Qtah.Generator.Module (AModule(AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
 
@@ -32,28 +31,25 @@ qPaletteInclude :: [Include]
 qPaletteInclude = [includeStd "Qt", includeStd "QPalette"]
 
 aModule :: AModule
-aModule = AQtModule $ makeQtModule ["Core", "QPalette"] exports
-
-exports :: [QtExport]
-exports =
-  QtExportSpecials :
-  (map QtExport . collect)
-  [ just $ ExportEnum e_ColorRole
+aModule =
+  AQtModule $
+  makeQtModule ["Core", "QPalette"]
+  [ qtExport e_ColorRole
   ]
 
 -- TODO QPalette
 
 e_ColorRole =
   makeQtEnum (ident1 "QPalette" "ColorRole") qPaletteInclude
-  [ (10, ["window"])
-  , (0,  ["window", "text"])
-  , (9,  ["base"])
-  , (16, ["alternate", "base"])
-  , (18, ["tool", "tip", "base"])
-  , (19, ["tool", "tip", "text"])
-  , (6,  ["text"])
-  , (1,  ["button"])
-  , (8,  ["button", "text"])
-  , (7,  ["bright", "text"])
+  [ "Window"
+  , "WindowText"
+  , "Base"
+  , "AlternateBase"
+  , "ToolTipBase"
+  , "ToolTipText"
+  , "Text"
+  , "Button"
+  , "ButtonText"
+  , "BrightText"
   ]
 

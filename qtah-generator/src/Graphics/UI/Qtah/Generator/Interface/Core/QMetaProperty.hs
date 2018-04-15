@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QMetaProperty (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetConversionToGc,
   classSetEntityPrefix,
@@ -42,7 +41,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Core", "QMetaProperty"]
-  [ QtExport $ ExportClass c_QMetaProperty ]
+  [ qtExport c_QMetaProperty ]
 
 c_QMetaProperty =
   addReqIncludes [includeStd "QMetaProperty"] $

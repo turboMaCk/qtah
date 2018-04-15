@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QMetaEnum (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetConversionToGc,
   classSetEntityPrefix,
@@ -42,7 +41,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Core", "QMetaEnum"]
-  [ QtExport $ ExportClass c_QMetaEnum ]
+  [ qtExport c_QMetaEnum ]
 
 c_QMetaEnum =
   addReqIncludes [includeStd "QMetaEnum"] $

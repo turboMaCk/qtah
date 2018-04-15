@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QMainWindow (
 
 import Foreign.Hoppy.Generator.Spec (
   Class,
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -34,6 +33,7 @@ import Foreign.Hoppy.Generator.Spec (
   mkMethod,
   mkMethod',
   mkProp,
+  np,
   )
 import Foreign.Hoppy.Generator.Types (boolT, enumT, intT, objT, ptrT, voidT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QByteArray (c_QByteArray)
@@ -44,7 +44,7 @@ import Graphics.UI.Qtah.Generator.Interface.Core.Types (
   e_DockWidgetArea,
   e_Orientation,
   )
-import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (c_ListenerQSize)
+import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (listenerQSize)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QDockWidget (c_QDockWidget)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QMenu (c_QMenu)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QMenuBar (c_QMenuBar)
@@ -60,7 +60,7 @@ aModule :: AModule
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QMainWindow"] $
-  QtExport (ExportClass c_QMainWindow) :
+  qtExport c_QMainWindow :
   map QtExportSignal signals
 
 c_QMainWindow :: Class
@@ -68,7 +68,7 @@ c_QMainWindow =
   addReqIncludes [includeStd "QMainWindow"] $
   classSetEntityPrefix "" $
   makeClass (ident "QMainWindow") Nothing [c_QWidget]
-  [ mkCtor "new" []
+  [ mkCtor "new" np
   , mkCtor "newWithParent" [ptrT $ objT c_QWidget]
     -- TODO Ctor with Qt::WindowFlags.
   , mkMethod "addDockWidget" [enumT e_DockWidgetArea, ptrT $ objT c_QDockWidget] voidT
@@ -82,7 +82,7 @@ c_QMainWindow =
   , mkBoolIsProp "animated"
   , mkProp "centralWidget" $ ptrT $ objT c_QWidget
   , mkConstMethod "corner" [enumT e_Corner] $ enumT e_DockWidgetArea
-  , mkMethod "createPopupMenu" [] $ ptrT $ objT c_QMenu
+  , mkMethod "createPopupMenu" np $ ptrT $ objT c_QMenu
   , mkBoolIsProp "dockNestingEnabled"
     -- TODO dockOptions
   , mkConstMethod "dockWidgetArea" [ptrT $ objT c_QDockWidget] $ enumT e_DockWidgetArea
@@ -96,7 +96,7 @@ c_QMainWindow =
   , mkMethod "restoreDockWidget" [ptrT $ objT c_QDockWidget] boolT
   , mkMethod "restoreState" [objT c_QByteArray] boolT
   , mkMethod' "restoreState" "restoreStateWithVersion" [objT c_QByteArray, intT] boolT
-  , mkConstMethod "saveState" [] (objT c_QByteArray)
+  , mkConstMethod "saveState" np (objT c_QByteArray)
   , mkConstMethod' "saveState" "saveStateWithVersion" [intT] (objT c_QByteArray)
   , mkMethod "setCorner" [enumT e_Corner, enumT e_DockWidgetArea] voidT
     -- TODO setTabPosition
@@ -116,6 +116,6 @@ c_QMainWindow =
 
 signals :: [Signal]
 signals =
-  [ makeSignal c_QMainWindow "iconSizeChanged" c_ListenerQSize
+  [ makeSignal c_QMainWindow "iconSizeChanged" listenerQSize
     -- TODO toolButtonStyleChanged
   ]

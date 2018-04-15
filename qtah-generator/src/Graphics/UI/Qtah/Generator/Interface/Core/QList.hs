@@ -48,9 +48,6 @@ import Foreign.Hoppy.Generator.Language.Haskell (
   prettyPrint,
   sayLn,
   saysLn,
-  toHsCastMethodName,
-  toHsClassEntityName',
-  toHsDataTypeName,
   )
 import Foreign.Hoppy.Generator.Spec (
   Class,
@@ -61,7 +58,6 @@ import Foreign.Hoppy.Generator.Spec (
     classHaskellConversionType
     ),
   Constness (Const, Nonconst),
-  Export (ExportClass),
   Operator (OpAdd, OpArray),
   Reqs,
   Type,
@@ -79,8 +75,14 @@ import Foreign.Hoppy.Generator.Spec (
   mkCtor,
   mkMethod,
   mkMethod',
+  np,
   reqInclude,
   toExtName,
+  )
+import Foreign.Hoppy.Generator.Spec.Class (
+  toHsCastMethodName,
+  toHsClassEntityName',
+  toHsDataTypeName,
   )
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Assignable, Copyable),
@@ -88,7 +90,7 @@ import Foreign.Hoppy.Generator.Spec.ClassFeature (
   )
 import Foreign.Hoppy.Generator.Types (boolT, constT, intT, objT, ptrT, refT, toGcT, voidT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.QByteArray (c_QByteArray)
 import Graphics.UI.Qtah.Generator.Interface.Core.QItemSelectionRange (c_QItemSelectionRange)
 import Graphics.UI.Qtah.Generator.Interface.Core.QModelIndex (c_QModelIndex)
@@ -151,28 +153,28 @@ instantiate' listName t tReqs opts =
         classSetMonomorphicSuperclass $
         classSetEntityPrefix "" $
         makeClass (identT "QList" [t]) (Just $ toExtName listName) [] $ collect
-        [ just $ mkCtor "new" []
+        [ just $ mkCtor "new" np
         , just $ mkMethod' "append" "append" [t] voidT
         , test (qtVersion >= [4, 5]) $ mkMethod' "append" "appendList" [objT list] voidT
         , just $ mkMethod' OpArray "at" [intT] $ refT t
         , just $ mkConstMethod' "at" "atConst" [intT] $ refT $ constT t
           -- OMIT back
           -- OMIT begin
-        , just $ mkMethod "clear" [] voidT
+        , just $ mkMethod "clear" np voidT
         , just $ mkConstMethod "contains" [t] boolT
           -- OMIT count()
         , just $ mkConstMethod "count" [t] intT
         , test (qtVersion >= [4, 5]) $ mkConstMethod "endsWith" [t] boolT
           -- OMIT erase
-        , just $ mkMethod' "first" "first" [] $ refT t
-        , just $ mkConstMethod' "first" "firstConst" [] $ refT $ constT t
+        , just $ mkMethod' "first" "first" np $ refT t
+        , just $ mkConstMethod' "first" "firstConst" np $ refT $ constT t
         , just $ mkConstMethod' OpArray "get" [intT] t
         , just $ mkConstMethod' "indexOf" "indexOf" [t] intT
         , just $ mkConstMethod' "indexOf" "indexOfFrom" [t, intT] intT
         , just $ mkMethod "insert" [intT, t] voidT
-        , just $ mkConstMethod "isEmpty" [] boolT
-        , just $ mkMethod' "last" "last" [] $ refT t
-        , just $ mkConstMethod' "last" "lastConst" [] $ refT $ constT t
+        , just $ mkConstMethod "isEmpty" np boolT
+        , just $ mkMethod' "last" "last" np $ refT t
+        , just $ mkConstMethod' "last" "lastConst" np $ refT $ constT t
         , just $ mkConstMethod' "lastIndexOf" "lastIndexOf" [t] intT
         , just $ mkConstMethod' "lastIndexOf" "lastIndexOfFrom" [t, intT] intT
           -- OMIT length
@@ -182,18 +184,18 @@ instantiate' listName t tReqs opts =
         , just $ mkMethod "prepend" [t] voidT
         , just $ mkMethod "removeAll" [t] intT
         , just $ mkMethod "removeAt" [intT] voidT
-        , just $ mkMethod "removeFirst" [] voidT
-        , just $ mkMethod "removeLast" [] voidT
+        , just $ mkMethod "removeFirst" np voidT
+        , just $ mkMethod "removeLast" np voidT
         , test (qtVersion >= [4, 4]) $ mkMethod "removeOne" [t] boolT
         , just $ mkMethod "replace" [intT, t] voidT
         , test hasReserve $ mkMethod "reserve" [intT] voidT
-        , just $ mkConstMethod "size" [] intT
+        , just $ mkConstMethod "size" np intT
         , test (qtVersion >= [4, 5]) $ mkConstMethod "startsWith" [t] boolT
         , just $ mkMethod "swap" [intT, intT] voidT
           -- OMIT swap(QList<T>&)
         , just $ mkMethod "takeAt" [intT] t
-        , just $ mkMethod "takeFirst" [] t
-        , just $ mkMethod "takeLast" [] t
+        , just $ mkMethod "takeFirst" np t
+        , just $ mkMethod "takeLast" np t
           -- TODO toSet
           -- TODO toStdList
           -- TODO toVector
@@ -284,7 +286,7 @@ inheritHasContents cls listClass t =
 -- | Converts an instantiation into a list of exports to be included in a
 -- module.
 toExports :: Contents -> [QtExport]
-toExports m = [QtExport $ ExportClass $ c_QList m]
+toExports m = [qtExport $ c_QList m]
 
 createModule :: String -> Contents -> QtModule
 createModule name contents = makeQtModule ["Core", "QList", name] $ toExports contents

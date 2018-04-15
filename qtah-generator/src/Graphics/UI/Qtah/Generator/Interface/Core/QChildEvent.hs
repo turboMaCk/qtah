@@ -27,6 +27,7 @@ import Foreign.Hoppy.Generator.Spec (
   makeClass,
   mkConstMethod,
   mkCtor,
+  np,
   )
 import Foreign.Hoppy.Generator.Types (boolT, enumT, objT, ptrT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QEvent (c_QEvent, e_Type)
@@ -47,8 +48,8 @@ c_QChildEvent =
   classSetEntityPrefix "" $
   makeClass (ident "QChildEvent") Nothing [c_QEvent]
   [ mkCtor "new" [enumT e_Type, ptrT $ objT c_QObject]
-  , mkConstMethod "added" [] boolT
-  , mkConstMethod "child" [] $ ptrT $ objT c_QObject
-  , mkConstMethod "polished" [] boolT
-  , mkConstMethod "removed" [] boolT
+  , mkConstMethod "added" np boolT
+  , mkConstMethod "child" np $ ptrT $ objT c_QObject
+  , mkConstMethod "polished" np boolT
+  , mkConstMethod "removed" np boolT
   ]

@@ -20,7 +20,6 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QProgressBar (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportEnum, ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -32,13 +31,15 @@ import Foreign.Hoppy.Generator.Spec (
   mkCtor,
   mkMethod,
   mkProp,
+  np,
   )
-import Foreign.Hoppy.Generator.Types (bitspaceT, boolT, enumT, intT, objT, ptrT, voidT)
+import Foreign.Hoppy.Generator.Types (boolT, enumT, intT, objT, ptrT, voidT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
+import Graphics.UI.Qtah.Generator.Flags (flagsT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
-import Graphics.UI.Qtah.Generator.Interface.Core.Types (bs_Alignment, e_Orientation)
-import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (c_ListenerInt)
+import Graphics.UI.Qtah.Generator.Interface.Core.Types (fl_Alignment, e_Orientation)
+import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (listenerInt)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QWidget (c_QWidget)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
@@ -48,10 +49,10 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QProgressBar"] $
-  QtExport (ExportClass c_QProgressBar) :
+  qtExport c_QProgressBar :
   map QtExportSignal signals ++
   collect
-  [ test (qtVersion >= [4, 1]) $ QtExport $ ExportEnum e_Direction
+  [ test (qtVersion >= [4, 1]) $ qtExport e_Direction
   ]
 
 c_QProgressBar =
@@ -59,31 +60,31 @@ c_QProgressBar =
   classSetEntityPrefix "" $
   makeClass (ident "QProgressBar") Nothing [c_QWidget] $
   collect
-  [ just $ mkCtor "new" []
+  [ just $ mkCtor "new" np
   , just $ mkCtor "newWithParent" [ptrT $ objT c_QWidget]
 
-  , just $ mkProp "alignment" $ bitspaceT bs_Alignment
+  , just $ mkProp "alignment" $ flagsT fl_Alignment
   , test (qtVersion >= [4, 2]) $ mkProp "format" $ objT c_QString
   , test (qtVersion >= [4, 1]) $ mkProp "invertedAppearance" boolT
   , just $ mkProp "maximum" intT
   , just $ mkProp "minimum" intT
   , test (qtVersion >= [4, 1]) $ mkProp "orientation" $ enumT e_Orientation
-  , just $ mkMethod "reset" [] voidT
-  , test (qtVersion >= [5, 0]) $ mkMethod "resetFormat" [] voidT  -- ADDED-BETWEEN 4.8 5.4
+  , just $ mkMethod "reset" np voidT
+  , test (qtVersion >= [5, 0]) $ mkMethod "resetFormat" np voidT  -- ADDED-BETWEEN 4.8 5.4
   , just $ mkMethod "setRange" [intT, intT] voidT
-  , just $ mkConstMethod "text" [] $ objT c_QString
+  , just $ mkConstMethod "text" np $ objT c_QString
   , test (qtVersion >= [4, 1]) $ mkProp "textDirection" $ enumT e_Direction
   , just $ mkBoolIsProp "textVisible"
   , just $ mkProp "value" intT
   ]
 
 signals =
-  [ makeSignal c_QProgressBar "valueChanged" c_ListenerInt
+  [ makeSignal c_QProgressBar "valueChanged" listenerInt
   ]
 
 -- Introduced in Qt 4.1.
 e_Direction =
   makeQtEnum (ident1 "QProgressBar" "Direction") [includeStd "QProgressBar"]
-  [ (0, ["top", "to", "bottom"])
-  , (1, ["bottom", "to", "top"])
+  [ "TopToBottom"
+  , "BottomToTop"
   ]

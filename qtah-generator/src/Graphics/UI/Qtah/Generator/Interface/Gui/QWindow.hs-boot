@@ -22,7 +22,7 @@ module Graphics.UI.Qtah.Generator.Interface.Gui.QWindow (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (Class, CppEnum)
-import Graphics.UI.Qtah.Generator.Flags (Version)
+import Graphics.UI.Qtah.Generator.Config (Version)
 
 minVersion :: Version
 

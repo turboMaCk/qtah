@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Gui.QIntValidator (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -30,6 +29,7 @@ import Foreign.Hoppy.Generator.Spec (
   mkCtor,
   mkMethod,
   mkProp,
+  np,
   )
 import Foreign.Hoppy.Generator.Types (intT, objT, ptrT, voidT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QObject (c_QObject)
@@ -42,13 +42,13 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Gui", "QIntValidator"]
-  [ QtExport $ ExportClass c_QIntValidator ]
+  [ qtExport c_QIntValidator ]
 
 c_QIntValidator =
   addReqIncludes [includeStd "QIntValidator"] $
   classSetEntityPrefix "" $
   makeClass (ident "QIntValidator") Nothing [c_QValidator]
-  [ mkCtor "new" []
+  [ mkCtor "new" np
   , mkCtor "newWithParent" [ptrT $ objT c_QObject]
   , mkCtor "newWithOptions" [intT, intT]
   , mkCtor "newWithOptionsAndParent" [intT, intT, ptrT $ objT c_QObject]

@@ -20,7 +20,6 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QTabWidget (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass, ExportEnum),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -33,15 +32,16 @@ import Foreign.Hoppy.Generator.Spec (
   mkMethod,
   mkMethod',
   mkProp,
+  np,
   )
 import Foreign.Hoppy.Generator.Types (boolT, enumT, intT, objT, ptrT, voidT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.QSize (c_QSize)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (e_Corner, e_TextElideMode)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QIcon (c_QIcon)
-import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (c_ListenerInt)
+import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (listenerInt)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QWidget (c_QWidget)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
@@ -51,10 +51,10 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QTabWidget"] $
-  QtExport (ExportClass c_QTabWidget) :
+  qtExport c_QTabWidget :
   map QtExportSignal signals ++
-  [ QtExport $ ExportEnum e_TabPosition
-  , QtExport $ ExportEnum e_TabShape
+  [ qtExport e_TabPosition
+  , qtExport e_TabShape
   ]
 
 c_QTabWidget =
@@ -62,14 +62,14 @@ c_QTabWidget =
   classSetEntityPrefix "" $
   makeClass (ident "QTabWidget") Nothing [c_QWidget] $
   collect
-  [ just $ mkCtor "new" []
+  [ just $ mkCtor "new" np
   , just $ mkCtor "newWithParent" [ptrT $ objT c_QWidget]
   , just $ mkMethod' "addTab" "addTab" [ptrT $ objT c_QWidget, objT c_QString] intT
   , just $ mkMethod' "addTab" "addTabWithIcon" [ptrT $ objT c_QWidget, objT c_QIcon, objT c_QString]
     intT
-  , just $ mkMethod "clear" [] voidT
+  , just $ mkMethod "clear" np voidT
   , just $ mkConstMethod "cornerWidget" [enumT e_Corner] $ ptrT $ objT c_QWidget
-  , just $ mkConstMethod "count" [] intT
+  , just $ mkConstMethod "count" np intT
   , just $ mkProp "currentIndex" intT
   , just $ mkProp "currentWidget" $ ptrT $ objT c_QWidget
   , test (qtVersion >= [4, 5]) $ mkProp "documentMode" boolT
@@ -103,21 +103,21 @@ c_QTabWidget =
 
 e_TabPosition =
   makeQtEnum (ident1 "QTabWidget" "TabPosition") [includeStd "QTabWidget"]
-  [ (0, ["north"])
-  , (1, ["south"])
-  , (2, ["west"])
-  , (3, ["east"])
+  [ "North"
+  , "South"
+  , "West"
+  , "East"
   ]
 
 e_TabShape =
   makeQtEnum (ident1 "QTabWidget" "TabShape") [includeStd "QTabWidget"]
-  [ (0, ["rounded"])
-  , (1, ["triangular"])
+  [ "Rounded"
+  , "Triangular"
   ]
 
 signals =
-  [ makeSignal c_QTabWidget "currentChanged" c_ListenerInt
-  , makeSignal c_QTabWidget "tabBarClicked" c_ListenerInt
-  , makeSignal c_QTabWidget "tabBarDoubleClicked" c_ListenerInt
-  , makeSignal c_QTabWidget "tabCloseRequested" c_ListenerInt
+  [ makeSignal c_QTabWidget "currentChanged" listenerInt
+  , makeSignal c_QTabWidget "tabBarClicked" listenerInt
+  , makeSignal c_QTabWidget "tabBarDoubleClicked" listenerInt
+  , makeSignal c_QTabWidget "tabCloseRequested" listenerInt
   ]

@@ -27,7 +27,6 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QTreeWidget (
 import Foreign.Hoppy.Generator.Spec (
   Class,
   CppEnum,
-  Export (ExportClass, ExportEnum),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -38,20 +37,21 @@ import Foreign.Hoppy.Generator.Spec (
   mkConstMethod',
   mkCtor,
   mkMethod,
+  np,
   )
 import Foreign.Hoppy.Generator.Types (intT, objT, ptrT, voidT, boolT, enumT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Graphics.UI.Qtah.Generator.Interface.Core.QStringList (c_QStringList)
 import Graphics.UI.Qtah.Generator.Interface.Core.QVariant (c_QVariant)
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (e_SortOrder)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QIcon (c_QIcon)
 import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
-  c_Listener,
-  c_ListenerPtrQTreeWidgetItem,
-  c_ListenerPtrQTreeWidgetItemInt,
-  c_ListenerPtrQTreeWidgetItemPtrQTreeWidgetItem,
+  listener,
+  listenerPtrQTreeWidgetItem,
+  listenerPtrQTreeWidgetItemInt,
+  listenerPtrQTreeWidgetItemPtrQTreeWidgetItem,
   )
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QTreeView (c_QTreeView)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QWidget (c_QWidget)
@@ -64,18 +64,16 @@ aModule :: AModule
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QTreeWidget"] $
-  QtExport (ExportClass c_QTreeWidget) :
+  qtExport c_QTreeWidget :
   map QtExportSignal signals
 
 itemModule :: AModule
 itemModule =
   AQtModule $
-  makeQtModule ["Widgets", "QTreeWidgetItem"] $
-  map
-    QtExport
-    [ ExportClass c_QTreeWidgetItem
-    , ExportEnum e_ChildIndicatorPolicy
-    ]
+  makeQtModule ["Widgets", "QTreeWidgetItem"]
+  [ qtExport c_QTreeWidgetItem
+  , qtExport e_ChildIndicatorPolicy
+  ]
 
 c_QTreeWidget :: Class
 c_QTreeWidget =
@@ -83,14 +81,14 @@ c_QTreeWidget =
   classSetEntityPrefix "" $
   makeClass (ident "QTreeWidget") Nothing [c_QTreeView] $
   collect
-  [ just $ mkCtor "new" []
+  [ just $ mkCtor "new" np
   , just $ mkCtor "newWithParent" [ptrT $ objT c_QWidget]
   , test (qtVersion >= [4, 1]) $
     mkMethod "addTopLevelItem" [ptrT $ objT c_QTreeWidgetItem] voidT
-  , just $ mkConstMethod "currentItem" [] (ptrT $ objT c_QTreeWidgetItem)
-  , just $ mkConstMethod "headerItem" [] (ptrT $ objT c_QTreeWidgetItem)
+  , just $ mkConstMethod "currentItem" np (ptrT $ objT c_QTreeWidgetItem)
+  , just $ mkConstMethod "headerItem" np (ptrT $ objT c_QTreeWidgetItem)
   , test (qtVersion >= [4, 2]) $
-    mkConstMethod "invisibleRootItem" [] (ptrT $ objT c_QTreeWidgetItem)
+    mkConstMethod "invisibleRootItem" np (ptrT $ objT c_QTreeWidgetItem)
   , just $ mkMethod "setCurrentItem" [ptrT $ objT c_QTreeWidgetItem] voidT
   , just $ mkMethod "setHeaderItem" [ptrT $ objT c_QTreeWidgetItem] voidT
   , test (qtVersion >= [4, 2]) $
@@ -98,7 +96,7 @@ c_QTreeWidget =
   , just $ mkMethod "setHeaderLabels" [objT c_QStringList] voidT
   , just $ mkMethod "sortItems" [intT, enumT e_SortOrder] voidT
   , just $ mkConstMethod "topLevelItem" [intT] (ptrT $ objT c_QTreeWidgetItem)
-  , just $ mkConstMethod "topLevelItemCount" [] intT
+  , just $ mkConstMethod "topLevelItemCount" np intT
   -- TODO add more methods
   ]
 
@@ -108,7 +106,7 @@ c_QTreeWidgetItem =
   classSetEntityPrefix "" $
   makeClass (ident "QTreeWidgetItem") Nothing [] $
   collect
-  [ just $ mkCtor "new" []
+  [ just $ mkCtor "new" np
   , just $ mkCtor "newWithType" [intT]
   , just $ mkCtor "newWithStrings" [objT c_QStringList]
   , just $ mkCtor "newWithStringsAndType" [objT c_QStringList, intT]
@@ -123,42 +121,40 @@ c_QTreeWidgetItem =
   , just $ mkCtor "newWithParentItemAndStringsAndType"
     [ptrT $ objT c_QTreeWidgetItem, objT c_QStringList, intT]
   , just $ mkConstMethod "child" [intT] (ptrT $ objT c_QTreeWidgetItem)
-  , just $ mkConstMethod "childCount" [] intT
-  , just $ mkConstMethod "childIndicatorPolicy" [] (enumT e_ChildIndicatorPolicy)
-  , just $ mkConstMethod "columnCount" [] intT
+  , just $ mkConstMethod "childCount" np intT
+  , just $ mkConstMethod "childIndicatorPolicy" np (enumT e_ChildIndicatorPolicy)
+  , just $ mkConstMethod "columnCount" np intT
   , just $ mkConstMethod' "data" "getData" [intT, intT] (objT c_QVariant)
-  , test (qtVersion >= [4, 2]) $ mkConstMethod "isHidden" [] boolT
-  , just $ mkConstMethod "parent" [] (ptrT $ objT c_QTreeWidgetItem)
+  , test (qtVersion >= [4, 2]) $ mkConstMethod "isHidden" np boolT
+  , just $ mkConstMethod "parent" np (ptrT $ objT c_QTreeWidgetItem)
   , just $ mkMethod "setChildIndicatorPolicy" [enumT e_ChildIndicatorPolicy] voidT
   , just $ mkMethod "setData" [intT, intT, objT c_QVariant] voidT
   , test (qtVersion >= [4, 2]) $ mkMethod "setHidden" [boolT] voidT
   , just $ mkMethod "setIcon" [intT, objT c_QIcon] voidT
   , just $ mkMethod "setText" [intT, objT c_QString] voidT
   , just $ mkConstMethod "text" [intT] (objT c_QString)
-  , just $ mkConstMethod' "type" "getType" [] intT
+  , just $ mkConstMethod' "type" "getType" np intT
   -- TODO add more methods
   ]
 
 signals :: [Signal]
 signals =
-  [ makeSignal c_QTreeWidget "currentItemChanged" c_ListenerPtrQTreeWidgetItemPtrQTreeWidgetItem
-  , makeSignal c_QTreeWidget "itemActivated" c_ListenerPtrQTreeWidgetItemInt
-  , makeSignal c_QTreeWidget "itemChanged" c_ListenerPtrQTreeWidgetItemInt
-  , makeSignal c_QTreeWidget "itemClicked" c_ListenerPtrQTreeWidgetItemInt
-  , makeSignal c_QTreeWidget "itemCollapsed" c_ListenerPtrQTreeWidgetItem
-  , makeSignal c_QTreeWidget "itemDoubleClicked" c_ListenerPtrQTreeWidgetItemInt
-  , makeSignal c_QTreeWidget "itemEntered" c_ListenerPtrQTreeWidgetItemInt
-  , makeSignal c_QTreeWidget "itemExpanded" c_ListenerPtrQTreeWidgetItem
-  , makeSignal c_QTreeWidget "itemPressed" c_ListenerPtrQTreeWidgetItemInt
-  , makeSignal c_QTreeWidget "itemSelectionChanged" c_Listener
+  [ makeSignal c_QTreeWidget "currentItemChanged" listenerPtrQTreeWidgetItemPtrQTreeWidgetItem
+  , makeSignal c_QTreeWidget "itemActivated" listenerPtrQTreeWidgetItemInt
+  , makeSignal c_QTreeWidget "itemChanged" listenerPtrQTreeWidgetItemInt
+  , makeSignal c_QTreeWidget "itemClicked" listenerPtrQTreeWidgetItemInt
+  , makeSignal c_QTreeWidget "itemCollapsed" listenerPtrQTreeWidgetItem
+  , makeSignal c_QTreeWidget "itemDoubleClicked" listenerPtrQTreeWidgetItemInt
+  , makeSignal c_QTreeWidget "itemEntered" listenerPtrQTreeWidgetItemInt
+  , makeSignal c_QTreeWidget "itemExpanded" listenerPtrQTreeWidgetItem
+  , makeSignal c_QTreeWidget "itemPressed" listenerPtrQTreeWidgetItemInt
+  , makeSignal c_QTreeWidget "itemSelectionChanged" listener
   ]
 
 e_ChildIndicatorPolicy :: CppEnum
 e_ChildIndicatorPolicy =
-  makeQtEnum
-    (ident1 "QTreeWidgetItem" "ChildIndicatorPolicy")
-    [includeStd "QTreeWidgetItem"]
-    [ (0, ["show", "indicator"])
-    , (1, ["dont", "show", "indicator"])
-    , (2, ["dont", "show", "indicator", "when", "childless"])
-    ]
+  makeQtEnum (ident1 "QTreeWidgetItem" "ChildIndicatorPolicy") [includeStd "QTreeWidgetItem"]
+  [ "ShowIndicator"
+  , "DontShowIndicator"
+  , "DontShowIndicatorWhenChildless"
+  ]

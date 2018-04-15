@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QObject (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   MethodApplicability (MConst, MNormal),
   Purity (Nonpure),
   addReqIncludes,
@@ -36,10 +35,11 @@ import Foreign.Hoppy.Generator.Spec (
   mkCtor,
   mkMethod,
   mkProp,
+  np,
   )
 import Foreign.Hoppy.Generator.Types (boolT, constT, intT, objT, ptrT, refT, voidT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Core.QList (
   c_QListQByteArray,
   c_QListQObject,
@@ -50,8 +50,8 @@ import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Core.QThread (c_QThread)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Core.QVariant (c_QVariant)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
-  c_ListenerPtrQObject,
-  c_ListenerQString,
+  listenerPtrQObject,
+  listenerQString,
   )
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
@@ -61,7 +61,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Core", "QObject"] $
-  (QtExport $ ExportClass c_QObject) :
+  (qtExport c_QObject) :
   map QtExportSignal signals
 
 c_QObject =
@@ -71,16 +71,16 @@ c_QObject =
   classSetEntityPrefix "" $
   makeClass (ident "QObject") Nothing [] $
   collect
-  [ just $ mkCtor "new" []
+  [ just $ mkCtor "new" np
   , just $ mkCtor "newWithParent" [ptrT $ objT c_QObject]
   , just $ mkMethod "blockSignals" [boolT] boolT
-  , just $ mkMethod "children" [] $ objT c_QListQObject
+  , just $ mkMethod "children" np $ objT c_QListQObject
     -- TODO connect
-  , just $ mkMethod "deleteLater" [] voidT
+  , just $ mkMethod "deleteLater" np voidT
     -- TODO disconnect
-  , just $ mkMethod "dumpObjectInfo" [] voidT
-  , just $ mkMethod "dumpObjectTree" [] voidT
-  , just $ mkConstMethod "dynamicPropertyNames" [] $ objT c_QListQByteArray
+  , just $ mkMethod "dumpObjectInfo" np voidT
+  , just $ mkMethod "dumpObjectTree" np voidT
+  , just $ mkConstMethod "dynamicPropertyNames" np $ objT c_QListQByteArray
   , just $ mkMethod "event" [ptrT $ objT c_QEvent] boolT
   , just $ mkMethod "eventFilter" [ptrT $ objT c_QObject, ptrT $ objT c_QEvent] boolT
     -- TODO findChild
@@ -88,11 +88,11 @@ c_QObject =
   , just $ makeFnMethod (ident2 "qtah" "qobject" "inherits") "inherits" MConst Nonpure
     [objT c_QObject, objT c_QString] boolT
   , just $ mkMethod "installEventFilter" [ptrT $ objT c_QObject] voidT
-  , just $ mkConstMethod "isWidgetType" [] boolT
+  , just $ mkConstMethod "isWidgetType" np boolT
   , -- This is a guess on the version bound.
-    test (qtVersion >= [5, 0]) $ mkConstMethod "isWindowType" [] boolT
+    test (qtVersion >= [5, 0]) $ mkConstMethod "isWindowType" np boolT
   , just $ mkMethod "killTimer" [intT] voidT
-  , just $ mkConstMethod "metaObject" [] $ ptrT $ constT $ objT c_QMetaObject
+  , just $ mkConstMethod "metaObject" np $ ptrT $ constT $ objT c_QMetaObject
   , just $ mkMethod "moveToThread" [ptrT $ objT c_QThread] voidT
   , just $ mkProp "objectName" $ objT c_QString
   , just $ mkProp "parent" $ ptrT $ objT c_QObject
@@ -101,12 +101,12 @@ c_QObject =
   , just $ mkMethod "removeEventFilter" [ptrT $ objT c_QObject] voidT
   , just $ makeFnMethod (ident2 "qtah" "qobject" "setProperty") "setProperty" MNormal Nonpure
     [refT $ objT c_QObject, objT c_QString, objT c_QVariant] voidT
-  , just $ mkConstMethod "signalsBlocked" [] boolT
+  , just $ mkConstMethod "signalsBlocked" np boolT
   , just $ mkMethod "startTimer" [intT] intT
-  , just $ mkConstMethod "thread" [] $ ptrT $ objT c_QThread
+  , just $ mkConstMethod "thread" np $ ptrT $ objT c_QThread
   ]
 
 signals =
-  [ makeSignal c_QObject "destroyed" c_ListenerPtrQObject
-  , makeSignal c_QObject "objectNameChanged" c_ListenerQString
+  [ makeSignal c_QObject "destroyed" listenerPtrQObject
+  , makeSignal c_QObject "objectNameChanged" listenerQString
   ]

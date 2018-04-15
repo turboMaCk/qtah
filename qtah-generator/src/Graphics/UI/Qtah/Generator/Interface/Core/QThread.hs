@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QThread (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass, ExportEnum),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -34,12 +33,13 @@ import Foreign.Hoppy.Generator.Spec (
   mkMethod',
   mkProp,
   mkStaticMethod,
+  np,
   )
 import Foreign.Hoppy.Generator.Types (boolT, enumT, intT, objT, ptrT, uintT, ulongT, voidT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.QObject (c_QObject)
-import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (c_Listener)
+import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (listener)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
 
@@ -48,9 +48,9 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Core", "QThread"] $
-  QtExport (ExportClass c_QThread) :
+  qtExport c_QThread :
   map QtExportSignal signals ++
-  [ QtExport $ ExportEnum e_Priority
+  [ qtExport e_Priority
   ]
 
 c_QThread =
@@ -58,48 +58,48 @@ c_QThread =
   classSetEntityPrefix "" $
   makeClass (ident "QThread") Nothing [c_QObject] $
   collect
-  [ just $ mkCtor "new" []
+  [ just $ mkCtor "new" np
   , just $ mkCtor "newWithParent" [ptrT $ objT c_QObject]
     -- TODO eventDispatcher property
-  , just $ mkMethod' "exit" "exit" [] voidT
+  , just $ mkMethod' "exit" "exit" np voidT
   , just $ mkMethod' "exit" "exitWithCode" [intT] voidT
-  , just $ mkConstMethod "isFinished" [] boolT
-  , test (qtVersion >= [5, 2]) $ mkConstMethod "isInterruptionRequested" [] boolT
-  , just $ mkConstMethod "isRunning" [] boolT
-  , test (qtVersion >= [5, 5]) $ mkConstMethod "loopLevel" [] intT
+  , just $ mkConstMethod "isFinished" np boolT
+  , test (qtVersion >= [5, 2]) $ mkConstMethod "isInterruptionRequested" np boolT
+  , just $ mkConstMethod "isRunning" np boolT
+  , test (qtVersion >= [5, 5]) $ mkConstMethod "loopLevel" np intT
   , just $ mkProp "priority" $ enumT e_Priority
-  , just $ mkMethod "quit" [] voidT
-  , test (qtVersion >= [5, 2]) $ mkMethod "requestInterruption" [] voidT
+  , just $ mkMethod "quit" np voidT
+  , test (qtVersion >= [5, 2]) $ mkMethod "requestInterruption" np voidT
   , just $ mkProp "stackSize" uintT
-  , just $ mkMethod' "start" "start" [] voidT
+  , just $ mkMethod' "start" "start" np voidT
   , just $ mkMethod' "start" "startWithPriority" [enumT e_Priority] voidT
-  , just $ mkMethod "terminate" [] voidT
-  , just $ mkMethod' "wait" "wait" [] voidT
+  , just $ mkMethod "terminate" np voidT
+  , just $ mkMethod' "wait" "wait" np voidT
   , just $ mkMethod' "wait" "waitWithMillis" [ulongT] voidT
 
     -- Static methods.
-  , just $ mkStaticMethod "currentThread" [] $ ptrT $ objT c_QThread
+  , just $ mkStaticMethod "currentThread" np $ ptrT $ objT c_QThread
     -- TODO currentThreadId
-  , just $ mkStaticMethod "idealThreadCount" [] intT
+  , just $ mkStaticMethod "idealThreadCount" np intT
   , just $ mkStaticMethod "msleep" [ulongT] voidT
   , just $ mkStaticMethod "sleep" [ulongT] voidT
   , just $ mkStaticMethod "usleep" [ulongT] voidT
-  , just $ mkStaticMethod "yieldCurrentThread" [] voidT
+  , just $ mkStaticMethod "yieldCurrentThread" np voidT
   ]
 
 signals =
-  [ makeSignal c_QThread "finished" c_Listener
-  , makeSignal c_QThread "started" c_Listener
+  [ makeSignal c_QThread "finished" listener
+  , makeSignal c_QThread "started" listener
   ]
 
 e_Priority =
   makeQtEnum (ident1 "QThread" "Priority") [includeStd "QThread"]
-  [ (0, ["idle", "priority"])
-  , (1, ["lowest", "priority"])
-  , (2, ["low", "priority"])
-  , (3, ["normal", "priority"])
-  , (4, ["high", "priority"])
-  , (5, ["highest", "priority"])
-  , (6, ["time", "critical", "priority"])
-  , (7, ["inherit", "priority"])
+  [ "IdlePriority"
+  , "LowestPriority"
+  , "LowPriority"
+  , "NormalPriority"
+  , "HighPriority"
+  , "HighestPriority"
+  , "TimeCriticalPriority"
+  , "InheritPriority"
   ]

@@ -27,14 +27,16 @@ import Foreign.Hoppy.Generator.Spec (
   makeClass,
   mkConstMethod,
   mkCtor,
+  np,
   )
-import Foreign.Hoppy.Generator.Types (bitspaceT, enumT, objT)
+import Foreign.Hoppy.Generator.Types (enumT, objT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
+import Graphics.UI.Qtah.Generator.Flags (flagsT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QEvent (c_QEvent, e_Type)
 import Graphics.UI.Qtah.Generator.Interface.Core.QPoint (c_QPoint)
 import Graphics.UI.Qtah.Generator.Interface.Core.QPointF (c_QPointF)
-import Graphics.UI.Qtah.Generator.Interface.Core.Types (bs_KeyboardModifiers)
+import Graphics.UI.Qtah.Generator.Interface.Core.Types (fl_KeyboardModifiers)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QInputEvent (c_QInputEvent)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
@@ -56,9 +58,9 @@ c_QHoverEvent =
   [ test (qtVersion < [5, 0]) $ mkCtor "new" [enumT e_Type, objT c_QPoint, objT c_QPoint]
   , test (qtVersion >= [5, 0]) $ mkCtor "new" [enumT e_Type, objT c_QPointF, objT c_QPointF]
   , test (qtVersion >= [5, 0]) $ mkCtor "newWithModifiers"
-    [enumT e_Type, objT c_QPointF, objT c_QPointF, bitspaceT bs_KeyboardModifiers]
-  , just $ mkConstMethod "oldPos" [] $ objT c_QPoint
-  , test (qtVersion >= [5, 0]) $ mkConstMethod "oldPosF" [] $ objT c_QPointF
-  , just $ mkConstMethod "pos" [] $ objT c_QPoint
-  , test (qtVersion >= [5, 0]) $ mkConstMethod "posF" [] $ objT c_QPointF
+    [enumT e_Type, objT c_QPointF, objT c_QPointF, flagsT fl_KeyboardModifiers]
+  , just $ mkConstMethod "oldPos" np $ objT c_QPoint
+  , test (qtVersion >= [5, 0]) $ mkConstMethod "oldPosF" np $ objT c_QPointF
+  , just $ mkConstMethod "pos" np $ objT c_QPoint
+  , test (qtVersion >= [5, 0]) $ mkConstMethod "posF" np $ objT c_QPointF
   ]

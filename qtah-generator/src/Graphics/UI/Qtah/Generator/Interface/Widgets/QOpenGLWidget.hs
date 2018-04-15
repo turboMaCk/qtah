@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QOpenGLWidget (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass, ExportEnum),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -32,13 +31,15 @@ import Foreign.Hoppy.Generator.Spec (
   mkCtor,
   mkMethod,
   mkProp,
+  np,
   )
-import Foreign.Hoppy.Generator.Types (bitspaceT, boolT, enumT, objT, ptrT, voidT)
+import Foreign.Hoppy.Generator.Types (boolT, enumT, objT, ptrT, voidT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
-import Graphics.UI.Qtah.Generator.Interface.Core.Types (bs_WindowFlags, gluint)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
+import Graphics.UI.Qtah.Generator.Flags (flagsT)
+import Graphics.UI.Qtah.Generator.Interface.Core.Types (fl_WindowFlags, gluint)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QImage (c_QImage)
-import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (c_Listener)
+import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (listener)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QWidget (c_QWidget)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModuleWithMinVersion)
 import Graphics.UI.Qtah.Generator.Types
@@ -50,38 +51,38 @@ minVersion = [5, 4]
 aModule =
   AQtModule $
   makeQtModuleWithMinVersion ["Widgets", "QOpenGLWidget"] minVersion $
-  [ QtExport $ ExportClass c_QOpenGLWidget ] ++
+  [ qtExport c_QOpenGLWidget ] ++
   map QtExportSignal signals ++
   collect
-  [ test (qtVersion >= [5, 5]) $ QtExport $ ExportEnum e_UpdateBehavior ]
+  [ test (qtVersion >= [5, 5]) $ qtExport e_UpdateBehavior ]
 
 c_QOpenGLWidget =
   addReqIncludes [includeStd "QOpenGLWidget"] $
   classSetEntityPrefix "" $
   makeClass (ident "QOpenGLWidget") Nothing [c_QWidget] $
   collect
-  [ just $ mkCtor "new" []
+  [ just $ mkCtor "new" np
   , just $ mkCtor "newWithParent" [ptrT $ objT c_QOpenGLWidget]
-  , just $ mkCtor "newWithParentAndFlags" [ptrT $ objT c_QOpenGLWidget, bitspaceT bs_WindowFlags]
-    -- TODO mkConstMethod "context" [] $ ptrT $ objT c_QOpenGLContext
-  , just $ mkConstMethod "defaultFramebufferObject" [] gluint
-  , just $ mkMethod "doneCurrent" [] voidT
+  , just $ mkCtor "newWithParentAndFlags" [ptrT $ objT c_QOpenGLWidget, flagsT fl_WindowFlags]
+    -- TODO mkConstMethod "context" np $ ptrT $ objT c_QOpenGLContext
+  , just $ mkConstMethod "defaultFramebufferObject" np gluint
+  , just $ mkMethod "doneCurrent" np voidT
     -- TODO mkProp "format" $ objT c_QSurfaceFormat
-  , just $ mkMethod "grabFramebuffer" [] $ objT c_QImage
-  , just $ mkConstMethod "isValid" [] boolT
-  , just $ mkMethod "makeCurrent" [] voidT
+  , just $ mkMethod "grabFramebuffer" np $ objT c_QImage
+  , just $ mkConstMethod "isValid" np boolT
+  , just $ mkMethod "makeCurrent" np voidT
   , test (qtVersion >= [5, 5]) $ mkProp "updateBehavior" $ enumT e_UpdateBehavior
   ]
 
 signals =
-  [ makeSignal c_QOpenGLWidget "aboutToCompose" c_Listener
-  , makeSignal c_QOpenGLWidget "aboutToResize" c_Listener
-  , makeSignal c_QOpenGLWidget "frameSwapped" c_Listener
-  , makeSignal c_QOpenGLWidget "resized" c_Listener
+  [ makeSignal c_QOpenGLWidget "aboutToCompose" listener
+  , makeSignal c_QOpenGLWidget "aboutToResize" listener
+  , makeSignal c_QOpenGLWidget "frameSwapped" listener
+  , makeSignal c_QOpenGLWidget "resized" listener
   ]
 
 e_UpdateBehavior =
   makeQtEnum (ident1 "QOpenGLWidget" "UpdateBehavior") [includeStd "QOpenGLWidget"]
-  [ (0, ["no", "partial", "update"])
-  , (1, ["partial", "update"])
+  [ "NoPartialUpdate"
+  , "PartialUpdate"
   ]

@@ -29,7 +29,8 @@ import Foreign.Hoppy.Generator.Spec (
   moduleSetHppPath,
   )
 import qualified Foreign.Hoppy.Generator.Std as Std
-import Graphics.UI.Qtah.Generator.Flags (qmakeArguments, qmakeExecutable, qtVersion)
+import Graphics.UI.Qtah.Generator.Enum (installEnumCalculator)
+import Graphics.UI.Qtah.Generator.Config (qmakeArguments, qmakeExecutable, qtVersion)
 import Graphics.UI.Qtah.Generator.Module
 import qualified Graphics.UI.Qtah.Generator.Interface.Core as Core
 import qualified Graphics.UI.Qtah.Generator.Interface.Gui as Gui
@@ -61,6 +62,7 @@ modules =
 
 interfaceResult :: Either String Interface
 interfaceResult =
+  fmap installEnumCalculator $
   interfaceAddHaskellModuleBase ["Graphics", "UI", "Qtah"] =<<
   interface "qtah" (concatMap aModuleHoppyModules modules)
 

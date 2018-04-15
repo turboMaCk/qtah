@@ -20,7 +20,6 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QGroupBox (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -29,14 +28,16 @@ import Foreign.Hoppy.Generator.Spec (
   mkBoolIsProp,
   mkCtor,
   mkProp,
+  np,
   )
-import Foreign.Hoppy.Generator.Types (bitspaceT, objT, ptrT)
+import Foreign.Hoppy.Generator.Types (objT, ptrT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
+import Graphics.UI.Qtah.Generator.Flags (flagsT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
-import Graphics.UI.Qtah.Generator.Interface.Core.Types (bs_Alignment)
+import Graphics.UI.Qtah.Generator.Interface.Core.Types (fl_Alignment)
 import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
-  c_ListenerBool,
+  listenerBool,
   )
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QWidget (c_QWidget)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
@@ -47,18 +48,18 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QGroupBox"] $
-  (QtExport $ ExportClass c_QGroupBox) :
+  (qtExport c_QGroupBox) :
   map QtExportSignal signals
 
 c_QGroupBox =
   addReqIncludes [includeStd "QGroupBox"] $
   classSetEntityPrefix "" $
   makeClass (ident "QGroupBox") Nothing [c_QWidget]
-  [ mkCtor "new" []
+  [ mkCtor "new" np
   , mkCtor "newWithParent" [ptrT $ objT c_QWidget]
   , mkCtor "newWithTitle" [objT c_QString]
   , mkCtor "newWithTitleAndParent" [objT c_QString, ptrT $ objT c_QWidget]
-  , mkProp "alignment" $ bitspaceT bs_Alignment
+  , mkProp "alignment" $ flagsT fl_Alignment
   , mkBoolIsProp "checkable"
   , mkBoolIsProp "checked"
   , mkBoolIsProp "flat"
@@ -67,6 +68,6 @@ c_QGroupBox =
 
 signals =
   collect
-  [ test (qtVersion >= [4, 2]) $ makeSignal c_QGroupBox "clicked" c_ListenerBool
-  , just $ makeSignal c_QGroupBox "toggled" c_ListenerBool
+  [ test (qtVersion >= [4, 2]) $ makeSignal c_QGroupBox "clicked" listenerBool
+  , just $ makeSignal c_QGroupBox "toggled" listenerBool
   ]

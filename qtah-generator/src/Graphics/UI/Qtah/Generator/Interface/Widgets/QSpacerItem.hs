@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QSpacerItem (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -30,10 +29,11 @@ import Foreign.Hoppy.Generator.Spec (
   mkConstMethod,
   mkCtor,
   mkMethod',
+  np,
   )
 import Foreign.Hoppy.Generator.Types (enumT, intT, objT, voidT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QLayoutItem (c_QLayoutItem)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QSizePolicy (c_QSizePolicy, e_Policy)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
@@ -44,7 +44,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QSpacerItem"]
-  [ QtExport $ ExportClass c_QSpacerItem ]
+  [ qtExport c_QSpacerItem ]
 
 c_QSpacerItem =
   addReqIncludes [includeStd "QSpacerItem"] $
@@ -57,5 +57,5 @@ c_QSpacerItem =
   , just $ mkMethod' "changeSize" "changeSize" [intT, intT] voidT
   , just $ mkMethod' "changeSize" "changeSizeWithOptions"
     [intT, intT, enumT e_Policy, enumT e_Policy] voidT
-  , test (qtVersion >= [5, 5]) $ mkConstMethod "sizePolicy" [] $ objT c_QSizePolicy
+  , test (qtVersion >= [5, 5]) $ mkConstMethod "sizePolicy" np $ objT c_QSizePolicy
   ]

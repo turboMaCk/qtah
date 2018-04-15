@@ -15,214 +15,355 @@
 -- You should have received a copy of the GNU Lesser General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
--- | Haskell definitions for preprocessor flags that Qt uses for conditional
--- compilation.
---
--- A list of flags enabled on your system can be obtained with:
---
--- > gcc -dM -E $(pkg-config --cflags QtCore) /usr/include/qt4/Qt/qconfig.h | grep '#define QT'
---
--- Using @qglobal.h@ and @#define Q@ provides additional defintions,
--- e.g. version and windowing system information.
 module Graphics.UI.Qtah.Generator.Flags (
-  Version,
-  qtVersion,
-  qmakeExecutable,
-  qmakeArguments,
-  keypadNavigation,
-  qdoc,
-  qrealFloat,
-  wsWince,
+  -- * Data type
+  Flags, flagsT,
+  -- * Construction
+  makeFlags,
+  -- * Properties
+  flagsExtName,
+  flagsIdentifier,
+  flagsEnum,
+  flagsReqs,
+  flagsAddendum,
+  -- * Haskell generator
+  -- ** Names
+  toHsFlagsTypeName',
+  toHsFlagsBindingName,
+  toHsFlagsBindingName',
   ) where
 
-import Control.Monad (unless)
-import Data.Char (isDigit, isSpace)
-import Data.List (intercalate, isPrefixOf)
-import Graphics.UI.Qtah.Generator.Common (firstM, fromMaybeM, splitOn)
-import System.Directory (findExecutable)
-import System.Environment (lookupEnv)
-import System.Exit (ExitCode (ExitSuccess))
-import System.IO.Unsafe (unsafePerformIO)
-import System.Process (readProcessWithExitCode)
+import Control.Monad (forM_, when)
+import Control.Monad.Except (throwError)
+import qualified Data.Map as M
+import qualified Foreign.Hoppy.Generator.Language.Cpp as LC
+import qualified Foreign.Hoppy.Generator.Language.Haskell as LH
+import Foreign.Hoppy.Generator.Spec (
+  Addendum,
+  Constness (Nonconst),
+  ConversionMethod (CustomConversion),
+  ConversionSpec,
+  Exportable,
+  ExtName,
+  ForeignLanguage (Haskell),
+  HasAddendum,
+  HasExtNames,
+  HasReqs,
+  Identifier,
+  Reqs,
+  Type,
+  conversionSpecCppConversionFromCppExpr,
+  conversionSpecCppConversionToCppExpr,
+  conversionSpecCppConversionType,
+  conversionSpecHaskell,
+  conversionSpecHaskellHsArgType,
+  evaluatedEnumType,
+  evaluatedEnumValueMap,
+  getAddendum,
+  getPrimaryExtName,
+  getReqs,
+  hsImport1,
+  hsImports,
+  identifierParts,
+  idPartBase,
+  makeConversionSpec,
+  makeConversionSpecCpp,
+  makeConversionSpecHaskell,
+  makeIdentifier,
+  makeIdPart,
+  modifyAddendum,
+  modifyReqs,
+  sayExportCpp,
+  sayExportHaskell,
+  setAddendum,
+  setReqs,
+  toExtName,
+  )
+import qualified Foreign.Hoppy.Generator.Spec.Enum as Enum
+import Foreign.Hoppy.Generator.Types (manualT)
+import Graphics.UI.Qtah.Generator.Common (lowerFirst, replaceLast)
+import Graphics.UI.Qtah.Generator.Interface.Imports (
+  importForBits,
+  importForFlags,
+  importForPrelude,
+  importForRuntime,
+  )
+import Language.Haskell.Syntax (
+  HsName (HsIdent),
+  HsQName (UnQual),
+  HsQualType (HsQualType),
+  HsType (HsTyCon, HsTyVar),
+  )
 
--- | A type synonym for Qt version specifications.  These are just lists of
--- integers, of length two.  Examples are @[4, 8]@ and @[5, 0]@ to denote
--- versions 4.8 and 5.0 respectively.  A third component may be used in the
--- future, if necessary.
-type Version = [Int]
-
-showVersion :: Version -> String
-showVersion = intercalate "." . map show
-
--- | An internal record of Qt configuration info.
-data QtConfig = QtConfig
-  { configVersion :: Version
-  , configQmakeExecutable :: FilePath
-  , configQmakeArguments :: [String]
+-- | This is an exportable wrapper around a 'Enum.CppEnum' that also generates
+-- support for a @QFlags\<Enum\>@ typedef.
+--
+-- This does not export any ExtNames of its own.
+--
+-- In generated Haskell code, in addition to what is generated for the
+-- 'Enum.CppEnum', we generate a newtype wrapper around an enum value to
+-- represent a combination of flags, and @IsFlags@ instances for converting both
+-- enum and newtype'd values to a newtype'd value.
+data Flags = Flags
+  { flagsExtName :: ExtName
+  , flagsIdentifier :: Identifier
+  , flagsEnum :: Enum.CppEnum
+  , flagsReqs :: Reqs
+  , flagsAddendum :: Addendum
   }
 
--- | This is initialized at program startup with the version of Qt that the
--- generator will work with, along with the corresponding QMake binary and
--- arguments necessary to invoke it.  The Qt version which functions and types
--- are made available in the API.
+instance Show Flags where
+  show flags =
+    "<Flags " ++
+    show (flagsExtName flags) ++ " " ++
+    LC.renderIdentifier (flagsIdentifier flags) ++ ">"
+
+instance HasAddendum Flags where
+  getAddendum = flagsAddendum
+  setAddendum a flags = flags { flagsAddendum = a }
+  modifyAddendum f flags = flags { flagsAddendum = f $ flagsAddendum flags }
+
+instance HasExtNames Flags where
+  getPrimaryExtName = flagsExtName
+
+instance HasReqs Flags where
+  getReqs = flagsReqs
+  setReqs r flags = flags { flagsReqs = r }
+  modifyReqs f flags = flags { flagsReqs = f $ flagsReqs flags }
+
+instance Exportable Flags where
+  -- Nothing to generate for flags here.  (Enums don't have any generated C++
+  -- code here either.)
+  sayExportCpp _ _ = return ()
+
+  sayExportHaskell mode flags = sayHsExport mode flags
+
+makeFlags :: Enum.CppEnum -> String -> Flags
+makeFlags enum flagsName =
+  let identifierWords =
+        replaceLast flagsName $ map idPartBase $ identifierParts $ Enum.enumIdentifier enum
+      identifier = makeIdentifier $ map (\s -> makeIdPart s Nothing) identifierWords
+  in Flags
+     { flagsExtName = toExtName $ concat identifierWords
+     , flagsIdentifier = identifier
+     , flagsEnum = enum
+     , flagsReqs = Enum.enumReqs enum  -- Copy reqs from the underlying enum.
+     , flagsAddendum = mempty
+     }
+
+flagsT :: Flags -> Type
+flagsT = manualT . makeConversion
+
+makeConversion :: Flags -> ConversionSpec
+makeConversion flags =
+  (makeConversionSpec (show flags) cpp)
+  { conversionSpecHaskell = Just hs }
+  where extName = flagsExtName flags
+        identifier = flagsIdentifier flags
+        identifierStr = LC.renderIdentifier identifier
+        enum = flagsEnum flags
+
+        cpp =
+          (makeConversionSpecCpp identifierStr (return $ Enum.enumReqs enum))
+          { conversionSpecCppConversionType =
+              Just . evaluatedEnumType <$> Enum.cppGetEvaluatedEnumData (Enum.enumExtName enum)
+
+          , conversionSpecCppConversionToCppExpr = Just $ \fromVar maybeToVar -> case maybeToVar of
+              Just toVar ->
+                LC.says [identifierStr, " "] >> toVar >> LC.say "(" >> fromVar >> LC.say ");\n"
+              Nothing -> LC.says [identifierStr, "("] >> fromVar >> LC.say ")"
+
+          , conversionSpecCppConversionFromCppExpr = Just $ \fromVar maybeToVar -> do
+              t <- evaluatedEnumType <$> Enum.cppGetEvaluatedEnumData (Enum.enumExtName enum)
+              forM_ maybeToVar $ \toVar -> do
+                LC.sayType Nothing t
+                LC.say " "
+                toVar
+                LC.say " = "
+              LC.say "static_cast<"
+              LC.sayType Nothing t
+              LC.say ">("
+              fromVar
+              LC.say $ case maybeToVar of
+                Just _ -> ");\n"
+                Nothing -> ")"
+          }
+
+        hs =
+          (makeConversionSpecHaskell
+             (HsTyCon . UnQual . HsIdent <$> LH.toHsTypeName Nonconst extName)
+             (Just $ do evaluatedData <- Enum.hsGetEvaluatedEnumData $ Enum.enumExtName enum
+                        LH.cppTypeToHsTypeAndUse LH.HsCSide $ evaluatedEnumType evaluatedData)
+             (CustomConversion $ do
+                LH.addImports $ mconcat [hsImport1 "Prelude" "(.)",
+                                         importForFlags,
+                                         importForPrelude]
+                LH.sayLn "QtahP.return . QtahFlags.flagsToNum . QtahFlags.toFlags")
+             (CustomConversion $ do
+                LH.addImports $ mconcat [hsImport1 "Prelude" "(.)",
+                                         importForFlags,
+                                         importForPrelude]
+                LH.sayLn "QtahP.return . QtahFlags.numToFlags"))
+          { conversionSpecHaskellHsArgType = Just $ \typeVar -> do
+              typeName <- LH.toHsTypeName Nonconst extName
+              return $
+                HsQualType [ (UnQual $ HsIdent "QtahFlags.IsFlags",
+                              [ HsTyCon $ UnQual $ HsIdent typeName
+                              , HsTyVar typeVar
+                              ])
+                           ] $
+                HsTyVar typeVar
+          }
+
+sayHsExport :: LH.SayExportMode -> Flags -> LH.Generator ()
+sayHsExport mode flags =
+  LH.withErrorContext ("generating " ++ show flags) $ do
+
+  -- Ensure that the flags is exported from the same module as its underlying
+  -- enum.  We always want this to be the case.
+  checkInFlagsEnumModule
+
+  case mode of
+    LH.SayExportForeignImports -> return ()
+
+    LH.SayExportDecls -> do
+      typeName <- toHsFlagsTypeName flags
+      -- We'll use the type name as the data constructor name as well:
+      let ctorName = typeName
+          enum = flagsEnum flags
+      enumTypeName <- Enum.toHsEnumTypeName enum
+      enumData <- Enum.hsGetEvaluatedEnumData $ Enum.enumExtName enum
+      numericType <- LH.cppTypeToHsTypeAndUse LH.HsCSide $ evaluatedEnumType enumData
+      let numericTypeStr = LH.prettyPrint numericType
+
+      -- Emit the newtype wrapper.
+      LH.addExport typeName
+      LH.addImports $ mconcat [hsImports "Prelude" ["($)", "(.)"],
+                               importForBits,
+                               importForFlags,
+                               importForPrelude,
+                               importForRuntime]
+      LH.ln
+      LH.saysLn ["newtype ", typeName, " = ", ctorName, " (", numericTypeStr,
+                 ") deriving (QtahP.Eq, QtahP.Ord, QtahP.Show)"]
+
+      -- Emit the Flags instance.
+      LH.ln
+      LH.saysLn ["instance QtahFlags.Flags (", numericTypeStr, ") ",
+                 enumTypeName, " ", typeName, " where"]
+      LH.indent $ do
+        LH.saysLn ["enumToFlags = ", ctorName, " . QtahFHR.fromCppEnum"]
+        LH.saysLn ["flagsToEnum (", ctorName, " x') = QtahFHR.toCppEnum x'"]
+
+      -- Emit IsFlags instances for both the flags and enum types.
+      LH.ln
+      LH.saysLn ["instance QtahFlags.IsFlags ", typeName, " ", typeName,
+                 " where toFlags = QtahP.id"]
+      LH.saysLn ["instance QtahFlags.IsFlags ", typeName, " ", enumTypeName,
+                 " where toFlags = QtahFlags.enumToFlags"]
+
+      -- Emit Haskell bindings for flags entries.
+      forM_ (M.toList $ evaluatedEnumValueMap enumData) $ \(words, num) -> do
+        let words' = Enum.enumGetOverriddenEntryName Haskell enum words
+        bindingName <- toHsFlagsBindingName flags words'
+        LH.addExport bindingName
+        LH.ln
+        LH.saysLn [bindingName, " :: ", typeName]
+        LH.saysLn [bindingName, " = ", ctorName, " (", show num, ")"]
+
+      -- Emit the Bits instance.  This code is the same as what Hoppy uses to
+      -- emit enum Bits instances.
+      LH.ln
+      LH.saysLn ["instance QtahDB.Bits ", typeName, " where"]
+      LH.indent $ do
+        let fun1 f =
+              LH.saysLn [f, " x = QtahFlags.numToFlags $ QtahDB.",
+                         f, " $ QtahFlags.flagsToNum x"]
+            fun1Int f =
+              LH.saysLn [f, " x i = QtahFlags.numToFlags $ QtahDB.",
+                         f, " (QtahFlags.flagsToNum x) i"]
+            fun2 f =
+              LH.saysLn [f, " x y = QtahFlags.numToFlags $ QtahDB.",
+                         f, " (QtahFlags.flagsToNum x) (QtahFlags.flagsToNum y)"]
+            op2 op =
+              LH.saysLn ["x ", op, " y = QtahFlags.numToFlags ",
+                         "(QtahFlags.flagsToNum x ", op, " QtahFlags.flagsToNum y)"]
+        op2 ".&."
+        op2 ".|."
+        fun2 "xor"
+        fun1 "complement"
+        fun1Int "shift"
+        fun1Int "rotate"
+        LH.sayLn "bitSize x = case QtahDB.bitSizeMaybe x of"
+        LH.indent $ do
+          LH.sayLn "  QtahP.Just n -> n"
+          -- Same error message as the prelude here:
+          LH.sayLn "  QtahP.Nothing -> QtahP.error \"bitSize is undefined\""
+        LH.sayLn "bitSizeMaybe = QtahDB.bitSizeMaybe . QtahFlags.flagsToNum"
+        LH.sayLn "isSigned = QtahDB.isSigned . QtahFlags.flagsToNum"
+        LH.sayLn "testBit x i = QtahDB.testBit (QtahFlags.flagsToNum x) i"
+        LH.sayLn "bit = QtahFlags.numToFlags . QtahDB.bit"
+        LH.sayLn "popCount = QtahDB.popCount . QtahFlags.flagsToNum"
+
+    LH.SayExportBoot -> do
+      -- Emit a minimal version of the regular binding code.
+      typeName <- toHsFlagsTypeName flags
+      -- We'll use the type name as the data constructor name as well:
+      let ctorName = typeName
+          enum = flagsEnum flags
+      enumTypeName <- Enum.toHsEnumTypeName enum
+      enumData <- Enum.hsGetEvaluatedEnumData $ Enum.enumExtName enum
+      numericType <- LH.cppTypeToHsTypeAndUse LH.HsCSide $ evaluatedEnumType enumData
+      let numericTypeStr = LH.prettyPrint numericType
+
+      LH.addImports $ mconcat [importForBits, importForFlags, importForPrelude]
+      LH.ln
+      LH.addExport typeName
+      LH.saysLn ["newtype ", typeName, " = ", ctorName, " (", numericTypeStr, ")"]
+      LH.saysLn ["instance QtahDB.Bits ", typeName]
+      LH.saysLn ["instance QtahP.Eq ", typeName]
+      LH.saysLn ["instance QtahP.Ord ", typeName]
+      LH.saysLn ["instance QtahP.Show ", typeName]
+      LH.ln
+      LH.saysLn ["instance QtahFlags.Flags (", numericTypeStr, ") ", enumTypeName, " ", typeName]
+      LH.ln
+      LH.saysLn ["instance QtahFlags.IsFlags ", typeName, " ", typeName]
+      LH.saysLn ["instance QtahFlags.IsFlags ", typeName, " ", enumTypeName]
+      LH.ln
+      forM_ (M.toList $ evaluatedEnumValueMap enumData) $ \(words, _) -> do
+        let words' = Enum.enumGetOverriddenEntryName Haskell enum words
+        bindingName <- toHsFlagsBindingName flags words'
+        LH.addExport bindingName
+        LH.saysLn [bindingName, " :: ", typeName]
+
+    where checkInFlagsEnumModule = do
+            currentModule <- LH.askModule
+            enumModule <- LH.getExtNameModule $ Enum.enumExtName $ flagsEnum flags
+            when (currentModule /= enumModule) $
+              throwError $ show flags ++ " and " ++ show (flagsEnum flags) ++
+              "are not exported from the same module."
+
+-- | Imports and returns the Haskell type name for a 'Flags'.
+toHsFlagsTypeName :: Flags -> LH.Generator String
+toHsFlagsTypeName flags =
+  LH.inFunction "toHsFlagsTypeName" $
+  LH.addExtNameModule (flagsExtName flags) $ toHsFlagsTypeName' flags
+
+-- | Pure version of 'toHsTypeName' that doesn't create a qualified name.
+toHsFlagsTypeName' :: Flags -> String
+toHsFlagsTypeName' = LH.toHsTypeName' Nonconst . flagsExtName
+
+-- | Constructs the name of the binding for a specific flags entry.
 --
--- The Qt version determined the following method:
---
--- * If @QTAH_QT=x.y@ is in the environment, then this value will be used.
---
--- * Otherwise, if @QTAH_QT=x@ is in the environment, then we query @qmake
--- -qt=$QTAH_QT -version@ for the version of Qt to use.
---
--- * Otherwise, we query @qmake -version@ for the version of Qt to use.  Setting
--- @QT_SELECT@ in the environment can select a major version of Qt to use.
---
--- For more information on @qmake -qt@ and @QT_SELECT@, see @man qtchooser@.
-qtConfig :: QtConfig
-{-# NOINLINE qtConfig #-}
-qtConfig = unsafePerformIO readQt
+-- This is the equivalent enum data constructor name, converted to a valid
+-- binding name by lower-casing the first letter.
+toHsFlagsBindingName :: Flags -> [String] -> LH.Generator String
+toHsFlagsBindingName flags words =
+  LH.inFunction "toHsFlagsBindingName" $
+  LH.addExtNameModule (flagsExtName flags) $ toHsFlagsBindingName' flags words
 
-qtVersion :: Version
-qtVersion = configVersion qtConfig
-
-qmakeExecutable :: FilePath
-qmakeExecutable = configQmakeExecutable qtConfig
-
-qmakeArguments :: [String]
-qmakeArguments = configQmakeArguments qtConfig
-
-keypadNavigation :: Bool
-keypadNavigation = False
-
-qdoc :: Bool
-qdoc = False
-
--- | Whether Qt was configured with qreal=float instead of double.
-qrealFloat :: Bool
-{-# NOINLINE qrealFloat #-}
-qrealFloat = unsafePerformIO $ readBool "QTAH_QREAL_FLOAT" False
-
-wsWince :: Bool
-wsWince = False
-
--- | Reads a Qt version from the environment variable @QTAH_QT@, and looks up a
--- qmake binary.
-readQt :: IO QtConfig
-readQt = do
-  maybeStr <- (\x -> case x of
-                 Just "" -> Nothing
-                 _ -> x) <$>
-              lookupEnv "QTAH_QT"
-  case maybeStr of
-    Just str -> do
-      let strs = splitOn '.' str
-      unless (length strs `elem` [1, 2] && all (\n -> not (null n) && all isDigit n) strs) $
-        fail $ concat
-        ["qtah-generator requires QTAH_QT=x or QTAH_QT=x.y, can't parse value ", show str, "."]
-      let version = map (read :: String -> Int) strs
-      case version of
-        [x] -> queryQmake $ Just x
-        [x, y] -> do
-          config <- queryQmake $ Just x
-          case configVersion config of
-            foundVersion@(x':y':_) | x /= x' || y /= y' ->
-              fail $ "qtah-generator: Mismatch between requested and installed " ++
-              "Qt versions.  Requested " ++ showVersion version ++ ", found " ++
-              showVersion foundVersion ++ "."
-            _ -> return ()
-          return config
-        _ -> fail $ concat
-             ["qtah-generator: Internal error, incorrect parsing of QTAH_QT value ", show str, "."]
-    Nothing -> queryQmake Nothing
-
-  where -- | When we don't have a preferred qmake version, then we'll search for
-        -- qmake's executables, first unqualified, then qualified by version
-        -- number in decreasing order.
-        allQmakeExecutableNames :: [String]
-        allQmakeExecutableNames = ["qmake", "qmake-qt5", "qmake-qt4"]
-
-        -- | When we /do/ have a prefered qmake version, then try the qualified
-        -- version name first, falling back to the generic qmake executable if
-        -- possible.
-        qmakeExecutableNamesForVersion :: Int -> [String]
-        qmakeExecutableNamesForVersion major = ["qmake-qt" ++ show major, "qmake"]
-
-        queryQmake :: Maybe Int -> IO QtConfig
-        queryQmake maybePreferredMajorVersion =
-          case maybePreferredMajorVersion of
-            Nothing ->
-              -- No major version preference, so take whatever Qt is available.
-              queryQmake' allQmakeExecutableNames []
-            Just preferredMajorVersion -> do
-              -- Even though we have a preferred major version, we don't want to
-              -- run "qmake -qt=X -version" initially because we might be on a
-              -- system (NixOS) where qtchooser isn't available and the only
-              -- qmake available *is* the desired version (in NixOS's case, the
-              -- binary is called "qmake", not "qmake-qtX").  Only pass "-qt=X"
-              -- if we get the wrong default version.
-              let executableNames = qmakeExecutableNamesForVersion preferredMajorVersion
-              defaultConfig <- queryQmake' executableNames []
-              case configVersion defaultConfig of
-                (x:_) | x == preferredMajorVersion -> return defaultConfig
-                _ -> queryQmake' executableNames ["-qt=" ++ show preferredMajorVersion]
-
-        queryQmake' :: [String] -> [String] -> IO QtConfig
-        queryQmake' executableNames extraArgs = do
-          qmakePath <- findQMake executableNames
-          let args = extraArgs ++ ["-version"]
-          (exitCode, out, err) <- readProcessWithExitCode qmakePath args ""
-          let qmakeDebugWords =
-                ["  Ran ", show (qmakePath : args), ".\nStdout:\n", out, "\nStderr:\n", err]
-          unless (exitCode == ExitSuccess) $
-            fail $ concat $ "qtah-generator: qmake returned non-zero exit code." : qmakeDebugWords
-
-          let versionLinePrefix = "Using Qt version "
-
-              maybeVersionStrs = do
-                versionLine <- expectSingle $
-                               filter (versionLinePrefix `isPrefixOf`) $
-                               lines out
-                let str = takeWhile (not . isSpace) $ drop (length versionLinePrefix) versionLine
-                    strs = take 2 $ splitOn '.' str
-                if length strs == 2 && all (\n -> not (null n) && all isDigit n) strs
-                  then Just strs
-                  else Nothing
-
-          case maybeVersionStrs of
-            Just strs ->
-              return QtConfig
-              { configVersion = map (read :: String -> Int) strs
-              , configQmakeExecutable = qmakePath
-              , configQmakeArguments = extraArgs
-              }
-            Nothing ->
-              fail $ concat $
-              "qtah-generator: Can't parse Qt version from qmake output." : qmakeDebugWords
-
-        expectSingle :: [a] -> Maybe a
-        expectSingle [x] = Just x
-        expectSingle _ = Nothing
-
--- | Reads a boolean value from the program's environment.  If the variable is
--- set and non-empty, then if must be one of the strings @true@ or @false@.  An
--- empty or unset value is treated as the provided default value.
-readBool :: String -> Bool -> IO Bool
-readBool name defaultValue = do
-  maybeStr <- lookupEnv name
-  case maybeStr of
-    Nothing -> return defaultValue
-    Just str -> case str of
-      "" -> return defaultValue
-      "true" -> return True
-      "false" -> return False
-      s -> fail $ concat
-           ["qtah-generator: Expected a boolean value for ", name,
-            " (true/false).  Got ", show s, "."]
-
-findQMake :: [String] -> IO FilePath
-findQMake executableNames = lookupEnv "QTAH_QMAKE" >>= fromMaybeM findBinary
-  where findBinary =
-          firstM (map findExecutable executableNames) >>=
-          fromMaybeM
-          (fail $ "qtah-generator: Can't find qmake named any of " ++
-           show executableNames ++ ".  Please ensure qmake is installed " ++
-           "and set QTAH_QMAKE to qmake's path.")
+-- | Pure version of 'toHsFlagsBindingName' that doesn't create a qualified
+-- name.
+toHsFlagsBindingName' :: Flags -> [String] -> String
+toHsFlagsBindingName' flags words =
+  lowerFirst $ Enum.toHsEnumCtorName' (flagsEnum flags) words

@@ -22,7 +22,6 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QSystemTrayIcon (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass, ExportEnum),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -36,6 +35,7 @@ import Foreign.Hoppy.Generator.Spec (
   mkMethod',
   mkProp,
   mkStaticMethod,
+  np,
   )
 import Foreign.Hoppy.Generator.Types (boolT, enumT, intT, objT, ptrT, voidT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QObject (c_QObject)
@@ -43,8 +43,8 @@ import Graphics.UI.Qtah.Generator.Interface.Core.QRect (c_QRect)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QIcon (c_QIcon)
 import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
-  c_Listener,
-  c_ListenerQSystemTrayIconActivationReason,
+  listener,
+  listenerQSystemTrayIconActivationReason,
   )
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QMenu (c_QMenu)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
@@ -55,52 +55,52 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QSystemTrayIcon"] $
-  QtExport (ExportClass c_QSystemTrayIcon) :
+  qtExport c_QSystemTrayIcon :
   map QtExportSignal signals ++
-  [ QtExport $ ExportEnum e_ActivationReason
-  , QtExport $ ExportEnum e_MessageIcon
+  [ qtExport e_ActivationReason
+  , qtExport e_MessageIcon
   ]
 
 c_QSystemTrayIcon =
   addReqIncludes [includeStd "QSystemTrayIcon"] $
   classSetEntityPrefix "" $
   makeClass (ident "QSystemTrayIcon") Nothing [c_QObject]
-  [ mkCtor "new" []
+  [ mkCtor "new" np
   , mkCtor "newWithParent" [ptrT $ objT c_QObject]
   , mkCtor "newWithIcon" [objT c_QIcon]
   , mkCtor "newWithIconAndParent" [objT c_QIcon, ptrT $ objT c_QObject]
   , mkProp "contextMenu" $ ptrT $ objT c_QMenu
-  , mkConstMethod "geometry" [] $ objT c_QRect
-  , mkMethod "hide" [] voidT
+  , mkConstMethod "geometry" np $ objT c_QRect
+  , mkMethod "hide" np voidT
   , mkProp "icon" $ objT c_QIcon
-  , mkStaticMethod "isSystemTrayAvailable" [] boolT
-  , mkMethod "show" [] voidT
+  , mkStaticMethod "isSystemTrayAvailable" np boolT
+  , mkMethod "show" np voidT
   , mkMethod' "showMessage" "showMessage" [objT c_QString, objT c_QString] voidT
   , mkMethod' "showMessage" "showMessageAll"
     [objT c_QString, objT c_QString, enumT e_MessageIcon, intT] voidT
-  , mkStaticMethod "supportsMessages" [] boolT
+  , mkStaticMethod "supportsMessages" np boolT
   , mkProp "toolTip" $ objT c_QString
   , mkBoolIsProp "visible"
   ]
 
 signals =
-  [ makeSignal c_QSystemTrayIcon "activated" c_ListenerQSystemTrayIconActivationReason
-  , makeSignal c_QSystemTrayIcon "messageClicked" c_Listener
+  [ makeSignal c_QSystemTrayIcon "activated" listenerQSystemTrayIconActivationReason
+  , makeSignal c_QSystemTrayIcon "messageClicked" listener
   ]
 
 e_ActivationReason =
   makeQtEnum (ident1 "QSystemTrayIcon" "ActivationReason") [includeStd "QSystemTrayIcon"]
-  [ (0, ["unknown"])
-  , (1, ["context"])
-  , (2, ["double", "click"])
-  , (3, ["trigger"])
-  , (4, ["middle", "click"])
+  [ "Unknown"
+  , "Context"
+  , "DoubleClick"
+  , "Trigger"
+  , "MiddleClick"
   ]
 
 e_MessageIcon =
   makeQtEnum (ident1 "QSystemTrayIcon" "MessageIcon") [includeStd "QSystemTrayIcon"]
-  [ (0, ["no", "icon"])
-  , (1, ["information"])
-  , (2, ["warning"])
-  , (3, ["critical"])
+  [ "NoIcon"
+  , "Information"
+  , "Warning"
+  , "Critical"
   ]

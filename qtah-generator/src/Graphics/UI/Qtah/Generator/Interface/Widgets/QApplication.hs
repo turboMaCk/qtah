@@ -20,7 +20,6 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QApplication (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportEnum, ExportClass),
   MethodApplicability (MStatic),
   Purity (Nonpure),
   addReqIncludes,
@@ -37,10 +36,11 @@ import Foreign.Hoppy.Generator.Spec (
   mkStaticMethod,
   mkStaticMethod',
   mkStaticProp,
+  np,
   )
 import Foreign.Hoppy.Generator.Types (boolT, enumT, intT, objT, ptrT, voidT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (keypadNavigation, qtVersion)
+import Graphics.UI.Qtah.Generator.Config (keypadNavigation, qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.QCoreApplication (c_QCoreApplication)
 import Graphics.UI.Qtah.Generator.Interface.Core.QList (c_QListQWidget)
 import Graphics.UI.Qtah.Generator.Interface.Core.QPoint (c_QPoint)
@@ -52,8 +52,8 @@ import Graphics.UI.Qtah.Generator.Interface.Gui.QClipboard (c_QClipboard)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QFont (c_QFont)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QIcon (c_QIcon)
 import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
-  c_Listener,
-  c_ListenerPtrQWidgetPtrQWidget,
+  listener,
+  listenerPtrQWidgetPtrQWidget,
   )
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QWidget (c_QWidget)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
@@ -64,10 +64,10 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QApplication"] $
-  [ QtExport $ ExportClass c_QApplication
+  [ qtExport c_QApplication
   ] ++ map QtExportSignal signals ++
   collect
-  [ test (qtVersion < [5]) $ QtExport $ ExportEnum e_Type
+  [ test (qtVersion < [5]) $ qtExport e_Type
   ]
 
 c_QApplication =
@@ -79,25 +79,25 @@ c_QApplication =
   collect
   [ just $ makeFnMethod (ident2 "qtah" "qapplication" "create") "new" MStatic Nonpure
     [objT c_QStringList] $ ptrT $ objT c_QApplication
-  , just $ mkStaticMethod "aboutQt" [] voidT
-  , just $ mkStaticMethod "activeModalWidget" [] $ ptrT $ objT c_QWidget
-  , just $ mkStaticMethod "activePopupWidget" [] $ ptrT $ objT c_QWidget
+  , just $ mkStaticMethod "aboutQt" np voidT
+  , just $ mkStaticMethod "activeModalWidget" np $ ptrT $ objT c_QWidget
+  , just $ mkStaticMethod "activePopupWidget" np $ ptrT $ objT c_QWidget
   , just $ mkStaticProp "activeWindow" $ ptrT $ objT c_QWidget
   , just $ mkStaticMethod "alert" [ptrT $ objT c_QWidget, intT] voidT
-  , just $ mkStaticMethod "allWidgets" [] $ objT c_QListQWidget
+  , just $ mkStaticMethod "allWidgets" np $ objT c_QListQWidget
   , just $ mkProp "autoSipEnabled" boolT
-  , just $ mkStaticMethod "beep" [] voidT
+  , just $ mkStaticMethod "beep" np voidT
     -- TODO changeOverrideCursor
-  , just $ mkStaticMethod "clipboard" [] $ ptrT $ objT c_QClipboard
-  , just $ mkStaticMethod "closeAllWindows" [] voidT
+  , just $ mkStaticMethod "clipboard" np $ ptrT $ objT c_QClipboard
+  , just $ mkStaticMethod "closeAllWindows" np voidT
   , just $ mkStaticProp "colorSpec" intT
     -- TODO commitData
   , just $ mkStaticProp "cursorFlashTime" intT
     -- TODO desktop
   , just $ mkStaticProp "desktopSettingsAware" boolT
   , just $ mkStaticProp "doubleClickInterval" intT
-  , just $ mkStaticMethod "focusWidget" [] $ ptrT $ objT c_QWidget
-  , just $ mkStaticMethod' "font" "font" [] $ objT c_QFont
+  , just $ mkStaticMethod "focusWidget" np $ ptrT $ objT c_QWidget
+  , just $ mkStaticMethod' "font" "font" np $ objT c_QFont
   , just $ mkStaticMethod' "font" "fontWithWidget" [ptrT $ objT c_QWidget] $ objT c_QFont
   , just $ makeFnMethod (ident2 "qtah" "qapplication" "fontWithClass") "fontWithClass"
     MStatic Nonpure [objT c_QString] $ objT c_QFont
@@ -105,29 +105,29 @@ c_QApplication =
   , just $ mkStaticProp "globalStrut" $ objT c_QSize
     -- TODO inputContext
     -- TODO isEffectEnabled
-  , just $ mkStaticMethod "isLeftToRight" [] boolT
-  , just $ mkStaticMethod "isRightToLeft" [] boolT
-  , just $ mkConstMethod "isSessionRestored" [] boolT
-  , test (qtVersion < [5]) $ mkStaticMethod "keyboardInputDirection" [] $ enumT e_LayoutDirection
-  , just $ mkStaticMethod "keyboardInputInterval" [] intT
+  , just $ mkStaticMethod "isLeftToRight" np boolT
+  , just $ mkStaticMethod "isRightToLeft" np boolT
+  , just $ mkConstMethod "isSessionRestored" np boolT
+  , test (qtVersion < [5]) $ mkStaticMethod "keyboardInputDirection" np $ enumT e_LayoutDirection
+  , just $ mkStaticMethod "keyboardInputInterval" np intT
     -- TODO keyboardInputLocale (<5)
     -- TODO keyboardModifiers
-  , just $ mkStaticMethod "layoutDirection" [] $ enumT e_LayoutDirection
+  , just $ mkStaticMethod "layoutDirection" np $ enumT e_LayoutDirection
     -- TODO macEventFilter
     -- TODO mouseButtons
-  , test keypadNavigation $ mkStaticMethod "navigationMode" [] $ enumT e_NavigationMode
+  , test keypadNavigation $ mkStaticMethod "navigationMode" np $ enumT e_NavigationMode
     -- TODO overrideCursor
     -- TODO palette
     -- TODO queryKeyboardModifiers
-  , just $ mkStaticMethod "quitOnLastWindowClosed" [] boolT
+  , just $ mkStaticMethod "quitOnLastWindowClosed" np boolT
     -- TODO qwsDecoration
     -- TODO qwsEventFilter
     -- TODO qwsSetCustomColors
     -- TODO qwsSetDecoration
-  , just $ mkStaticMethod "restoreOverrideCursor" [] voidT
+  , just $ mkStaticMethod "restoreOverrideCursor" np voidT
     -- TODO saveState
-  , just $ mkConstMethod "sessionId" [] $ objT c_QString
-  , just $ mkConstMethod "sessionKey" [] $ objT c_QString
+  , just $ mkConstMethod "sessionId" np $ objT c_QString
+  , just $ mkConstMethod "sessionKey" np $ objT c_QString
     -- TODO setEffectEnabled
   , just $ mkStaticMethod' "setFont" "setFont" [objT c_QFont] voidT
   , just $ makeFnMethod (ident2 "qtah" "qapplication" "setFontWithClass") "setFontWithClass"
@@ -146,14 +146,14 @@ c_QApplication =
   , just $ mkProp "startDragTime" intT
     -- TODO style
   , just $ mkProp "styleSheet" $ objT c_QString
-  , test (qtVersion < [5]) $ mkStaticMethod "syncX" [] voidT
+  , test (qtVersion < [5]) $ mkStaticMethod "syncX" np voidT
     -- TODO symbianEventFilter
     -- TODO symbianProcessEvent
   , just $ mkStaticMethod' "topLevelAt" "topLevelAtPoint" [objT c_QPoint] $ ptrT $ objT c_QWidget
   , just $ mkStaticMethod' "topLevelAt" "topLevelAtRaw" [intT, intT] $ ptrT $ objT c_QWidget
     -- TODO topLevelWidgets
     -- We rename type() since @type@ is a Haskell keyword.
-  , test (qtVersion < [5]) $ mkStaticMethod' "type" "applicationType" [] $ enumT e_Type
+  , test (qtVersion < [5]) $ mkStaticMethod' "type" "applicationType" np $ enumT e_Type
   , just $ mkStaticProp "wheelScrollLines" intT
   , just $ mkStaticMethod' "widgetAt" "widgetAtPoint" [objT c_QPoint] $ ptrT $ objT c_QWidget
   , just $ mkStaticMethod' "widgetAt" "widgetAtRaw" [intT, intT] $ ptrT $ objT c_QWidget
@@ -163,12 +163,12 @@ c_QApplication =
   ]
 
 signals =
-  [ makeSignal c_QApplication "aboutToReleaseGpuResources" c_Listener
-  , makeSignal c_QApplication "aboutToUseGpuResources" c_Listener
+  [ makeSignal c_QApplication "aboutToReleaseGpuResources" listener
+  , makeSignal c_QApplication "aboutToUseGpuResources" listener
     -- TODO commitDataRequest
-  , makeSignal c_QApplication "focusChanged" c_ListenerPtrQWidgetPtrQWidget
-  , makeSignal c_QApplication "fontDatabaseChanged" c_Listener
-  , makeSignal c_QApplication "lastWindowClosed" c_Listener
+  , makeSignal c_QApplication "focusChanged" listenerPtrQWidgetPtrQWidget
+  , makeSignal c_QApplication "fontDatabaseChanged" listener
+  , makeSignal c_QApplication "lastWindowClosed" listener
     -- TODO quit (static!)
     -- TODO saveStateRequest
   ]
@@ -176,7 +176,7 @@ signals =
 -- | Removed in Qt 5.
 e_Type =
   makeQtEnum (ident1 "QApplication" "Type") [includeStd "QApplication"]
-  [ (0, ["tty"])
-  , (1, ["gui", "client"])
-  , (2, ["gui", "server"])
+  [ "Tty"
+  , "GuiClient"
+  , "GuiServer"
   ]
