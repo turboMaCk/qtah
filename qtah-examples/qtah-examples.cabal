@@ -9,7 +9,7 @@ maintainer: Bryan Gardiner <bog@khumba.net>
 copyright: Copyright 2015-2018 The Qtah Authors.
 category: Graphics
 build-type: Simple
-cabal-version: >=1.10
+cabal-version: 1.20
 description:
   Qtah is a set of Qt bindings for Haskell.  This package contains example
   programs to demonstrate use of the bindings.
