@@ -41,7 +41,7 @@ import Graphics.UI.Qtah.Generator.Types
 
 aModule =
   AQtModule $
-  makeQtModule ["Core", "QStringListModel"] $
+  makeQtModule ["Core", "QStringListModel"]
   [ QtExport $ ExportClass c_QStringListModel ]
 
 c_QStringListModel =

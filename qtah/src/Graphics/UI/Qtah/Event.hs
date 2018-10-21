@@ -73,7 +73,7 @@ onAnyEvent :: QObjectPtr target => target -> EventFilter -> IO EventRegistration
 onAnyEvent receiver filter = do
   liveVar <- newMVar True
   listener <- EventListener.new receiver filter $ modifyMVar_ liveVar $ const $ return False
-  return $ EventRegistration
+  return EventRegistration
     { regListener = listener
     , regLive = liveVar
     }

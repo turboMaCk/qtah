@@ -51,7 +51,7 @@ c_QPen =
   classSetConversionToGc $
   classAddFeatures [Assignable, Copyable, Equatable] $
   classSetEntityPrefix "" $
-  makeClass (ident "QPen") Nothing [] $
+  makeClass (ident "QPen") Nothing []
   [ mkCtor "new" []
   , mkCtor "newWithColor" [objT c_QColor]
   ]

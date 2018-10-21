@@ -88,7 +88,7 @@ c_QStringList =
     { classHaskellConversionType = Just $ do
       addImports importForPrelude
       return $
-        HsTyApp (HsTyCon $ Special $ HsListCon) $
+        HsTyApp (HsTyCon $ Special HsListCon) $
         HsTyCon $ UnQual $ HsIdent "QtahP.String"
     , classHaskellConversionToCppFn = Just $ do
       addImports importForRuntime

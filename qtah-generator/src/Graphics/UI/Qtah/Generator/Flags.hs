@@ -108,9 +108,9 @@ wsWince = False
 -- qmake binary.
 readQt :: IO QtConfig
 readQt = do
-  maybeStr <- fmap (\x -> case x of
-                      Just "" -> Nothing
-                      _ -> x) $
+  maybeStr <- (\x -> case x of
+                 Just "" -> Nothing
+                 _ -> x) <$>
               lookupEnv "QTAH_QT"
   case maybeStr of
     Just str -> do
@@ -147,7 +147,7 @@ readQt = do
         qmakeExecutableNamesForVersion major = ["qmake-qt" ++ show major, "qmake"]
 
         queryQmake :: Maybe Int -> IO QtConfig
-        queryQmake maybePreferredMajorVersion = do
+        queryQmake maybePreferredMajorVersion =
           case maybePreferredMajorVersion of
             Nothing ->
               -- No major version preference, so take whatever Qt is available.

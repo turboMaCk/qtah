@@ -249,7 +249,7 @@ c_QImage =
   ]
 
 e_Format =
-  makeQtEnum (ident1 "QImage" "Format") [includeStd "QImage"] $
+  makeQtEnum (ident1 "QImage" "Format") [includeStd "QImage"]
   [ (0, ["format", "invalid"])
   , (1, ["format", "mono"])
   , (2, ["format", "mono", "l", "s", "b"])
@@ -278,7 +278,7 @@ e_Format =
   ]
 
 e_InvertMode =
-  makeQtEnum (ident1 "QImage" "InvertMode") [includeStd "QImage"] $
+  makeQtEnum (ident1 "QImage" "InvertMode") [includeStd "QImage"]
   [ (0, ["invert", "rgb"])
   , (1, ["invert", "rgba"])
   ]

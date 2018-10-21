@@ -42,7 +42,7 @@ minVersion = [5, 4]
 
 aModule =
   AQtModule $
-  makeQtModuleWithMinVersion ["Gui", "QRasterWindow"] minVersion $
+  makeQtModuleWithMinVersion ["Gui", "QRasterWindow"] minVersion
   [ QtExport $ ExportClass c_QRasterWindow ]
 
 c_QRasterWindow =

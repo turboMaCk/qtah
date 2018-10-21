@@ -289,7 +289,7 @@ sayQtExport path qtExport = case qtExport of
     forM_ (bitspaceValueNames b) $ \(_, valueName) ->
       addExport $ toHsBitspaceValueName' b valueName
 
-  QtExport (ExportFn fn) -> do
+  QtExport (ExportFn fn) ->
     addExport $ getFnReexportName fn
 
   QtExportFnRenamed fn rename -> do

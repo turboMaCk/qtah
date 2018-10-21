@@ -50,6 +50,6 @@ c_QTransform =
   classSetConversionToGc $
   classAddFeatures [Assignable, Copyable, Equatable] $
   classSetEntityPrefix "" $
-  makeClass (ident "QTransform") Nothing [] $
+  makeClass (ident "QTransform") Nothing []
   [ mkCtor "new2x2" [qreal, qreal, qreal, qreal, qreal, qreal]
   ]

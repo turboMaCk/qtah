@@ -160,8 +160,8 @@ findQmake programDb verbosity = do
   generatorConfiguredProgram <-
     maybe (dieFn $ packageName ++ ": Couldn't find qtah-generator.  Is it installed?") return $
     lookupProgram generatorProgram programDb
-  output <- fmap lines $
-            getProgramOutput verbosity generatorConfiguredProgram ["--qmake-executable"]
+  output <-
+    lines <$> getProgramOutput verbosity generatorConfiguredProgram ["--qmake-executable"]
   case output of
     executable:args -> return (executable, args)
     [] -> fail $ packageName ++
@@ -321,10 +321,12 @@ exportQtVersion configFlags localBuildInfo = do
 #endif
           qt4Flag = fromMaybe False $ lookupFlag (mkFlagName "qt4") flags
           qt5Flag = fromMaybe False $ lookupFlag (mkFlagName "qt5") flags
-          qtFlag = if qt4Flag then Just 4 else if qt5Flag then Just 5 else Nothing
+          qtFlag | qt4Flag = Just 4
+                 | qt5Flag = Just 5
+                 | otherwise = Nothing
       when (qt4Flag && qt5Flag) $
-        dieFn $ concat
-        [packageName, ": The qt4 and qt5 flags are mutually exclusive.  Please select at most one."]
+        dieFn $
+        packageName ++ ": The qt4 and qt5 flags are mutually exclusive.  Please select at most one."
 
       -- Inspect the QTAH_QT environment variable.
       qtahQtStr <- lookupEnv "QTAH_QT"
@@ -341,11 +343,10 @@ exportQtVersion configFlags localBuildInfo = do
       -- generator to pick up.
       case (qtahQtMajor, qtFlag) of
         -- If both QTAH_QT and one of the qtX flags above is set, then they must agree.
-        (Just m, Just n) -> do
-          when (m /= n) $
-            dieFn $ concat
-            [packageName, ": QTAH_QT=", show $ fromMaybe "" qtahQtStr, " and the qt",
-             show n, " flag conflict."]
+        (Just m, Just n) | m /= n ->
+          dieFn $ concat
+          [packageName, ": QTAH_QT=", show $ fromMaybe "" qtahQtStr, " and the qt",
+           show n, " flag conflict."]
         -- Otherwise, if QTAH_QT is not already set but we have a flag preference,
         -- then use QTAH_QT to tell qtah-generator about the flag.
         (Nothing, Just n) -> setEnv "QTAH_QT" $ show n
@@ -360,7 +361,7 @@ exportQtVersion configFlags localBuildInfo = do
         (_, Just n) ->
           notice verbosity $
           concat [packageName, ": Requesting Qt ", show n, " because of the qt", show n, " flag."]
-        _ -> notice verbosity $ concat [packageName, ": Requesting system default Qt."]
+        _ -> notice verbosity $ packageName ++ ": Requesting system default Qt."
 
       return $ qtahQtMajor <|> qtFlag
 

@@ -57,7 +57,7 @@ c_QMetaClassInfo =
   classSetConversionToGc $
   classAddFeatures [Copyable] $
   classSetEntityPrefix "" $
-  makeClass (ident "QMetaClassInfo") Nothing [] $
+  makeClass (ident "QMetaClassInfo") Nothing []
   [ makeFnMethod (ident2 "qtah" "qmetaclassinfo" "name") "name" MConst Nonpure
     [objT c_QMetaClassInfo] $ objT c_QString
   , makeFnMethod (ident2 "qtah" "qmetaclassinfo" "value") "value" MConst Nonpure

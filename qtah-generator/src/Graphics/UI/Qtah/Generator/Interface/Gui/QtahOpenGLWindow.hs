@@ -45,7 +45,7 @@ import Graphics.UI.Qtah.Generator.Types
 
 aModule =
   AQtModule $
-  makeQtModuleWithMinVersion ["Gui", "QtahOpenGLWindow"] minVersion $
+  makeQtModuleWithMinVersion ["Gui", "QtahOpenGLWindow"] minVersion
   [ QtExport $ ExportClass c_QtahOpenGLWindow ]
 
 c_QtahOpenGLWindow =

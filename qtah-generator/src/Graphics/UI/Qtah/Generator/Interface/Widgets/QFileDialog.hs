@@ -174,7 +174,7 @@ e_FileMode =
   , just (1, ["existing", "file"])
   , just (2, ["directory"])
   , just (3, ["existing", "files"])
-  , test (qtVersion < [4, 5]) $ (4, ["directory", "only"])
+  , test (qtVersion < [4, 5]) (4, ["directory", "only"])
   ]
 
 (e_Option, bs_Options) =

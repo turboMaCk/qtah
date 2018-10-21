@@ -85,7 +85,7 @@ aModule =
 c_QAbstractItemView =
   addReqIncludes [includeStd "QAbstractItemView"] $
   classSetEntityPrefix "" $
-  makeClass (ident "QAbstractItemView") Nothing [c_QAbstractScrollArea] $
+  makeClass (ident "QAbstractItemView") Nothing [c_QAbstractScrollArea]
   [ mkProp "alternatingRowColors" boolT
   , mkBoolHasProp "autoScroll"
   , mkProp "autoScrollMargin" intT

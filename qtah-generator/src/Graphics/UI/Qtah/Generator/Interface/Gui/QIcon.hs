@@ -112,12 +112,12 @@ c_QIcon =
   , just $ mkConstMethod "isNull" [] boolT
   , just $ mkConstMethod "name" [] $ objT c_QString
   , just $ mkConstMethod' "paint" "paintWithRect"
-    [ptrT $ objT c_QPainter, objT c_QRect] $ voidT
+    [ptrT $ objT c_QPainter, objT c_QRect] voidT
   , just $ mkConstMethod' "paint" "paintWithRectAll"
     [ptrT $ objT c_QPainter, objT c_QRect, bitspaceT bs_Alignment, enumT e_Mode, enumT e_State]
     voidT
   , just $ mkConstMethod' "paint" "paintWithRaw"
-    [ptrT $ objT c_QPainter, intT, intT, intT, intT] $ voidT
+    [ptrT $ objT c_QPainter, intT, intT, intT, intT] voidT
   , just $ mkConstMethod' "paint" "paintWithRawAll"
     [ptrT $ objT c_QPainter, intT, intT, intT, intT, bitspaceT bs_Alignment, enumT e_Mode,
      enumT e_State]

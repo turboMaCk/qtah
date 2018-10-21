@@ -68,7 +68,7 @@ c_QPaintDevice =
   ]
 
 e_PaintDeviceMetric =
-  makeQtEnum (ident1 "QPaintDevice" "PaintDeviceMetric") [includeStd "QPaintDevice"] $
+  makeQtEnum (ident1 "QPaintDevice" "PaintDeviceMetric") [includeStd "QPaintDevice"]
   [ (1, ["pdm", "width"])
   , (2, ["pdm", "height"])
   , (3, ["pdm", "width", "mm"])

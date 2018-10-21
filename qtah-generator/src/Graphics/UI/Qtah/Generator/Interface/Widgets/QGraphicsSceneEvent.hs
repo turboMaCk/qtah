@@ -45,6 +45,6 @@ aModule =
 c_QGraphicsSceneEvent =
   addReqIncludes [includeStd "QGraphicsSceneEvent"] $
   classSetEntityPrefix "" $
-  makeClass (ident "QGraphicsSceneEvent") Nothing [c_QEvent] $
+  makeClass (ident "QGraphicsSceneEvent") Nothing [c_QEvent]
   [ mkConstMethod "widget" [] $ ptrT $ objT c_QWidget
   ]

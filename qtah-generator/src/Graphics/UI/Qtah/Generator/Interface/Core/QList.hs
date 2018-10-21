@@ -251,9 +251,8 @@ instantiate' listName t tReqs opts =
       -- type using HasContents/FromContents.
       conversion =
         ClassHaskellConversion
-        { classHaskellConversionType = Just $ do
-          hsType <- cppTypeToHsTypeAndUse HsHsSide t
-          return $ HsTyApp (HsTyCon $ Special HsListCon) hsType
+        { classHaskellConversionType =
+          Just $ HsTyApp (HsTyCon $ Special HsListCon) <$> cppTypeToHsTypeAndUse HsHsSide t
         , classHaskellConversionToCppFn = Just $ do
           addImports importForRuntime
           sayLn "QtahFHR.fromContents"

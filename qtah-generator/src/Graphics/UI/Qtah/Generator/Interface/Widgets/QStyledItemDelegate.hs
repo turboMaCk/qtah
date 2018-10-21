@@ -48,7 +48,7 @@ aModule =
 c_QStyledItemDelegate =
   addReqIncludes [includeStd "QStyledItemDelegate"] $
   classSetEntityPrefix "" $
-  makeClass (ident "QStyledItemDelegate") Nothing [c_QAbstractItemDelegate] $
+  makeClass (ident "QStyledItemDelegate") Nothing [c_QAbstractItemDelegate]
   [
   -- Public Functions
     mkCtor "new" []

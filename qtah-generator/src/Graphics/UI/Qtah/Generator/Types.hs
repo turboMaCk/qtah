@@ -73,7 +73,7 @@ makeQtEnum identifier includes valueNames =
   addReqIncludes includes $
   enumSetValuePrefix "" $
   makeEnum identifier
-           (Just $ toExtName $ concat $ map idPartBase $ identifierParts identifier)
+           (Just $ toExtName $ concatMap idPartBase $ identifierParts identifier)
            valueNames
 
 -- | Creates an (enum, bitspace) pair with the same values and similar names,

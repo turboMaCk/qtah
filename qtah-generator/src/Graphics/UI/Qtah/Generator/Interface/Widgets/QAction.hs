@@ -56,10 +56,10 @@ aModule =
   QtExport (ExportClass c_QAction) :
   map QtExportSignal signals ++
   (map (QtExport . ExportEnum) . collect)
-  [ just $ e_ActionEvent
-  , just $ e_MenuRole
-  , just $ e_Priority
-  , test (qtVersion < [5]) $ e_SoftKeyRole
+  [ just e_ActionEvent
+  , just e_MenuRole
+  , just e_Priority
+  , test (qtVersion < [5]) e_SoftKeyRole
   ]
 
 c_QAction =

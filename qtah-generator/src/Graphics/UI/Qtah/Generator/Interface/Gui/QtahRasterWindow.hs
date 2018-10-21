@@ -41,7 +41,7 @@ import Graphics.UI.Qtah.Generator.Types
 
 aModule =
   AQtModule $
-  makeQtModuleWithMinVersion ["Gui", "QtahRasterWindow"] minVersion $
+  makeQtModuleWithMinVersion ["Gui", "QtahRasterWindow"] minVersion
   [ QtExport $ ExportClass c_QtahRasterWindow ]
 
 c_QtahRasterWindow =

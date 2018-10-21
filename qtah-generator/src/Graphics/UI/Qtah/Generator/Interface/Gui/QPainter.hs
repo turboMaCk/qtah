@@ -48,11 +48,11 @@ import Graphics.UI.Qtah.Generator.Types
 
 aModule =
   AQtModule $
-  makeQtModule ["Gui", "QPainter"] $
-  (QtExport $ ExportClass c_QPainter) :
-  (QtExport $ ExportEnum e_RenderHint) :
-  (QtExport $ ExportBitspace bs_RenderHints) :
-  []
+  makeQtModule ["Gui", "QPainter"]
+  [ QtExport $ ExportClass c_QPainter
+  , QtExport $ ExportEnum e_RenderHint
+  , QtExport $ ExportBitspace bs_RenderHints
+  ]
 
 c_QPainter =
   addReqIncludes [includeStd "QPainter"] $
@@ -69,7 +69,7 @@ c_QPainter =
   ]
 
 (e_RenderHint, bs_RenderHints) =
-  makeQtEnumBitspace (ident1 "QPainter" "RenderHint") "RenderHints" [includeStd "QPainter"] $
+  makeQtEnumBitspace (ident1 "QPainter" "RenderHint") "RenderHints" [includeStd "QPainter"]
   [ (0x01, ["antialiasing"])
   , (0x02, ["text","antialiasing"])
   , (0x04, ["smooth","pixmap","transform"])

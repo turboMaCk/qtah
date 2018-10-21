@@ -72,7 +72,7 @@ onAnySceneEvent :: QGraphicsItemPtr target =>
 onAnySceneEvent receiver filter = do
   liveVar <- newMVar True
   listener <- SceneEventListener.new receiver filter $ modifyMVar_ liveVar $ const $ return False
-  return $ SceneEventRegistration
+  return SceneEventRegistration
     { regListener = listener
     , regLive = liveVar
     }

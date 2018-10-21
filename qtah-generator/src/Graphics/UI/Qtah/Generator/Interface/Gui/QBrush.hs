@@ -59,7 +59,7 @@ c_QBrush =
   classSetConversionToGc $
   classAddFeatures [Assignable, Copyable, Equatable] $
   classSetEntityPrefix "" $
-  makeClass (ident "QBrush") Nothing [] $
+  makeClass (ident "QBrush") Nothing []
   [ mkCtor "new" []
   , mkCtor "newWithColor" [objT c_QColor]
   , mkProp "color" $ objT c_QColor

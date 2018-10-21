@@ -61,8 +61,8 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Core", "QObject"] $
-  [ QtExport $ ExportClass c_QObject
-  ] ++ map QtExportSignal signals
+  (QtExport $ ExportClass c_QObject) :
+  map QtExportSignal signals
 
 c_QObject =
   addReqIncludes [ includeStd "QObject"

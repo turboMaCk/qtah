@@ -80,7 +80,7 @@ c_QItemSelection =
     ClassHaskellConversion
     { classHaskellConversionType = Just $ do
       hsType <- cppTypeToHsTypeAndUse HsHsSide $ objT c_QItemSelectionRange
-      return $ HsTyApp (HsTyCon $ Special $ HsListCon) hsType
+      return $ HsTyApp (HsTyCon $ Special HsListCon) hsType
     , classHaskellConversionToCppFn = Nothing
     , classHaskellConversionFromCppFn = Just $ do
       addImports importForRuntime
@@ -89,7 +89,7 @@ c_QItemSelection =
   addAddendumHaskell
     (inheritHasContents c_QItemSelection c_QListQItemSelectionRange $ objT c_QItemSelectionRange) $
   classSetEntityPrefix "" $
-  makeClass (ident "QItemSelection") Nothing [c_QListQItemSelectionRange] $
+  makeClass (ident "QItemSelection") Nothing [c_QListQItemSelectionRange]
   [ mkCtor "new" []
   , mkCtor "newWithRange" [objT c_QModelIndex, objT c_QModelIndex]
   , mkConstMethod "contains" [objT c_QModelIndex] boolT

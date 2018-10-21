@@ -53,8 +53,7 @@ aModule =
 c_QAbstractButton =
   addReqIncludes [includeStd "QAbstractButton"] $
   classSetEntityPrefix "" $
-  makeClass (ident "QAbstractButton") Nothing
-  [ c_QWidget ] $
+  makeClass (ident "QAbstractButton") Nothing [c_QWidget]
   -- Abstact.
   [ mkMethod "animateClick" [intT] voidT
   , mkProp "autoExclusive" boolT

@@ -44,7 +44,7 @@ minVersion = [5, 0]
 
 aModule =
   AQtModule $
-  makeQtModuleWithMinVersion ["Gui", "QSurface"] minVersion $
+  makeQtModuleWithMinVersion ["Gui", "QSurface"] minVersion
   [ QtExport $ ExportClass c_QSurface
   , QtExport $ ExportEnum e_SurfaceClass
   , QtExport $ ExportEnum e_SurfaceType

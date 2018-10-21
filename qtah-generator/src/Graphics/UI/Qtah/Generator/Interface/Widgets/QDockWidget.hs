@@ -77,7 +77,7 @@ c_QDockWidget =
   , just $ mkCtor "newWithTextAndParent" [objT c_QString, ptrT $ objT c_QWidget]
     -- TODO Ctor with Qt::WindowFlags.
   , just $ mkProp "allowedAreas" $ bitspaceT bs_DockWidgetAreas
-  , just $ mkConstMethod "isAreaAllowed" [enumT e_DockWidgetArea] $ boolT
+  , just $ mkConstMethod "isAreaAllowed" [enumT e_DockWidgetArea] boolT
   , just $ mkProp "features" $ bitspaceT bs_DockWidgetFeatures
   , just $ mkBoolIsProp "floating"
   , test (qtVersion >= [4, 3]) $ mkProp "titleBarWidget" $ ptrT $ objT c_QWidget
@@ -97,7 +97,7 @@ signals =
 
 (e_DockWidgetFeature, bs_DockWidgetFeatures) =
   makeQtEnumBitspace (ident1 "QDockWidget" "DockWidgetFeature") "DockWidgetFeatures"
-  [includeStd "QDockWidget"] $
+  [includeStd "QDockWidget"]
   [ (0x0, ["no", "dock", "widget", "features"])
   , (0x1, ["dock", "widget", "closable"])
   , (0x2, ["dock", "widget", "movable"])

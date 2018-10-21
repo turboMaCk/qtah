@@ -36,7 +36,7 @@ import Graphics.UI.Qtah.Generator.Types
 
 aModule =
   AQtModule $
-  makeQtModule ["Core", "QAbstractTableModel"] $
+  makeQtModule ["Core", "QAbstractTableModel"]
   [ QtExport $ ExportClass c_QAbstractTableModel ]
 
 c_QAbstractTableModel =

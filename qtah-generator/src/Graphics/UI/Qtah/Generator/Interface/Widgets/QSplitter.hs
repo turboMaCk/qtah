@@ -45,8 +45,8 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QSplitter"] $
-  [ QtExport $ ExportClass c_QSplitter
-  ] ++ map QtExportSignal signals
+  (QtExport $ ExportClass c_QSplitter) :
+  map QtExportSignal signals
 
 c_QSplitter =
   addReqIncludes [includeStd "QSplitter"] $

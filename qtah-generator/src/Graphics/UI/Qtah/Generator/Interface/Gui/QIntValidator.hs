@@ -41,7 +41,7 @@ import Graphics.UI.Qtah.Generator.Types
 
 aModule =
   AQtModule $
-  makeQtModule ["Gui", "QIntValidator"] $
+  makeQtModule ["Gui", "QIntValidator"]
   [ QtExport $ ExportClass c_QIntValidator ]
 
 c_QIntValidator =
