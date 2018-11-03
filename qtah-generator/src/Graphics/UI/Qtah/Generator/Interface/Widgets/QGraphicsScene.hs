@@ -236,14 +236,14 @@ c_QGraphicsScene =
 
 e_ItemIndexMethod =
   makeQtEnum (ident1 "QGraphicsScene" "ItemIndexMethod")
-    [includeStd "QGraphicsScene"]
+  [includeStd "QGraphicsScene"]
   [ (0, ["bsp","tree","index"])
   , (-1, ["no","index"])
   ]
 
 (e_SceneLayer, bs_SceneLayers) =
-  makeQtEnumBitspace (ident1 "QGraphicsView" "SceneLayer") "SceneLayers"
-    [includeStd "QGraphicsView"]
+  makeQtEnumBitspace (ident1 "QGraphicsScene" "SceneLayer") "SceneLayers"
+  [includeStd "QGraphicsScene"]
   [ (0x1, ["item","layer"])
   , (0x2, ["background","layer"])
   , (0x4, ["foreground","layer"])
