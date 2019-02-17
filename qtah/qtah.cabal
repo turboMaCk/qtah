@@ -159,6 +159,7 @@ library
     , Graphics.UI.Qtah.Widgets.QFrame
     , Graphics.UI.Qtah.Widgets.QGraphicsEllipseItem
     , Graphics.UI.Qtah.Widgets.QGraphicsItem
+    , Graphics.UI.Qtah.Widgets.QGraphicsPixmapItem
     , Graphics.UI.Qtah.Widgets.QGraphicsPolygonItem
     , Graphics.UI.Qtah.Widgets.QGraphicsRectItem
     , Graphics.UI.Qtah.Widgets.QGraphicsScene
@@ -332,6 +333,7 @@ library
     , Graphics.UI.Qtah.Generated.Widgets.QFrame
     , Graphics.UI.Qtah.Generated.Widgets.QGraphicsEllipseItem
     , Graphics.UI.Qtah.Generated.Widgets.QGraphicsItem
+    , Graphics.UI.Qtah.Generated.Widgets.QGraphicsPixmapItem
     , Graphics.UI.Qtah.Generated.Widgets.QGraphicsPolygonItem
     , Graphics.UI.Qtah.Generated.Widgets.QGraphicsRectItem
     , Graphics.UI.Qtah.Generated.Widgets.QGraphicsScene

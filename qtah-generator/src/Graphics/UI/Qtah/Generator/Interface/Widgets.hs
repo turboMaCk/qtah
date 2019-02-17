@@ -43,6 +43,7 @@ import qualified Graphics.UI.Qtah.Generator.Interface.Widgets.QFormLayout as QFo
 import qualified Graphics.UI.Qtah.Generator.Interface.Widgets.QFrame as QFrame
 import qualified Graphics.UI.Qtah.Generator.Interface.Widgets.QGraphicsEllipseItem as QGraphicsEllipseItem
 import qualified Graphics.UI.Qtah.Generator.Interface.Widgets.QGraphicsItem as QGraphicsItem
+import qualified Graphics.UI.Qtah.Generator.Interface.Widgets.QGraphicsPixmapItem as QGraphicsPixmapItem
 import qualified Graphics.UI.Qtah.Generator.Interface.Widgets.QGraphicsPolygonItem as QGraphicsPolygonItem
 import qualified Graphics.UI.Qtah.Generator.Interface.Widgets.QGraphicsRectItem as QGraphicsRectItem
 import qualified Graphics.UI.Qtah.Generator.Interface.Widgets.QGraphicsScene as QGraphicsScene
@@ -121,6 +122,7 @@ modules =
   , QFrame.aModule
   , QGraphicsEllipseItem.aModule
   , QGraphicsItem.aModule
+  , QGraphicsPixmapItem.aModule
   , QGraphicsPolygonItem.aModule
   , QGraphicsRectItem.aModule
   , QGraphicsScene.aModule

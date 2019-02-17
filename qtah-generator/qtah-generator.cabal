@@ -170,6 +170,7 @@ executable qtah-generator
     , Graphics.UI.Qtah.Generator.Interface.Widgets.QFrame
     , Graphics.UI.Qtah.Generator.Interface.Widgets.QGraphicsEllipseItem
     , Graphics.UI.Qtah.Generator.Interface.Widgets.QGraphicsItem
+    , Graphics.UI.Qtah.Generator.Interface.Widgets.QGraphicsPixmapItem
     , Graphics.UI.Qtah.Generator.Interface.Widgets.QGraphicsPolygonItem
     , Graphics.UI.Qtah.Generator.Interface.Widgets.QGraphicsRectItem
     , Graphics.UI.Qtah.Generator.Interface.Widgets.QGraphicsScene
