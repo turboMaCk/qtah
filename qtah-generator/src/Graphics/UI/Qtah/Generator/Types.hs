@@ -45,6 +45,7 @@ import Foreign.Hoppy.Generator.Spec (
   idPartBase,
   makeAutoEnum,
   toExtName,
+  toExport,
   )
 import Graphics.UI.Qtah.Generator.Flags (Flags, makeFlags)
 
@@ -59,7 +60,7 @@ data QtExport =
     -- some bindings that need special logic.
 
 qtExport :: Exportable a => a -> QtExport
-qtExport = QtExport . Export
+qtExport = QtExport . toExport
 
 qtExportToExports :: QtExport -> [Export]
 qtExportToExports qtExport = case qtExport of
@@ -99,7 +100,7 @@ makeQtEnumAndFlags enumIdentifier flagsName includes names =
 makeQtEnumAndFlags' ::
   Identifier -> String -> [Include] -> [String] -> [(String, String)] -> (CppEnum, Flags)
 makeQtEnumAndFlags' enumIdentifier flagsName includes names nameOverrides =
-  let enum = enumAddEntryNameOverrides Haskell nameOverrides $  -- TODO This should be flags-specific...
+  let enum = enumAddEntryNameOverrides Haskell nameOverrides $
              makeQtEnum enumIdentifier includes names
       flags = makeFlags enum flagsName
   in (enum, flags)

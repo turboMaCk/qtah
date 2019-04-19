@@ -33,7 +33,7 @@ import Data.Foldable (forM_)
 import Data.List (find, intersperse, sort)
 import Data.Maybe (isJust)
 import Data.Monoid (mconcat)
-import Foreign.Hoppy.Generator.Language.Cpp (execChunkWriter, sayType)
+import Foreign.Hoppy.Generator.Language.Cpp (chunkContents, execChunkWriter, sayType)
 import Foreign.Hoppy.Generator.Language.Haskell (
   Generator,
   HsTypeSide (HsHsSide),
@@ -440,7 +440,7 @@ toSignalConnectName signal paramTypes =
   "2" :  -- This is a magic code added by the SIGNAL() macro.
   signalCName signal :
   "(" :
-  intersperse "," (map (execChunkWriter . sayType Nothing) paramTypes) ++
+  intersperse "," (map (chunkContents . execChunkWriter . sayType Nothing) paramTypes) ++
   [")"]
 
 importWholeModuleForExtName :: ExtName -> Generator ()
