@@ -97,6 +97,7 @@ executable qtah-generator
     , Graphics.UI.Qtah.Generator.Interface.Core.Types
     , Graphics.UI.Qtah.Generator.Interface.Gui
     , Graphics.UI.Qtah.Generator.Interface.Gui.QActionEvent
+    , Graphics.UI.Qtah.Generator.Interface.Gui.QBackingStore
     , Graphics.UI.Qtah.Generator.Interface.Gui.QBitmap
     , Graphics.UI.Qtah.Generator.Interface.Gui.QBrush
     , Graphics.UI.Qtah.Generator.Interface.Gui.QClipboard

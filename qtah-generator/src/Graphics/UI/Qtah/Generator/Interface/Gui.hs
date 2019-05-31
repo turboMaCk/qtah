@@ -18,6 +18,7 @@
 module Graphics.UI.Qtah.Generator.Interface.Gui (modules) where
 
 import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QActionEvent as QActionEvent
+import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QBackingStore as QBackingStore
 import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QBrush as QBrush
 import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QClipboard as QClipboard
 import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QCloseEvent as QCloseEvent
@@ -66,6 +67,7 @@ import Graphics.UI.Qtah.Generator.Module (AModule)
 modules :: [AModule]
 modules =
   [ QActionEvent.aModule
+  , QBackingStore.aModule
   , QBrush.aModule
   , QClipboard.aModule
   , QCloseEvent.aModule
