@@ -76,6 +76,7 @@ executable qtah-generator
     , Graphics.UI.Qtah.Generator.Interface.Core.QMetaProperty
     , Graphics.UI.Qtah.Generator.Interface.Core.QModelIndex
     , Graphics.UI.Qtah.Generator.Interface.Core.QObject
+    , Graphics.UI.Qtah.Generator.Interface.Core.QPair
     , Graphics.UI.Qtah.Generator.Interface.Core.QPersistentModelIndex
     , Graphics.UI.Qtah.Generator.Interface.Core.QPoint
     , Graphics.UI.Qtah.Generator.Interface.Core.QPointF

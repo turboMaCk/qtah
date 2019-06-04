@@ -40,6 +40,7 @@ import qualified Graphics.UI.Qtah.Generator.Interface.Core.QMetaObject as QMetaO
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QMetaProperty as QMetaProperty
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QModelIndex as QModelIndex
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QObject as QObject
+import qualified Graphics.UI.Qtah.Generator.Interface.Core.QPair as QPair
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QPalette as QPalette
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QPersistentModelIndex as QPersistentModelIndex
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QPoint as QPoint
@@ -109,4 +110,5 @@ modules =
     ]
   , QList.allModules
   , QVector.allModules
+  , QPair.allModules
   ]
