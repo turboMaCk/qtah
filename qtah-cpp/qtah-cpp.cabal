@@ -34,8 +34,6 @@ extra-source-files:
   cpp/wrap_qimage.hpp
   cpp/wrap_qstring.cpp
   cpp/wrap_qstring.hpp
-  cpp/wrap_qpair.cpp
-  cpp/wrap_qpair.hpp
 
 flag qt4
   description: Build against Qt 4.

@@ -56,6 +56,7 @@ import Foreign.Hoppy.Generator.Types (
   )
 import Foreign.Hoppy.Generator.Version (collect, just, test)
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (qreal)
+import Graphics.UI.Qtah.Generator.Interface.Core.QPair (c_QPairDoubleQColor)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QColor (c_QColor)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
@@ -297,3 +298,4 @@ e_Type =
     , (2, ["conical", "gradient"])
     , (3, ["no", "gradient"])
     ]
+

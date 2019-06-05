@@ -30,7 +30,6 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QPair (
 import Foreign.Hoppy.Generator.Language.Haskell (addImports)
 import Foreign.Hoppy.Generator.Spec (
   Class,
-  Constness (Const),
   Export (ExportClass),
   Reqs,
   Type,
@@ -41,13 +40,10 @@ import Foreign.Hoppy.Generator.Spec (
   hsImport1,
   hsImports,
   identT,
-  identT',
   includeStd,
   makeClass,
-  mkConstMethod,
   mkCtor,
   mkMethod,
-  mkMethod',
   reqInclude,
   toExtName,
   )
@@ -55,10 +51,9 @@ import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Assignable, Copyable),
   classAddFeatures,
   )
-import Foreign.Hoppy.Generator.Types (intT, objT, refT, voidT)
+import Foreign.Hoppy.Generator.Types (intT, objT, refT, voidT, constT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
 import Graphics.UI.Qtah.Generator.Flags (qtVersion)
-import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (qreal)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QColor (c_QColor)
 import Graphics.UI.Qtah.Generator.Interface.Imports
@@ -105,8 +100,9 @@ instantiate' pairName t1 t2 tReqs opts =
         makeClass (identT "QPair" [t1,t2]) (Just $ toExtName pairName) [] $
         collect
         [ just $ mkCtor "new" []
+        , just $ mkCtor "newWithValues" [refT $ constT t1, refT $ constT t2]
         , test (qtVersion >= [5, 2]) $ mkCtor "newCopyPair" [objT pair]
-        , test (qtVersion >= [5, 5]) $ mkMethod' "swap" "swap" [refT $ objT pair] voidT
+        , test (qtVersion >= [5, 5]) $ mkMethod "swap" [refT $ objT pair] voidT
         ]
 
       -- The addendum for the vector class contains HasContents and FromContents
