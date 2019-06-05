@@ -19,6 +19,8 @@
 module Graphics.UI.Qtah.Generator.Interface.Core.Types (
   aModule,
   qreal,
+  qulonglong,
+  qlonglong,
   gluint,
   e_AlignmentFlag,
   bs_Alignment,
@@ -97,10 +99,10 @@ import Foreign.Hoppy.Generator.Spec (
   includeStd,
   makeFn,
   )
-import Foreign.Hoppy.Generator.Types (doubleT, floatT, objT, word32T)
+import Foreign.Hoppy.Generator.Types (doubleT, floatT, objT, word32T, word64T, int64T)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
 import Graphics.UI.Qtah.Generator.Flags (qrealFloat, qtVersion)
-import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
+import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
 
@@ -180,6 +182,12 @@ qtInclude = [includeStd "Qt"]
 
 qreal :: Type
 qreal = if qrealFloat then floatT else doubleT
+
+qlonglong :: Type
+qlonglong = int64T
+
+qulonglong :: Type
+qulonglong = word64T
 
 gluint :: Type
 gluint = word32T

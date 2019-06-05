@@ -17,8 +17,20 @@
 
 module Graphics.UI.Qtah.Generator.Interface.Core.QString (
   c_QString,
+  e_SectionFlag,
+  bs_SectionFlags,
+  e_NormalizationForm,
+  e_SplitBehavior,
   ) where
 
-import Foreign.Hoppy.Generator.Spec (Class)
+import Foreign.Hoppy.Generator.Spec (Class, CppEnum, Bitspace)
 
 c_QString :: Class
+
+e_SectionFlag :: CppEnum 
+
+e_NormalizationForm :: CppEnum 
+
+e_SplitBehavior :: CppEnum 
+
+bs_SectionFlags :: Bitspace
