@@ -18,10 +18,13 @@
 module Graphics.UI.Qtah.Generator.Interface.Core.QAbstractItemModel (
   aModule,
   c_QAbstractItemModel,
+  e_LayoutChangeHint,
+  e_CheckIndexOption,
+  bs_CheckIndexOptions,
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportEnum, ExportClass),
+  Export (ExportEnum, ExportClass, ExportBitspace),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -69,7 +72,11 @@ aModule =
   makeQtModule ["Core", "QAbstractItemModel"] $
   QtExport (ExportClass c_QAbstractItemModel) :
   map QtExportSignal signals ++
-  [ QtExport $ ExportEnum e_LayoutChangeHint ]
+  collect
+  [ just $ QtExport $ ExportEnum e_LayoutChangeHint 
+  , test (qtVersion >= [5, 11]) $ QtExport $ ExportEnum e_CheckIndexOption
+  , test (qtVersion >= [5, 11]) $ QtExport $ ExportBitspace bs_CheckIndexOptions ]
+
 
 c_QAbstractItemModel =
   addReqIncludes [includeStd "QAbstractItemModel"] $
@@ -176,4 +183,12 @@ e_LayoutChangeHint =
   [ (0, ["no", "layout", "change", "hint"])
   , (1, ["vertical", "sort", "hint"])
   , (2, ["horizontal", "sort", "hint"])
+  ]
+
+(e_CheckIndexOption, bs_CheckIndexOptions) =
+  makeQtEnumBitspace (ident1 "QAbstractItemModel" "CheckIndexOption") "CheckIndexOptions" [includeStd "QAbstractItemModel"]
+  [ (0x00, ["no", "option"])
+  , (0x01, ["index", "is", "valid"])
+  , (0x02, ["do", "not", "use", "parent"])
+  , (0x04, ["parent", "is", "invalid"])
   ]
