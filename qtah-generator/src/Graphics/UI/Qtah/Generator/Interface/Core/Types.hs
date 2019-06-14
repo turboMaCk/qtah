@@ -28,6 +28,7 @@ module Graphics.UI.Qtah.Generator.Interface.Core.Types (
   e_AspectRatioMode,
   e_BrushStyle,
   e_CaseSensitivity,
+  e_ApplicationAttribute,
   e_CheckState,
   e_ContextMenuPolicy,
   e_Corner,
@@ -170,6 +171,7 @@ exports =
   , just $ ExportEnum e_ToolButtonStyle
   , just $ ExportEnum e_TransformationMode
   , just $ ExportEnum e_WindowModality
+  , just $ ExportEnum e_ApplicationAttribute
   , just $ ExportEnum e_WindowState
   , just $ ExportBitspace bs_WindowStates
   , just $ ExportEnum e_WindowType
@@ -793,6 +795,37 @@ e_WindowModality =
   , (1, ["window", "modal"])
   , (2, ["application", "modal"])
   ]
+
+e_ApplicationAttribute =
+  makeQtEnum (ident1 "Qt" "ApplicationAttribute") qtInclude
+  [ (2, ["a", "a", "_", "dont", "show", "icons", "in", "menus"])
+  , (28, ["a", "a", "_", "dont", "show", "shortcuts", "in", "context", "menus"])
+  , (3, ["a", "a", "_", "native", "windows"])
+  , (4, ["a", "a", "_", "dont", "create", "native", "widget", "siblings"])
+  , (5, ["a", "a", "_", "plugin", "application"])
+  , (6, ["a", "a", "_", "dont", "use", "native", "menu", "bar"])
+  , (7, ["a", "a", "_", "mac", "dont", "swap", "ctrl", "and", "meta"])
+  , (8, ["a", "a", "_", "use96", "dpi"])
+  , (11, ["a", "a", "_", "synthesize", "touch", "for", "unhandled", "mouse", "events"])
+  , (12, ["a", "a", "_", "synthesize", "mouse", "for", "unhandled", "touch", "events"])
+  , (13, ["a", "a", "_", "use", "high", "dpi", "pixmaps"])
+  , (14, ["a", "a", "_", "force", "raster", "widgets"])
+  , (15, ["a", "a", "_", "use", "desktop", "open", "g", "l"])
+  , (16, ["a", "a", "_", "use", "open", "g", "l", "e", "s"])
+  , (17, ["a", "a", "_", "use", "software", "open", "g", "l"])
+  , (18, ["a", "a", "_", "share", "open", "g", "l", "contexts"])
+  , (19, ["a", "a", "_", "set", "palette"])
+  , (20, ["a", "a", "_", "enable", "high", "dpi", "scaling"])
+  , (21, ["a", "a", "_", "disable", "high", "dpi", "scaling"])
+  , (22, ["a", "a", "_", "use", "style", "sheet", "propagation", "in", "widget", "styles"])
+  , (23, ["a", "a", "_", "dont", "use", "native", "dialogs"])
+  , (24, ["a", "a", "_", "synthesize", "mouse", "for", "unhandled", "tablet", "events"])
+  , (25, ["a", "a", "_", "compress", "high", "frequency", "events"])
+  , (29, ["a", "a", "_", "compress", "tablet", "events"])
+  , (26, ["a", "a", "_", "dont", "check", "open", "g", "l", "context", "thread", "affinity"])
+  , (27, ["a", "a", "_", "disable", "shader", "disk", "cache"])
+  , (30, ["a", "a", "_", "disable", "window", "context", "help", "button"])
+    ]
 
 (e_WindowState, bs_WindowStates) =
   makeQtEnumBitspace (ident1 "Qt" "WindowState") "WindowStates" qtInclude
