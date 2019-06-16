@@ -24,22 +24,38 @@ module Graphics.UI.Qtah.Generator.Interface.Core.Types (
   gluint,
   e_AlignmentFlag,
   bs_Alignment,
+  e_AnchorPoint,
+  e_ApplicationState,
+  bs_ApplicationStates,
   e_ArrowType,
   e_AspectRatioMode,
+  e_Axis,
+  e_BGMode,
   e_BrushStyle,
   e_CaseSensitivity,
   e_ApplicationAttribute,
   e_CheckState,
+  e_ChecksumType,
+  e_ClipOperation,
+  e_ConnectionType,
   e_ContextMenuPolicy,
+  e_CoordinateSystem,
   e_Corner,
   e_CursorMoveStyle,
   e_CursorShape,
+  e_DateFormat,
+  e_DayOfWeek,
   e_DockWidgetArea,
   bs_DockWidgetAreas,
   e_DropAction,
   bs_DropActions,
+  e_Edge,
+  bs_Edges,
+  e_EnterKeyType,
   e_EventPriority,
   e_FillRule,
+  e_FindChildOption,
+  bs_FindChildOptions,
   e_FocusReason,
   e_GlobalColor,
   e_ImageConversionFlag,
@@ -118,21 +134,37 @@ exports =
   (map QtExport . collect)
   [ just $ ExportEnum e_AlignmentFlag
   , just $ ExportBitspace bs_Alignment
+  , just $ ExportEnum e_AnchorPoint
+  , test (qtVersion >= [5, 1]) $ ExportEnum e_ApplicationState
+  , test (qtVersion >= [5, 1]) $ ExportBitspace bs_ApplicationStates
   , just $ ExportEnum e_ArrowType
   , just $ ExportEnum e_AspectRatioMode
+  , just $ ExportEnum e_Axis
+  , just $ ExportEnum e_BGMode
   , just $ ExportEnum e_BrushStyle
   , just $ ExportEnum e_CaseSensitivity
   , just $ ExportEnum e_CheckState
+  , test (qtVersion >= [5, 9]) $ ExportEnum e_ChecksumType
+  , just $ ExportEnum e_ClipOperation
+  , just $ ExportEnum e_ConnectionType
   , just $ ExportEnum e_ContextMenuPolicy
+  , test (qtVersion >= [4, 6]) $ ExportEnum e_CoordinateSystem 
   , just $ ExportEnum e_Corner
   , just $ ExportEnum e_CursorMoveStyle
   , just $ ExportEnum e_CursorShape
+  , just $ ExportEnum e_DateFormat
+  , just $ ExportEnum e_DayOfWeek
   , just $ ExportEnum e_DockWidgetArea
   , just $ ExportBitspace bs_DockWidgetAreas
   , just $ ExportEnum e_DropAction
   , just $ ExportBitspace bs_DropActions
+  , test (qtVersion >= [5, 1]) $ ExportEnum e_Edge
+  , test (qtVersion >= [5, 1]) $ ExportBitspace bs_Edges
+  , test (qtVersion >= [5, 6]) $ ExportEnum e_EnterKeyType
   , just $ ExportEnum e_EventPriority
   , just $ ExportEnum e_FillRule
+  , just $ ExportEnum e_FindChildOption
+  , just $ ExportBitspace bs_FindChildOptions
   , just $ ExportEnum e_FocusReason
   , just $ ExportEnum e_GlobalColor
   , just $ ExportEnum e_ImageConversionFlag
@@ -209,6 +241,24 @@ gluint = word32T
   , (0x10, ["align", "absolute"])
   ]
 
+e_AnchorPoint =
+  makeQtEnum (ident1 "Qt" "AnchorPoint") qtInclude
+  [ (0, ["anchor", "left"])
+  , (1, ["anchor", "horizontal", "center"])
+  , (2, ["anchor", "right"])
+  , (3, ["anchor", "top"])
+  , (4, ["anchor", "vertical", "center"])
+  , (5, ["anchor", "bottom"])
+  ]
+
+(e_ApplicationState, bs_ApplicationStates) =
+  makeQtEnumBitspace (ident1 "Qt" "ApplicationState") "ApplicationStates" qtInclude
+  [ (0x00000000, ["application", "suspended"])
+  , (0x00000001, ["application", "hidden"])
+  , (0x00000002, ["application", "inactive"])
+  , (0x00000004, ["application", "active"])
+  ]
+
 e_ArrowType =
   makeQtEnum (ident1 "Qt" "ArrowType") qtInclude
   [ (0, ["no", "arrow"])
@@ -223,6 +273,19 @@ e_AspectRatioMode =
   [ (0, ["ignore", "aspect", "ratio"])
   , (1, ["keep", "aspect", "ratio"])
   , (2, ["keep", "aspect", "ratio", "by", "expanding"])
+  ]
+
+e_Axis =
+  makeQtEnum (ident1 "Qt" "Axis") qtInclude
+  [ (0, ["x", "axis"])
+  , (1, ["y", "axis"])
+  , (2, ["z", "axis"])
+  ]
+
+e_BGMode =
+  makeQtEnum (ident1 "Qt" "BGMode") qtInclude
+  [ (0, ["transparent", "mode"])
+  , (1, ["opaque", "mode"])
   ]
 
 e_BrushStyle =
@@ -261,6 +324,30 @@ e_CheckState =
   , (2, ["checked"])
   ]
 
+e_ChecksumType =
+  makeQtEnum (ident1 "Qt" "ChecksumType") qtInclude
+  [ (0, ["checksum", "iso3309"])
+  , (1, ["checksum", "itu", "v41"])
+  ]
+
+e_ClipOperation =
+  makeQtEnum (ident1 "Qt" "ClipOperation") qtInclude
+  [ (0, ["no", "clip"])
+  , (1, ["replace", "clip"])
+  , (2, ["intersect", "clip"])
+  ]
+
+e_ConnectionType =
+  makeQtEnum (ident1 "Qt" "ConnectionType") qtInclude $ 
+  collect
+  [ just (0, ["auto", "connection"])
+  , just (1, ["direct", "connection"])
+  , just (2, ["queued", "connection"])
+  , just (3, ["blocking", "queued", "connection"])
+  , test (qtVersion >= [4,6]) (0x80, ["unique", "connection"])
+  ]
+
+
 e_ContextMenuPolicy :: CppEnum
 e_ContextMenuPolicy =
   makeQtEnum (ident1 "Qt" "ContextMenuPolicy") qtInclude
@@ -270,6 +357,13 @@ e_ContextMenuPolicy =
   , (2, ["actions", "context", "menu"])
   , (3, ["custom", "context", "menu"])
   ]
+
+e_CoordinateSystem =
+  makeQtEnum (ident1 "Qt" "CoordinateSystem") qtInclude
+  [ (0, ["device", "coordinates"])
+  , (1, ["logical", "coordinates"])
+  ]
+  
 
 e_Corner =
   makeQtEnum (ident1 "Qt" "Corner") qtInclude
@@ -312,6 +406,43 @@ e_CursorShape =
   , (24, ["bitmap", "cursor"])
   ]
 
+e_DateFormat =
+  makeQtEnum (ident1 "Qt" "DateFormat") qtInclude $
+  let textDate = 0
+      iSODate = 1
+      iSODateWithMs = 9
+      systemLocaleShortDate = 4
+      systemLocaleLongDate = 5
+      defaultLocaleShortDate = 6
+      defaultLocaleLongDate = 7
+      systemLocaleDate = 2
+      localeDate = 3
+      localDate = systemLocaleDate
+      rFC2822Date = 8
+  in [(textDate, ["text", "date"])
+     , (iSODate, ["i", "s", "o", "date"])
+     , (iSODateWithMs, ["i", "s", "o", "date", "with", "ms"])
+     , (systemLocaleShortDate, ["system", "locale", "short", "date"])
+     , (systemLocaleLongDate, ["system", "locale", "long", "date"])
+     , (defaultLocaleShortDate, ["default", "locale", "short", "date"])
+     , (defaultLocaleLongDate, ["default", "locale", "long", "date"])
+     , (systemLocaleDate, ["system", "locale", "date"])
+     , (localeDate, ["locale", "date"])
+     , (localDate, ["local", "date"])
+     , (rFC2822Date, ["r", "f", "c2822", "date"])
+     ]
+
+e_DayOfWeek =
+  makeQtEnum (ident1 "Qt" "DayOfWeek") qtInclude
+  [ (0, ["monday"])
+  , (1, ["tuesday"])
+  , (2, ["wednesday"])
+  , (3, ["thursday"])
+  , (4, ["friday"])
+  , (5, ["saturday"])
+  , (6, ["sunday"])
+  ]
+
 (e_DockWidgetArea, bs_DockWidgetAreas) =
   makeQtEnumBitspace (ident1 "Qt" "DockWidgetArea") "DockWidgetAreas" qtInclude
   [ (0x0, ["no", "dock", "widget", "area"])
@@ -332,6 +463,26 @@ e_CursorShape =
   , (0x8002, ["target", "move", "action"])
   ]
 
+(e_Edge, bs_Edges) =
+  makeQtEnumBitspace (ident1 "Qt" "Edge") "Edges" qtInclude
+  [ (0x00001, ["top", "edge"])
+  , (0x00002, ["left", "edge"])
+  , (0x00004, ["right", "edge"])
+  , (0x00008, ["bottom", "edge"])
+  ]
+
+e_EnterKeyType =
+  makeQtEnum (ident1 "Qt" "EnterKeyType") qtInclude
+  [ (0, ["enter", "key", "default"])
+  , (1, ["enter", "key", "return"])
+  , (2, ["enter", "key", "done"])
+  , (3, ["enter", "key", "go"])
+  , (4, ["enter", "key", "send"])
+  , (5, ["enter", "key", "search"])
+  , (6, ["enter", "key", "next"])
+  , (7, ["enter", "key", "previous"])
+  ]
+
 e_EventPriority =
   makeQtEnum (ident1 "Qt" "EventPriority") qtInclude
   [ (1, ["high", "event", "priority"])
@@ -343,6 +494,12 @@ e_FillRule =
   makeQtEnum (ident1 "Qt" "FillRule") qtInclude
   [ (0, ["odd", "even", "fill"])
   , (1, ["winding", "fill"])
+  ]
+
+(e_FindChildOption, bs_FindChildOptions) =
+  makeQtEnumBitspace (ident1 "Qt" "FindChildOption") "FindChildOptions" qtInclude
+  [ (0x0, ["find", "direct", "children", "only"])
+  , (0x1, ["find", "children", "recursively"])
   ]
 
 e_FocusReason =
@@ -797,34 +954,35 @@ e_WindowModality =
   ]
 
 e_ApplicationAttribute =
-  makeQtEnum (ident1 "Qt" "ApplicationAttribute") qtInclude
-  [ (2, ["a", "a", "_", "dont", "show", "icons", "in", "menus"])
-  , (28, ["a", "a", "_", "dont", "show", "shortcuts", "in", "context", "menus"])
-  , (3, ["a", "a", "_", "native", "windows"])
-  , (4, ["a", "a", "_", "dont", "create", "native", "widget", "siblings"])
-  , (5, ["a", "a", "_", "plugin", "application"])
-  , (6, ["a", "a", "_", "dont", "use", "native", "menu", "bar"])
-  , (7, ["a", "a", "_", "mac", "dont", "swap", "ctrl", "and", "meta"])
-  , (8, ["a", "a", "_", "use96", "dpi"])
-  , (11, ["a", "a", "_", "synthesize", "touch", "for", "unhandled", "mouse", "events"])
-  , (12, ["a", "a", "_", "synthesize", "mouse", "for", "unhandled", "touch", "events"])
-  , (13, ["a", "a", "_", "use", "high", "dpi", "pixmaps"])
-  , (14, ["a", "a", "_", "force", "raster", "widgets"])
-  , (15, ["a", "a", "_", "use", "desktop", "open", "g", "l"])
-  , (16, ["a", "a", "_", "use", "open", "g", "l", "e", "s"])
-  , (17, ["a", "a", "_", "use", "software", "open", "g", "l"])
-  , (18, ["a", "a", "_", "share", "open", "g", "l", "contexts"])
-  , (19, ["a", "a", "_", "set", "palette"])
-  , (20, ["a", "a", "_", "enable", "high", "dpi", "scaling"])
-  , (21, ["a", "a", "_", "disable", "high", "dpi", "scaling"])
-  , (22, ["a", "a", "_", "use", "style", "sheet", "propagation", "in", "widget", "styles"])
-  , (23, ["a", "a", "_", "dont", "use", "native", "dialogs"])
-  , (24, ["a", "a", "_", "synthesize", "mouse", "for", "unhandled", "tablet", "events"])
-  , (25, ["a", "a", "_", "compress", "high", "frequency", "events"])
-  , (29, ["a", "a", "_", "compress", "tablet", "events"])
-  , (26, ["a", "a", "_", "dont", "check", "open", "g", "l", "context", "thread", "affinity"])
-  , (27, ["a", "a", "_", "disable", "shader", "disk", "cache"])
-  , (30, ["a", "a", "_", "disable", "window", "context", "help", "button"])
+  makeQtEnum (ident1 "Qt" "ApplicationAttribute") qtInclude $ 
+  collect
+  [ just (2, ["a", "a", "_", "dont", "show", "icons", "in", "menus"])
+  , test (qtVersion >= [5,10]) (28, ["a", "a", "_", "dont", "show", "shortcuts", "in", "context", "menus"])
+  , just (3, ["a", "a", "_", "native", "windows"])
+  , just (4, ["a", "a", "_", "dont", "create", "native", "widget", "siblings"])
+  , test (qtVersion >= [5,7]) (5, ["a", "a", "_", "plugin", "application"])
+  , just (6, ["a", "a", "_", "dont", "use", "native", "menu", "bar"])
+  , just (7, ["a", "a", "_", "mac", "dont", "swap", "ctrl", "and", "meta"])
+  , just (8, ["a", "a", "_", "use96", "dpi"])
+  , just (11, ["a", "a", "_", "synthesize", "touch", "for", "unhandled", "mouse", "events"])
+  , just (12, ["a", "a", "_", "synthesize", "mouse", "for", "unhandled", "touch", "events"])
+  , just (13, ["a", "a", "_", "use", "high", "dpi", "pixmaps"])
+  , just (14, ["a", "a", "_", "force", "raster", "widgets"])
+  , test (qtVersion >= [5,3]) (15, ["a", "a", "_", "use", "desktop", "open", "g", "l"])
+  , test (qtVersion >= [5,3]) (16, ["a", "a", "_", "use", "open", "g", "l", "e", "s"])
+  , test (qtVersion >= [5,4]) (17, ["a", "a", "_", "use", "software", "open", "g", "l"])
+  , test (qtVersion >= [5,4])(18, ["a", "a", "_", "share", "open", "g", "l", "contexts"])
+  , test (qtVersion >= [5,5]) (19, ["a", "a", "_", "set", "palette"])
+  , test (qtVersion >= [5,6]) (20, ["a", "a", "_", "enable", "high", "dpi", "scaling"])
+  , test (qtVersion >= [5,6]) (21, ["a", "a", "_", "disable", "high", "dpi", "scaling"])
+  , test (qtVersion >= [5,7]) (22, ["a", "a", "_", "use", "style", "sheet", "propagation", "in", "widget", "styles"])
+  , test (qtVersion >= [5,7]) (23, ["a", "a", "_", "dont", "use", "native", "dialogs"])
+  , test (qtVersion >= [5,7]) (24, ["a", "a", "_", "synthesize", "mouse", "for", "unhandled", "tablet", "events"])
+  , test (qtVersion >= [5,7]) (25, ["a", "a", "_", "compress", "high", "frequency", "events"])
+  , test (qtVersion >= [5,10]) (29, ["a", "a", "_", "compress", "tablet", "events"])
+  , test (qtVersion >= [5,8]) (26, ["a", "a", "_", "dont", "check", "open", "g", "l", "context", "thread", "affinity"])
+  , just (27, ["a", "a", "_", "disable", "shader", "disk", "cache"])
+  , test (qtVersion >= [5,10]) (30, ["a", "a", "_", "disable", "window", "context", "help", "button"])
     ]
 
 (e_WindowState, bs_WindowStates) =
