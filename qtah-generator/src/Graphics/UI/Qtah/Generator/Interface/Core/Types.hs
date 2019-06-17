@@ -56,15 +56,28 @@ module Graphics.UI.Qtah.Generator.Interface.Core.Types (
   e_FillRule,
   e_FindChildOption,
   bs_FindChildOptions,
+  e_FocusPolicy,
   e_FocusReason,
+  e_GestureFlag,
+  bs_GestureFlags,
+  e_GestureState,
+  bs_GestureStates,
+  e_GestureType,
+  e_HitTestAccuracy,
+  e_ImageConversionFlag,
+  bs_ImageConversionFlags,
   e_GlobalColor,
   e_ImageConversionFlag,
   bs_ImageConversionFlags,
   e_InputMethodHint,
   bs_InputMethodHints,
+  e_InputMethodQuery,
+  bs_InputMethodQueries,
   e_ItemDataRole,
   e_ItemFlag,
   bs_ItemFlags,
+  e_ItemSelectionMode,
+  e_ItemSelectionOperation,
   e_Key,
   e_KeyboardModifier,
   bs_KeyboardModifiers,
@@ -79,9 +92,13 @@ module Graphics.UI.Qtah.Generator.Interface.Core.Types (
   bs_MouseEventFlags,
   e_MouseEventSource,
   e_MouseEventSource_minVersion,
+  e_NativeGestureType,
   e_NavigationMode,
   e_Orientation,
   bs_Orientations,
+  e_PenCapStyle,
+  e_PenJoinStyle,
+  e_PenStyle,
   e_ScreenOrientation,
   e_ScreenOrientation_minVersion,
   bs_ScreenOrientations,
@@ -165,15 +182,28 @@ exports =
   , just $ ExportEnum e_FillRule
   , just $ ExportEnum e_FindChildOption
   , just $ ExportBitspace bs_FindChildOptions
+  , just $ ExportEnum e_FocusPolicy
   , just $ ExportEnum e_FocusReason
+  , just $ ExportEnum e_GestureFlag
+  , just $ ExportBitspace bs_GestureFlags
+  , test (qtVersion >= [4, 6]) $ ExportEnum e_GestureState
+  , test (qtVersion >= [4, 6]) $ ExportBitspace bs_GestureStates
+  , test (qtVersion >= [4, 6]) $ ExportEnum e_GestureType
+  , just $ ExportEnum e_HitTestAccuracy
+  , just $ ExportEnum e_ImageConversionFlag
+  , just $ ExportBitspace bs_ImageConversionFlags
   , just $ ExportEnum e_GlobalColor
   , just $ ExportEnum e_ImageConversionFlag
   , just $ ExportBitspace bs_ImageConversionFlags
   , just $ ExportEnum e_InputMethodHint
   , just $ ExportBitspace bs_InputMethodHints
+  , just $ ExportEnum e_InputMethodQuery
+  , just $ ExportBitspace bs_InputMethodQueries
   , just $ ExportEnum e_ItemDataRole
   , just $ ExportEnum e_ItemFlag
   , just $ ExportBitspace bs_ItemFlags
+  , just $ ExportEnum e_ItemSelectionMode
+  , just $ ExportEnum e_ItemSelectionOperation
   , just $ ExportEnum e_Key
   , just $ ExportEnum e_KeyboardModifier
   , just $ ExportBitspace bs_KeyboardModifiers
@@ -186,9 +216,13 @@ exports =
   , test (qtVersion >= e_MouseEventFlag_minVersion) $ ExportEnum e_MouseEventFlag
   , test (qtVersion >= e_MouseEventFlag_minVersion) $ ExportBitspace bs_MouseEventFlags
   , test (qtVersion >= e_MouseEventSource_minVersion) $ ExportEnum e_MouseEventSource
+  , test (qtVersion >= [5,2]) $ ExportEnum e_NativeGestureType
   , just $ ExportEnum e_NavigationMode
   , just $ ExportEnum e_Orientation
   , just $ ExportBitspace bs_Orientations
+  , just $ ExportEnum e_PenCapStyle
+  , just $ ExportEnum e_PenJoinStyle
+  , just $ ExportEnum e_PenStyle
   , test (qtVersion >= e_ScreenOrientation_minVersion) $ ExportEnum e_ScreenOrientation
   , test (qtVersion >= e_ScreenOrientation_minVersion) $ ExportBitspace bs_ScreenOrientations
   , just $ ExportEnum e_ScrollBarPolicy
@@ -502,6 +536,20 @@ e_FillRule =
   , (0x1, ["find", "children", "recursively"])
   ]
 
+e_FocusPolicy =
+  makeQtEnum (ident1 "Qt" "FocusPolicy") qtInclude $
+  let tabFocus = 0x1
+      clickFocus = 0x2
+      strongFocus = tabFocus .|. clickFocus .|. 0x8
+      wheelFocus = strongFocus .|. 0x4
+      noFocus = 0
+  in [ (tabFocus, ["tab", "focus"])
+      , (clickFocus, ["click", "focus"])
+      , (strongFocus, ["strong", "focus"])
+      , (wheelFocus, ["wheel", "focus"])
+      , (noFocus, ["no", "focus"])
+     ]
+
 e_FocusReason =
   makeQtEnum (ident1 "Qt" "FocusReason") qtInclude
   [ (0, ["mouse", "focus", "reason"])
@@ -512,6 +560,57 @@ e_FocusReason =
   , (5, ["shortcut", "focus", "reason"])
   , (6, ["menu", "bar", "focus", "reason"])
   , (7, ["other", "focus", "reason"])
+  ]
+
+(e_GestureFlag, bs_GestureFlags) =
+  makeQtEnumBitspace (ident1 "Qt" "GestureFlag") "GestureFlags" qtInclude $
+  collect
+  [ just (0x01, ["dont", "start", "gesture", "on", "children"])
+  , just (0x02, ["receive", "partial", "gestures"])
+  , test (qtVersion >= [4,7]) (0x04, ["ignored", "gestures", "propagate", "to", "parent"])
+  ]
+
+(e_GestureState, bs_GestureStates) =
+  makeQtEnumBitspace (ident1 "Qt" "GestureState") "GestureStates" qtInclude
+  [ (0, ["no", "gesture"])
+  , (1, ["gesture", "started"])
+  , (2, ["gesture", "updated"])
+  , (3, ["gesture", "finished"])
+  , (4, ["gesture", "canceled"])
+  ]
+
+e_GestureType =
+  makeQtEnum (ident1 "Qt" "GestureType") qtInclude
+  [ (1, ["tap", "gesture"])
+  , (2, ["tap", "and", "hold", "gesture"])
+  , (3, ["pan", "gesture"])
+  , (4, ["pinch", "gesture"])
+  , (5, ["swipe", "gesture"])
+  , (0x0100, ["custom", "gesture"])
+  ]
+
+e_HitTestAccuracy =
+  makeQtEnum (ident1 "Qt" "HitTestAccuracy") qtInclude
+  [ (0, ["exact", "hit"])
+  , (1, ["fuzzy", "hit"])
+  ]
+
+(e_ImageConversionFlag, bs_ImageConversionFlags) =
+  makeQtEnumBitspace (ident1 "Qt" "ImageConversionFlag") "ImageConversionFlags" qtInclude
+  [ (0x00000000, ["auto", "color"])
+  , (0x00000003, ["color", "only"])
+  , (0x00000002, ["mono", "only"])
+  , (0x00000000, ["diffuse", "dither"])
+  , (0x00000010, ["ordered", "dither"])
+  , (0x00000020, ["threshold", "dither"])
+  , (0x00000000, ["threshold", "alpha", "dither"])
+  , (0x00000004, ["ordered", "alpha", "dither"])
+  , (0x00000008, ["diffuse", "alpha", "dither"])
+  , (0x00000040, ["prefer", "dither"])
+  , (0x00000080, ["avoid", "dither"])
+  , (0x00000000, ["auto", "dither"])
+  , (0x00000100, ["no", "opaque", "detection"])
+  , (0x00000200, ["no", "format", "conversion"])
   ]
 
 e_GlobalColor =
@@ -538,25 +637,25 @@ e_GlobalColor =
   , (1, ["color1"])
   ]
 
-(e_ImageConversionFlag, bs_ImageConversionFlags) =
-  makeQtEnumBitspace (ident1 "Qt" "ImageConversionFlag") "ImageConversionFlags" qtInclude
+--(e_ImageConversionFlag, bs_ImageConversionFlags) =
+--  makeQtEnumBitspace (ident1 "Qt" "ImageConversionFlag") "ImageConversionFlags" qtInclude
   -- TODO Lots of synonyms for 0x0.  Hoppy doesn't support these.
-  [ (0x0, ["auto"])  -- Not real, this is because Hoppy doesn't support duplicate enum values.
+--  [ (0x0, ["auto"])  -- Not real, this is because Hoppy doesn't support duplicate enum values.
     -- Color/mono preference:
-  , (0x3, ["color", "only"])
-  , (0x2, ["mono", "only"])
+--  , (0x3, ["color", "only"])
+--  , (0x2, ["mono", "only"])
     -- Dithering mode preference for RGB channels:
-  , (0x10, ["ordered", "dither"])
-  , (0x20, ["threshold", "dither"])
+--  , (0x10, ["ordered", "dither"])
+--  , (0x20, ["threshold", "dither"])
     -- Dithering mode preference for alpha channel:
-  , (0x4, ["ordered", "alpha", "dither"])
-  , (0x8, ["diffuse", "alpha", "dither"])
+--  , (0x4, ["ordered", "alpha", "dither"])
+--  , (0x8, ["diffuse", "alpha", "dither"])
     -- Color matching versus dithering preference:
-  , (0x40, ["prefer", "dither"])
-  , (0x80, ["avoid", "dither"])
-  , (0x100, ["no", "opaque", "detection"])
-  , (0x200, ["no", "format", "conversion"])
-  ]
+--  , (0x40, ["prefer", "dither"])
+--  , (0x80, ["avoid", "dither"])
+--  , (0x100, ["no", "opaque", "detection"])
+--  , (0x200, ["no", "format", "conversion"])
+--  ]
 
 (e_InputMethodHint, bs_InputMethodHints) =
   makeQtEnumBitspace (ident1 "Qt" "InputMethodHint") "InputMethodHints" qtInclude
@@ -581,6 +680,29 @@ e_GlobalColor =
   , (0x400000, ["imh", "url", "characters", "only"])
   , (0x800000, ["imh", "latin", "only"])
   , (0xffff0000, ["imh", "exclusive", "input", "mask"])
+  ]
+
+(e_InputMethodQuery, bs_InputMethodQueries) =
+  makeQtEnumBitspace (ident1 "Qt" "InputMethodQuery") "InputMethodQueries" qtInclude $
+  collect
+  [ just (0x1, ["im", "enabled"])
+  , just (0x2, ["im", "micro", "focus"])
+  , just (0x2, ["im", "cursor", "rectangle"])
+  , just (0x4, ["im", "font"])
+  , just (0x8, ["im", "cursor", "position"])
+  , just (0x10, ["im", "surrounding", "text"])
+  , just (0x20, ["im", "current", "selection"])
+  , just (0x40, ["im", "maximum", "text", "length"])
+  , just (0x80, ["im", "anchor", "position"])
+  , just (0x100, ["im", "hints"])
+  , just (0x200, ["im", "preferred", "language"])
+  , just (0x80000000, ["im", "platform", "data"])
+  , just (0x400, ["im", "absolute", "position"])
+  , just (0x800, ["im", "text", "before", "cursor"])
+  , just (0x1000, ["im", "text", "after", "cursor"])
+  , just (0x2000, ["im", "enter", "key", "type"])
+  , test (qtVersion >= [5,7]) (0x4000, ["im", "anchor", "rectangle"])
+  , just (0x8000, ["im", "input", "item", "clip", "rectangle"])
   ]
 
 -- TODO Support for custom ItemDataRole values.
@@ -625,6 +747,20 @@ e_ItemDataRole =
   , just (64, ["item", "is", "auto", "tristate"])
   , just (128, ["item", "never", "has", "children"])
   , test (qtVersion >= [5, 5]) (256, ["item", "is", "user", "tristate"])
+  ]
+
+e_ItemSelectionMode =
+  makeQtEnum (ident1 "Qt" "ItemSelectionMode") qtInclude
+  [ (0x0, ["contains", "item", "shape"])
+  , (0x1, ["intersects", "item", "shape"])
+  , (0x2, ["contains", "item", "bounding", "rect"])
+  , (0x3, ["intersects", "item", "bounding", "rect"])
+  ]
+
+e_ItemSelectionOperation =
+  makeQtEnum (ident1 "Qt" "ItemSelectionOperation") qtInclude
+  [ (0, ["replace", "selection"])
+  , (1, ["add", "to", "selection"])
   ]
 
 e_Key =
@@ -811,14 +947,79 @@ e_MaskMode =
   ]
 
 (e_MouseButton, bs_MouseButtons) =
-  makeQtEnumBitspace (ident1 "Qt" "MouseButton") "MouseButtons" qtInclude
-  [ (0x00000000, ["no", "button"])
-  , (0x07ffffff, ["all", "buttons"])
-  , (0x00000001, ["left", "button"])
-  , (0x00000002, ["right", "button"])
-  , (0x00000004, ["middle", "button"])
-    -- TODO Other mouse buttons.  Lots of synonyms here which Hoppy doesn't support.
-  ]
+  makeQtEnumBitspace (ident1 "Qt" "MouseButton") "MouseButtons" qtInclude $
+  let noButton = 0x00000000
+      allButtons = 0x07ffffff
+      leftButton = 0x00000001
+      rightButton = 0x00000002
+      midButton = 0x00000004
+      middleButton = midButton
+      backButton = 0x00000008
+      xButton1 = backButton
+      extraButton1 = xButton1
+      forwardButton = 0x00000010
+      xButton2 = forwardButton
+      extraButton2 = forwardButton
+      taskButton = 0x00000020
+      extraButton3 = taskButton
+      extraButton4 = 0x00000040
+      extraButton5 = 0x00000080
+      extraButton6 = 0x00000100
+      extraButton7 = 0x00000200
+      extraButton8 = 0x00000400
+      extraButton9 = 0x00000800
+      extraButton10 = 0x00001000
+      extraButton11 = 0x00002000
+      extraButton12 = 0x00004000
+      extraButton13 = 0x00008000
+      extraButton14 = 0x00010000
+      extraButton15 = 0x00020000
+      extraButton16 = 0x00040000
+      extraButton17 = 0x00080000
+      extraButton18 = 0x00100000
+      extraButton19 = 0x00200000
+      extraButton20 = 0x00400000
+      extraButton21 = 0x00800000
+      extraButton22 = 0x01000000
+      extraButton23 = 0x02000000
+      extraButton24 = 0x04000000 
+  in [ (noButton, ["no", "button"])
+     , (allButtons, ["all", "buttons"])
+     , (leftButton, ["left", "button"])
+     , (rightButton, ["right", "button"])
+     , (midButton, ["mid", "button"])
+     , (middleButton, ["middle", "button"])
+     , (backButton, ["back", "button"])
+     , (xButton1, ["x", "button1"])
+     , (extraButton1, ["extra", "button1"])
+     , (forwardButton, ["forward", "button"])
+     , (xButton2, ["x", "button2"])
+     , (extraButton2, ["extra", "button2"])
+     , (taskButton, ["task", "button"])
+     , (extraButton3, ["extra", "button3"])
+     , (extraButton4, ["extra", "button4"])
+     , (extraButton5, ["extra", "button5"])
+     , (extraButton6, ["extra", "button6"])
+     , (extraButton7, ["extra", "button7"])
+     , (extraButton8, ["extra", "button8"])
+     , (extraButton9, ["extra", "button9"])
+     , (extraButton10, ["extra", "button10"])
+     , (extraButton11, ["extra", "button11"])
+     , (extraButton12, ["extra", "button12"])
+     , (extraButton13, ["extra", "button13"])
+     , (extraButton14, ["extra", "button14"])
+     , (extraButton15, ["extra", "button15"])
+     , (extraButton16, ["extra", "button16"])
+     , (extraButton17, ["extra", "button17"])
+     , (extraButton18, ["extra", "button18"])
+     , (extraButton19, ["extra", "button19"])
+     , (extraButton20, ["extra", "button20"])
+     , (extraButton21, ["extra", "button21"])
+     , (extraButton22, ["extra", "button22"])
+     , (extraButton23, ["extra", "button23"])
+     , (extraButton24, ["extra", "button24"])
+     ]
+
 
 (e_MouseEventFlag, bs_MouseEventFlags) =
   makeQtEnumBitspace (ident1 "Qt" "MouseEventFlag") "MouseEventFlags" qtInclude
@@ -836,6 +1037,17 @@ e_MouseEventSource =
 
 e_MouseEventSource_minVersion = [5, 3]
 
+e_NativeGestureType =
+  makeQtEnum (ident1 "Qt" "NativeGestureType") qtInclude
+  [ (0, ["begin", "native", "gesture"])
+  , (1, ["end", "native", "gesture"])
+  , (2, ["pan", "native", "gesture"])
+  , (3, ["zoom", "native", "gesture"])
+  , (4, ["smart", "zoom", "native", "gesture"])
+  , (5, ["rotate", "native", "gesture"])
+  , (6, ["swipe", "native", "gesture"])
+  ]
+
 e_NavigationMode =
   makeQtEnum (ident1 "Qt" "NavigationMode") qtInclude
   [ (0, ["navigation", "mode", "none"])
@@ -849,6 +1061,32 @@ e_NavigationMode =
   makeQtEnumBitspace (ident1 "Qt" "Orientation") "Orientations" qtInclude
   [ (1, ["horizontal"])
   , (2, ["vertical"])
+  ]
+
+e_PenCapStyle =
+  makeQtEnum (ident1 "Qt" "PenCapStyle") qtInclude
+  [ (0x00, ["flat", "cap"])
+  , (0x10, ["square", "cap"])
+  , (0x20, ["round", "cap"])
+  ]
+
+e_PenJoinStyle =
+  makeQtEnum (ident1 "Qt" "PenJoinStyle") qtInclude
+  [ (0x00, ["mitter", "join"])
+  , (0x40, ["bevel", "join"])
+  , (0x80, ["round", "join"])
+  , (0x100, ["svg", "mitter", "join"])
+  ]
+
+e_PenStyle =
+  makeQtEnum (ident1 "Qt" "PenStyle") qtInclude
+  [ (0, ["no", "pen"])
+  , (1, ["solid", "line"])
+  , (2, ["dash", "line"])
+  , (3, ["dot", "line"])
+  , (4, ["dash", "dot", "line"])
+  , (5, ["dash", "dot", "dot", "line"])
+  , (6, ["custom", "dash", "line"])
   ]
 
 (e_ScreenOrientation, bs_ScreenOrientations) =
