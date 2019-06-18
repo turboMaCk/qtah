@@ -105,15 +105,29 @@ module Graphics.UI.Qtah.Generator.Interface.Core.Types (
   e_ScrollBarPolicy,
   e_ScrollPhase,
   e_ScrollPhase_minVersion,
+  e_ShortcutContext,
+  e_SizeHint,
+  e_SizeMode,
   e_SortOrder,
+  e_TabFocusBehavior,
   e_TextElideMode,
+  e_TextFlag,
   e_TextFormat,
   e_TextInteractionFlag,
   bs_TextInteractionFlags,
+  e_TileRule,
+  e_TimeSpec,
+  e_TimerType,
   e_ToolBarArea,
   bs_ToolBarAreas,
   e_ToolButtonStyle,
+  e_TouchPointState,
+  bs_TouchPointStates,
   e_TransformationMode,
+  e_UIEffect,
+  e_WhiteSpaceMode,
+  e_WidgetAttribute,
+  e_WindowFrameSection,
   e_WindowModality,
   e_WindowState,
   bs_WindowStates,
@@ -227,15 +241,29 @@ exports =
   , test (qtVersion >= e_ScreenOrientation_minVersion) $ ExportBitspace bs_ScreenOrientations
   , just $ ExportEnum e_ScrollBarPolicy
   , test (qtVersion >= e_ScrollPhase_minVersion) $ ExportEnum e_ScrollPhase
+  , just $ ExportEnum e_ShortcutContext
+  , test (qtVersion >= [4, 4]) $ ExportEnum e_SizeHint
+  , test (qtVersion >= [4, 4]) $ ExportEnum e_SizeMode
   , just $ ExportEnum e_SortOrder
+  , test (qtVersion >= [5, 5]) $ ExportEnum e_TabFocusBehavior
   , just $ ExportEnum e_TextElideMode
+  , just $ ExportEnum e_TextFlag
   , just $ ExportEnum e_TextFormat
   , just $ ExportEnum e_TextInteractionFlag
   , just $ ExportBitspace bs_TextInteractionFlags
+  , test (qtVersion >= [4, 6]) $ ExportEnum e_TileRule
+  , just $ ExportEnum e_TimeSpec
+  , just $ ExportEnum e_TimerType
   , just $ ExportEnum e_ToolBarArea
   , just $ ExportBitspace bs_ToolBarAreas
   , just $ ExportEnum e_ToolButtonStyle
+  , test (qtVersion >= [4, 6]) $ ExportEnum e_TouchPointState
+  , test (qtVersion >= [4, 6]) $ ExportBitspace bs_TouchPointStates
   , just $ ExportEnum e_TransformationMode
+  , just $ ExportEnum e_UIEffect
+  , just $ ExportEnum e_WhiteSpaceMode
+  , just $ ExportEnum e_WidgetAttribute
+  , test (qtVersion >= [4, 4]) $ ExportEnum e_WindowFrameSection
   , just $ ExportEnum e_WindowModality
   , just $ ExportEnum e_ApplicationAttribute
   , just $ ExportEnum e_WindowState
@@ -1116,10 +1144,40 @@ e_ScrollPhase =
 
 e_ScrollPhase_minVersion = [5, 2]
 
+e_ShortcutContext =
+  makeQtEnum (ident1 "Qt" "ShortcutContext") qtInclude
+  [ (0, ["widget", "shortcut"])
+  , (3, ["widget", "with", "children", "shortcut"])
+  , (1, ["window", "shortcut"])
+  , (2, ["application", "shortcut"])
+  ]
+
+e_SizeHint =
+  makeQtEnum (ident1 "Qt" "SizeHint") qtInclude
+  [ (0, ["minimum", "size"])
+  , (1, ["preferred", "size"])
+  , (2, ["maximum", "size"])
+  , (3, ["minimum", "descent"])
+  ]
+
+e_SizeMode =
+  makeQtEnum (ident1 "Qt" "SizeMode") qtInclude
+  [ (0, ["absolute", "size"])
+  , (1, ["relative", "size"])
+  ]
+
 e_SortOrder =
   makeQtEnum (ident1 "Qt" "SortOrder") qtInclude
   [ (0, ["ascending", "order"])
   , (1, ["descending", "order"])
+  ]
+
+e_TabFocusBehavior =
+  makeQtEnum (ident1 "Qt" "TabFocusBehavior") qtInclude
+  [ (0x00, ["no", "tab", "focus"])
+  , (0x01, ["tab", "focus", "text", "controls"])
+  , (0x02, ["tab", "focus", "list", "controls"])
+  , (0xff, ["tab", "focus", "all", "controls"])
   ]
 
 e_TextElideMode =
@@ -1128,6 +1186,20 @@ e_TextElideMode =
   , (1, ["elide", "right"])
   , (2, ["elide", "middle"])
   , (3, ["elide", "none"])
+  ]
+
+e_TextFlag =
+  makeQtEnum (ident1 "Qt" "TextFlag") qtInclude
+  [ (0x0100, ["text", "single", "line"])
+  , (0x0200, ["text", "dont", "clip"])
+  , (0x0400, ["text", "expand", "tabs"])
+  , (0x0800, ["text", "show", "mnemonic"])
+  , (0x1000, ["text", "word", "wrap"])
+  , (0x2000, ["text", "wrap", "anywhere"])
+  , (0x8000, ["text", "hide", "mnemonic"])
+  , (0x4000, ["text", "dont", "print"])
+  , (0x08000000, ["text", "include", "trailing", "spaces"])
+  , (0x10000, ["text", "justification", "forced"])
   ]
 
 e_TextFormat =
@@ -1159,6 +1231,28 @@ e_TextFormat =
      , (textBrowserInteraction, ["text", "browser", "interaction"])
      ]
 
+e_TileRule =
+  makeQtEnum (ident1 "Qt" "TileRule") qtInclude
+  [ (0, ["stretch", "tile"])
+  , (1, ["repeat", "tile"])
+  , (2, ["round", "tile"])
+  ]
+
+e_TimeSpec =
+  makeQtEnum (ident1 "Qt" "TimeSpec") qtInclude
+  [ (0, ["local", "time"])
+  , (1, ["u", "t", "c"])
+  , (2, ["offset", "from", "u", "t", "c"])
+  , (3, ["time", "zone"])
+  ]
+
+e_TimerType =
+  makeQtEnum (ident1 "Qt" "TimerType") qtInclude
+  [ (0, ["precise", "timer"])
+  , (1, ["coarse", "timer"])
+  , (2, ["very", "coarse", "timer"])
+  ]
+
 (e_ToolBarArea, bs_ToolBarAreas) =
   makeQtEnumBitspace (ident1 "Qt" "ToolBarArea") "ToolBarAreas" qtInclude
   [ (0x0, ["no", "tool", "bar", "area"])
@@ -1178,10 +1272,136 @@ e_ToolButtonStyle =
   , (4, ["tool", "button", "follow", "style"])
   ]
 
+(e_TouchPointState, bs_TouchPointStates) =
+  makeQtEnumBitspace (ident1 "Qt" "TouchPointState") "TouchPointStates" qtInclude
+  [ (0x01, ["touch", "point", "pressed"])
+  , (0x02, ["touch", "point", "moved"])
+  , (0x04, ["touch", "point", "stationary"])
+  , (0x08, ["touch", "point", "released"])
+  ]
+
 e_TransformationMode =
   makeQtEnum (ident1 "Qt" "TransformationMode") qtInclude
   [ (0, ["fast", "transformation"])
   , (1, ["smooth", "transformation"])
+  ]
+
+e_UIEffect =
+  makeQtEnum (ident1 "Qt" "UIEffect") qtInclude
+  [ (1, ["u", "i_", "animate", "menu"])
+  , (2, ["u", "i_", "fade", "menu"])
+  , (3, ["u", "i_", "animate", "combo"])
+  , (4, ["u", "i_", "animate", "tooltip"])
+  , (5, ["u", "i_", "fade", "tooltip"])
+  , (6, ["u", "i_", "animate", "tool", "box"])
+  ]
+
+e_WhiteSpaceMode =
+  makeQtEnum (ident1 "Qt" "WhiteSpaceMode") qtInclude
+  [ (0, ["white", "space", "normal"])
+  , (1, ["white", "space", "pre"])
+  , (2, ["white", "space", "no", "wrap"])
+  ]
+
+e_WidgetAttribute =
+  makeQtEnum (ident1 "Qt" "WidgetAttribute") qtInclude
+  [ (78, ["w", "a_", "accept", "drops"])
+  , (84, ["w", "a_", "always", "show", "tool", "tips"])
+  , (3, ["w", "a_", "contents", "propagated"])
+  , (47, ["w", "a_", "custom", "whats", "this"])
+  , (55, ["w", "a_", "delete", "on", "close"])
+  , (0, ["w", "a_", "disabled"])
+  , (103, ["w", "a_", "dont", "show", "on", "screen"])
+  , (32, ["w", "a_", "force", "disabled"])
+  , (59, ["w", "a_", "force", "updates", "disabled"])
+  , (72, ["w", "a_", "group", "leader"])
+  , (74, ["w", "a_", "hover"])
+  , (14, ["w", "a_", "input", "method", "enabled"])
+  , (77, ["w", "a_", "keyboard", "focus", "change"])
+  , (33, ["w", "a_", "key", "compression"])
+  , (48, ["w", "a_", "layout", "on", "entire", "rect"])
+  , (92, ["w", "a_", "layout", "uses", "widget", "rect"])
+  , (12, ["w", "a_", "mac", "no", "click", "through"])
+  , (85, ["w", "a_", "mac", "opaque", "size", "grip"])
+  , (88, ["w", "a_", "mac", "show", "focus", "rect"])
+  , (89, ["w", "a_", "mac", "normal", "size"])
+  , (90, ["w", "a_", "mac", "small", "size"])
+  , (91, ["w", "a_", "mac", "mini", "size"])
+  , (102, ["w", "a_", "mac", "variable", "size"])
+  , (46, ["w", "a_", "mac", "brushed", "metal"])
+  , (11, ["w", "a_", "mapped"])
+  , (71, ["w", "a_", "mouse", "no", "mask"])
+  , (2, ["w", "a_", "mouse", "tracking"])
+  , (43, ["w", "a_", "moved"])
+  , (94, ["w", "a_", "m", "s", "windows", "use", "direct3", "d"])
+  , (58, ["w", "a_", "no", "child", "events", "for", "parent"])
+  , (39, ["w", "a_", "no", "child", "events", "from", "children"])
+  , (54, ["w", "a_", "no", "mouse", "replay"])
+  , (73, ["w", "a_", "no", "mouse", "propagation"])
+  , (51, ["w", "a_", "transparent", "for", "mouse", "events"])
+  , (9, ["w", "a_", "no", "system", "background"])
+  , (4, ["w", "a_", "opaque", "paint", "event"])
+  , (49, ["w", "a_", "outside", "w", "s", "range"])
+  , (8, ["w", "a_", "paint", "on", "screen"])
+  , (52, ["w", "a_", "paint", "unclipped"])
+  , (34, ["w", "a_", "pending", "move", "event"])
+  , (35, ["w", "a_", "pending", "resize", "event"])
+  , (76, ["w", "a_", "quit", "on", "close"])
+  , (42, ["w", "a_", "resized"])
+  , (56, ["w", "a_", "right", "to", "left"])
+  , (38, ["w", "a_", "set", "cursor"])
+  , (37, ["w", "a_", "set", "font"])
+  , (36, ["w", "a_", "set", "palette"])
+  , (86, ["w", "a_", "set", "style"])
+  , (70, ["w", "a_", "show", "modal"])
+  , (5, ["w", "a_", "static", "contents"])
+  , (97, ["w", "a_", "style", "sheet"])
+  , (131, ["w", "a_", "style", "sheet", "target"])
+  , (129, ["w", "a_", "tablet", "tracking"])
+  , (120, ["w", "a_", "translucent", "background"])
+  , (1, ["w", "a_", "under", "mouse"])
+  , (10, ["w", "a_", "updates", "disabled"])
+  , (41, ["w", "a_", "window", "modified"])
+  , (80, ["w", "a_", "window", "propagation"])
+  , (96, ["w", "a_", "mac", "always", "show", "tool", "window"])
+  , (87, ["w", "a_", "set", "locale"])
+  , (93, ["w", "a_", "styled", "background"])
+  , (98, ["w", "a_", "show", "without", "activating"])
+  , (100, ["w", "a_", "native", "window"])
+  , (101, ["w", "a_", "dont", "create", "native", "ancestors"])
+  , (104, ["w", "a_", "x11", "net", "vm", "window", "type", "desktop"])
+  , (105, ["w", "a_", "x11", "net", "vm", "window", "type", "dock"])
+  , (106, ["w", "a_", "x11", "net", "vm", "window", "type", "tool", "bar"])
+  , (107, ["w", "a_", "x11", "net", "vm", "window", "type", "menu"])
+  , (108, ["w", "a_", "x11", "net", "vm", "window", "type", "utility"])
+  , (109, ["w", "a_", "x11", "net", "vm", "window", "type", "splash"])
+  , (110, ["w", "a_", "x11", "net", "vm", "window", "type", "dialog"])
+  , (111, ["w", "a_", "x11", "net", "vm", "window", "type", "drop", "down", "menu"])
+  , (112, ["w", "a_", "x11", "net", "vm", "window", "type", "popup", "menu"])
+  , (113, ["w", "a_", "x11", "net", "vm", "window", "type", "tool", "tip"])
+  , (114, ["w", "a_", "x11", "net", "vm", "window", "type", "notification"])
+  , (115, ["w", "a_", "x11", "net", "vm", "window", "type", "combo"])
+  , (116, ["w", "a_", "x11", "net", "vm", "window", "type", "d", "n", "d"])
+  , (117, ["w", "a_", "mac", "framework", "scaled"])
+  , (121, ["w", "a_", "accept", "touch", "events"])
+  , (123, ["w", "a_", "touch", "pad", "accept", "single", "touch", "events"])
+  , (126, ["w", "a_", "x11", "do", "not", "accept", "focus"])
+  , (128, ["w", "a_", "always", "stack", "on", "top"])
+  , (130, ["w", "a_", "contents", "margins", "respects", "safe", "area"])
+  ]
+
+e_WindowFrameSection =
+  makeQtEnum (ident1 "Qt" "WindowFrameSection") qtInclude
+  [ (0, ["no", "section"])
+  , (1, ["left", "section"])
+  , (2, ["top", "left", "section"])
+  , (3, ["top", "section"])
+  , (4, ["top", "right", "section"])
+  , (5, ["right", "section"])
+  , (6, ["bottom", "right", "section"])
+  , (7, ["bottom", "section"])
+  , (8, ["bottom", "left", "section"])
+  , (9, ["title", "bar", "area"])
   ]
 
 e_WindowModality =
