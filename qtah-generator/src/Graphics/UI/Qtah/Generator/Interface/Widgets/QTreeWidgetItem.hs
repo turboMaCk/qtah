@@ -25,6 +25,7 @@ import Foreign.Hoppy.Generator.Spec (
   Class,
   CppEnum,
   Export (ExportClass, ExportEnum),
+  Operator (OpAssign, OpLt),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -35,6 +36,7 @@ import Foreign.Hoppy.Generator.Spec (
   mkConstMethod',
   mkCtor,
   mkMethod,
+  mkMethod',
   )
 
 import Foreign.Hoppy.Generator.Types (intT, objT, ptrT, refT, constT, voidT, boolT, enumT, bitspaceT)
@@ -64,6 +66,7 @@ aModule =
     QtExport
     [ ExportClass c_QTreeWidgetItem
     , ExportEnum e_ChildIndicatorPolicy
+    , ExportEnum e_ItemType
     ]
 
 c_QTreeWidgetItem :: Class
@@ -141,6 +144,8 @@ c_QTreeWidgetItem =
   , just $ mkConstMethod "treeWidget" [] $ ptrT $ objT c_QTreeWidget
   , just $ mkConstMethod' "type" "getType" [] intT
   , just $ mkConstMethod "whatsThis" [intT] $ objT c_QString
+  , just $ mkMethod' OpAssign "assign" [objT c_QTreeWidgetItem] $ refT $ objT c_QTreeWidgetItem
+  , just $ mkMethod' OpLt "lessThan" [constT $ refT $ objT c_QTreeWidgetItem] boolT
   -- TODO void QTreeWidgetItem::write(QDataStream &out) const
   ]
 
@@ -154,3 +159,13 @@ e_ChildIndicatorPolicy =
     , (1, ["dont", "show", "indicator"])
     , (2, ["dont", "show", "indicator", "when", "childless"])
     ]
+
+e_ItemType :: CppEnum
+e_ItemType =
+  makeQtEnum
+    (ident1 "QTreeWidgetItem" "ItemType")
+    [includeStd "QTreeWidgetItem"]
+    [ (0, ["type"])
+    , (1000, ["user", "type"])
+    ]
+    
