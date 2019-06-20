@@ -18,6 +18,13 @@
 module Graphics.UI.Qtah.Generator.Interface.Widgets.QAbstractItemView (
   aModule,
   c_QAbstractItemView,
+  e_ScrollHint,
+  e_SelectionMode,
+  e_ScrollMode,
+  e_DragDropMode,
+  e_EditTrigger,
+  bs_EditTriggers,
+  e_SelectionBehavior,
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
