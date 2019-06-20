@@ -35,6 +35,7 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QList (
   c_QListQString,
   c_QListQVariant,
   c_QListQWidget,
+  c_QListQTreeWidgetItem,
   ) where
 
 import Control.Monad (forM_, when)
@@ -94,6 +95,7 @@ import Graphics.UI.Qtah.Generator.Interface.Core.QItemSelectionRange (c_QItemSel
 import Graphics.UI.Qtah.Generator.Interface.Core.QModelIndex (c_QModelIndex)
 import Graphics.UI.Qtah.Generator.Interface.Core.QObject (c_QObject)
 import Graphics.UI.Qtah.Generator.Interface.Core.QSize (c_QSize)
+import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Widgets.QTreeWidgetItem (c_QTreeWidgetItem)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Core.QVariant (c_QVariant)
 import Graphics.UI.Qtah.Generator.Interface.Imports
@@ -302,6 +304,7 @@ allModules =
   , qmod_QString
   , qmod_QVariant
   , qmod_QWidget
+  , qmod_QTreeWidgetItem
   ]
 
 qmod_Int :: QtModule
@@ -395,3 +398,12 @@ contents_QWidget = instantiate "QListQWidget" (ptrT $ objT c_QWidget) mempty
 
 c_QListQWidget :: Class
 c_QListQWidget = c_QList contents_QWidget
+
+qmod_QTreeWidgetItem :: QtModule
+qmod_QTreeWidgetItem = createModule "QTreeWidgetItem" contents_QTreeWidgetItem
+
+contents_QTreeWidgetItem :: Contents
+contents_QTreeWidgetItem = instantiate "QListQTreeWidgetItem" (ptrT $ objT c_QTreeWidgetItem) mempty
+
+c_QListQTreeWidgetItem :: Class
+c_QListQTreeWidgetItem = c_QList contents_QTreeWidgetItem

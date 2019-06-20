@@ -55,7 +55,7 @@ import Graphics.UI.Qtah.Generator.Interface.Core.Types (
   e_DropAction,
   e_TextElideMode,
   )
-import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
+import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
   c_Listener,
   c_ListenerQModelIndex,
   c_ListenerQSize,

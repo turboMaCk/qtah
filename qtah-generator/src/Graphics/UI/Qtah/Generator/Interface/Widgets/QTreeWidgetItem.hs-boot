@@ -15,10 +15,10 @@
 -- You should have received a copy of the GNU Lesser General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-module Graphics.UI.Qtah.Generator.Interface.Widgets.QTreeWidget (
-  c_QTreeWidget,
+module Graphics.UI.Qtah.Generator.Interface.Widgets.QTreeWidgetItem (
+  c_QTreeWidgetItem,
   ) where
 
 import Foreign.Hoppy.Generator.Spec (Class)
 
-c_QTreeWidget :: Class
+c_QTreeWidgetItem :: Class

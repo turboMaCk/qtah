@@ -16,12 +16,8 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 module Graphics.UI.Qtah.Generator.Interface.Widgets.QTreeWidget (
-  -- modules
   aModule,
-  itemModule,
-  -- classes
   c_QTreeWidget,
-  c_QTreeWidgetItem,
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
@@ -31,7 +27,6 @@ import Foreign.Hoppy.Generator.Spec (
   addReqIncludes,
   classSetEntityPrefix,
   ident,
-  ident1,
   includeStd,
   makeClass,
   mkConstMethod,
@@ -39,22 +34,23 @@ import Foreign.Hoppy.Generator.Spec (
   mkCtor,
   mkMethod,
   )
-import Foreign.Hoppy.Generator.Types (intT, objT, ptrT, voidT, boolT, enumT)
+
+import Foreign.Hoppy.Generator.Types (intT, objT, ptrT, voidT, enumT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
 import Graphics.UI.Qtah.Generator.Flags (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
+import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Core.QList (c_QListQTreeWidgetItem)
+import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Widgets.QTreeWidgetItem (c_QTreeWidgetItem)
 import Graphics.UI.Qtah.Generator.Interface.Core.QStringList (c_QStringList)
-import Graphics.UI.Qtah.Generator.Interface.Core.QVariant (c_QVariant)
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (e_SortOrder)
-import Graphics.UI.Qtah.Generator.Interface.Gui.QIcon (c_QIcon)
-import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
+import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
   c_Listener,
   c_ListenerPtrQTreeWidgetItem,
   c_ListenerPtrQTreeWidgetItemInt,
   c_ListenerPtrQTreeWidgetItemPtrQTreeWidgetItem,
   )
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QTreeView (c_QTreeView)
-import Graphics.UI.Qtah.Generator.Interface.Widgets.QWidget (c_QWidget)
+import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Widgets.QWidget (c_QWidget)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
 
@@ -67,15 +63,6 @@ aModule =
   QtExport (ExportClass c_QTreeWidget) :
   map QtExportSignal signals
 
-itemModule :: AModule
-itemModule =
-  AQtModule $
-  makeQtModule ["Widgets", "QTreeWidgetItem"] $
-  map
-    QtExport
-    [ ExportClass c_QTreeWidgetItem
-    , ExportEnum e_ChildIndicatorPolicy
-    ]
 
 c_QTreeWidget :: Class
 c_QTreeWidget =
@@ -102,42 +89,6 @@ c_QTreeWidget =
   -- TODO add more methods
   ]
 
-c_QTreeWidgetItem :: Class
-c_QTreeWidgetItem =
-  addReqIncludes [includeStd "QTreeWidgetItem"] $
-  classSetEntityPrefix "" $
-  makeClass (ident "QTreeWidgetItem") Nothing [] $
-  collect
-  [ just $ mkCtor "new" []
-  , just $ mkCtor "newWithType" [intT]
-  , just $ mkCtor "newWithStrings" [objT c_QStringList]
-  , just $ mkCtor "newWithStringsAndType" [objT c_QStringList, intT]
-  , just $ mkCtor "newWithParentTree" [ptrT $ objT c_QTreeWidget]
-  , just $ mkCtor "newWithParentTreeAndType" [ptrT $ objT c_QTreeWidget, intT]
-  , just $ mkCtor "newWithParentTreeAndStrings" [ptrT $ objT c_QTreeWidget, objT c_QStringList]
-  , just $ mkCtor "newWithParentTreeAndStringsAndType"
-    [ptrT $ objT c_QTreeWidget, objT c_QStringList, intT]
-  , just $ mkCtor "newWithParentItem" [ptrT $ objT c_QTreeWidgetItem]
-  , just $ mkCtor "newWithParentItemAndType" [ptrT $ objT c_QTreeWidgetItem, intT]
-  , just $ mkCtor "newWithParentItemAndStrings" [ptrT $ objT c_QTreeWidgetItem, objT c_QStringList]
-  , just $ mkCtor "newWithParentItemAndStringsAndType"
-    [ptrT $ objT c_QTreeWidgetItem, objT c_QStringList, intT]
-  , just $ mkConstMethod "child" [intT] (ptrT $ objT c_QTreeWidgetItem)
-  , just $ mkConstMethod "childCount" [] intT
-  , just $ mkConstMethod "childIndicatorPolicy" [] (enumT e_ChildIndicatorPolicy)
-  , just $ mkConstMethod "columnCount" [] intT
-  , just $ mkConstMethod' "data" "getData" [intT, intT] (objT c_QVariant)
-  , test (qtVersion >= [4, 2]) $ mkConstMethod "isHidden" [] boolT
-  , just $ mkConstMethod "parent" [] (ptrT $ objT c_QTreeWidgetItem)
-  , just $ mkMethod "setChildIndicatorPolicy" [enumT e_ChildIndicatorPolicy] voidT
-  , just $ mkMethod "setData" [intT, intT, objT c_QVariant] voidT
-  , test (qtVersion >= [4, 2]) $ mkMethod "setHidden" [boolT] voidT
-  , just $ mkMethod "setIcon" [intT, objT c_QIcon] voidT
-  , just $ mkMethod "setText" [intT, objT c_QString] voidT
-  , just $ mkConstMethod "text" [intT] (objT c_QString)
-  , just $ mkConstMethod' "type" "getType" [] intT
-  -- TODO add more methods
-  ]
 
 signals :: [Signal]
 signals =
@@ -153,12 +104,3 @@ signals =
   , makeSignal c_QTreeWidget "itemSelectionChanged" c_Listener
   ]
 
-e_ChildIndicatorPolicy :: CppEnum
-e_ChildIndicatorPolicy =
-  makeQtEnum
-    (ident1 "QTreeWidgetItem" "ChildIndicatorPolicy")
-    [includeStd "QTreeWidgetItem"]
-    [ (0, ["show", "indicator"])
-    , (1, ["dont", "show", "indicator"])
-    , (2, ["dont", "show", "indicator", "when", "childless"])
-    ]
