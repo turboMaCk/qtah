@@ -82,6 +82,7 @@ import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Widgets.QSystemTrayIc
   e_ActivationReason,
   )
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Widgets.QTreeWidget (c_QTreeWidget)
+import Graphics.UI.Qtah.Generator.Interface.Widgets.QTreeView (c_QTreeView)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Widgets.QTreeWidgetItem (c_QTreeWidgetItem)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Widgets.QWidget (c_QWidget)
 import Graphics.UI.Qtah.Generator.Module (AModule (AHoppyModule))
@@ -109,6 +110,7 @@ aModule =
       , just $ ExportCallback cb_PtrQObjectPtrQEventBool
       , just $ ExportCallback cb_PtrQObjectVoid
       , just $ ExportCallback cb_PtrQPaintEventVoid
+      , just $ ExportCallback cb_RefConstQModelIndexVoid
       , just $ ExportCallback cb_PtrQTreeWidgetItemVoid
       , just $ ExportCallback cb_PtrQTreeWidgetItemIntVoid
       , just $ ExportCallback cb_PtrQTreeWidgetItemPtrQTreeWidgetItemVoid
@@ -201,6 +203,11 @@ cb_PtrQObjectVoid =
 cb_PtrQPaintEventVoid =
   makeCallback (toExtName "CallbackPtrQPaintEventVoid")
   [ptrT $ objT c_QPaintEvent] voidT
+
+cb_RefConstQModelIndexVoid :: Callback
+cb_RefConstQModelIndexVoid =
+  makeCallback (toExtName "CallbackRefConstQModelIndexVoid")
+  [refT $ constT $ objT c_QModelIndex] voidT
 
 cb_PtrQTreeWidgetItemVoid :: Callback
 cb_PtrQTreeWidgetItemVoid =

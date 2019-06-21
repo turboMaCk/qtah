@@ -45,7 +45,7 @@ import Graphics.UI.Qtah.Generator.Interface.Core.Types (
   e_ToolButtonStyle,
   )
 import Graphics.UI.Qtah.Generator.Interface.Gui.QIcon (c_QIcon)
-import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
+import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
   c_ListenerBool,
   c_ListenerOrientation,
   c_ListenerPtrQAction,

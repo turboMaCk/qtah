@@ -43,7 +43,7 @@ import Graphics.UI.Qtah.Generator.Interface.Core.Types (
   bs_DockWidgetAreas,
   )
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
-import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
+import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
   c_ListenerBool,
   c_ListenerDockWidgetArea,
   c_ListenerDockWidgetAreas,

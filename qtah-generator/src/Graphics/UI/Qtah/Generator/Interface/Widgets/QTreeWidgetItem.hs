@@ -90,7 +90,7 @@ c_QTreeWidgetItem =
   , just $ mkCtor "newWithParentItemAndStringsAndType"
     [ptrT $ objT c_QTreeWidgetItem, objT c_QStringList, intT]
   , just $ mkMethod "addChild" [ptrT $ objT c_QTreeWidgetItem] voidT
-  , test (qtVersion >= [4, 1]) $ mkMethod "addChildren" [constT $ refT $ objT c_QListQTreeWidgetItem] voidT
+  , test (qtVersion >= [4, 1]) $ mkMethod "addChildren" [refT $ constT $ objT c_QListQTreeWidgetItem] voidT
   , test (qtVersion >= [4, 2]) $ mkConstMethod "background" [intT] $ objT c_QBrush
   , just $ mkConstMethod "checkState" [intT] $ enumT e_CheckState
   , just $ mkConstMethod "child" [intT] (ptrT $ objT c_QTreeWidgetItem)
@@ -105,7 +105,7 @@ c_QTreeWidgetItem =
   , just $ mkConstMethod "icon" [intT] $ objT c_QIcon
   , just $ mkConstMethod "indexOfChild" [ptrT $ objT c_QTreeWidgetItem] intT
   , just $ mkMethod "insertChild" [intT, ptrT $ objT c_QTreeWidgetItem] voidT
-  , test (qtVersion >= [4, 1]) $ mkMethod "insertChildren" [intT, constT $ refT $ objT c_QListQTreeWidgetItem] voidT
+  , test (qtVersion >= [4, 1]) $ mkMethod "insertChildren" [intT, refT $ constT $ objT c_QListQTreeWidgetItem] voidT
   , test (qtVersion >= [4, 3]) $ mkConstMethod "isDisabled" [] boolT
   , test (qtVersion >= [4, 2]) $ mkConstMethod "isExpanded" [] boolT
   , test (qtVersion >= [4, 3]) $ mkConstMethod "isFirstColumnSpanned" [] boolT
@@ -145,7 +145,7 @@ c_QTreeWidgetItem =
   , just $ mkConstMethod' "type" "getType" [] intT
   , just $ mkConstMethod "whatsThis" [intT] $ objT c_QString
   , just $ mkMethod' OpAssign "assign" [objT c_QTreeWidgetItem] $ refT $ objT c_QTreeWidgetItem
-  , just $ mkMethod' OpLt "lessThan" [constT $ refT $ objT c_QTreeWidgetItem] boolT
+  , just $ mkMethod' OpLt "lessThan" [refT $ constT $ objT c_QTreeWidgetItem] boolT
   -- TODO void QTreeWidgetItem::write(QDataStream &out) const
   ]
 

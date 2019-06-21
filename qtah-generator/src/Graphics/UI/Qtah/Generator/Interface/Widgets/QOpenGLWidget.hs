@@ -38,7 +38,7 @@ import Foreign.Hoppy.Generator.Version (collect, just, test)
 import Graphics.UI.Qtah.Generator.Flags (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (bs_WindowFlags, gluint)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QImage (c_QImage)
-import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (c_Listener)
+import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Internal.Listener (c_Listener)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QWidget (c_QWidget)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModuleWithMinVersion)
 import Graphics.UI.Qtah.Generator.Types

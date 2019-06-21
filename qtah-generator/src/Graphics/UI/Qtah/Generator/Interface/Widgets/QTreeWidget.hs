@@ -80,7 +80,7 @@ c_QTreeWidget =
   [ just $ mkCtor "new" []
   , just $ mkCtor "newWithParent" [ptrT $ objT c_QWidget]
   , test (qtVersion >= [4, 1]) $ mkMethod "addTopLevelItem" [ptrT $ objT c_QTreeWidgetItem] voidT
-  , just $ mkMethod "addTopLevelItems" [constT $ refT $ objT c_QListQTreeWidgetItem] voidT
+  , just $ mkMethod "addTopLevelItems" [refT $ constT $ objT c_QListQTreeWidgetItem] voidT
   , just $ mkMethod' "closePersistentEditor" "closePersistentEditor" [ptrT $ objT c_QTreeWidgetItem] voidT
   , just $ mkMethod' "closePersistentEditor" "closePersistentEditorWithColumn" [ptrT $ objT c_QTreeWidgetItem, intT] voidT
   , just $ mkProp "columnCount" intT
@@ -93,7 +93,7 @@ c_QTreeWidget =
   , just $ mkConstMethod "headerItem" [] (ptrT $ objT c_QTreeWidgetItem)
   , just $ mkConstMethod "indexOfTopLevelItem" [ptrT $ objT c_QTreeWidgetItem] intT 
   , just $ mkMethod "insertTopLevelItem" [intT, ptrT $ objT c_QTreeWidgetItem] voidT 
-  , test (qtVersion >= [4, 1]) $ mkMethod "insertTopLevelItems" [intT, constT $ refT $ objT c_QListQTreeWidgetItem] voidT 
+  , test (qtVersion >= [4, 1]) $ mkMethod "insertTopLevelItems" [intT, refT $ constT $ objT c_QListQTreeWidgetItem] voidT 
   , test (qtVersion >= [4, 2]) $ mkConstMethod "invisibleRootItem" [] (ptrT $ objT c_QTreeWidgetItem)
   , test (qtVersion >= [5, 10]) $ mkConstMethod' "isPersistentEditorOpen" "isPersistentEditorOpen" [ptrT $ objT c_QTreeWidgetItem] boolT
   , test (qtVersion >= [5, 10]) $ mkConstMethod' "isPersistentEditorOpen" "isPersistentEditorOpenWithColumn" [ptrT $ objT c_QTreeWidgetItem, intT] boolT

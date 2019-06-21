@@ -44,7 +44,7 @@ import Graphics.UI.Qtah.Generator.Interface.Core.Types (
   e_DockWidgetArea,
   e_Orientation,
   )
-import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (c_ListenerQSize)
+import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Internal.Listener (c_ListenerQSize)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QDockWidget (c_QDockWidget)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QMenu (c_QMenu)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QMenuBar (c_QMenuBar)

@@ -59,7 +59,7 @@ import Graphics.UI.Qtah.Generator.Interface.Gui.QCursor (c_QCursor)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QIcon (c_QIcon)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QRegion (c_QRegion)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QSurface (c_QSurface, e_SurfaceType)
-import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
+import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
   c_Listener,
   c_ListenerBool,
   c_ListenerInt,

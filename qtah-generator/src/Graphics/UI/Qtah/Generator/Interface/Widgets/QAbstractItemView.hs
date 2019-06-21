@@ -69,7 +69,7 @@ import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
   )
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QAbstractItemDelegate (c_QAbstractItemDelegate)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QAbstractScrollArea (c_QAbstractScrollArea)
-import Graphics.UI.Qtah.Generator.Interface.Widgets.QWidget (c_QWidget)
+import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Widgets.QWidget (c_QWidget)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
 

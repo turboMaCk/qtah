@@ -17,8 +17,6 @@
 
 /qtah-examples/dist
 /qtah-generator/dist
-/qtah-generator/src/Graphics/UI/Qtah/Generator/Interface/Internal/Listener.hs
-/qtah-generator/src/Graphics/UI/Qtah/Generator/Interface/Internal/Listener.hs-boot
 
 /qtah-cpp/cpp/Makefile
 /qtah-cpp/cpp/b_*
