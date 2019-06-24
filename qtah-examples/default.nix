@@ -19,10 +19,9 @@
 # Keep qtah on a line by itself, scripts/set-qt-version looks for it:
 , qtah
 , stdenv, lib
-, enableSplitObjs ? null
 , forceParallelBuilding ? false
 }:
-mkDerivation ({
+mkDerivation {
   pname = "qtah-examples";
   version = "0.6.0";
   src = ./.;
@@ -41,4 +40,4 @@ mkDerivation ({
     if forceParallelBuilding
     then "configureFlags+=\" --ghc-option=-j$NIX_BUILD_CORES\""
     else null;
-} // lib.filterAttrs (k: v: v != null) { inherit enableSplitObjs; })
+}

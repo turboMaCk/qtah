@@ -16,10 +16,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 { mkDerivation, base, Cabal, qt, qtah-generator, stdenv, lib
-, enableSplitObjs ? null
 , forceParallelBuilding ? false
 }:
-mkDerivation ({
+mkDerivation {
   pname = "qtah-cpp";
   version = "0.6.0";
   src = ./.;
@@ -34,4 +33,4 @@ mkDerivation ({
     if forceParallelBuilding then ''
       configureFlags+=" --ghc-option=-j$NIX_BUILD_CORES"
     '' else null;
-} // lib.filterAttrs (k: v: v != null) { inherit enableSplitObjs; })
+}

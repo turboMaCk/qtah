@@ -15,27 +15,9 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-{ mkDerivation, base, containers, directory, filepath, haskell-src
-, hoppy-generator, hoppy-std, mtl, stdenv, lib
-, forceParallelBuilding ? false
-}:
-mkDerivation {
-  pname = "qtah-generator";
-  version = "0.6.0";
-  src = ./.;
-  isLibrary = true;
-  isExecutable = true;
-  executableHaskellDepends = [
-    base containers directory filepath haskell-src hoppy-generator
-    hoppy-std mtl
-  ];
-  homepage = "http://khumba.net/projects/qtah";
-  description = "Generator for Qtah Qt bindings";
-  license = stdenv.lib.licenses.lgpl3Plus;
+# This file provides Nixpkgs with overlay.nix included.
 
-  preConfigure = ''
-    ${if forceParallelBuilding
-     then "configureFlags+=\" --ghc-option=-j$NIX_BUILD_CORES\""
-     else ""}
-  '';
-}
+args@{ overlays ? [], ...}:
+import <nixpkgs> (args // {
+  overlays = overlays ++ [ (import ./overlay.nix) ];
+})

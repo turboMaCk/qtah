@@ -15,27 +15,24 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-{ mkDerivation, base, containers, directory, filepath, haskell-src
-, hoppy-generator, hoppy-std, mtl, stdenv, lib
-, forceParallelBuilding ? false
-}:
-mkDerivation {
-  pname = "qtah-generator";
-  version = "0.6.0";
-  src = ./.;
-  isLibrary = true;
-  isExecutable = true;
-  executableHaskellDepends = [
-    base containers directory filepath haskell-src hoppy-generator
-    hoppy-std mtl
-  ];
-  homepage = "http://khumba.net/projects/qtah";
-  description = "Generator for Qtah Qt bindings";
-  license = stdenv.lib.licenses.lgpl3Plus;
+let
 
-  preConfigure = ''
-    ${if forceParallelBuilding
-     then "configureFlags+=\" --ghc-option=-j$NIX_BUILD_CORES\""
-     else ""}
-  '';
+  qtName = "qt5";
+
+  haskellOverrides = super: hself: hsuper:
+    let qtbase = super.${qtName}.qtbase;
+    in {
+      qtah-generator = hsuper.callPackage ../qtah-generator {};
+      qtah-cpp = hsuper.callPackage ../qtah-cpp { qt = qtbase; };
+      qtah = hsuper.callPackage ../qtah { qt = qtbase; };
+      qtah-examples = hsuper.callPackage ../qtah-examples {};
+    };
+
+in self: super: {
+  haskell = super.haskell // {
+    packageOverrides =
+      super.lib.composeExtensions
+        (super.haskell.packageOverrides or (x: y: {}))
+        (haskellOverrides super);
+  };
 }

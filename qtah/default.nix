@@ -17,10 +17,9 @@
 
 { mkDerivation, base, binary, bytestring, hoppy-runtime, HUnit
 , qt, qtah-cpp, qtah-generator, stdenv, lib
-, enableSplitObjs ? null
 , forceParallelBuilding ? false
 }:
-mkDerivation ({
+mkDerivation {
   pname = "qtah";
   version = "0.6.0";
   src = ./.;
@@ -37,4 +36,4 @@ mkDerivation ({
     if forceParallelBuilding
     then "configureFlags+=\" --ghc-option=-j$NIX_BUILD_CORES\""
     else null;
-} // lib.filterAttrs (k: v: v != null) { inherit enableSplitObjs; })
+}
