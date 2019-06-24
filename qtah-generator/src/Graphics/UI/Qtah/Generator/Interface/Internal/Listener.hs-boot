@@ -12,6 +12,7 @@ c_ListenerInt :: Class
 c_ListenerIntBool :: Class
 c_ListenerIntInt :: Class
 c_ListenerOrientation :: Class
+c_ListenerOrientationIntInt :: Class
 c_ListenerPtrQAbstractButton :: Class
 c_ListenerPtrQAbstractButtonBool :: Class
 c_ListenerPtrQAbstractItemModel :: Class

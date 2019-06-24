@@ -76,7 +76,7 @@ c_QTextEdit =
   , mkProp "alignment" $ bitspaceT bs_Alignment
   , mkConstMethod "anchorAt" [objT c_QPoint] $ objT c_QString
   , mkMethod "append" [objT c_QString] voidT
-  , mkProp "autoFormatting" $ enumT e_AutoFormattingFlag
+  , mkProp "autoFormatting" $ bitspaceT bs_AutoFormatting
   , mkConstMethod "canPaste" [] boolT
   , mkMethod "clear" [] voidT
   , mkMethod "copy" [] voidT

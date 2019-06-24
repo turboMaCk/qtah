@@ -85,6 +85,15 @@ c_ListenerOrientation =
     [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT
   ]
 
+c_ListenerOrientationIntInt =
+  S.makeClass (S.ident "ListenerOrientationIntInt") Nothing [QObject.c_QObject]
+  [ S.mkCtor "new" [S.callbackT C.cb_OrientationIntIntVoid]
+  , S.mkCtor "newWithParent"
+    [S.callbackT C.cb_OrientationIntIntVoid, S.ptrT $ S.objT QObject.c_QObject]
+  , S.mkMethod "connectListener"
+    [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT
+  ]  
+
 c_ListenerPtrQAbstractButton =
   S.makeClass (S.ident "ListenerPtrQAbstractButton") Nothing [QObject.c_QObject]
   [ S.mkCtor "new" [S.callbackT C.cb_PtrQAbstractButtonVoid]
@@ -395,6 +404,7 @@ aModule =
       , V.just $ S.ExportClass c_ListenerIntBool
       , V.just $ S.ExportClass c_ListenerIntInt
       , V.just $ S.ExportClass c_ListenerOrientation
+      , V.just $ S.ExportClass c_ListenerOrientationIntInt
       , V.just $ S.ExportClass c_ListenerPtrQAbstractButton
       , V.just $ S.ExportClass c_ListenerPtrQAbstractButtonBool
       , V.just $ S.ExportClass c_ListenerPtrQAbstractItemModel

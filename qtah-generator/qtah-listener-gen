@@ -84,6 +84,7 @@ forEachListener() {
     $fn IntBool "int|bool"
     $fn IntInt "int|int"
     $fn Orientation "Qt::Orientation"
+    $fn OrientationIntInt "Qt::Orientation|int|int"
     $fn PtrQAbstractButton "QAbstractButton*"
     $fn PtrQAbstractButtonBool "QAbstractButton*|bool"
     $fn PtrQAbstractItemModel "QAbstractItemModel*"

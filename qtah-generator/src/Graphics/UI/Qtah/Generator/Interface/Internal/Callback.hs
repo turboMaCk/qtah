@@ -102,6 +102,7 @@ aModule =
       , just $ ExportCallback cb_IntBoolVoid
       , just $ ExportCallback cb_IntIntVoid
       , just $ ExportCallback cb_OrientationVoid
+      , just $ ExportCallback cb_OrientationIntIntVoid
       , just $ ExportCallback cb_PtrQAbstractButtonVoid
       , just $ ExportCallback cb_PtrQAbstractButtonBoolVoid
       , just $ ExportCallback cb_PtrQAbstractItemModelVoid
@@ -171,6 +172,10 @@ cb_IntIntVoid =
 cb_OrientationVoid =
   makeCallback (toExtName "CallbackOrientationVoid")
   [enumT e_Orientation] voidT
+
+cb_OrientationIntIntVoid =
+  makeCallback (toExtName "CallbackOrientationIntIntVoid")
+  [enumT e_Orientation, intT, intT] voidT
 
 cb_PtrQAbstractButtonVoid =
   makeCallback (toExtName "CallbackPtrQAbstractButtonVoid")
