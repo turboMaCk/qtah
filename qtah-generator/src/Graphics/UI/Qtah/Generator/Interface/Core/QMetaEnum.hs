@@ -28,12 +28,18 @@ import Foreign.Hoppy.Generator.Spec (
   ident,
   includeStd,
   makeClass,
+  mkConstMethod,
+  mkConstMethod',
+  mkStaticMethod,
   )
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Copyable),
   classAddFeatures,
   )
---import Foreign.Hoppy.Generator.Types (boolT, intT, objT, ptrT, refT, voidT)
+import Foreign.Hoppy.Generator.Types (boolT, intT, objT, ptrT, refT, voidT, constT, charT)
+import Foreign.Hoppy.Generator.Version (collect, just, test)
+import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Interface.Core.QByteArray (c_QByteArray)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
 
@@ -49,6 +55,21 @@ c_QMetaEnum =
   classSetConversionToGc $
   classAddFeatures [Copyable] $
   classSetEntityPrefix "" $
-  makeClass (ident "QMetaEnum") Nothing []
-  [ -- TODO
+  makeClass (ident "QMetaEnum") Nothing [] $
+  collect
+  [ test (qtVersion >= [5, 12]) $ mkConstMethod "enumName" [] $ ptrT $ constT charT
+  , just $ mkConstMethod "isFlag" [] boolT
+  , test (qtVersion >= [5, 8]) $ mkConstMethod "isScoped" [] boolT
+  , just $ mkConstMethod "isValid" [] boolT
+  , just $ mkConstMethod "key" [intT] $ ptrT $ constT charT
+  , just $ mkConstMethod "keyCount" [] intT
+  , just $ mkConstMethod' "keyToValue" "keyToValue" [ptrT $ constT charT] intT 
+  , just $ mkConstMethod' "keyToValue" "keyToValueWithBool" [ptrT $ constT charT, ptrT boolT] intT 
+  , just $ mkConstMethod' "keysToValue" "keysToValue" [ptrT $ constT charT] intT 
+  , just $ mkConstMethod' "keysToValue" "keysToValueWithBool" [ptrT $ constT charT, ptrT boolT] intT 
+  , just $ mkConstMethod "name" [] $ ptrT $ constT charT
+  , just $ mkConstMethod "scope" [] $ ptrT $ constT charT
+  , just $ mkConstMethod "value" [intT] intT
+  , just $ mkConstMethod "valueToKey" [intT] $ ptrT $ constT charT
+  , just $ mkConstMethod "valueToKeys" [intT] $ objT c_QByteArray
   ]
