@@ -47,14 +47,14 @@ import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
   c_ListenerQSystemTrayIconActivationReason,
   )
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QMenu (c_QMenu)
-import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
+import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModuleWithMinVersion)
 import Graphics.UI.Qtah.Generator.Types
 
 {-# ANN module "HLint: ignore Use camelCase" #-}
 
 aModule =
   AQtModule $
-  makeQtModule ["Widgets", "QSystemTrayIcon"] $
+  makeQtModuleWithMinVersion ["Widgets", "QSystemTrayIcon"] [4, 2] $
   QtExport (ExportClass c_QSystemTrayIcon) :
   map QtExportSignal signals ++
   [ QtExport $ ExportEnum e_ActivationReason
