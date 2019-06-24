@@ -20,7 +20,7 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QTextEdit (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportEnum, ExportClass),
+  Export (ExportEnum, ExportBitspace, ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -59,7 +59,10 @@ aModule =
   makeQtModule ["Widgets", "QTextEdit"] $
   QtExport (ExportClass c_QTextEdit) :
   map QtExportSignal signals ++
-  [ QtExport $ ExportEnum e_LineWrapMode ]
+  [ QtExport $ ExportEnum e_LineWrapMode
+  , QtExport $ ExportEnum e_AutoFormattingFlag
+  , QtExport $ ExportBitspace bs_AutoFormatting
+  ]
 
 c_QTextEdit =
   addReqIncludes [includeStd "QTextEdit"] $
@@ -73,7 +76,7 @@ c_QTextEdit =
   , mkProp "alignment" $ bitspaceT bs_Alignment
   , mkConstMethod "anchorAt" [objT c_QPoint] $ objT c_QString
   , mkMethod "append" [objT c_QString] voidT
-    -- TODO autoFormatting
+  , mkProp "autoFormatting" $ enumT e_AutoFormattingFlag
   , mkConstMethod "canPaste" [] boolT
   , mkMethod "clear" [] voidT
   , mkMethod "copy" [] voidT
@@ -148,4 +151,11 @@ e_LineWrapMode =
   , (1, ["widget", "width"])
   , (2, ["fixed", "pixel", "width"])
   , (3, ["fixed", "column", "width"])
+  ]
+
+(e_AutoFormattingFlag, bs_AutoFormatting) =
+  makeQtEnumBitspace (ident1 "QTextEdit" "AutoFormattingFlag") "AutoFormatting" [includeStd "QTextEdit"]
+  [ (0, ["auto", "none"])
+  , (0x00000001, ["auto", "bullet", "list"])
+  , (0xffffffff, ["auto", "all"])
   ]
