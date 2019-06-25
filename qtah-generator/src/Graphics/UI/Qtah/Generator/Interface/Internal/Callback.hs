@@ -49,6 +49,7 @@ import Graphics.UI.Qtah.Generator.Interface.Core.QDate (c_QDate)
 import Graphics.UI.Qtah.Generator.Interface.Core.QEvent (c_QEvent)
 import Graphics.UI.Qtah.Generator.Interface.Core.QItemSelection (c_QItemSelection)
 import Graphics.UI.Qtah.Generator.Interface.Core.QModelIndex (c_QModelIndex)
+import Graphics.UI.Qtah.Generator.Interface.Core.QList (c_QListQModelIndex)
 import Graphics.UI.Qtah.Generator.Interface.Core.QObject (c_QObject)
 import Graphics.UI.Qtah.Generator.Interface.Core.QPoint (c_QPoint)
 import Graphics.UI.Qtah.Generator.Interface.Core.QSize (c_QSize)
@@ -112,6 +113,7 @@ aModule =
       , just $ ExportCallback cb_PtrQObjectVoid
       , just $ ExportCallback cb_PtrQPaintEventVoid
       , just $ ExportCallback cb_RefConstQModelIndexVoid
+      , just $ ExportCallback cb_RefConstQListQModelIndexVoid
       , just $ ExportCallback cb_PtrQTreeWidgetItemVoid
       , just $ ExportCallback cb_PtrQTreeWidgetItemIntVoid
       , just $ ExportCallback cb_PtrQTreeWidgetItemPtrQTreeWidgetItemVoid
@@ -213,6 +215,11 @@ cb_RefConstQModelIndexVoid :: Callback
 cb_RefConstQModelIndexVoid =
   makeCallback (toExtName "CallbackRefConstQModelIndexVoid")
   [refT $ constT $ objT c_QModelIndex] voidT
+
+cb_RefConstQListQModelIndexVoid :: Callback
+cb_RefConstQListQModelIndexVoid =
+  makeCallback (toExtName "CallbackRefConstQListQModelIndexVoid")
+  [refT $ constT $ objT c_QListQModelIndex] voidT
 
 cb_PtrQTreeWidgetItemVoid :: Callback
 cb_PtrQTreeWidgetItemVoid =

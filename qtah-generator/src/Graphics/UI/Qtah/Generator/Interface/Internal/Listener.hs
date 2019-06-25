@@ -146,6 +146,13 @@ c_ListenerRefConstQModelIndexVoid =
   , S.mkMethod "connectListener" [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT
   ]  
 
+c_ListenerRefConstQListQModelIndexVoid =
+  S.makeClass (S.ident "ListenerRefConstQListQModelIndex") Nothing [QObject.c_QObject]
+  [ S.mkCtor "new" [S.callbackT C.cb_RefConstQListQModelIndexVoid]
+  , S.mkCtor "newWithParent" [S.callbackT C.cb_RefConstQListQModelIndexVoid, S.ptrT $ S.objT QObject.c_QObject]
+  , S.mkMethod "connectListener" [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT
+  ]  
+
 c_ListenerPtrQTreeWidgetItem =
   S.makeClass (S.ident "ListenerPtrQTreeWidgetItem") Nothing [QObject.c_QObject]
   [ S.mkCtor "new" [S.callbackT C.cb_PtrQTreeWidgetItemVoid]
@@ -411,6 +418,7 @@ aModule =
       , V.just $ S.ExportClass c_ListenerPtrQAction
       , V.just $ S.ExportClass c_ListenerPtrQObject
       , V.just $ S.ExportClass c_ListenerRefConstQModelIndexVoid
+      , V.just $ S.ExportClass c_ListenerRefConstQListQModelIndexVoid
       , V.just $ S.ExportClass c_ListenerPtrQTreeWidgetItem
       , V.just $ S.ExportClass c_ListenerPtrQTreeWidgetItemInt
       , V.just $ S.ExportClass c_ListenerPtrQTreeWidgetItemPtrQTreeWidgetItem

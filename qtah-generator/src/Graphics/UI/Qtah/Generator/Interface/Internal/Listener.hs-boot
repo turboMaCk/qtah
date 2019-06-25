@@ -45,4 +45,5 @@ c_ListenerToolButtonStyle :: Class
 c_ListenerWindowModality :: Class
 c_ListenerWindowState :: Class
 c_ListenerRefConstQModelIndexVoid :: Class
+c_ListenerRefConstQListQModelIndexVoid :: Class
 c_Listener :: Class

@@ -99,6 +99,7 @@ forEachListener() {
     $fn QDate "QDate"
     $fn QDockWidgetFeatures "QDockWidget::DockWidgetFeatures"
     $fn RefConstQModelIndex "const QModelIndex&"
+    $fn RefConstQListQModelIndex "const QList<QModelIndex>&"
     $fn QModelIndex "QModelIndex"
     $fn QModelIndexIntInt "QModelIndex|int|int"
     $fn QModelIndexIntIntQModelIndexInt "QModelIndex|int|int|QModelIndex|int"
