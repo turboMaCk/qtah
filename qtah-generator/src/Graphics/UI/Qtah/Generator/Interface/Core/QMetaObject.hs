@@ -43,7 +43,7 @@ import Foreign.Hoppy.Generator.Types (boolT, constT, intT, objT, ptrT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QMetaClassInfo (c_QMetaClassInfo)
 import Graphics.UI.Qtah.Generator.Interface.Core.QMetaEnum (c_QMetaEnum)
 import Graphics.UI.Qtah.Generator.Interface.Core.QMetaMethod (c_QMetaMethod)
-import Graphics.UI.Qtah.Generator.Interface.Core.QMetaProperty (c_QMetaProperty)
+import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Core.QMetaProperty (c_QMetaProperty)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types

@@ -28,12 +28,21 @@ import Foreign.Hoppy.Generator.Spec (
   ident,
   includeStd,
   makeClass,
+  mkConstMethod,
+  mkConstMethod',
+  mkMethod,
   )
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Copyable),
   classAddFeatures,
   )
---import Foreign.Hoppy.Generator.Types (boolT, intT, objT, ptrT, refT, voidT)
+import Foreign.Hoppy.Generator.Types (voidT, boolT, intT, objT, ptrT, refT, voidT, enumT, constT, charT)
+import Foreign.Hoppy.Generator.Version (collect, just, test)
+import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Interface.Core.QMetaEnum (c_QMetaEnum)
+import Graphics.UI.Qtah.Generator.Interface.Core.QMetaMethod (c_QMetaMethod)
+import Graphics.UI.Qtah.Generator.Interface.Core.QObject (c_QObject)
+import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Core.QVariant (c_QVariant, e_Type)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
 
@@ -49,6 +58,38 @@ c_QMetaProperty =
   classSetConversionToGc $
   classAddFeatures [Copyable] $
   classSetEntityPrefix "" $
-  makeClass (ident "QMetaProperty") Nothing []
-  [ -- TODO
+  makeClass (ident "QMetaProperty") Nothing [] $
+  collect
+  [ just $ mkConstMethod "enumerator" [] $ objT c_QMetaEnum
+  , just $ mkConstMethod "hasNotifySignal" [] boolT
+  , test (qtVersion >= [4, 6]) $ mkConstMethod "isConstant" [] boolT
+  , just $ mkConstMethod' "isDesignable" "isDesignable" [] boolT
+  , just $ mkConstMethod' "isDesignable" "isDesignableWithObject" [ptrT $ constT $ objT c_QObject] boolT
+  , just $ mkConstMethod "isEnumType" [] boolT
+  , test (qtVersion >= [4, 6]) $ mkConstMethod "isFinal" [] boolT
+  , just $ mkConstMethod "isFlagType" [] boolT
+  , just $ mkConstMethod "isReadable" [] boolT
+  , just $ mkConstMethod "isResettable" [] boolT
+  , just $ mkConstMethod' "isScriptable" "isScriptable" [] boolT
+  , just $ mkConstMethod' "isScriptable" "isScriptableWithObject" [ptrT $ constT $ objT c_QObject] boolT
+  , just $ mkConstMethod' "isStored" "isStored" [] boolT
+  , just $ mkConstMethod' "isStored" "isStoredWithObject" [ptrT $ constT $ objT c_QObject] boolT
+  , just $ mkConstMethod' "isUser" "isUser" [] boolT
+  , just $ mkConstMethod' "isUser" "isUserWithObject" [ptrT $ constT $ objT c_QObject] boolT
+  , just $ mkConstMethod "isValid" [] boolT
+  , just $ mkConstMethod "isWritable" [] boolT
+  , just $ mkConstMethod "name" [] $ ptrT $ constT charT
+  , test (qtVersion >= [4, 5]) $ mkConstMethod "notifySignal" [] $ objT c_QMetaMethod
+  , test (qtVersion >= [4, 6]) $ mkConstMethod "notifySignalIndex" [] intT
+  , test (qtVersion >= [4, 6]) $ mkConstMethod "propertyIndex" [] intT
+  , just $ mkConstMethod "read" [ptrT $ constT $ objT c_QObject] $ objT c_QVariant
+  , test (qtVersion >= [5, 5]) $ mkConstMethod "readOnGadget" [ptrT $ constT voidT] $ objT c_QVariant
+  , just $ mkConstMethod "reset" [ptrT $ objT c_QObject] boolT
+  , test (qtVersion >= [5, 5]) $ mkConstMethod "resetOnGadget" [ptrT voidT] boolT
+  , test (qtVersion >= [5, 1]) $ mkConstMethod "revision" [] intT
+  , just $ mkConstMethod' "type" "typeMetaProperty" [] $ enumT e_Type
+  , just $ mkConstMethod "typeName" [] $ ptrT $ constT charT
+  , test (qtVersion >= [4, 2]) $ mkConstMethod "userType" [] intT
+  , just $ mkConstMethod "write" [ptrT $ objT c_QObject, refT $ constT $ objT c_QVariant] boolT
+  , test (qtVersion >= [5, 5]) $ mkConstMethod "writeOnGadget" [ptrT voidT, refT $ constT $ objT c_QVariant] boolT
   ]

@@ -15,13 +15,10 @@
 -- You should have received a copy of the GNU Lesser General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-module Graphics.UI.Qtah.Generator.Interface.Core.QVariant (
-  c_QVariant,
-  e_Type,
+module Graphics.UI.Qtah.Generator.Interface.Core.QMetaProperty (
+  c_QMetaProperty,
   ) where
 
-import Foreign.Hoppy.Generator.Spec (Class, CppEnum)
+import Foreign.Hoppy.Generator.Spec (Class)
 
-c_QVariant :: Class
-
-e_Type :: CppEnum
+c_QMetaProperty :: Class
