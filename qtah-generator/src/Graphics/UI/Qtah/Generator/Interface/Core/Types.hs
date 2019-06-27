@@ -353,16 +353,16 @@ e_GlobalColor =
 
 (e_ImageConversionFlag, fl_ImageConversionFlags) =
   makeQtEnumAndFlags (ident1 "Qt" "ImageConversionFlag") "ImageConversionFlags" qtInclude
-  -- TODO Lots of synonyms for 0x0.  Hoppy doesn't support these.  We only
-  -- include AutoColor and leave out e.g. DiffuseDither, ThresholdAlphaDither.
-  [ "AutoColor"
-    -- Color/mono preference:
+  [ -- Color/mono preference:
+    "AutoColor"
   , "ColorOnly"
   , "MonoOnly"
     -- Dithering mode preference for RGB channels:
+  , "DiffuseDither"
   , "OrderedDither"
   , "ThresholdDither"
     -- Dithering mode preference for alpha channel:
+  , "ThresholdAlphaDither"
   , "OrderedAlphaDither"
   , "DiffuseAlphaDither"
     -- Color matching versus dithering preference:
