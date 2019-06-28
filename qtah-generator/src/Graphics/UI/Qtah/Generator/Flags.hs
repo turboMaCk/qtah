@@ -57,6 +57,7 @@ import Foreign.Hoppy.Generator.Spec (
   conversionSpecCppConversionType,
   conversionSpecHaskell,
   conversionSpecHaskellHsArgType,
+  conversionSpecHaskellHsType,
   evaluatedEnumType,
   evaluatedEnumValueMap,
   getAddendum,
@@ -198,7 +199,10 @@ makeConversion flags =
                 LH.addImports $ mconcat [hsImport1 "Prelude" "(.)",
                                          importForFlags,
                                          importForPrelude]
-                LH.sayLn "QtahP.return . QtahFlags.flagsToNum . QtahFlags.toFlags")
+                hsTypeStr <- LH.prettyPrint <$> conversionSpecHaskellHsType hs
+                LH.saysLn ["QtahP.return . QtahFlags.flagsToNum . ",
+                           "(`QtahP.asTypeOf` (QtahP.undefined :: (", hsTypeStr, "))). ",
+                           "QtahFlags.toFlags"])
              (CustomConversion $ do
                 LH.addImports $ mconcat [hsImport1 "Prelude" "(.)",
                                          importForFlags,
@@ -239,6 +243,7 @@ sayHsExport mode flags =
       -- Emit the newtype wrapper.
       LH.addExport typeName
       LH.addImports $ mconcat [hsImports "Prelude" ["($)", "(.)"],
+                               hsImports "Data.Bits" ["(.&.)", "(.|.)"],
                                importForBits,
                                importForFlags,
                                importForPrelude,
@@ -255,12 +260,14 @@ sayHsExport mode flags =
         LH.saysLn ["enumToFlags = ", ctorName, " . QtahFHR.fromCppEnum"]
         LH.saysLn ["flagsToEnum (", ctorName, " x') = QtahFHR.toCppEnum x'"]
 
-      -- Emit IsFlags instances for both the flags and enum types.
+      -- Emit IsFlags instances for the flags, enum, and numeric types.
       LH.ln
       LH.saysLn ["instance QtahFlags.IsFlags ", typeName, " ", typeName,
                  " where toFlags = QtahP.id"]
       LH.saysLn ["instance QtahFlags.IsFlags ", typeName, " ", enumTypeName,
                  " where toFlags = QtahFlags.enumToFlags"]
+      LH.saysLn ["instance QtahFlags.IsFlags ", typeName, " (", numericTypeStr,
+                 ") where toFlags = QtahFlags.numToFlags"]
 
       -- Emit Haskell bindings for flags entries.
       forM_ (M.toList $ evaluatedEnumValueMap enumData) $ \(words, num) -> do

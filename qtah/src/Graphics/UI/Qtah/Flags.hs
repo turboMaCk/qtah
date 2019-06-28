@@ -15,10 +15,8 @@
 -- You should have received a copy of the GNU Lesser General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
--- Is it worse to allow bitwise operations for enum values in places where
--- they're not allowed, or to force the user to use separate identifiers for
--- flags values?
-
+-- | Support for Qt flags, which are bitwise combinations of enum values wrapped
+-- in @QFlags@.
 module Graphics.UI.Qtah.Flags (
   Flags (..),
   IsFlags (..),
@@ -28,18 +26,35 @@ module Graphics.UI.Qtah.Flags (
 
 import Foreign.Hoppy.Runtime (CppEnum, fromCppEnum, toCppEnum)
 
+-- | A C++ enum @e@ with numeric type @n@ can have an associated type @f@ that
+-- represents a corresponding @QFlags@ instance.
 class CppEnum n e => Flags n e f | e -> f, f -> e, f -> n where
+  -- | Converts an enum value to a 'Flags' value.
   enumToFlags :: e -> f
 
+  -- | Converts a 'Flags' value to an enum value.
   flagsToEnum :: f -> e
 
+-- | Builds a 'Flags' value representing a raw number.
 numToFlags :: Flags n e f => n -> f
 numToFlags = enumToFlags . toCppEnum
 
+-- | Extracts the raw numeric value in a 'Flags' value.
 flagsToNum :: Flags n e f => f -> n
 flagsToNum = fromCppEnum . flagsToEnum
 
--- | A class of types that can be convered to @QFlags@ instances.  This class is
--- used as a constraint in functions that expect Qt flags values as arguments.
-class IsFlags f a | a -> f where
+-- | A class of types that can be convered to 'Flags' instances representing
+-- @QFlags@.  This class is used as a constraint in functions that expect Qt
+-- flags values as arguments.  Each 'Flags' type @f@ gets instances for itself,
+-- its enum type, and its underlying numeric type.  In other words, for a
+-- concrete flags type @F@ with enum type @E@ and numeric type @N@, there will
+-- be the following instances:
+--
+-- > instance CppEnum N E
+-- > instance Flags N E F
+-- > instance IsFlags F F
+-- > instance IsFlags F N
+-- > instance IsFlags F E
+class IsFlags f a where
+  -- | Builds a 'Flags' value from a value that can be used as input.
   toFlags :: a -> f

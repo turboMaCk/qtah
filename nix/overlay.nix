@@ -19,13 +19,18 @@ let
 
   qtName = "qt5";
 
+  haskellOptions =
+    if builtins.pathExists ../config.nix
+    then import ../config.nix
+    else {};
+
   haskellOverrides = super: hself: hsuper:
     let qtbase = super.${qtName}.qtbase;
     in {
-      qtah-generator = hsuper.callPackage ../qtah-generator {};
-      qtah-cpp = hsuper.callPackage ../qtah-cpp { qt = qtbase; };
-      qtah = hsuper.callPackage ../qtah { qt = qtbase; };
-      qtah-examples = hsuper.callPackage ../qtah-examples {};
+      qtah-generator = hsuper.callPackage ../qtah-generator haskellOptions;
+      qtah-cpp = hsuper.callPackage ../qtah-cpp (haskellOptions // { qt = qtbase; });
+      qtah = hsuper.callPackage ../qtah (haskellOptions // { qt = qtbase; });
+      qtah-examples = hsuper.callPackage ../qtah-examples haskellOptions;
     };
 
 in self: super: {

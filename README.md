@@ -237,8 +237,11 @@ have to manage objects you didn't create explicitly with a constructor call.
 
 ## Developing
 
-Patches welcome!  Please enable the pre-commit hook at `scripts/git-pre-commit`
-which checks lint and copyright/license issues:
+The Qtah `master` branch tracks the latest Hoppy release.  There may also be a
+`next` branch which tracks unreleased Hoppy `master`.
+
+Patches are welcome!  Please enable the pre-commit hook at
+`scripts/git-pre-commit` which checks lint and copyright/license issues:
 
     $ ln -s ../../scripts/git-pre-commit .git/hooks/pre-commit
 

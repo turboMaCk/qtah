@@ -2,9 +2,42 @@
 
 ## Unreleased
 
+This release primarily adds support for Hoppy 0.6, including all of its new
+features and changes.  For more details, see its changelog.
+
+- [API change] `QFlags` are now implemented in Qtah itself, rather than relying
+  on Bitspaces from Hoppy.  There are new `Flags` and `IsFlags` typeclasses to
+  replace the old `IsFooBitspace` per-bitspace typeclasses.
+
+- [API change] Passing this on from Hoppy, there are some important changes to
+  enums.
+
+  One: All enums are now capable of representing unknown values, i.e. if Qt
+  defines values that Qtah doesn't, Qtah code will no longer invoke `error` on
+  seeing such a value.  There is an additional "Unknown" data constructor on
+  each enum that holds a number.  GHC will warn about these if you don't pattern
+  match against them.
+
+  Two: Hoppy previously had issues when two enum entries had the same numeric
+  value, so we just picked an arbitrary one.  Hoppy now supports this, so we can
+  start including all enum entries.  For now, we've just added some entries ofxs
+  `ImageConversionFlag`.
+
+  Three: Enums no longer have instances for `Bounded` and `Enum`.  Instead, they
+  have instances for a new `CppEnum` typeclass provided by Hoppy.  The `Bounded`
+  and `Enum` instances weren't implemented correctly.
+
+  Four: Hoppy now handles enum numeric types correctly rather than assuming
+  everything is an `Int`.  This might require you to perform additional casts
+  for type safety.
+
 - Removed uses of CPP from qtah-generator, except for Setup.hs.  This bumps
   minimum version requirements to base >= 4.8.0 (GHC 8.0) and mtl >= 2.2.1, both
   of which have been available for over two years.
+
+- The Nix expressions, which had long been languishing, have been brought up to
+  date, and now make use of Nix overlays.  The example now includes Nix
+  expressions.
 
 ## (2018-09-07) qtah-0.5.1
 

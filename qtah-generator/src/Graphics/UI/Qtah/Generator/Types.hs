@@ -40,6 +40,7 @@ import Foreign.Hoppy.Generator.Spec (
   Include,
   addReqIncludes,
   enumAddEntryNameOverrides,
+  enumSetHasBitOperations,
   enumSetValuePrefix,
   identifierParts,
   idPartBase,
@@ -77,6 +78,7 @@ makeQtEnum :: Identifier -> [Include] -> [String] -> CppEnum
 makeQtEnum identifier includes names =
   addReqIncludes includes $
   enumSetValuePrefix "" $
+  enumSetHasBitOperations False $
   addEntryOverrides $
   makeAutoEnum identifier
                (Just $ toExtName $ concatMap idPartBase $ identifierParts identifier)
@@ -105,6 +107,10 @@ makeQtEnumAndFlags' enumIdentifier flagsName includes names nameOverrides =
       flags = makeFlags enum flagsName
   in (enum, flags)
 
+-- | Global enum entry name overrides.  These are applied to all enum entries,
+-- to handle the cases where they overlap with Haskell keywords.
+--
+-- TODO Fill these out based on enums we're defined so far.
 enumNameOverrides :: [(String, String)]
 enumNameOverrides =
   [ ("Type", "Typ")
