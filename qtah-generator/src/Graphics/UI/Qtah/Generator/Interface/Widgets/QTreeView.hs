@@ -51,7 +51,7 @@ import Graphics.UI.Qtah.Generator.Types
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (e_SortOrder)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
   c_Listener,
-  c_ListenerRefConstQModelIndexVoid,
+  c_ListenerRefConstQModelIndex,
   )
 
 {-# ANN module "HLint: ignore Use camelCase" #-}
@@ -129,6 +129,6 @@ c_QTreeView =
 
 signals :: [Signal]
 signals =
-  [ makeSignal c_QTreeView "collapsed" c_ListenerRefConstQModelIndexVoid
-  , makeSignal c_QTreeView "expanded" c_ListenerRefConstQModelIndexVoid
+  [ makeSignal c_QTreeView "collapsed" c_ListenerRefConstQModelIndex
+  , makeSignal c_QTreeView "expanded" c_ListenerRefConstQModelIndex
   ]

@@ -45,7 +45,7 @@ import Graphics.UI.Qtah.Generator.Interface.Core.QModelIndex (c_QModelIndex)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QAbstractItemView (e_ScrollHint)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QAbstractItemView (c_QAbstractItemView)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
-import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Internal.Listener (c_ListenerRefConstQListQModelIndexVoid)
+import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Internal.Listener (c_ListenerRefConstQListQModelIndex)
 import Graphics.UI.Qtah.Generator.Types
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (bs_Alignment)
 
@@ -97,7 +97,7 @@ c_QListView =
 
 signals = 
   collect
-  [ test (qtVersion >= [4, 2]) $ makeSignal c_QListView "indexesMoved" c_ListenerRefConstQListQModelIndexVoid ]
+  [ test (qtVersion >= [4, 2]) $ makeSignal c_QListView "indexesMoved" c_ListenerRefConstQListQModelIndex ]
 
 
 e_Flow = 

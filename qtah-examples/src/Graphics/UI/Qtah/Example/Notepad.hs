@@ -38,6 +38,7 @@ import qualified Graphics.UI.Qtah.Widgets.QMenu as QMenu
 import qualified Graphics.UI.Qtah.Widgets.QMenuBar as QMenuBar
 import qualified Graphics.UI.Qtah.Widgets.QMessageBox as QMessageBox
 import qualified Graphics.UI.Qtah.Widgets.QTextEdit as QTextEdit
+import qualified Graphics.UI.Qtah.Core.QObject as QObject
 import Graphics.UI.Qtah.Widgets.QTextEdit (
   QTextEdit,
   copyAvailableSignal,

@@ -37,6 +37,7 @@ import qualified Graphics.UI.Qtah.Generator.Interface.Core.QMetaClassInfo as QMe
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QMetaEnum as QMetaEnum
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QMetaMethod as QMetaMethod
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QMetaObject as QMetaObject
+import qualified Graphics.UI.Qtah.Generator.Interface.Core.Connection as Connection
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QMetaProperty as QMetaProperty
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QModelIndex as QModelIndex
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QObject as QObject
@@ -86,6 +87,7 @@ modules =
     , QMetaEnum.aModule
     , QMetaMethod.aModule
     , QMetaObject.aModule
+    , Connection.aModule
     , QMetaProperty.aModule
     , QModelIndex.aModule
     , QObject.aModule

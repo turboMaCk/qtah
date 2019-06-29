@@ -60,6 +60,7 @@ library
     , Graphics.UI.Qtah.Core.QMetaEnum
     , Graphics.UI.Qtah.Core.QMetaMethod
     , Graphics.UI.Qtah.Core.QMetaObject
+    , Graphics.UI.Qtah.Core.Connection
     , Graphics.UI.Qtah.Core.QMetaProperty
     , Graphics.UI.Qtah.Core.QModelIndex
     , Graphics.UI.Qtah.Core.QObject
@@ -244,6 +245,7 @@ library
     , Graphics.UI.Qtah.Generated.Core.QMetaEnum
     , Graphics.UI.Qtah.Generated.Core.QMetaMethod
     , Graphics.UI.Qtah.Generated.Core.QMetaObject
+    , Graphics.UI.Qtah.Generated.Core.Connection
     , Graphics.UI.Qtah.Generated.Core.QMetaProperty
     , Graphics.UI.Qtah.Generated.Core.QModelIndex
     , Graphics.UI.Qtah.Generated.Core.QObject

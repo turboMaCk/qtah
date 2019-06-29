@@ -26,6 +26,8 @@ c_ListenerQAbstractSliderAction :: Class
 c_ListenerQClipboardMode :: Class
 c_ListenerQDate :: Class
 c_ListenerQDockWidgetFeatures :: Class
+c_ListenerRefConstQModelIndex :: Class
+c_ListenerRefConstQListQModelIndex :: Class
 c_ListenerQModelIndex :: Class
 c_ListenerQModelIndexIntInt :: Class
 c_ListenerQModelIndexIntIntQModelIndexInt :: Class
@@ -44,6 +46,4 @@ c_ListenerToolBarAreas :: Class
 c_ListenerToolButtonStyle :: Class
 c_ListenerWindowModality :: Class
 c_ListenerWindowState :: Class
-c_ListenerRefConstQModelIndexVoid :: Class
-c_ListenerRefConstQListQModelIndexVoid :: Class
 c_Listener :: Class

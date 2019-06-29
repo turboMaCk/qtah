@@ -82,7 +82,7 @@ c_QCursor =
   , just $ mkMethod "setShape" [enumT e_CursorShape] voidT
   , just $ mkConstMethod "shape" [] $ enumT e_CursorShape
   , just $ mkMethod "swap" [refT $ objT c_QCursor] voidT
-  
+
     -- Static methods.
   , just $ mkStaticMethod "pos" [] $ objT c_QPoint
     -- TODO QPoint pos(const QScreen*)

@@ -73,6 +73,7 @@ executable qtah-generator
     , Graphics.UI.Qtah.Generator.Interface.Core.QMetaEnum
     , Graphics.UI.Qtah.Generator.Interface.Core.QMetaMethod
     , Graphics.UI.Qtah.Generator.Interface.Core.QMetaObject
+    , Graphics.UI.Qtah.Generator.Interface.Core.Connection
     , Graphics.UI.Qtah.Generator.Interface.Core.QMetaProperty
     , Graphics.UI.Qtah.Generator.Interface.Core.QModelIndex
     , Graphics.UI.Qtah.Generator.Interface.Core.QObject
