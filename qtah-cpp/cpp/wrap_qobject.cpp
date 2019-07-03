@@ -32,5 +32,29 @@ void setProperty(QObject& obj, const QString& propertyName, const QVariant& valu
     obj.setProperty(propertyName.toStdString().c_str(), value);
 }
 
+QMetaObject::Connection connect(const QObject* obj1, std::string slotname, const QObject* obj2, std::string signalname)
+{
+    std::string buf("2");
+    const char * signal_1 = buf.append(slotname).c_str();
+
+    std::string buf2("1");
+    const char * slot_1 = buf2.append(signalname).c_str();
+
+   return QObject::connect(obj1, signal_1, obj2, slot_1);
+}
+
+bool disconnect(const QObject* obj1, std::string slotname, const QObject* obj2, std::string signalname)
+{
+    std::string buf("2");
+    const char * signal_1 = buf.append(slotname).c_str();
+
+    std::string buf2("1");
+    const char * slot_1 = buf2.append(signalname).c_str();
+
+    bool disconnected_ = QObject::disconnect(obj1, signal_1, obj2, slot_1);
+    return disconnected_;
+}
+
+
 }  // namespace qobject
 }  // namespace qtah

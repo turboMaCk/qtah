@@ -22,7 +22,7 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QObject (
 
 import Foreign.Hoppy.Generator.Spec (
   Export (ExportClass),
-  MethodApplicability (MConst, MNormal),
+  MethodApplicability (MConst, MNormal, MStatic),
   Purity (Nonpure),
   addReqIncludes,
   classSetEntityPrefix,
@@ -52,6 +52,7 @@ import Graphics.UI.Qtah.Generator.Interface.Core.QMetaObject (c_QMetaObject)
 import Graphics.UI.Qtah.Generator.Interface.Core.QMetaMethod (c_QMetaMethod)
 import Graphics.UI.Qtah.Generator.Interface.Core.Connection (c_Connection)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
+import Foreign.Hoppy.Generator.Std.String (c_string)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Core.QThread (c_QThread)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Core.QVariant (c_QVariant)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
@@ -85,10 +86,14 @@ c_QObject =
   , just $ mkConstMethod' "connect" "connect" [ptrT $ constT $ objT c_QObject, ptrT $ constT charT, ptrT $ constT charT] $ objT c_Connection
   , just $ mkConstMethod' "connect" "connectWithType" [ptrT $ constT $ objT c_QObject, ptrT $ constT charT, ptrT $ constT charT, enumT e_ConnectionType] $ objT c_Connection
   
-  , just $ mkStaticMethod' "connect" "connectStatic" [ptrT $ constT $ objT c_QObject, ptrT $ constT charT, ptrT $ constT $ objT c_QObject, ptrT $ constT charT] $ objT c_Connection
   , just $ mkStaticMethod' "connect" "connectWithTypeStatic" [ptrT $ constT $ objT c_QObject, ptrT $ constT charT, ptrT $ constT $ objT c_QObject, ptrT $ constT charT, enumT e_ConnectionType] $ objT c_Connection
   , just $ mkStaticMethod' "connect" "connectWithSenderSignalStatic" [ptrT $ constT $ objT c_QObject, refT $ constT $ objT c_QMetaMethod, ptrT $ constT $ objT c_QObject, refT $ constT $ objT c_QMetaMethod] $ objT c_Connection
   , just $ mkStaticMethod' "connect" "connectWithSenderSignalTypeStatic" [ptrT $ constT $ objT c_QObject, refT $ constT $ objT c_QMetaMethod, ptrT $ constT $ objT c_QObject, refT $ constT $ objT c_QMetaMethod, enumT e_ConnectionType] $ objT c_Connection
+
+  , just $ makeFnMethod (ident2 "qtah" "qobject" "connect") "connectStatic" MStatic Nonpure
+    [ptrT $ constT $ objT c_QObject, objT c_string, ptrT $ constT $ objT c_QObject, objT c_string] $ objT c_Connection
+  , just $ makeFnMethod (ident2 "qtah" "qobject" "disconnect") "disconnectStatic" MStatic Nonpure
+    [ptrT $ constT $ objT c_QObject, objT c_string, ptrT $ constT $ objT c_QObject, objT c_string] boolT
 
 
   , just $ mkMethod "deleteLater" [] voidT

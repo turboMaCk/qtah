@@ -18,8 +18,13 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+#include <string>
+
+#include <Qt>
+#include <QtGlobal>
 #include <QObject>
 #include <QString>
+#include <QMetaObject>
 #include <QVariant>
 
 namespace qtah {
@@ -30,6 +35,9 @@ bool inherits(const QObject& obj, const QString& className);
 QVariant property(const QObject& obj, const QString& propertyName);
 
 void setProperty(QObject& obj, const QString& propertyName, const QVariant& value);
+
+QMetaObject::Connection connect(const QObject* obj1, std::string slotname, const QObject* obj2, std::string signalname);
+bool disconnect(const QObject* obj1, std::string slotname, const QObject* obj2, std::string signalname);
 
 }  // namespace qobject
 }  // namespace qtah

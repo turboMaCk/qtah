@@ -23,6 +23,7 @@ module Graphics.UI.Qtah.Example.Notepad (run) where
 import Control.Monad (forM_, unless, when)
 import Data.Bits ((.|.))
 import Data.Functor (void)
+import Foreign.C.String (newCString)
 import Data.IORef (IORef, newIORef, readIORef, writeIORef)
 import qualified Graphics.UI.Qtah.Core.QCoreApplication as QCoreApplication
 import Graphics.UI.Qtah.Event
@@ -32,6 +33,7 @@ import qualified Graphics.UI.Qtah.Core.QEvent as QEvent
 import qualified Graphics.UI.Qtah.Widgets.QAction as QAction
 import Graphics.UI.Qtah.Widgets.QAction (triggeredSignal)
 import qualified Graphics.UI.Qtah.Widgets.QFileDialog as QFileDialog
+import qualified Graphics.UI.Qtah.Core.QString as QString
 import qualified Graphics.UI.Qtah.Widgets.QMainWindow as QMainWindow
 import Graphics.UI.Qtah.Widgets.QMainWindow (QMainWindow)
 import qualified Graphics.UI.Qtah.Widgets.QMenu as QMenu
@@ -108,6 +110,13 @@ makeMainWindow = do
     continue <- confirmSaveIfDirty me "Quit"
     unless continue $ QEvent.ignore event
     return $ not continue
+
+  tt1 <- newCString "2textChanged()" >>= QString.newFromCString
+  tt2 <- newCString "1showMinimized()" >>= QString.newFromCString
+  ttt1 <- newCString "textChanged()"
+  ttt2 <- newCString "showMinimized()"
+
+  QObject.connectStatic text "textChanged()" window "showMinimized()" 
 
   connect_ menuFileNew triggeredSignal $ \_ -> fileNew me
   connect_ menuFileOpen triggeredSignal $ \_ -> fileOpen me
