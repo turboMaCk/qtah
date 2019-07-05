@@ -21,7 +21,7 @@ module Graphics.UI.Qtah.Core.Connection (
 
 import qualified Foreign.Hoppy.Runtime as QtahFHR
 import Graphics.UI.Qtah.Generated.Core.Connection
-import qualified Graphics.UI.Qtah.Generated.Core.Connection as M40
+import qualified Graphics.UI.Qtah.Generated.Core.Connection as M42
 import Prelude ()
 import qualified Prelude as QtahP
 
@@ -31,5 +31,5 @@ cast = toConnection
 downCastConst = downToConnectionConst
 downCast = downToConnection
 
-decode :: (ConnectionConstPtr this) => this -> QtahP.IO M40.Connection
+decode :: (ConnectionConstPtr this) => this -> QtahP.IO M42.Connection
 decode = QtahFHR.decode QtahP.. toConnectionConst

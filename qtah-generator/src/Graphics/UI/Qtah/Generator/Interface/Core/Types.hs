@@ -22,6 +22,7 @@ module Graphics.UI.Qtah.Generator.Interface.Core.Types (
   qulonglong,
   qlonglong,
   gluint,
+  e_QtMsgType,
   e_AlignmentFlag,
   bs_Alignment,
   e_AnchorPoint,
@@ -143,6 +144,7 @@ import Foreign.Hoppy.Generator.Spec (
   Purity (Nonpure),
   Type,
   addReqIncludes,
+  ident,
   ident1,
   includeStd,
   makeFn,
@@ -163,7 +165,8 @@ exports :: [QtExport]
 exports =
   QtExportSpecials :
   (map QtExport . collect)
-  [ just $ ExportEnum e_AlignmentFlag
+  [ test (qtVersion >= [5, 5]) $ ExportEnum e_QtMsgType
+  , just $ ExportEnum e_AlignmentFlag
   , just $ ExportBitspace bs_Alignment
   , just $ ExportEnum e_AnchorPoint
   , test (qtVersion >= [5, 1]) $ ExportEnum e_ApplicationState
@@ -274,7 +277,7 @@ exports =
   ]
 
 qtInclude :: [Include]
-qtInclude = [includeStd "Qt"]
+qtInclude = [includeStd "Qt", includeStd "QtGlobal"]
 
 qreal :: Type
 qreal = if qrealFloat then floatT else doubleT
@@ -287,6 +290,17 @@ qulonglong = word64T
 
 gluint :: Type
 gluint = word32T
+
+
+e_QtMsgType =
+  makeQtEnum (ident "QtMsgType") qtInclude
+  [ (0, ["qt", "debug", "msg"])
+  , (1, ["qt", "warning", "msg"])
+  , (2, ["qt", "critical", "msg"])
+  , (2, ["qt", "system", "msg"])
+  , (3, ["qt", "fatal", "msg"])
+  , (4, ["qt", "info", "msg"])
+  ]
 
 (e_AlignmentFlag, bs_Alignment) =
   makeQtEnumBitspace (ident1 "Qt" "AlignmentFlag") "Alignment" qtInclude
