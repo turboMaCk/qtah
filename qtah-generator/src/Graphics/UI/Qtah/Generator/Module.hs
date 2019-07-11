@@ -38,6 +38,7 @@ import Foreign.Hoppy.Generator.Language.Haskell (
   Generator,
   HsTypeSide (HsHsSide),
   addExport,
+  addExport',
   addExports,
   addExtension,
   addImports,
@@ -106,7 +107,12 @@ import Foreign.Hoppy.Generator.Spec.Enum (enumGetOverriddenEntryName, enumValues
 import Foreign.Hoppy.Generator.Types (objT)
 import Graphics.UI.Qtah.Generator.Config (Version, qrealFloat, qtVersion)
 import Graphics.UI.Qtah.Generator.Common (fromMaybeM)
-import Graphics.UI.Qtah.Generator.Flags (flagsEnum, toHsFlagsBindingName', toHsFlagsTypeName')
+import Graphics.UI.Qtah.Generator.Flags (
+  flagsEnum,
+  toHsFlagsBindingName',
+  toHsFlagsTypeName',
+  toHsFlagsTypeclassName',
+  )
 import Graphics.UI.Qtah.Generator.Types (
   QtExport (
     QtExport,
@@ -326,8 +332,10 @@ sayQtExport path qtExport = case qtExport of
         doExportFlags flags = do
           let enum = flagsEnum flags
               typeName = toHsFlagsTypeName' flags
-          -- Re-export the data type.
+              typeclassName = toHsFlagsTypeclassName' flags
+          -- Re-export the data type and typeclass.
           addExport typeName
+          addExport' typeclassName
           -- Re-export the entries' bindings.
           forM_ (enumValueMapNames $ enumValues enum) $ \words -> do
             let words' = enumGetOverriddenEntryName Haskell enum words

@@ -6,8 +6,11 @@ This release primarily adds support for Hoppy 0.6, including all of its new
 features and changes.  For more details, see its changelog.
 
 - [API change] `QFlags` are now implemented in Qtah itself, rather than relying
-  on Bitspaces from Hoppy.  There are new `Flags` and `IsFlags` typeclasses to
-  replace the old `IsFooBitspace` per-bitspace typeclasses.
+  on Bitspaces from Hoppy.  There is a new `Flags` typeclasses to complement the
+  old `IsFooBitspace` per-bitspace typeclasses.  This new typeclass links a
+  flags type together with its enum and raw numeric types.  The `IsFooBitspace`
+  typeclasses no longer have instances for `Int`, to make conversions between
+  numeric types more explicit.
 
 - [API change] Passing this on from Hoppy, there are some important changes to
   enums.
@@ -20,7 +23,7 @@ features and changes.  For more details, see its changelog.
 
   Two: Hoppy previously had issues when two enum entries had the same numeric
   value, so we just picked an arbitrary one.  Hoppy now supports this, so we can
-  start including all enum entries.  For now, we've just added some entries ofxs
+  start including all enum entries.  For now, we've just added some entries of
   `ImageConversionFlag`.
 
   Three: Enums no longer have instances for `Bounded` and `Enum`.  Instead, they

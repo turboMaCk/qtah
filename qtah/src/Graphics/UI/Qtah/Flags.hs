@@ -19,7 +19,6 @@
 -- in @QFlags@.
 module Graphics.UI.Qtah.Flags (
   Flags (..),
-  IsFlags (..),
   numToFlags,
   flagsToNum,
   ) where
@@ -42,19 +41,3 @@ numToFlags = enumToFlags . toCppEnum
 -- | Extracts the raw numeric value in a 'Flags' value.
 flagsToNum :: Flags n e f => f -> n
 flagsToNum = fromCppEnum . flagsToEnum
-
--- | A class of types that can be convered to 'Flags' instances representing
--- @QFlags@.  This class is used as a constraint in functions that expect Qt
--- flags values as arguments.  Each 'Flags' type @f@ gets instances for itself,
--- its enum type, and its underlying numeric type.  In other words, for a
--- concrete flags type @F@ with enum type @E@ and numeric type @N@, there will
--- be the following instances:
---
--- > instance CppEnum N E
--- > instance Flags N E F
--- > instance IsFlags F F
--- > instance IsFlags F N
--- > instance IsFlags F E
-class IsFlags f a where
-  -- | Builds a 'Flags' value from a value that can be used as input.
-  toFlags :: a -> f

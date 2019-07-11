@@ -29,6 +29,7 @@ module Graphics.UI.Qtah.Generator.Flags (
   -- * Haskell generator
   -- ** Names
   toHsFlagsTypeName',
+  toHsFlagsTypeclassName',
   toHsFlagsBindingName,
   toHsFlagsBindingName',
   ) where
@@ -103,8 +104,8 @@ import Language.Haskell.Syntax (
 --
 -- In generated Haskell code, in addition to what is generated for the
 -- 'Enum.CppEnum', we generate a newtype wrapper around an enum value to
--- represent a combination of flags, and @IsFlags@ instances for converting both
--- enum and newtype'd values to a newtype'd value.
+-- represent a combination of flags, and an @IsXXX@ typeclass for converting
+-- various types (flags type, enum type, raw number) to a newtype'd value.
 data Flags = Flags
   { flagsExtName :: ExtName
   , flagsIdentifier :: Identifier
@@ -199,23 +200,18 @@ makeConversion flags =
                 LH.addImports $ mconcat [hsImport1 "Prelude" "(.)",
                                          importForFlags,
                                          importForPrelude]
+                convertFn <- toHsFlagsConvertFnName flags
                 hsTypeStr <- LH.prettyPrint <$> conversionSpecHaskellHsType hs
-                LH.saysLn ["QtahP.return . QtahFlags.flagsToNum . ",
-                           "(`QtahP.asTypeOf` (QtahP.undefined :: (", hsTypeStr, "))). ",
-                           "QtahFlags.toFlags"])
+                LH.saysLn ["QtahP.return . QtahFlags.flagsToNum . ", convertFn])
              (CustomConversion $ do
                 LH.addImports $ mconcat [hsImport1 "Prelude" "(.)",
                                          importForFlags,
                                          importForPrelude]
                 LH.sayLn "QtahP.return . QtahFlags.numToFlags"))
           { conversionSpecHaskellHsArgType = Just $ \typeVar -> do
-              typeName <- LH.toHsTypeName Nonconst extName
+              typeclassName <- toHsFlagsTypeclassName flags
               return $
-                HsQualType [ (UnQual $ HsIdent "QtahFlags.IsFlags",
-                              [ HsTyCon $ UnQual $ HsIdent typeName
-                              , HsTyVar typeVar
-                              ])
-                           ] $
+                HsQualType [(UnQual $ HsIdent typeclassName, [HsTyVar typeVar])] $
                 HsTyVar typeVar
           }
 
@@ -232,6 +228,8 @@ sayHsExport mode flags =
 
     LH.SayExportDecls -> do
       typeName <- toHsFlagsTypeName flags
+      typeclassName <- toHsFlagsTypeclassName flags
+      convertFnName <- toHsFlagsConvertFnName flags
       -- We'll use the type name as the data constructor name as well:
       let ctorName = typeName
           enum = flagsEnum flags
@@ -260,14 +258,22 @@ sayHsExport mode flags =
         LH.saysLn ["enumToFlags = ", ctorName, " . QtahFHR.fromCppEnum"]
         LH.saysLn ["flagsToEnum (", ctorName, " x') = QtahFHR.toCppEnum x'"]
 
-      -- Emit IsFlags instances for the flags, enum, and numeric types.
+      -- Emit an IsXXX typeclass with a method to convert arguments to flag
+      -- values.
+      LH.addExport' typeclassName
       LH.ln
-      LH.saysLn ["instance QtahFlags.IsFlags ", typeName, " ", typeName,
-                 " where toFlags = QtahP.id"]
-      LH.saysLn ["instance QtahFlags.IsFlags ", typeName, " ", enumTypeName,
-                 " where toFlags = QtahFlags.enumToFlags"]
-      LH.saysLn ["instance QtahFlags.IsFlags ", typeName, " (", numericTypeStr,
-                 ") where toFlags = QtahFlags.numToFlags"]
+      LH.saysLn ["class ", typeclassName, " a where"]
+      LH.indent $ do
+        LH.saysLn [convertFnName, " :: a -> ", typeName]
+
+      -- Emit IsXXX instances for the flags, enum, and numeric types.
+      LH.ln
+      LH.saysLn ["instance ", typeclassName, " ", typeName,
+                 " where ", convertFnName, " = QtahP.id"]
+      LH.saysLn ["instance ", typeclassName, " ", enumTypeName,
+                 " where ", convertFnName, " = QtahFlags.enumToFlags"]
+      LH.saysLn ["instance ", typeclassName, " (", numericTypeStr,
+                 ") where ", convertFnName, " = QtahFlags.numToFlags"]
 
       -- Emit Haskell bindings for flags entries.
       forM_ (M.toList $ evaluatedEnumValueMap enumData) $ \(words, num) -> do
@@ -315,6 +321,8 @@ sayHsExport mode flags =
     LH.SayExportBoot -> do
       -- Emit a minimal version of the regular binding code.
       typeName <- toHsFlagsTypeName flags
+      typeclassName <- toHsFlagsTypeclassName flags
+      convertFnName <- toHsFlagsConvertFnName flags
       -- We'll use the type name as the data constructor name as well:
       let ctorName = typeName
           enum = flagsEnum flags
@@ -334,8 +342,14 @@ sayHsExport mode flags =
       LH.ln
       LH.saysLn ["instance QtahFlags.Flags (", numericTypeStr, ") ", enumTypeName, " ", typeName]
       LH.ln
-      LH.saysLn ["instance QtahFlags.IsFlags ", typeName, " ", typeName]
-      LH.saysLn ["instance QtahFlags.IsFlags ", typeName, " ", enumTypeName]
+      LH.addExport' typeclassName
+      LH.saysLn ["class ", typeclassName, " a where"]
+      LH.indent $ do
+        LH.saysLn [convertFnName, " :: a -> ", typeName]
+      LH.ln
+      LH.saysLn ["instance ", typeclassName, " ", typeName]
+      LH.saysLn ["instance ", typeclassName, " ", enumTypeName]
+      LH.saysLn ["instance ", typeclassName, " ", numericTypeStr]
       LH.ln
       forM_ (M.toList $ evaluatedEnumValueMap enumData) $ \(words, _) -> do
         let words' = Enum.enumGetOverriddenEntryName Haskell enum words
@@ -359,6 +373,29 @@ toHsFlagsTypeName flags =
 -- | Pure version of 'toHsTypeName' that doesn't create a qualified name.
 toHsFlagsTypeName' :: Flags -> String
 toHsFlagsTypeName' = LH.toHsTypeName' Nonconst . flagsExtName
+
+-- | Imports and returns the Haskell \"IsFooFlags\" typeclass for a 'Flags'.
+toHsFlagsTypeclassName :: Flags -> LH.Generator String
+toHsFlagsTypeclassName flags =
+  LH.inFunction "toHsFlagsTypeclassName" $
+  LH.addExtNameModule (flagsExtName flags) $ toHsFlagsTypeclassName' flags
+
+-- | Pure version of 'toHsFlagsTypeclassName' that doesn't create a qualified
+-- name.
+toHsFlagsTypeclassName' :: Flags -> String
+toHsFlagsTypeclassName' flags = 'I':'s':toHsFlagsTypeName' flags
+
+-- | Imports and returns the Haskell \"toFooFlags\" typeclass method for a
+-- 'Flags', in the typeclass named with 'toHsFlagsTypeclassName'.
+toHsFlagsConvertFnName :: Flags -> LH.Generator String
+toHsFlagsConvertFnName flags =
+  LH.inFunction "toHsFlagsConvertFnName" $
+  LH.addExtNameModule (flagsExtName flags) $ toHsFlagsConvertFnName' flags
+
+-- | Pure version of 'toHsFlagsConvertFnName' that doesn't create a qualified
+-- name.
+toHsFlagsConvertFnName' :: Flags -> String
+toHsFlagsConvertFnName' flags = 't':'o':toHsFlagsTypeName' flags
 
 -- | Constructs the name of the binding for a specific flags entry.
 --
