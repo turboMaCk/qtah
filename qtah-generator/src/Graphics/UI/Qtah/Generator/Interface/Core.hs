@@ -28,6 +28,7 @@ import qualified Graphics.UI.Qtah.Generator.Interface.Core.QDate as QDate
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QDebug as QDebug
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QDir as QDir
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QEvent as QEvent
+import qualified Graphics.UI.Qtah.Generator.Interface.Core.QIODevice as QIODevice
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QItemSelection as QItemSelection
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QItemSelectionModel as QItemSelectionModel
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QItemSelectionRange as QItemSelectionRange
@@ -81,6 +82,7 @@ modules =
     , QDebug.aModule
     , QDir.aModule
     , QEvent.aModule
+    , QIODevice.aModule
     , QItemSelection.aModule
     , QItemSelectionModel.aModule
     , QItemSelectionRange.aModule

@@ -391,6 +391,26 @@ c_ListenerWindowState =
     [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT
   ]
 
+ 
+c_ListenerQlonglong =
+  S.makeClass (S.ident "ListenerQlonglong") Nothing [QObject.c_QObject]
+  [ S.mkCtor "new" [S.callbackT C.cb_QlonglongVoid]
+  , S.mkCtor "newWithParent"
+    [S.callbackT C.cb_QlonglongVoid, S.ptrT $ S.objT QObject.c_QObject]
+  , S.mkMethod "connectListener"
+    [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT
+  ]
+  
+c_ListenerIntQlonglong =
+  S.makeClass (S.ident "ListenerIntQlonglong") Nothing [QObject.c_QObject]
+  [ S.mkCtor "new" [S.callbackT C.cb_IntQlonglongVoid]
+  , S.mkCtor "newWithParent"
+    [S.callbackT C.cb_IntQlonglongVoid, S.ptrT $ S.objT QObject.c_QObject]
+  , S.mkMethod "connectListener"
+    [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT
+  ]
+    
+  
 c_Listener =
   S.makeClass (S.ident "Listener") Nothing [QObject.c_QObject]
   [ S.mkCtor "new" [S.callbackT C.cb_Void]
@@ -399,7 +419,7 @@ c_Listener =
   , S.mkMethod "connectListener"
     [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT
   ]
-
+  
 aModule :: M.AModule
 aModule =
   M.AHoppyModule $
@@ -449,5 +469,8 @@ aModule =
       , V.just $ S.ExportClass c_ListenerToolButtonStyle
       , V.just $ S.ExportClass c_ListenerWindowModality
       , V.just $ S.ExportClass c_ListenerWindowState
+      , V.just $ S.ExportClass c_ListenerQlonglong
+      , V.just $ S.ExportClass c_ListenerIntQlonglong
       , V.just $ S.ExportClass c_Listener
       ]
+  

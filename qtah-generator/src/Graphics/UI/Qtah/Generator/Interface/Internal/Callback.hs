@@ -66,6 +66,7 @@ import Graphics.UI.Qtah.Generator.Interface.Core.Types (
   e_WindowModality,
   e_WindowState,
   qreal,
+  qlonglong,
   )
 import {-# SOURCE #-} qualified Graphics.UI.Qtah.Generator.Interface.Gui.QClipboard as QClipboard
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Gui.QIcon (c_QIcon)
@@ -140,6 +141,8 @@ aModule =
       , just $ ExportCallback cb_ToolButtonStyleVoid
       , just $ ExportCallback cb_WindowModalityVoid
       , just $ ExportCallback cb_WindowStateVoid
+      , just $ ExportCallback cb_QlonglongVoid
+      , just $ ExportCallback cb_IntQlonglongVoid
       , just $ ExportCallback cb_Void
       ]
 
@@ -328,6 +331,14 @@ cb_WindowModalityVoid =
 cb_WindowStateVoid =
   makeCallback (toExtName "CallbackWindowStateVoid")
   [enumT e_WindowState] voidT
+
+cb_QlonglongVoid =
+  makeCallback (toExtName "CallbackQlonglongVoid")
+  [qlonglong] voidT
+
+cb_IntQlonglongVoid =
+  makeCallback (toExtName "CallbackIntQlonglongVoid")
+  [intT, qlonglong] voidT
 
 cb_Void =
   makeCallback (toExtName "CallbackVoid")

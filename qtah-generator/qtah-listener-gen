@@ -118,6 +118,8 @@ forEachListener() {
     $fn ToolButtonStyle "Qt::ToolButtonStyle"
     $fn WindowModality "Qt::WindowModality"
     $fn WindowState "Qt::WindowState"
+    $fn Qlonglong "qint64"
+    $fn IntQlonglong "int|qint64"
     $fn "" ""
 }
 
