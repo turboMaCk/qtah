@@ -65,3 +65,4 @@
 *~
 .qmake.stash
 .stack-work
+/qtah-cpp/cpp/*.pro.user
