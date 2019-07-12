@@ -46,4 +46,9 @@ c_ListenerToolBarAreas :: Class
 c_ListenerToolButtonStyle :: Class
 c_ListenerWindowModality :: Class
 c_ListenerWindowState :: Class
+c_ListenerQlonglong :: Class
+c_ListenerIntQlonglong :: Class
+c_ListenerProcessError :: Class
+c_ListenerIntExitStatus :: Class
+c_ListenerProcessState :: Class
 c_Listener :: Class

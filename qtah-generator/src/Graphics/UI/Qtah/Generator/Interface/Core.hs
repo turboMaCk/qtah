@@ -48,6 +48,7 @@ import qualified Graphics.UI.Qtah.Generator.Interface.Core.QPalette as QPalette
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QPersistentModelIndex as QPersistentModelIndex
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QPoint as QPoint
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QPointF as QPointF
+import qualified Graphics.UI.Qtah.Generator.Interface.Core.QProcess as QProcess
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QRect as QRect
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QRectF as QRectF
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QSettings as QSettings
@@ -100,6 +101,7 @@ modules =
     , QPersistentModelIndex.aModule
     , QPoint.aModule
     , QPointF.aModule
+    , QProcess.aModule
     , QRect.aModule
     , QRectF.aModule
     , QSettings.aModule

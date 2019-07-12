@@ -60,6 +60,7 @@ aModule =
   , QtExport $ ExportBitspace bs_OpenMode
   ]
 
+  
 c_QIODevice =
   addReqIncludes [ includeStd "QIODevice" ] $
   classSetEntityPrefix "" $

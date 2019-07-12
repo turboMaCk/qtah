@@ -71,6 +71,7 @@ library
     , Graphics.UI.Qtah.Core.QPersistentModelIndex
     , Graphics.UI.Qtah.Core.QPoint
     , Graphics.UI.Qtah.Core.QPointF
+    , Graphics.UI.Qtah.Core.QProcess
     , Graphics.UI.Qtah.Core.QRect
     , Graphics.UI.Qtah.Core.QRectF
     , Graphics.UI.Qtah.Core.QSettings
@@ -259,6 +260,7 @@ library
     , Graphics.UI.Qtah.Generated.Core.QPersistentModelIndex
     , Graphics.UI.Qtah.Generated.Core.QPoint
     , Graphics.UI.Qtah.Generated.Core.QPointF
+    , Graphics.UI.Qtah.Generated.Core.QProcess
     , Graphics.UI.Qtah.Generated.Core.QRect
     , Graphics.UI.Qtah.Generated.Core.QRectF
     , Graphics.UI.Qtah.Generated.Core.QSettings

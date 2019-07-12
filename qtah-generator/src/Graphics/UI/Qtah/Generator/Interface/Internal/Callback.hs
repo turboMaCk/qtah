@@ -54,6 +54,7 @@ import Graphics.UI.Qtah.Generator.Interface.Core.QObject (c_QObject)
 import Graphics.UI.Qtah.Generator.Interface.Core.QPoint (c_QPoint)
 import Graphics.UI.Qtah.Generator.Interface.Core.QSize (c_QSize)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
+import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Core.QProcess (e_ProcessError, e_ExitStatus, e_ProcessState)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Core.QVector (c_QVectorInt)
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (
   e_DockWidgetArea,
@@ -143,6 +144,9 @@ aModule =
       , just $ ExportCallback cb_WindowStateVoid
       , just $ ExportCallback cb_QlonglongVoid
       , just $ ExportCallback cb_IntQlonglongVoid
+      , just $ ExportCallback cb_ProcessErrorVoid
+      , just $ ExportCallback cb_IntExitStatusVoid
+      , just $ ExportCallback cb_ProcessStateVoid
       , just $ ExportCallback cb_Void
       ]
 
@@ -339,6 +343,21 @@ cb_QlonglongVoid =
 cb_IntQlonglongVoid =
   makeCallback (toExtName "CallbackIntQlonglongVoid")
   [intT, qlonglong] voidT
+
+
+cb_ProcessErrorVoid =
+  makeCallback (toExtName "CallbackProcessErrorVoid")
+  [enumT e_ProcessError] voidT
+
+
+cb_IntExitStatusVoid =
+  makeCallback (toExtName "CallbackIntExitStatusVoid")
+  [intT, enumT e_ExitStatus] voidT
+
+
+cb_ProcessStateVoid =
+  makeCallback (toExtName "CallbackProcessStateVoid")
+  [enumT e_ProcessState] voidT
 
 cb_Void =
   makeCallback (toExtName "CallbackVoid")

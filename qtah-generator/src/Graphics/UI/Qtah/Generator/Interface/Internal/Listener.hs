@@ -391,7 +391,6 @@ c_ListenerWindowState =
     [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT
   ]
 
- 
 c_ListenerQlonglong =
   S.makeClass (S.ident "ListenerQlonglong") Nothing [QObject.c_QObject]
   [ S.mkCtor "new" [S.callbackT C.cb_QlonglongVoid]
@@ -400,7 +399,7 @@ c_ListenerQlonglong =
   , S.mkMethod "connectListener"
     [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT
   ]
-  
+
 c_ListenerIntQlonglong =
   S.makeClass (S.ident "ListenerIntQlonglong") Nothing [QObject.c_QObject]
   [ S.mkCtor "new" [S.callbackT C.cb_IntQlonglongVoid]
@@ -409,8 +408,36 @@ c_ListenerIntQlonglong =
   , S.mkMethod "connectListener"
     [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT
   ]
-    
-  
+
+
+c_ListenerProcessError =
+  S.makeClass (S.ident "ListenerProcessError") Nothing [QObject.c_QObject]
+  [ S.mkCtor "new" [S.callbackT C.cb_ProcessErrorVoid]
+  , S.mkCtor "newWithParent"
+    [S.callbackT C.cb_ProcessErrorVoid, S.ptrT $ S.objT QObject.c_QObject]
+  , S.mkMethod "connectListener"
+    [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT
+  ]
+
+
+c_ListenerIntExitStatus =
+  S.makeClass (S.ident "ListenerIntExitStatus") Nothing [QObject.c_QObject]
+  [ S.mkCtor "new" [S.callbackT C.cb_IntExitStatusVoid]
+  , S.mkCtor "newWithParent"
+    [S.callbackT C.cb_IntExitStatusVoid, S.ptrT $ S.objT QObject.c_QObject]
+  , S.mkMethod "connectListener"
+    [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT
+  ]
+
+c_ListenerProcessState =
+  S.makeClass (S.ident "ListenerProcessState") Nothing [QObject.c_QObject]
+  [ S.mkCtor "new" [S.callbackT C.cb_ProcessStateVoid]
+  , S.mkCtor "newWithParent"
+    [S.callbackT C.cb_ProcessStateVoid, S.ptrT $ S.objT QObject.c_QObject]
+  , S.mkMethod "connectListener"
+    [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT
+  ]
+
 c_Listener =
   S.makeClass (S.ident "Listener") Nothing [QObject.c_QObject]
   [ S.mkCtor "new" [S.callbackT C.cb_Void]
@@ -419,7 +446,7 @@ c_Listener =
   , S.mkMethod "connectListener"
     [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT
   ]
-  
+
 aModule :: M.AModule
 aModule =
   M.AHoppyModule $
@@ -471,6 +498,8 @@ aModule =
       , V.just $ S.ExportClass c_ListenerWindowState
       , V.just $ S.ExportClass c_ListenerQlonglong
       , V.just $ S.ExportClass c_ListenerIntQlonglong
+      , V.just $ S.ExportClass c_ListenerProcessError
+      , V.just $ S.ExportClass c_ListenerIntExitStatus
+      , V.just $ S.ExportClass c_ListenerProcessState
       , V.just $ S.ExportClass c_Listener
       ]
-  
