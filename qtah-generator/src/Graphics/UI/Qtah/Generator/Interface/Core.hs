@@ -53,6 +53,7 @@ import qualified Graphics.UI.Qtah.Generator.Interface.Core.QPoint as QPoint
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QPointF as QPointF
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QRect as QRect
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QRectF as QRectF
+import qualified Graphics.UI.Qtah.Generator.Interface.Core.QSaveFile as QSaveFile
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QSettings as QSettings
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QSize as QSize
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QSizeF as QSizeF
@@ -108,6 +109,7 @@ modules =
     , QPointF.aModule
     , QRect.aModule
     , QRectF.aModule
+    , QSaveFile.aModule
     , QSettings.aModule
     , QSize.aModule
     , QSizeF.aModule
