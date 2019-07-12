@@ -409,7 +409,6 @@ c_ListenerIntQlonglong =
     [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT
   ]
 
-
 c_ListenerProcessError =
   S.makeClass (S.ident "ListenerProcessError") Nothing [QObject.c_QObject]
   [ S.mkCtor "new" [S.callbackT C.cb_ProcessErrorVoid]
@@ -418,7 +417,6 @@ c_ListenerProcessError =
   , S.mkMethod "connectListener"
     [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT
   ]
-
 
 c_ListenerIntExitStatus =
   S.makeClass (S.ident "ListenerIntExitStatus") Nothing [QObject.c_QObject]

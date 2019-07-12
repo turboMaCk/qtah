@@ -24,6 +24,7 @@ import Foreign.Hoppy.Generator.Spec (
   Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
+  classSetConversionToGc,
   ident,
   includeStd,
   makeClass,
@@ -35,20 +36,24 @@ import Foreign.Hoppy.Generator.Spec (
   mkStaticMethod,
   mkStaticMethod',
   )
+import Foreign.Hoppy.Generator.Spec.ClassFeature (
+  ClassFeature (Assignable, Copyable, Equatable),
+  classAddFeatures,
+  )
 import Foreign.Hoppy.Generator.Types (boolT, objT, refT, voidT, constT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
 import Graphics.UI.Qtah.Generator.Flags (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Graphics.UI.Qtah.Generator.Interface.Core.QStringList (c_QStringList)
-import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
+import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModuleWithMinVersion)
 import Graphics.UI.Qtah.Generator.Types
 
 {-# ANN module "HLint: ignore Use camelCase" #-}
 
 aModule =
   AQtModule $
-  makeQtModule ["Core", "QProcessEnvironment"] $
-  QtExport (ExportClass c_QProcessEnvironment)
+  makeQtModuleWithMinVersion ["Core", "QProcessEnvironment"] [4, 6]
+  [QtExport $ ExportClass c_QProcessEnvironment] 
 
 c_QProcessEnvironment =
   addReqIncludes [includeStd "QProcessEnvironment"] $
