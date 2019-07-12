@@ -51,6 +51,7 @@ import Graphics.UI.Qtah.Generator.Interface.Core.QObject (c_QObject)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Graphics.UI.Qtah.Generator.Interface.Core.QStringList (c_QStringList)
 import Graphics.UI.Qtah.Generator.Interface.Core.QByteArray (c_QByteArray)
+import Graphics.UI.Qtah.Generator.Interface.Core.QProcessEnvironment (c_QProcessEnvironment)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Internal.Listener (c_Listener, c_ListenerProcessError, c_ListenerIntExitStatus, c_ListenerProcessState)
@@ -99,7 +100,7 @@ c_QProcess =
   , just $ mkMethod' "open" "open" [] boolT
   , just $ mkMethod' "open" "openWithMode" [bitspaceT bs_OpenMode] boolT
   , test (qtVersion >= [4, 2]) $ mkConstMethod "processChannelMode" [] $ enumT e_ProcessChannelMode
-  -- QProcessEnvironment QProcess::processEnvironment() const  since Qt 4.6.
+  , test (qtVersion >= [4, 2]) $ mkConstMethod "processEnvironment" [] $ objT c_QProcessEnvironment
   , test (qtVersion >= [5, 3]) $ mkConstMethod "processId" [] qlonglong
   , test (qtVersion >= [5, 0]) $ mkConstMethod "program" [] $ objT c_QString
   , just $ mkMethod "readAllStandardError" [] $ objT c_QByteArray
@@ -110,7 +111,7 @@ c_QProcess =
   , test (qtVersion >= [5, 2]) $ mkMethod "setInputChannelMode" [enumT e_InputChannelMode] voidT
  -- , test (qtVersion >= [4, 7]) $ mkMethod "setNativeArguments" [refT $ constT $ objT c_QString] voidT
   , test (qtVersion >= [4, 2]) $ mkMethod "setProcessChannelMode" [enumT e_ProcessChannelMode] voidT
-  -- TODO void QProcess::setProcessEnvironment(const QProcessEnvironment &environment) since  Qt 4.6
+  , test (qtVersion >= [4, 6]) $ mkMethod "setProcessEnvironment" [refT $ constT $ objT c_QProcessEnvironment] voidT
   , test (qtVersion >= [5, 1]) $ mkMethod "setProgram" [refT $ constT $ objT c_QString] voidT
   , just $ mkMethod "setReadChannel" [enumT e_ProcessChannel] voidT
   , test (qtVersion >= [4, 2]) $ mkMethod' "setStandardErrorFile" "setStandardErrorFile" [refT $ constT $ objT c_QString] voidT
