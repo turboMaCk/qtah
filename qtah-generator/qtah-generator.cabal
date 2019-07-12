@@ -64,6 +64,7 @@ executable qtah-generator
     , Graphics.UI.Qtah.Generator.Interface.Core.QDebug
     , Graphics.UI.Qtah.Generator.Interface.Core.QDir
     , Graphics.UI.Qtah.Generator.Interface.Core.QEvent
+    , Graphics.UI.Qtah.Generator.Interface.Core.QFileDevice
     , Graphics.UI.Qtah.Generator.Interface.Core.QIODevice
     , Graphics.UI.Qtah.Generator.Interface.Core.QItemSelection
     , Graphics.UI.Qtah.Generator.Interface.Core.QItemSelectionModel
