@@ -22,6 +22,7 @@ module Graphics.UI.Qtah.Signal (
   Signal (..),
   connect,
   connect_,
+  disconnect_,
   ) where
 
 import Control.Monad (unless)
@@ -30,6 +31,7 @@ import Control.Monad (unless)
 -- and when invoked will call a function of the given @handler@ type.
 data Signal object handler = Signal
   { internalConnectSignal :: object -> handler -> IO Bool
+  , internalDisconnectSignal :: object -> handler -> IO Bool
   , internalName :: String
   }
 
@@ -47,3 +49,10 @@ connect_ :: object -> Signal object handler -> handler -> IO ()
 connect_ object signal handler = do
   success <- connect object signal handler
   unless success $ fail $ "connect_: Failed to connect signal " ++ show signal ++ "."
+
+-- | Registers a handler function to listen to a signal an object emits, via
+-- 'connect'.  If the connection fails, then the program aborts.
+disconnect_ :: object -> Signal object handler -> handler -> IO ()
+disconnect_ object signal handler = do
+  internalDisconnectSignal signal object handler
+  return ()

@@ -202,7 +202,10 @@ if [[ -n $cppDir ]]; then
         sayHpp "public:"
         sayHpp "    typedef ${callbackClassName} callback;"
         sayHpp "    ${className}(callback f, QObject* parent = 0);"
+        sayHpp "    ~${className}();"
         sayHpp "    bool connectListener(QObject* source, const std::string& signal);"
+        sayHpp "    bool disconnectListener(QObject* source, const std::string& signal);"
+        sayHpp "    static ${className}* getInstance();"
         sayHpp
         sayHpp "public slots:"
         sayHpp "    void invoke(${paramList});"
@@ -210,6 +213,7 @@ if [[ -n $cppDir ]]; then
         sayHpp "private:"
         sayHpp "    callback f_;"
         sayHpp "    bool connected_;"
+        sayHpp "    static ${className} *m_instance;"
         sayHpp "};"
         if [[ -n $minVersion ]]; then
             sayHpp
@@ -221,8 +225,19 @@ if [[ -n $cppDir ]]; then
             sayCpp "#if QT_VERSION >= ${minVersion}"
         fi
         sayCpp
+        sayCpp "${className} *${className}::m_instance = nullptr;"
+        sayCpp
+        sayCpp
         sayCpp "${className}::${className}(${className}::callback f, QObject* parent) :"
-        sayCpp "    QObject(parent), f_(f), connected_(false) {}"
+        sayCpp "    QObject(parent), f_(f), connected_(false) {"
+        sayCpp " if (m_instance == nullptr)"
+        sayCpp "     m_instance = this;"
+        sayCpp "}"
+        sayCpp
+        sayCpp "${className}::~${className}() {"
+        sayCpp " if (m_instance != nullptr)"
+        sayCpp "    m_instance = nullptr;"
+        sayCpp "}"
         sayCpp
         sayCpp "bool ${className}::connectListener(QObject* source, const std::string& signal) {"
         sayCpp "    if (connected_) {"
@@ -234,6 +249,20 @@ if [[ -n $cppDir ]]; then
         sayCpp "    setParent(source);"
         sayCpp "    connected_ = connect(source, signal.c_str(), SLOT(invoke(${paramTypeList})));"
         sayCpp "    return connected_;"
+        sayCpp "}"
+        sayCpp 
+        sayCpp "${className}* ${className}::getInstance() {"
+        sayCpp "    return m_instance;"
+        sayCpp "}"
+        sayCpp "// disconnect doesn't work at the moment because there is no matched disconnect for arguments below"
+        sayCpp "bool ${className}::disconnectListener(QObject* source, const std::string& signal) {"
+        sayCpp "    if (connected_) {"
+        sayCpp "        bool disconnected_ = disconnect(signal.c_str(), source);"
+        sayCpp "        if (disconnected_) connected_ = false;"
+        sayCpp "        return disconnected_;"
+        sayCpp "    }"
+        sayCpp "    connected_ = true;"    
+        sayCpp "    return false;"
         sayCpp "}"
         sayCpp
         sayCpp "void ${className}::invoke(${paramList}) {"
@@ -288,7 +317,10 @@ if [[ -n $hsDir ]]; then
         say "  [ S.mkCtor \"new\" [S.callbackT C.${callbackVar}]"
         say "  , S.mkCtor \"newWithParent\""
         say "    [S.callbackT C.${callbackVar}, S.ptrT \$ S.objT QObject.c_QObject]"
+        say "  , S.mkStaticMethod \"getInstance\" [] $ S.ptrT $ S.objT ${classVar}"
         say "  , S.mkMethod \"connectListener\""
+        say "    [S.ptrT \$ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT"
+        say "  , S.mkMethod \"disconnectListener\""
         say "    [S.ptrT \$ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT"
         say "  ]"
     }

@@ -26,9 +26,10 @@ import Data.Functor (void)
 import Foreign.C.String (newCString)
 import Data.IORef (IORef, newIORef, readIORef, writeIORef)
 import qualified Graphics.UI.Qtah.Core.QCoreApplication as QCoreApplication
+import qualified Graphics.UI.Qtah.Core.QProcessEnvironment as QProcessEnvironment
 import Graphics.UI.Qtah.Event
 import Graphics.UI.Qtah.Gui.QCloseEvent (QCloseEvent)
-import Graphics.UI.Qtah.Signal (connect_)
+import Graphics.UI.Qtah.Signal (connect_, disconnect_)
 import qualified Graphics.UI.Qtah.Core.QEvent as QEvent
 import qualified Graphics.UI.Qtah.Widgets.QAction as QAction
 import Graphics.UI.Qtah.Widgets.QAction (triggeredSignal)
@@ -116,9 +117,11 @@ makeMainWindow = do
   ttt1 <- newCString "textChanged()"
   ttt2 <- newCString "showMinimized()"
 
+
   QObject.connectStatic text "textChanged()" window "showMinimized()" 
 
   connect_ menuFileNew triggeredSignal $ \_ -> fileNew me
+  --disconnect_ menuFileNew triggeredSignal $ \_ -> fileNew me
   connect_ menuFileOpen triggeredSignal $ \_ -> fileOpen me
   connect_ menuFileSave triggeredSignal $ \_ -> void $ fileSave me
   connect_ menuFileSaveAs triggeredSignal $ \_ -> void $ fileSaveAs me
