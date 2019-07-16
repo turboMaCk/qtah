@@ -62,5 +62,5 @@ connect_ object signal handler = internalConnectSignal signal object handler
 
 -- | Registers a handler function to listen to a signal an object emits, via
 -- 'connect'.  If the connection fails, then the program aborts.
-disconnect_ :: Signal object handler -> object -> handler -> Connection -> IO Bool
-disconnect_ signal object handler connection = internalDisconnectSignal signal object handler connection
+disconnect_ :: Connection -> Signal object handler -> object -> handler -> IO Bool
+disconnect_ connection signal object handler = internalDisconnectSignal signal connection 
