@@ -22,19 +22,19 @@ module Graphics.UI.Qtah.Signal (
   Signal (..),
   connect_,
   disconnect_,
+  disconnectWithConn_,
   ) where
 
 import Control.Monad (unless)
 import Graphics.UI.Qtah.Core.Connection (Connection)
+import {-# SOURCE #-} qualified Graphics.UI.Qtah.Object as Object 
 
--- może stworzyć nową klasę na class z modułu hoppy. Metoda wewnątrz musiałaby mieć jako pierwszy parametr podstawienie (np. a)
-
--- instance signalClass (Signal object handler) where
---  metaConn signal = internalDisconnectSignal
 
 -- | A signal that can be connected to an instance of the @object@ (C++) class,
 -- and when invoked will call a function of the given @handler@ type.
 
+disconnectWithConn_ :: Connection -> IO Bool
+disconnectWithConn_ = Object.disconnectWithConn_
 
 
 data Signal object handler = Signal
@@ -43,22 +43,15 @@ data Signal object handler = Signal
   , internalName :: String
   }
 
- -- (ConnectionPtr object) => QtahSignal.Signal object (M50.QModelIndex -> HoppyP.IO ())
 instance Show (Signal object handler) where
   show signal = concat ["<Signal ", internalName signal, ">"]
 
---instance Connection (Signal object handler) where
---  show signal = concat ["<Signal ", internalName signal, ">"]
-
--- | Registers a handler function to listen to a signal an object emits.
--- Returns true if the connection succeeded.
---connect :: object -> Signal object handler -> handler -> IO Connection
---connect = flip internalConnectSignal
 
 -- | Registers a handler function to listen to a signal an object emits, via
 -- 'connect'.  If the connection fails, then the program aborts.
 connect_ :: object -> Signal object handler -> handler -> IO Connection
 connect_ object signal handler = internalConnectSignal signal object handler
+
 
 -- | Registers a handler function to listen to a signal an object emits, via
 -- 'connect'.  If the connection fails, then the program aborts.

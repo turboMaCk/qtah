@@ -143,6 +143,7 @@ library
     , Graphics.UI.Qtah.Gui.QtahRasterWindow
     , Graphics.UI.Qtah.SceneEvent
     , Graphics.UI.Qtah.Signal
+    , Graphics.UI.Qtah.Object
     -- TODO This should not be exposed directly, but there is no nice interface
     -- to it right now.
     , Graphics.UI.Qtah.Std

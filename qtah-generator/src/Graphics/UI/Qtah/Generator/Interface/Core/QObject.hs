@@ -104,6 +104,7 @@ c_QObject =
   , just $ mkConstMethod' "disconnect" "disconnectWithSignal" [ptrT $ constT charT] boolT
   , just $ mkConstMethod' "disconnect" "disconnectWithSignalReceiver" [ptrT $ constT charT, ptrT $ constT $ objT c_QObject] boolT
   , just $ mkConstMethod' "disconnect" "disconnectWithSignalReceiverMethod" [ptrT $ constT charT, ptrT $ constT $ objT c_QObject, ptrT $ constT charT] boolT
+  , just $ mkStaticMethod' "disconnect" "disconnectWithMetaobject" [objT c_Connection] boolT
 
 
 
