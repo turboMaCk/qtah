@@ -116,11 +116,13 @@ makeMainWindow = do
  -- tt2 <- newCString "1showMinimized()" >>= QString.newFromCString
 
 
-  QObject.connectStatic text "textChanged()" window "showMinimized()" 
+  textEditConn <- QObject.connectStatic text "textChanged()" window "showMinimized()" 
 
   metabobj <- connect_ menuFileNew triggeredSignal $ \_ -> fileNew me
-  --disconnect_ metabobj triggeredSignal menuFileNew (\_ -> fileNew me) 
+  -- disconnect_ metabobj triggeredSignal menuFileNew (\_ -> fileNew me) 
   disconnectWithConn_ metabobj
+  -- QObject.disconnectStatic text "textChanged()" window "showMinimized()" 
+  disconnectWithConn_ textEditConn
 
   connect_ menuFileOpen triggeredSignal $ \_ -> fileOpen me
   connect_ menuFileSave triggeredSignal $ \_ -> void $ fileSave me
