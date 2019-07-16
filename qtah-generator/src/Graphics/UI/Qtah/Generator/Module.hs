@@ -386,6 +386,21 @@ sayExportSignal signal = inFunction "sayExportSignal" $ do
                  show listenerClass, " for signal ", show name]) $
     find ((RealMethod (FnName "connectListener") ==) . methodImpl) $ classMethods listenerClass
 
+  -- Also find the 'connectListener' method.
+  getInstanceMethod <-
+    fromMaybeM (throwError $ concat
+                ["Couldn't find the getInstance method in ",
+                 show listenerClass, " for signal ", show name]) $
+    find ((RealMethod (FnName "getInstance") ==) . methodImpl) $ classMethods listenerClass
+
+  -- Also find the 'disconnectListener' method.
+  listenerDisconnectMethod <-
+    fromMaybeM (throwError $ concat
+                ["Couldn't find the disconnectListener method in ",
+                 show listenerClass, " for signal ", show name]) $
+    find ((RealMethod (FnName "disconnectListener") ==) . methodImpl) $ classMethods listenerClass
+
+
   callbackHsType <- cppTypeToHsTypeAndUse HsHsSide callbackType
 
   let varType = HsQualType [(UnQual $ HsIdent ptrClassName, [HsTyVar $ HsIdent "object"])] $
@@ -410,6 +425,12 @@ sayExportSignal signal = inFunction "sayExportSignal" $ do
               toHsFnName' $ classEntityForeignName listenerClass listenerCtor, " fn'"]
       saysLn [toHsFnName' $ classEntityForeignName listenerClass listenerConnectMethod,
               " listener' object' ", show (toSignalConnectName signal paramTypes)]
+    sayLn ", QtahSignal.internalDisconnectSignal = \\metaobject' -> do"
+    indent $ do
+      saysLn ["listener' <- ",
+              toHsFnName' $ classEntityForeignName listenerClass getInstanceMethod]
+      saysLn [toHsFnName' $ classEntityForeignName listenerClass listenerDisconnectMethod,
+              " listener' metaobject' "]
     saysLn [", QtahSignal.internalName = ", show internalName]
     sayLn "}"
 

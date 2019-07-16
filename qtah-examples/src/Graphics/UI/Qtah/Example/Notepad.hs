@@ -26,9 +26,10 @@ import Data.Functor (void)
 import Foreign.C.String (newCString)
 import Data.IORef (IORef, newIORef, readIORef, writeIORef)
 import qualified Graphics.UI.Qtah.Core.QCoreApplication as QCoreApplication
+import qualified Graphics.UI.Qtah.Core.QProcessEnvironment as QProcessEnvironment
 import Graphics.UI.Qtah.Event
 import Graphics.UI.Qtah.Gui.QCloseEvent (QCloseEvent)
-import Graphics.UI.Qtah.Signal (connect_)
+import Graphics.UI.Qtah.Signal (connect_, disconnect_, disconnectWithConn_)
 import qualified Graphics.UI.Qtah.Core.QEvent as QEvent
 import qualified Graphics.UI.Qtah.Widgets.QAction as QAction
 import Graphics.UI.Qtah.Widgets.QAction (triggeredSignal)
@@ -111,14 +112,16 @@ makeMainWindow = do
     unless continue $ QEvent.ignore event
     return $ not continue
 
-  tt1 <- newCString "2textChanged()" >>= QString.newFromCString
-  tt2 <- newCString "1showMinimized()" >>= QString.newFromCString
-  ttt1 <- newCString "textChanged()"
-  ttt2 <- newCString "showMinimized()"
+ -- tt1 <- newCString "2textChanged()" >>= QString.newFromCString
+ -- tt2 <- newCString "1showMinimized()" >>= QString.newFromCString
+
 
   QObject.connectStatic text "textChanged()" window "showMinimized()" 
 
-  connect_ menuFileNew triggeredSignal $ \_ -> fileNew me
+  metabobj <- connect_ menuFileNew triggeredSignal $ \_ -> fileNew me
+  --disconnect_ metabobj triggeredSignal menuFileNew (\_ -> fileNew me) 
+  disconnectWithConn_ metabobj
+
   connect_ menuFileOpen triggeredSignal $ \_ -> fileOpen me
   connect_ menuFileSave triggeredSignal $ \_ -> void $ fileSave me
   connect_ menuFileSaveAs triggeredSignal $ \_ -> void $ fileSaveAs me
