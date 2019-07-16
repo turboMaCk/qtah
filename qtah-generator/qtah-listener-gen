@@ -150,6 +150,7 @@ if [[ -n $cppDir ]]; then
     sayHpp '#include <QClipboard>'
     sayHpp '#include <QDockWidget>'
     sayHpp '#include <QIcon>'
+    sayHpp '#include <QMetaObject>'
     sayHpp '#include <QItemSelection>'
     sayHpp '#include <QModelIndex>'
     sayHpp '#include <QObject>'
@@ -203,8 +204,8 @@ if [[ -n $cppDir ]]; then
         sayHpp "    typedef ${callbackClassName} callback;"
         sayHpp "    ${className}(callback f, QObject* parent = 0);"
         sayHpp "    ~${className}();"
-        sayHpp "    bool connectListener(QObject* source, const std::string& signal);"
-        sayHpp "    bool disconnectListener(QObject* source, const std::string& signal);"
+        sayHpp "    QMetaObject::Connection connectListener(QObject* source, const std::string& signal);"
+        sayHpp "    bool disconnectListener(QMetaObject::Connection metaObj);"
         sayHpp "    static ${className}* getInstance();"
         sayHpp
         sayHpp "public slots:"
@@ -212,7 +213,7 @@ if [[ -n $cppDir ]]; then
         sayHpp
         sayHpp "private:"
         sayHpp "    callback f_;"
-        sayHpp "    bool connected_;"
+        sayHpp "    bool disconnected_;"
         sayHpp "    static ${className} *m_instance;"
         sayHpp "};"
         if [[ -n $minVersion ]]; then
@@ -229,7 +230,7 @@ if [[ -n $cppDir ]]; then
         sayCpp
         sayCpp
         sayCpp "${className}::${className}(${className}::callback f, QObject* parent) :"
-        sayCpp "    QObject(parent), f_(f), connected_(false) {"
+        sayCpp "    QObject(parent), f_(f), disconnected_(true) {"
         sayCpp " if (m_instance == nullptr)"
         sayCpp "     m_instance = this;"
         sayCpp "}"
@@ -239,30 +240,30 @@ if [[ -n $cppDir ]]; then
         sayCpp "    m_instance = nullptr;"
         sayCpp "}"
         sayCpp
-        sayCpp "bool ${className}::connectListener(QObject* source, const std::string& signal) {"
-        sayCpp "    if (connected_) {"
+        sayCpp "QMetaObject::Connection ${className}::connectListener(QObject* source, const std::string& signal) {"
+        sayCpp "    if (!disconnected_) {"
         sayCpp "        std::cerr <<"
         sayCpp "            \"${className}::connectListener: Internal error, already connected.  \""
         sayCpp "            \"Not connecting again.\\n\" << std::flush;"
-        sayCpp "        return false;"
         sayCpp "    }"
         sayCpp "    setParent(source);"
-        sayCpp "    connected_ = connect(source, signal.c_str(), SLOT(invoke(${paramTypeList})));"
-        sayCpp "    return connected_;"
+        sayCpp "    disconnected_ = false;"
+        sayCpp "    return connect(source, signal.c_str(), SLOT(invoke(${paramTypeList})));"
+        sayCpp      
         sayCpp "}"
         sayCpp 
         sayCpp "${className}* ${className}::getInstance() {"
         sayCpp "    return m_instance;"
         sayCpp "}"
-        sayCpp "// disconnect doesn't work at the moment because there is no matched disconnect for arguments below"
-        sayCpp "bool ${className}::disconnectListener(QObject* source, const std::string& signal) {"
-        sayCpp "    if (connected_) {"
-        sayCpp "        bool disconnected_ = disconnect(signal.c_str(), source);"
-        sayCpp "        if (disconnected_) connected_ = false;"
+        sayCpp 
+        sayCpp "bool ${className}::disconnectListener(QMetaObject::Connection metaObj) {"
+        sayCpp "    if (!disconnected_) {"
+        sayCpp "        bool disconnected_ = disconnect(metaObj);"
+        sayCpp "        disconnected_ = true;"
         sayCpp "        return disconnected_;"
         sayCpp "    }"
-        sayCpp "    connected_ = true;"    
-        sayCpp "    return false;"
+        sayCpp "    disconnected_ = false;"    
+        sayCpp "    return disconnected_;"
         sayCpp "}"
         sayCpp
         sayCpp "void ${className}::invoke(${paramList}) {"
@@ -301,6 +302,7 @@ if [[ -n $hsDir ]]; then
     say 'import qualified Foreign.Hoppy.Generator.Std.String as String'
     say 'import qualified Graphics.UI.Qtah.Generator.Module as M'
     say 'import qualified Graphics.UI.Qtah.Generator.Interface.Core.QObject as QObject'
+    say 'import qualified Graphics.UI.Qtah.Generator.Interface.Core.Connection as Connection'
     say 'import qualified Graphics.UI.Qtah.Generator.Interface.Internal.Callback as C'
     say
     say '{-# ANN module "HLint: ignore Use camelCase" #-}'
@@ -319,9 +321,9 @@ if [[ -n $hsDir ]]; then
         say "    [S.callbackT C.${callbackVar}, S.ptrT \$ S.objT QObject.c_QObject]"
         say "  , S.mkStaticMethod \"getInstance\" [] $ S.ptrT $ S.objT ${classVar}"
         say "  , S.mkMethod \"connectListener\""
-        say "    [S.ptrT \$ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT"
+        say "    [S.ptrT \$ S.objT QObject.c_QObject, S.objT String.c_string] \$ S.objT Connection.c_Connection"
         say "  , S.mkMethod \"disconnectListener\""
-        say "    [S.ptrT \$ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT"
+        say "    [S.objT Connection.c_Connection] S.boolT"
         say "  ]"
     }
     forEachListener writeHs

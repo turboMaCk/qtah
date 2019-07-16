@@ -20,39 +20,47 @@
 -- | General routines for managing Qt signals.
 module Graphics.UI.Qtah.Signal (
   Signal (..),
-  connect,
   connect_,
   disconnect_,
   ) where
 
 import Control.Monad (unless)
+import Graphics.UI.Qtah.Core.Connection (Connection)
+
+-- może stworzyć nową klasę na class z modułu hoppy. Metoda wewnątrz musiałaby mieć jako pierwszy parametr podstawienie (np. a)
+
+-- instance signalClass (Signal object handler) where
+--  metaConn signal = internalDisconnectSignal
 
 -- | A signal that can be connected to an instance of the @object@ (C++) class,
 -- and when invoked will call a function of the given @handler@ type.
+
+
+
 data Signal object handler = Signal
-  { internalConnectSignal :: object -> handler -> IO Bool
-  , internalDisconnectSignal :: object -> handler -> IO Bool
+  { internalConnectSignal :: object -> handler -> IO Connection
+  , internalDisconnectSignal :: Connection -> IO Bool
   , internalName :: String
   }
 
+ -- (ConnectionPtr object) => QtahSignal.Signal object (M50.QModelIndex -> HoppyP.IO ())
 instance Show (Signal object handler) where
   show signal = concat ["<Signal ", internalName signal, ">"]
 
+--instance Connection (Signal object handler) where
+--  show signal = concat ["<Signal ", internalName signal, ">"]
+
 -- | Registers a handler function to listen to a signal an object emits.
 -- Returns true if the connection succeeded.
-connect :: object -> Signal object handler -> handler -> IO Bool
-connect = flip internalConnectSignal
+--connect :: object -> Signal object handler -> handler -> IO Connection
+--connect = flip internalConnectSignal
 
 -- | Registers a handler function to listen to a signal an object emits, via
 -- 'connect'.  If the connection fails, then the program aborts.
-connect_ :: object -> Signal object handler -> handler -> IO ()
-connect_ object signal handler = do
-  success <- connect object signal handler
-  unless success $ fail $ "connect_: Failed to connect signal " ++ show signal ++ "."
+connect_ :: object -> Signal object handler -> handler -> IO Connection
+connect_ object signal handler = internalConnectSignal signal object handler
 
 -- | Registers a handler function to listen to a signal an object emits, via
 -- 'connect'.  If the connection fails, then the program aborts.
-disconnect_ :: object -> Signal object handler -> handler -> IO ()
-disconnect_ object signal handler = do
-  internalDisconnectSignal signal object handler
-  return ()
+disconnect_ :: Signal object handler -> object -> handler -> Connection -> IO Bool
+disconnect_ signal object handler connection = internalDisconnectSignal signal object handler connection

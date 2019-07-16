@@ -425,12 +425,12 @@ sayExportSignal signal = inFunction "sayExportSignal" $ do
               toHsFnName' $ classEntityForeignName listenerClass listenerCtor, " fn'"]
       saysLn [toHsFnName' $ classEntityForeignName listenerClass listenerConnectMethod,
               " listener' object' ", show (toSignalConnectName signal paramTypes)]
-    sayLn ", QtahSignal.internalDisconnectSignal = \\object' fn' -> do"
+    sayLn ", QtahSignal.internalDisconnectSignal = \\metaobject' -> do"
     indent $ do
       saysLn ["listener' <- ",
               toHsFnName' $ classEntityForeignName listenerClass getInstanceMethod]
       saysLn [toHsFnName' $ classEntityForeignName listenerClass listenerDisconnectMethod,
-              " listener' object' ", show (toSignalConnectName signal paramTypes)]
+              " listener' metaobject' "]
     saysLn [", QtahSignal.internalName = ", show internalName]
     sayLn "}"
 

@@ -120,8 +120,8 @@ makeMainWindow = do
 
   QObject.connectStatic text "textChanged()" window "showMinimized()" 
 
-  connect_ menuFileNew triggeredSignal $ \_ -> fileNew me
-  --disconnect_ menuFileNew triggeredSignal $ \_ -> fileNew me
+  metabobj <- connect_ menuFileNew triggeredSignal $ \_ -> fileNew me
+  disconnect_ triggeredSignal menuFileNew (\_ -> fileNew me) metabobj
   connect_ menuFileOpen triggeredSignal $ \_ -> fileOpen me
   connect_ menuFileSave triggeredSignal $ \_ -> void $ fileSave me
   connect_ menuFileSaveAs triggeredSignal $ \_ -> void $ fileSaveAs me
