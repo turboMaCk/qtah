@@ -205,7 +205,7 @@ if [[ -n $cppDir ]]; then
         sayHpp "    ${className}(callback f, QObject* parent = 0);"
         sayHpp "    ~${className}();"
         sayHpp "    QMetaObject::Connection connectListener(QObject* source, const std::string& signal);"
-        sayHpp "    bool disconnectListener(QMetaObject::Connection metaObj);"
+        sayHpp "    bool disconnectListener(QObject* emitter, const std::string& signal);"
         sayHpp "    static ${className}* getInstance();"
         sayHpp
         sayHpp "public slots:"
@@ -248,17 +248,18 @@ if [[ -n $cppDir ]]; then
         sayCpp "    }"
         sayCpp "    setParent(source);"
         sayCpp "    disconnected_ = false;"
-        sayCpp "    return connect(source, signal.c_str(), SLOT(invoke(${paramTypeList})));"
+        sayCpp "    return connect(source, signal.c_str(), this, SLOT(invoke(${paramTypeList})));"
         sayCpp      
         sayCpp "}"
+        sayCpp 
         sayCpp 
         sayCpp "${className}* ${className}::getInstance() {"
         sayCpp "    return m_instance;"
         sayCpp "}"
         sayCpp 
-        sayCpp "bool ${className}::disconnectListener(QMetaObject::Connection metaObj) {"
+        sayCpp "bool ${className}::disconnectListener(QObject* emitter, const std::string& signal) {"
         sayCpp "    if (!disconnected_) {"
-        sayCpp "        bool disconnected_ = disconnect(metaObj);"
+        sayCpp "        bool disconnected_ = disconnect(emitter, signal.c_str(), 0, 0);"
         sayCpp "        disconnected_ = true;"
         sayCpp "        return disconnected_;"
         sayCpp "    }"
@@ -323,7 +324,7 @@ if [[ -n $hsDir ]]; then
         say "  , S.mkMethod \"connectListener\""
         say "    [S.ptrT \$ S.objT QObject.c_QObject, S.objT String.c_string] \$ S.objT Connection.c_Connection"
         say "  , S.mkMethod \"disconnectListener\""
-        say "    [S.objT Connection.c_Connection] S.boolT"
+        say "    [S.ptrT \$ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT"
         say "  ]"
     }
     forEachListener writeHs

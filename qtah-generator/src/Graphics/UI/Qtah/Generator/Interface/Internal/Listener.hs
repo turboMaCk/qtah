@@ -23,7 +23,7 @@ c_ListenerBool =
   , S.mkMethod "connectListener"
     [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] $ S.objT Connection.c_Connection
   , S.mkMethod "disconnectListener"
-    [S.objT Connection.c_Connection] S.boolT
+    [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT
   ]
 
 c_ListenerDockWidgetArea =
@@ -35,7 +35,7 @@ c_ListenerDockWidgetArea =
   , S.mkMethod "connectListener"
     [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] $ S.objT Connection.c_Connection
   , S.mkMethod "disconnectListener"
-    [S.objT Connection.c_Connection] S.boolT
+    [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT
   ]
 
 c_ListenerDockWidgetAreas =
@@ -47,8 +47,7 @@ c_ListenerDockWidgetAreas =
   , S.mkMethod "connectListener"
     [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] $ S.objT Connection.c_Connection
   , S.mkMethod "disconnectListener"
-    [S.objT Connection.c_Connection] S.boolT
-  ]
+    [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT  ]
 
 c_ListenerDouble =
   S.makeClass (S.ident "ListenerDouble") Nothing [QObject.c_QObject]
@@ -59,8 +58,7 @@ c_ListenerDouble =
   , S.mkMethod "connectListener"
     [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] $ S.objT Connection.c_Connection
   , S.mkMethod "disconnectListener"
-    [S.objT Connection.c_Connection] S.boolT
-  ]
+    [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT  ]
 
 c_ListenerInt =
   S.makeClass (S.ident "ListenerInt") Nothing [QObject.c_QObject]
@@ -71,8 +69,7 @@ c_ListenerInt =
   , S.mkMethod "connectListener"
     [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] $ S.objT Connection.c_Connection
   , S.mkMethod "disconnectListener"
-    [S.objT Connection.c_Connection] S.boolT
-  ]
+    [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT  ]
 
 c_ListenerIntBool =
   S.makeClass (S.ident "ListenerIntBool") Nothing [QObject.c_QObject]
@@ -83,8 +80,7 @@ c_ListenerIntBool =
   , S.mkMethod "connectListener"
     [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] $ S.objT Connection.c_Connection
   , S.mkMethod "disconnectListener"
-    [S.objT Connection.c_Connection] S.boolT
-  ]
+    [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT  ]
 
 c_ListenerIntInt =
   S.makeClass (S.ident "ListenerIntInt") Nothing [QObject.c_QObject]
@@ -95,8 +91,7 @@ c_ListenerIntInt =
   , S.mkMethod "connectListener"
     [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] $ S.objT Connection.c_Connection
   , S.mkMethod "disconnectListener"
-    [S.objT Connection.c_Connection] S.boolT
-  ]
+    [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT  ]
 
 c_ListenerOrientation =
   S.makeClass (S.ident "ListenerOrientation") Nothing [QObject.c_QObject]
@@ -107,8 +102,7 @@ c_ListenerOrientation =
   , S.mkMethod "connectListener"
     [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] $ S.objT Connection.c_Connection
   , S.mkMethod "disconnectListener"
-    [S.objT Connection.c_Connection] S.boolT
-  ]
+    [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT  ]
 
 c_ListenerOrientationIntInt =
   S.makeClass (S.ident "ListenerOrientationIntInt") Nothing [QObject.c_QObject]
@@ -119,8 +113,7 @@ c_ListenerOrientationIntInt =
   , S.mkMethod "connectListener"
     [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] $ S.objT Connection.c_Connection
   , S.mkMethod "disconnectListener"
-    [S.objT Connection.c_Connection] S.boolT
-  ]
+    [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT  ]
 
 c_ListenerPtrQAbstractButton =
   S.makeClass (S.ident "ListenerPtrQAbstractButton") Nothing [QObject.c_QObject]
@@ -131,8 +124,7 @@ c_ListenerPtrQAbstractButton =
   , S.mkMethod "connectListener"
     [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] $ S.objT Connection.c_Connection
   , S.mkMethod "disconnectListener"
-    [S.objT Connection.c_Connection] S.boolT
-  ]
+    [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT  ]
 
 c_ListenerPtrQAbstractButtonBool =
   S.makeClass (S.ident "ListenerPtrQAbstractButtonBool") Nothing [QObject.c_QObject]
@@ -143,8 +135,7 @@ c_ListenerPtrQAbstractButtonBool =
   , S.mkMethod "connectListener"
     [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] $ S.objT Connection.c_Connection
   , S.mkMethod "disconnectListener"
-    [S.objT Connection.c_Connection] S.boolT
-  ]
+    [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT  ]
 
 c_ListenerPtrQAbstractItemModel =
   S.makeClass (S.ident "ListenerPtrQAbstractItemModel") Nothing [QObject.c_QObject]
@@ -155,8 +146,7 @@ c_ListenerPtrQAbstractItemModel =
   , S.mkMethod "connectListener"
     [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] $ S.objT Connection.c_Connection
   , S.mkMethod "disconnectListener"
-    [S.objT Connection.c_Connection] S.boolT
-  ]
+    [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT  ]
 
 c_ListenerPtrQAction =
   S.makeClass (S.ident "ListenerPtrQAction") Nothing [QObject.c_QObject]
@@ -167,8 +157,7 @@ c_ListenerPtrQAction =
   , S.mkMethod "connectListener"
     [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] $ S.objT Connection.c_Connection
   , S.mkMethod "disconnectListener"
-    [S.objT Connection.c_Connection] S.boolT
-  ]
+    [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT  ]
 
 c_ListenerPtrQObject =
   S.makeClass (S.ident "ListenerPtrQObject") Nothing [QObject.c_QObject]
@@ -179,8 +168,7 @@ c_ListenerPtrQObject =
   , S.mkMethod "connectListener"
     [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] $ S.objT Connection.c_Connection
   , S.mkMethod "disconnectListener"
-    [S.objT Connection.c_Connection] S.boolT
-  ]
+    [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT  ]
 
 c_ListenerPtrQTreeWidgetItem =
   S.makeClass (S.ident "ListenerPtrQTreeWidgetItem") Nothing [QObject.c_QObject]
@@ -191,8 +179,7 @@ c_ListenerPtrQTreeWidgetItem =
   , S.mkMethod "connectListener"
     [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] $ S.objT Connection.c_Connection
   , S.mkMethod "disconnectListener"
-    [S.objT Connection.c_Connection] S.boolT
-  ]
+    [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT  ]
 
 c_ListenerPtrQTreeWidgetItemInt =
   S.makeClass (S.ident "ListenerPtrQTreeWidgetItemInt") Nothing [QObject.c_QObject]
@@ -203,8 +190,7 @@ c_ListenerPtrQTreeWidgetItemInt =
   , S.mkMethod "connectListener"
     [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] $ S.objT Connection.c_Connection
   , S.mkMethod "disconnectListener"
-    [S.objT Connection.c_Connection] S.boolT
-  ]
+    [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT  ]
 
 c_ListenerPtrQTreeWidgetItemPtrQTreeWidgetItem =
   S.makeClass (S.ident "ListenerPtrQTreeWidgetItemPtrQTreeWidgetItem") Nothing [QObject.c_QObject]
@@ -215,8 +201,7 @@ c_ListenerPtrQTreeWidgetItemPtrQTreeWidgetItem =
   , S.mkMethod "connectListener"
     [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] $ S.objT Connection.c_Connection
   , S.mkMethod "disconnectListener"
-    [S.objT Connection.c_Connection] S.boolT
-  ]
+    [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT  ]
 
 c_ListenerPtrQWidgetPtrQWidget =
   S.makeClass (S.ident "ListenerPtrQWidgetPtrQWidget") Nothing [QObject.c_QObject]
@@ -227,8 +212,7 @@ c_ListenerPtrQWidgetPtrQWidget =
   , S.mkMethod "connectListener"
     [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] $ S.objT Connection.c_Connection
   , S.mkMethod "disconnectListener"
-    [S.objT Connection.c_Connection] S.boolT
-  ]
+    [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT  ]
 
 c_ListenerQAbstractSliderAction =
   S.makeClass (S.ident "ListenerQAbstractSliderAction") Nothing [QObject.c_QObject]
@@ -239,8 +223,7 @@ c_ListenerQAbstractSliderAction =
   , S.mkMethod "connectListener"
     [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] $ S.objT Connection.c_Connection
   , S.mkMethod "disconnectListener"
-    [S.objT Connection.c_Connection] S.boolT
-  ]
+    [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT  ]
 
 c_ListenerQClipboardMode =
   S.makeClass (S.ident "ListenerQClipboardMode") Nothing [QObject.c_QObject]
@@ -251,8 +234,7 @@ c_ListenerQClipboardMode =
   , S.mkMethod "connectListener"
     [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] $ S.objT Connection.c_Connection
   , S.mkMethod "disconnectListener"
-    [S.objT Connection.c_Connection] S.boolT
-  ]
+    [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT  ]
 
 c_ListenerQDate =
   S.makeClass (S.ident "ListenerQDate") Nothing [QObject.c_QObject]
@@ -263,8 +245,7 @@ c_ListenerQDate =
   , S.mkMethod "connectListener"
     [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] $ S.objT Connection.c_Connection
   , S.mkMethod "disconnectListener"
-    [S.objT Connection.c_Connection] S.boolT
-  ]
+    [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT  ]
 
 c_ListenerQDockWidgetFeatures =
   S.makeClass (S.ident "ListenerQDockWidgetFeatures") Nothing [QObject.c_QObject]
@@ -275,8 +256,7 @@ c_ListenerQDockWidgetFeatures =
   , S.mkMethod "connectListener"
     [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] $ S.objT Connection.c_Connection
   , S.mkMethod "disconnectListener"
-    [S.objT Connection.c_Connection] S.boolT
-  ]
+    [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT  ]
 
 c_ListenerRefConstQModelIndex =
   S.makeClass (S.ident "ListenerRefConstQModelIndex") Nothing [QObject.c_QObject]
@@ -287,8 +267,7 @@ c_ListenerRefConstQModelIndex =
   , S.mkMethod "connectListener"
     [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] $ S.objT Connection.c_Connection
   , S.mkMethod "disconnectListener"
-    [S.objT Connection.c_Connection] S.boolT
-  ]
+    [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT  ]
 
 c_ListenerRefConstQListQModelIndex =
   S.makeClass (S.ident "ListenerRefConstQListQModelIndex") Nothing [QObject.c_QObject]
@@ -299,8 +278,7 @@ c_ListenerRefConstQListQModelIndex =
   , S.mkMethod "connectListener"
     [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] $ S.objT Connection.c_Connection
   , S.mkMethod "disconnectListener"
-    [S.objT Connection.c_Connection] S.boolT
-  ]
+    [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT  ]
 
 c_ListenerQModelIndex =
   S.makeClass (S.ident "ListenerQModelIndex") Nothing [QObject.c_QObject]
@@ -311,8 +289,7 @@ c_ListenerQModelIndex =
   , S.mkMethod "connectListener"
     [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] $ S.objT Connection.c_Connection
   , S.mkMethod "disconnectListener"
-    [S.objT Connection.c_Connection] S.boolT
-  ]
+    [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT  ]
 
 c_ListenerQModelIndexIntInt =
   S.makeClass (S.ident "ListenerQModelIndexIntInt") Nothing [QObject.c_QObject]
@@ -323,8 +300,7 @@ c_ListenerQModelIndexIntInt =
   , S.mkMethod "connectListener"
     [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] $ S.objT Connection.c_Connection
   , S.mkMethod "disconnectListener"
-    [S.objT Connection.c_Connection] S.boolT
-  ]
+    [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT  ]
 
 c_ListenerQModelIndexIntIntQModelIndexInt =
   S.makeClass (S.ident "ListenerQModelIndexIntIntQModelIndexInt") Nothing [QObject.c_QObject]
@@ -335,8 +311,7 @@ c_ListenerQModelIndexIntIntQModelIndexInt =
   , S.mkMethod "connectListener"
     [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] $ S.objT Connection.c_Connection
   , S.mkMethod "disconnectListener"
-    [S.objT Connection.c_Connection] S.boolT
-  ]
+    [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT  ]
 
 c_ListenerQModelIndexQModelIndex =
   S.makeClass (S.ident "ListenerQModelIndexQModelIndex") Nothing [QObject.c_QObject]
@@ -347,8 +322,7 @@ c_ListenerQModelIndexQModelIndex =
   , S.mkMethod "connectListener"
     [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] $ S.objT Connection.c_Connection
   , S.mkMethod "disconnectListener"
-    [S.objT Connection.c_Connection] S.boolT
-  ]
+    [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT  ]
 
 c_ListenerQModelIndexQModelIndexQVectorInt =
   S.makeClass (S.ident "ListenerQModelIndexQModelIndexQVectorInt") Nothing [QObject.c_QObject]
@@ -359,8 +333,7 @@ c_ListenerQModelIndexQModelIndexQVectorInt =
   , S.mkMethod "connectListener"
     [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] $ S.objT Connection.c_Connection
   , S.mkMethod "disconnectListener"
-    [S.objT Connection.c_Connection] S.boolT
-  ]
+    [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT  ]
 
 c_ListenerQPoint =
   S.makeClass (S.ident "ListenerQPoint") Nothing [QObject.c_QObject]
@@ -371,8 +344,7 @@ c_ListenerQPoint =
   , S.mkMethod "connectListener"
     [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] $ S.objT Connection.c_Connection
   , S.mkMethod "disconnectListener"
-    [S.objT Connection.c_Connection] S.boolT
-  ]
+    [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT  ]
 
 c_ListenerQreal =
   S.makeClass (S.ident "ListenerQreal") Nothing [QObject.c_QObject]
@@ -383,8 +355,7 @@ c_ListenerQreal =
   , S.mkMethod "connectListener"
     [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] $ S.objT Connection.c_Connection
   , S.mkMethod "disconnectListener"
-    [S.objT Connection.c_Connection] S.boolT
-  ]
+    [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT  ]
 
 c_ListenerQSize =
   S.makeClass (S.ident "ListenerQSize") Nothing [QObject.c_QObject]
@@ -395,8 +366,7 @@ c_ListenerQSize =
   , S.mkMethod "connectListener"
     [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] $ S.objT Connection.c_Connection
   , S.mkMethod "disconnectListener"
-    [S.objT Connection.c_Connection] S.boolT
-  ]
+    [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT  ]
 
 c_ListenerQString =
   S.makeClass (S.ident "ListenerQString") Nothing [QObject.c_QObject]
@@ -407,8 +377,7 @@ c_ListenerQString =
   , S.mkMethod "connectListener"
     [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] $ S.objT Connection.c_Connection
   , S.mkMethod "disconnectListener"
-    [S.objT Connection.c_Connection] S.boolT
-  ]
+    [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT  ]
 
 c_ListenerQSystemTrayIconActivationReason =
   S.makeClass (S.ident "ListenerQSystemTrayIconActivationReason") Nothing [QObject.c_QObject]
@@ -419,8 +388,7 @@ c_ListenerQSystemTrayIconActivationReason =
   , S.mkMethod "connectListener"
     [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] $ S.objT Connection.c_Connection
   , S.mkMethod "disconnectListener"
-    [S.objT Connection.c_Connection] S.boolT
-  ]
+    [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT  ]
 
 c_ListenerQWindowVisibility =
   S.makeClass (S.ident "ListenerQWindowVisibility") Nothing [QObject.c_QObject]
@@ -431,8 +399,7 @@ c_ListenerQWindowVisibility =
   , S.mkMethod "connectListener"
     [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] $ S.objT Connection.c_Connection
   , S.mkMethod "disconnectListener"
-    [S.objT Connection.c_Connection] S.boolT
-  ]
+    [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT  ]
 
 c_ListenerRefConstQIcon =
   S.makeClass (S.ident "ListenerRefConstQIcon") Nothing [QObject.c_QObject]
@@ -443,8 +410,7 @@ c_ListenerRefConstQIcon =
   , S.mkMethod "connectListener"
     [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] $ S.objT Connection.c_Connection
   , S.mkMethod "disconnectListener"
-    [S.objT Connection.c_Connection] S.boolT
-  ]
+    [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT  ]
 
 c_ListenerRefConstQItemSelectionRefConstQItemSelection =
   S.makeClass (S.ident "ListenerRefConstQItemSelectionRefConstQItemSelection") Nothing [QObject.c_QObject]
@@ -455,8 +421,7 @@ c_ListenerRefConstQItemSelectionRefConstQItemSelection =
   , S.mkMethod "connectListener"
     [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] $ S.objT Connection.c_Connection
   , S.mkMethod "disconnectListener"
-    [S.objT Connection.c_Connection] S.boolT
-  ]
+    [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT  ]
 
 c_ListenerScreenOrientation =
   S.makeClass (S.ident "ListenerScreenOrientation") Nothing [QObject.c_QObject]
@@ -467,8 +432,7 @@ c_ListenerScreenOrientation =
   , S.mkMethod "connectListener"
     [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] $ S.objT Connection.c_Connection
   , S.mkMethod "disconnectListener"
-    [S.objT Connection.c_Connection] S.boolT
-  ]
+    [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT  ]
 
 c_ListenerToolBarAreas =
   S.makeClass (S.ident "ListenerToolBarAreas") Nothing [QObject.c_QObject]
@@ -479,8 +443,7 @@ c_ListenerToolBarAreas =
   , S.mkMethod "connectListener"
     [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] $ S.objT Connection.c_Connection
   , S.mkMethod "disconnectListener"
-    [S.objT Connection.c_Connection] S.boolT
-  ]
+    [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT  ]
 
 c_ListenerToolButtonStyle =
   S.makeClass (S.ident "ListenerToolButtonStyle") Nothing [QObject.c_QObject]
@@ -491,8 +454,7 @@ c_ListenerToolButtonStyle =
   , S.mkMethod "connectListener"
     [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] $ S.objT Connection.c_Connection
   , S.mkMethod "disconnectListener"
-    [S.objT Connection.c_Connection] S.boolT
-  ]
+    [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT  ]
 
 c_ListenerWindowModality =
   S.makeClass (S.ident "ListenerWindowModality") Nothing [QObject.c_QObject]
@@ -503,8 +465,7 @@ c_ListenerWindowModality =
   , S.mkMethod "connectListener"
     [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] $ S.objT Connection.c_Connection
   , S.mkMethod "disconnectListener"
-    [S.objT Connection.c_Connection] S.boolT
-  ]
+    [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT  ]
 
 c_ListenerWindowState =
   S.makeClass (S.ident "ListenerWindowState") Nothing [QObject.c_QObject]
@@ -515,8 +476,7 @@ c_ListenerWindowState =
   , S.mkMethod "connectListener"
     [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] $ S.objT Connection.c_Connection
   , S.mkMethod "disconnectListener"
-    [S.objT Connection.c_Connection] S.boolT
-  ]
+    [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT  ]
 
 c_ListenerQlonglong =
   S.makeClass (S.ident "ListenerQlonglong") Nothing [QObject.c_QObject]
@@ -527,8 +487,7 @@ c_ListenerQlonglong =
   , S.mkMethod "connectListener"
     [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] $ S.objT Connection.c_Connection
   , S.mkMethod "disconnectListener"
-    [S.objT Connection.c_Connection] S.boolT
-  ]
+    [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT  ]
 
 c_ListenerIntQlonglong =
   S.makeClass (S.ident "ListenerIntQlonglong") Nothing [QObject.c_QObject]
@@ -539,8 +498,7 @@ c_ListenerIntQlonglong =
   , S.mkMethod "connectListener"
     [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] $ S.objT Connection.c_Connection
   , S.mkMethod "disconnectListener"
-    [S.objT Connection.c_Connection] S.boolT
-  ]
+    [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT  ]
 
 c_ListenerProcessError =
   S.makeClass (S.ident "ListenerProcessError") Nothing [QObject.c_QObject]
@@ -551,8 +509,7 @@ c_ListenerProcessError =
   , S.mkMethod "connectListener"
     [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] $ S.objT Connection.c_Connection
   , S.mkMethod "disconnectListener"
-    [S.objT Connection.c_Connection] S.boolT
-  ]
+    [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT  ]
 
 c_ListenerIntExitStatus =
   S.makeClass (S.ident "ListenerIntExitStatus") Nothing [QObject.c_QObject]
@@ -563,8 +520,7 @@ c_ListenerIntExitStatus =
   , S.mkMethod "connectListener"
     [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] $ S.objT Connection.c_Connection
   , S.mkMethod "disconnectListener"
-    [S.objT Connection.c_Connection] S.boolT
-  ]
+    [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT  ]
 
 c_ListenerProcessState =
   S.makeClass (S.ident "ListenerProcessState") Nothing [QObject.c_QObject]
@@ -575,8 +531,7 @@ c_ListenerProcessState =
   , S.mkMethod "connectListener"
     [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] $ S.objT Connection.c_Connection
   , S.mkMethod "disconnectListener"
-    [S.objT Connection.c_Connection] S.boolT
-  ]
+    [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT  ]
 
 c_Listener =
   S.makeClass (S.ident "Listener") Nothing [QObject.c_QObject]
@@ -587,8 +542,7 @@ c_Listener =
   , S.mkMethod "connectListener"
     [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] $ S.objT Connection.c_Connection
   , S.mkMethod "disconnectListener"
-    [S.objT Connection.c_Connection] S.boolT
-  ]
+    [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT  ]
 
 aModule :: M.AModule
 aModule =

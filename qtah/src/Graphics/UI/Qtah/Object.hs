@@ -28,4 +28,3 @@ import Graphics.UI.Qtah.Core.Connection (Connection)
 
 disconnectWithConn_ :: Connection -> IO Bool
 disconnectWithConn_ = QObject.disconnectWithMetaobject
-

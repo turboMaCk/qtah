@@ -29,7 +29,7 @@ import qualified Graphics.UI.Qtah.Core.QCoreApplication as QCoreApplication
 import qualified Graphics.UI.Qtah.Core.QProcessEnvironment as QProcessEnvironment
 import Graphics.UI.Qtah.Event
 import Graphics.UI.Qtah.Gui.QCloseEvent (QCloseEvent)
-import Graphics.UI.Qtah.Signal (connect_, disconnect_, disconnectWithConn_)
+import Graphics.UI.Qtah.Signal (nullptr, connect_, disconnect_, disconnectWithConn_)
 import qualified Graphics.UI.Qtah.Core.QEvent as QEvent
 import qualified Graphics.UI.Qtah.Widgets.QAction as QAction
 import Graphics.UI.Qtah.Widgets.QAction (triggeredSignal)
@@ -124,6 +124,8 @@ makeMainWindow = do
   -- QObject.disconnectStatic text "textChanged()" window "showMinimized()" 
   disconnectWithConn_ textEditConn
 
+  
+
   connect_ menuFileOpen triggeredSignal $ \_ -> fileOpen me
   connect_ menuFileSave triggeredSignal $ \_ -> void $ fileSave me
   connect_ menuFileSaveAs triggeredSignal $ \_ -> void $ fileSaveAs me
@@ -138,6 +140,8 @@ makeMainWindow = do
   connect_ menuEditCopy triggeredSignal $ \_ -> QTextEdit.copy text
   connect_ menuEditPaste triggeredSignal $ \_ -> QTextEdit.paste text
   connect_ menuEditSelectAll triggeredSignal $ \_ -> QTextEdit.selectAll text
+
+  disconnect_ menuFileClose triggeredSignal nullptr
 
   connect_ text textChangedSignal $ setDirty me True
   connect_ text undoAvailableSignal $ \b -> QAction.setEnabled menuEditUndo b

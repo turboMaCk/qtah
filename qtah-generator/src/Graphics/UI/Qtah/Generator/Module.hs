@@ -386,7 +386,7 @@ sayExportSignal signal = inFunction "sayExportSignal" $ do
                  show listenerClass, " for signal ", show name]) $
     find ((RealMethod (FnName "connectListener") ==) . methodImpl) $ classMethods listenerClass
 
-  -- Also find the 'connectListener' method.
+  -- Also find the 'getInstance' method.
   getInstanceMethod <-
     fromMaybeM (throwError $ concat
                 ["Couldn't find the getInstance method in ",
@@ -425,12 +425,12 @@ sayExportSignal signal = inFunction "sayExportSignal" $ do
               toHsFnName' $ classEntityForeignName listenerClass listenerCtor, " fn'"]
       saysLn [toHsFnName' $ classEntityForeignName listenerClass listenerConnectMethod,
               " listener' object' ", show (toSignalConnectName signal paramTypes)]
-    sayLn ", QtahSignal.internalDisconnectSignal = \\metaobject' -> do"
+    sayLn ", QtahSignal.internalDisconnectSignal = \\object' fn' -> do"
     indent $ do
       saysLn ["listener' <- ",
               toHsFnName' $ classEntityForeignName listenerClass getInstanceMethod]
       saysLn [toHsFnName' $ classEntityForeignName listenerClass listenerDisconnectMethod,
-              " listener' metaobject' "]
+              " listener' object' ", show (toSignalConnectName signal paramTypes)]
     saysLn [", QtahSignal.internalName = ", show internalName]
     sayLn "}"
 
@@ -453,3 +453,5 @@ importWholeModuleForExtName :: ExtName -> Generator ()
 importWholeModuleForExtName extName = do
   iface <- askInterface
   addImports . hsWholeModuleImport . getModuleName iface =<< getModuleForExtName extName
+
+--  addImports . (if fromExtName extName == "QObject" then hsImportSetMakeSource . hsWholeModuleImport else hsWholeModuleImport) . getModuleName iface =<< getModuleForExtName extName
