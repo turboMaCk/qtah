@@ -49,7 +49,7 @@ amountofbitspaces=$5
 ifSignals=$6
 ifIncludedLocale=$7
 classFeatures=$8
-generalTypes="$9, voidT, enumT, constT, objT, ptrT, refT"
+generalTypes="$9, voidT, enumT, bitspaceT, constT, objT, ptrT, refT"
 coreTypes=${10}
 opList=${11}
 minVersion=${12}
@@ -119,6 +119,7 @@ echo -e "  ) where
 exportString=""
 applicalibityString=""
 operatorString=""
+gcConversion=""
 
 if [ $amountofbitspaces -gt 0 ]; then
   exportString=", ExportBitspace, ExportEnum),"
@@ -135,11 +136,16 @@ fi
 if [ ! -z "$opList" ]; then
   operatorString="Operator ($opList),"
 fi
+
+if [ ! -z "$classFeatures" ]; then
+  gcConversion="classSetConversionToGc,"
+fi
   
 echo -e "import Foreign.Hoppy.Generator.Spec (
   Export (ExportClass$exportString
   $applicalibityString
   $operatorString
+  $gcConversion
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -160,6 +166,16 @@ echo -e "import Foreign.Hoppy.Generator.Spec (
   
 " >> $HASKELL_FILE 
   
+
+if [ ! -z "$classFeatures" ]; then
+    echo -e "import Foreign.Hoppy.Generator.Spec.ClassFeature (
+  ClassFeature ($classFeatures),
+  classAddFeatures,
+  )
+  
+" >> $HASKELL_FILE
+fi  
+  
   
 # add imports  
   
@@ -172,9 +188,9 @@ if [ $ifSignals == true ]; then
 fi
 
 if [ ! -z "$minVersion" ]; then
-  makeModuleVer="makeQtModuleWithMinVersion),"
+  makeModuleVer="makeQtModuleWithMinVersion)"
 else
-  makeModuleVer="makeQtModule),"
+  makeModuleVer="makeQtModule)"
 fi
 
 if [ ! -z "$coreTypes" ]; then
@@ -208,9 +224,9 @@ aModuleVersion=""
 if [ ! -z "$minVersion" ]; then
   majorVersion="$(cut -d'.' -f1 <<<"$minVersion")"
   minorVersion="$(cut -d'.' -f2 <<<"$minVersion")"
-  aModuleVersion="makeQtModuleWithMinVersion [$modulename, $classname] [$majorVersion, $minorVersion] $"
+  aModuleVersion="makeQtModuleWithMinVersion [\"$modulename\", \"$classname\"] [$majorVersion, $minorVersion] $"
 else
-  aModuleVersion="makeQtModule [$modulename, $classname] $"
+  aModuleVersion="makeQtModule [\"$modulename\", \"$classname\"] $"
 fi
 
 
@@ -324,10 +340,10 @@ if [ $ifIncludedLocale == true ]; then
 fi  
   
 echo -e "c_$classname =
-  addReqIncludes [ includeStd $classname$includeLocalString ] $
+  addReqIncludes [ includeStd \"$classname\"$includeLocalString ] $
   $classFeaturesString
   classSetEntityPrefix "" $
-  makeClass (ident $classname]) Nothing [$superclass] $
+  makeClass (ident \"$classname\") Nothing [$superclass] $
   collect
   [ 
   -- TODO Methods 
