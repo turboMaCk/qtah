@@ -31,13 +31,13 @@
 
 # EXAMPLES
 
-# ./class-template-maker "Core" "QResource" "" 1 0 false false "" "ucharT, boolT" "longlong" "" "4.2"
+# ./class-template-maker "Core" "QResource" "" 1 0 false false "" "ucharT, boolT" "qlonglong" "" "4.2"
 # ./class-template-maker "Core" "QTime" "" 0 0 false false "Equatable, Comparable" "boolT, intT" "e_DateFormat" "" ""
 # ./class-template-maker "Gui" "QVulkanWindow" "QWindow" 0 1 false false "Copyable" "boolT, intT, word32T" "" "" "5.10"
 # ./class-template-maker "Core" "QDir" "" 0 2 false false "Copyable, Assignable, Equatable" "boolT, uintT" "" "OpArray" ""
 
 # 1) of amountofbitspaces contains one enum and one bitspace
-# 2) There is no need to add such general types as  voidT, enumT, constT, objT, ptrT, refT. They are generated automatically
+# 2) There is no need to add such general types as  voidT, enumT, bitspaceT, constT, objT, ptrT, refT. They are generated automatically
 
 # variables from arguments
 
