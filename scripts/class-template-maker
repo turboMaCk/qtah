@@ -288,6 +288,17 @@ echo -e "  ]
 
 " >> $HASKELL_FILE
   
+  
+else
+
+echo -e "aModule =
+  AQtModule $
+  $aModuleVersion
+  QtExport (ExportClass c_$classname)
+  
+  
+" >> $HASKELL_FILE
+
 fi
 
 
