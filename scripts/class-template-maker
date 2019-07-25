@@ -310,7 +310,7 @@ else
 echo -e "aModule =
   AQtModule $
   $aModuleVersion
-  QtExport (ExportClass c_$classname)
+  [QtExport $ ExportClass c_$classname]
   
   
 " >> $HASKELL_FILE
@@ -342,7 +342,7 @@ fi
 echo -e "c_$classname =
   addReqIncludes [ includeStd \"$classname\"$includeLocalString ] $
   $classFeaturesString
-  classSetEntityPrefix "" $
+  classSetEntityPrefix \"\" $
   makeClass (ident \"$classname\") Nothing [$superclass] $
   collect
   [ 
