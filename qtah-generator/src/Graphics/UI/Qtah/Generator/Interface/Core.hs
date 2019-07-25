@@ -21,6 +21,7 @@ import qualified Graphics.UI.Qtah.Generator.Interface.Core.QAbstractItemModel as
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QAbstractListModel as QAbstractListModel
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QAbstractTableModel as QAbstractTableModel
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QByteArray as QByteArray
+import qualified Graphics.UI.Qtah.Generator.Interface.Core.QBuffer as QBuffer
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QChar as QChar
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QChildEvent as QChildEvent
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QCoreApplication as QCoreApplication
@@ -79,6 +80,7 @@ modules =
     , QAbstractListModel.aModule
     , QAbstractTableModel.aModule
     , QByteArray.aModule
+    , QBuffer.aModule
     , QChar.aModule
     , QChildEvent.aModule
     , QCoreApplication.aModule
