@@ -63,6 +63,7 @@ import qualified Graphics.UI.Qtah.Generator.Interface.Core.QString as QString
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QStringList as QStringList
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QStringListModel as QStringListModel
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QTextCodec as QTextCodec
+import qualified Graphics.UI.Qtah.Generator.Interface.Core.QTextEncoder as QTextEncoder
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QThread as QThread
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QTimer as QTimer
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QTimerEvent as QTimerEvent
@@ -121,6 +122,7 @@ modules =
     , QStringList.aModule
     , QStringListModel.aModule
     , QTextCodec.aModule
+    , QTextEncoder.aModule
     , QThread.aModule
     , QTimer.aModule
     , QTimerEvent.aModule
