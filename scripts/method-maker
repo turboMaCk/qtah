@@ -1,0 +1,72 @@
+#!/usr/bin/env bash
+
+# This file is part of Qtah.
+#
+# Copyright 2015-2019 The Qtah Authors.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# execution template:
+# ./method-maker ifStatic minVersion fullmethod
+
+# result is generated in console. It can be copied and pasted into methods in class
+
+# Examples of full methods, which can be given as strings:
+
+# QByteArray QTextEncoder::fromUnicode(const QString &str)
+# QFileSelector(QObject *parent = nullptr)
+# void QProcess::setReadChannel(QProcess::ProcessChannel channel)
+# int QProcess::execute(const QString &program, const QStringList &arguments) 
+# void QProcess::setStandardErrorFile(const QString &fileName, QIODevice::OpenMode mode = Truncate)
+
+contentMain=$(echo "$3" | awk -F"(" '{print $1}')
+contentArg="("$(echo "$3" | awk -F"(" '{print $2}')
+
+echo "contentMain is $contentMain"
+echo "contentArg is $contentArg" 
+
+Heurystyka
+
+I. Rozbij fullmethod na części:
+  1. Pierwsza część tekstu jest wzięta do zmiennej od początku do pierwszego wystąpienia "("
+    1.1 Część dzielona jest według białych znaków
+        a) Jeśli zawierają się dwie części to zapisz pierwszą część jako zmienną z typem zwracanym, a z drugiej wyciagnij nazwe funkcji od "::" do konca (od razu oflaguj jako mkMethod, o ile nie bylo ifStatic w argumentach skryptu)
+        a) Jeśli zawierają się trzy części to zapisz pierwszą część jako zmienną z typem zwracanym, a z drugiej wyciagnij nazwe funkcji od "::" do konca (od razu oflaguj jako mkConstMethod, o ile nie bylo ifStatic w argumentach skryptu)
+        b) a jesli jest tylko jedna czesc to wyciagnij nazwe funkcji (oflaguj od razu jako mkCtor)
+        w dodatku wyciagnij nazwe klasy do innej zmiennej jesli to a)
+  2. Druga część tekstu to wszystko co zawiera się od pierwszego znaku "(" do ostatniego znaku ")"
+    2.1 Część dzielona jest według przecinków
+        a) Sprawdz ile bedzie wersji dla funkcji. Zawsze to bedzie (2, jesli pierwszy argument ma "=") + (wszystkie inne argumenty zawierajace znak "="). 
+        b) jesli nie istnieja zadne argumenty to dac [] do zmiennej wszystkich argumentow
+        c) jesli zawiera pierwszy argument znak "=", to stworzyc od razu pierwsza wersje. Bedzie po pierwszym elemencie miala znak "'", nazwe realna metody i druga tez. Druga wersja bedzie po pierwszym elemencie miala znak "'", nazwe realna metody i (nazwe realna metody + slowo "With1Arg") oraz typ wedlug uniwersalnego sprawdzacza.
+          c1) dla kazdego kolejnego argumentu po czyms takim trzeba bedzie inkrementowac przed kazda wersja "With${i}Arg" i sprawdzac funkcja uniwersalna
+        d) jesli piewszy argument nie zawiera "=" to tworz jedna wersja funkcji, o ile ktorys z argumentow dalszych nie bedzie go zawieral. Bo jesli tak to wersja pierwsza zakonczy sie wraz z argumentem tego poprzedzajacego z "=", dodaniem apostrofu do mk, dodaniu dwoch naz po sobie. Zapisz do zmiennej numer argumentu, na ktorym ma byc pierwszy default parameter. Do tego momentu bedzie tworzona kolejna wersja. Kolejna wersja znow zacznie sprawdzac, czy potem znowu czegos nie ma i bedzie ponawiac kolejna wersje w razie wystapienia
+        
+uniwersalny sprawdzacz argumentu w postaci funkcji:
+
+przyjmuje w argumencie swoja tresc
+
+1) jesli zawiera znak "=", to usun z tresci wszystko od znaku  "="
+2) jesli zawiera znak "&", to przygotuj na przodzie "refT $ " i usun & z tresci oraz wszystkie znaki po nim nastepujace
+3) jesli jednak zawiera znak "*", to przygotuj na przodzie "ptrT $ " i usun * z tresci oraz wszystkie znaki po nim nastepujace
+4) jesli zawiera slowo "const ", to dolacz do poprzedniego rezultatu "constT $ " i usun "const " z tresci
+5) pozostala tresc usun z bialych znakow od przodu i od tylu
+6) Sprobuj jeszcze raz podzielic tresc wedlug bialych znakow
+  a) jesli wynik wskazuje 2, to typem jest pierwsza zmienna i ja sprawdzamy dalej
+  b) jesli wynik wskazuje 1, to nic nie trzeba zmieniac tylko wystarczy przejsc dalej
+6) sprawdz czy tresc zawiera slowo "::", 
+   a) jak tak to powstanie "enumT"
+   b) jak nie to sprawdz czy jest to jedno z typow podstawowych i od razu go podloz
+   c) jesli jednak nie jest to typ podstawowy to dodaj "objT $zmienna_pozostala"
+7) funkcja zwraca polaczenie ostatnich tresci
