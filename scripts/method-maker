@@ -1,22 +1,5 @@
 #!/usr/bin/env bash
 
-# This file is part of Qtah.
-#
-# Copyright 2015-2019 The Qtah Authors.
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU Lesser General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU Lesser General Public License for more details.
-#
-# You should have received a copy of the GNU Lesser General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
 # execution template:
 # ./method-maker ifStatic minVersion fullmethod
 
@@ -30,43 +13,480 @@
 # int QProcess::execute(const QString &program, const QStringList &arguments) 
 # void QProcess::setStandardErrorFile(const QString &fileName, QIODevice::OpenMode mode = Truncate)
 
-contentMain=$(echo "$3" | awk -F"(" '{print $1}')
-contentArg="("$(echo "$3" | awk -F"(" '{print $2}')
+contentMain=$(echo "$3" | awk -F"(" '{print $1}') # everything before "(" character
+contentArg="("$(echo "$3" | awk -F"(" '{print $2}') # everything after "(" character
+ifStatic=$1
+minVersion=$2
+returnedType=""
+methodName=""
+argList=""
+method=""
+ifFirstDefault= false
+defaultsCount=0
+
 
 echo "contentMain is $contentMain"
 echo "contentArg is $contentArg" 
 
-Heurystyka
 
-I. Rozbij fullmethod na części:
-  1. Pierwsza część tekstu jest wzięta do zmiennej od początku do pierwszego wystąpienia "("
-    1.1 Część dzielona jest według białych znaków
-        a) Jeśli zawierają się dwie części to zapisz pierwszą część jako zmienną z typem zwracanym, a z drugiej wyciagnij nazwe funkcji od "::" do konca (od razu oflaguj jako mkMethod, o ile nie bylo ifStatic w argumentach skryptu)
-        a) Jeśli zawierają się trzy części to zapisz pierwszą część jako zmienną z typem zwracanym, a z drugiej wyciagnij nazwe funkcji od "::" do konca (od razu oflaguj jako mkConstMethod, o ile nie bylo ifStatic w argumentach skryptu)
-        b) a jesli jest tylko jedna czesc to wyciagnij nazwe funkcji (oflaguj od razu jako mkCtor)
-        w dodatku wyciagnij nazwe klasy do innej zmiennej jesli to a)
-  2. Druga część tekstu to wszystko co zawiera się od pierwszego znaku "(" do ostatniego znaku ")"
-    2.1 Część dzielona jest według przecinków
-        a) Sprawdz ile bedzie wersji dla funkcji. Zawsze to bedzie (2, jesli pierwszy argument ma "=") + (wszystkie inne argumenty zawierajace znak "="). 
-        b) jesli nie istnieja zadne argumenty to dac [] do zmiennej wszystkich argumentow
-        c) jesli zawiera pierwszy argument znak "=", to stworzyc od razu pierwsza wersje. Bedzie po pierwszym elemencie miala znak "'", nazwe realna metody i druga tez. Druga wersja bedzie po pierwszym elemencie miala znak "'", nazwe realna metody i (nazwe realna metody + slowo "With1Arg") oraz typ wedlug uniwersalnego sprawdzacza.
-          c1) dla kazdego kolejnego argumentu po czyms takim trzeba bedzie inkrementowac przed kazda wersja "With${i}Arg" i sprawdzac funkcja uniwersalna
-        d) jesli piewszy argument nie zawiera "=" to tworz jedna wersja funkcji, o ile ktorys z argumentow dalszych nie bedzie go zawieral. Bo jesli tak to wersja pierwsza zakonczy sie wraz z argumentem tego poprzedzajacego z "=", dodaniem apostrofu do mk, dodaniu dwoch naz po sobie. Zapisz do zmiennej numer argumentu, na ktorym ma byc pierwszy default parameter. Do tego momentu bedzie tworzona kolejna wersja. Kolejna wersja znow zacznie sprawdzac, czy potem znowu czegos nie ma i bedzie ponawiac kolejna wersje w razie wystapienia
-        
-uniwersalny sprawdzacz argumentu w postaci funkcji:
+if [[ $contentMain =~ "::" ]]; then
 
-przyjmuje w argumencie swoja tresc
+    read -a strarr <<< "$contentMain"
+    
+    if [ ${#strarr[*]} -gt 1 ]; then    # greater than 1 means it must have separated by whitespaces 1) return type and 2) classname::methodname
+    
+       echo "Use other function than mkCtor"
+       
+       returnedType="${strarr[0]}"
+       
+       echo "Return type is $returnedType"
+       
+       methodName="$(sed 's/.*:://' <<< "${strarr[1]}")"
+       echo "Method name is $methodName"
+       
+       if [ $ifStatic == true ]; then
+           method="static-method"
+       elif [ `echo $contentArg | awk '{print $NF}'` == "const" ]; then
+           method="const-method"
+       else     
+           method="regular-method"
+       fi
+       
+    else
+       echo "Use mkCtor function"
+       method="constructor-method"
+    fi
+    
+else
+     echo "Use mkCtor function"
+     method="constructor-method"
+fi
 
-1) jesli zawiera znak "=", to usun z tresci wszystko od znaku  "="
-2) jesli zawiera znak "&", to przygotuj na przodzie "refT $ " i usun & z tresci oraz wszystkie znaki po nim nastepujace
-3) jesli jednak zawiera znak "*", to przygotuj na przodzie "ptrT $ " i usun * z tresci oraz wszystkie znaki po nim nastepujace
-4) jesli zawiera slowo "const ", to dolacz do poprzedniego rezultatu "constT $ " i usun "const " z tresci
-5) pozostala tresc usun z bialych znakow od przodu i od tylu
-6) Sprobuj jeszcze raz podzielic tresc wedlug bialych znakow
-  a) jesli wynik wskazuje 2, to typem jest pierwsza zmienna i ja sprawdzamy dalej
-  b) jesli wynik wskazuje 1, to nic nie trzeba zmieniac tylko wystarczy przejsc dalej
-6) sprawdz czy tresc zawiera slowo "::", 
-   a) jak tak to powstanie "enumT"
-   b) jak nie to sprawdz czy jest to jedno z typow podstawowych i od razu go podloz
-   c) jesli jednak nie jest to typ podstawowy to dodaj "objT $zmienna_pozostala"
-7) funkcja zwraca polaczenie ostatnich tresci
+
+echo "It's $method"
+
+afterChar=${contentArg#*(}
+argList=${afterChar%)*}
+
+echo "Parameters list is $argList"
+
+
+# https://stackoverflow.com/questions/369758/how-to-trim-whitespace-from-a-bash-variable
+trim() {
+    local var="$*"
+    # remove leading whitespace characters
+    var="${var#"${var%%[![:space:]]*}"}" 
+    echo -e "$var"
+}
+
+trimBothSides() {
+    local var="$*"
+    # remove leading whitespace characters
+    var="${var#"${var%%[![:space:]]*}"}"
+    # remove trailing whitespace characters
+    var="${var%"${var##*[![:space:]]}"}"   
+    echo -n "$var"
+}
+
+IFS=',' read -r -a argArray <<< "$argList"
+
+
+if [ ${#argArray[*]} -gt 0 ]; then
+
+for index in "${!argArray[@]}"
+do
+    echo "$index)"
+    trim "${argArray[index]}"
+    
+    if [[ "${argArray[index]}" =~ "=" ]]; then
+       if [ $index -eq 0 ]; then
+         ifFirstDefault=true
+         defaultsCount=2
+       else
+         defaultsCount=$((defaultsCount+1))
+       fi
+    fi
+done
+
+fi
+
+# gets type name from C++
+return_type_for_haskell () {
+case "$*" in
+'bool')
+  echo "boolT"
+;;
+'int')
+  echo "intT"
+;;
+'std::string')
+  #echo "attach \"import Foreign.Hoppy.Generator.Std.String (c_string)\" in class file"
+  echo "c_string"
+;;
+'std::u16string')
+  echo "-- TODO std::u16string"
+;;
+'std::u32string')
+  echo "-- TODO std::u32string"
+;;
+'std::wstring')
+  echo "-- TODO std::wstring"
+;;
+'uint')
+  echo "uintT"
+;;
+'ulong')
+  echo "ulongT"
+;;
+'qulonglong')
+  #echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qulonglong)\" in class file"
+  echo "qulonglong"
+;;
+'qlonglong')
+  #echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qlonglong)\" in class file"
+  echo "qlonglong"
+;;
+'ushort')
+  echo "ushortT"
+;;
+'wchar_t')
+  echo "-- TODO wchar_t"
+;;
+'char')
+  echo "charT"
+;;
+'short')
+  echo "shortT"
+;;
+'char16_t')
+  echo "-- TODO char16_t"
+;;
+'char32_t')
+  echo "-- TODO char32_t"
+;;
+'long')
+  echo "longT"
+;;
+'qint64')
+  echo "int64_t"
+;;
+'quint64')
+  echo "uint64_t"
+;;
+'float')
+  echo "floatT"
+;;
+'double')
+  echo "doubleT"
+;;
+'void')
+  echo "voidT"
+;;
+'uchar')
+  echo "ucharT"
+;;
+'qreal')
+  #echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qreal)\" in class file"
+  echo "qreal"
+;;
+*) 
+  if [[ "$*" =~ "::" ]]; then
+    enumName="$(sed 's/.*:://' <<< "$*")"
+    #echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (e_$enumName)\" in class file"
+    #echo "In the case of import error, try \"bitspaceT bs_$enumName\""
+    echo "enumT e_$enumName"
+  else
+    #echo "It's object"
+    #echo "$*"
+    echo "objT c_$*" # return then objT
+  fi
+;;
+esac
+}
+
+
+return_type_for_haskell_2 () {
+case "$*" in
+'bool')
+  echo "boolT"
+;;
+'int')
+  echo "intT"
+;;
+'std::string')
+  #echo "attach \"import Foreign.Hoppy.Generator.Std.String (c_string)\" in class file"
+  echo "c_string"
+;;
+'std::u16string')
+  echo "-- TODO std::u16string"
+;;
+'std::u32string')
+  echo "-- TODO std::u32string"
+;;
+'std::wstring')
+  echo "-- TODO std::wstring"
+;;
+'uint')
+  echo "uintT"
+;;
+'ulong')
+  echo "ulongT"
+;;
+'qulonglong')
+  #echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qulonglong)\" in class file"
+  echo "qulonglong"
+;;
+'qlonglong')
+  #echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qlonglong)\" in class file"
+  echo "qlonglong"
+;;
+'ushort')
+  echo "ushortT"
+;;
+'wchar_t')
+  echo "-- TODO wchar_t"
+;;
+'char')
+  echo "charT"
+;;
+'short')
+  echo "shortT"
+;;
+'char16_t')
+  echo "-- TODO char16_t"
+;;
+'char32_t')
+  echo "-- TODO char32_t"
+;;
+'long')
+  echo "longT"
+;;
+'qint64')
+  echo "int64_t"
+;;
+'quint64')
+  echo "uint64_t"
+;;
+'float')
+  echo "floatT"
+;;
+'double')
+  echo "doubleT"
+;;
+'void')
+  echo "voidT"
+;;
+'uchar')
+  echo "ucharT"
+;;
+'qreal')
+  #echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qreal)\" in class file"
+  echo "qreal"
+;;
+*) 
+  if [ $(grep -o "::" <<<"$*" | wc -l) -gt 1 ]; then
+    enumName="$(sed 's/.*:://' <<< "$*")"
+    #echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (e_$enumName)\" in class file"
+    #echo "In the case of import error, try \"bitspaceT bs_$enumName\""
+    echo "enumT e_$enumName"
+  else
+    #echo "It's object"
+    #echo "$*"
+    echo "objT c_$*" # return then objT
+  fi
+;;
+esac
+}
+
+
+convert_arg_to_haskell () {
+
+local argFromC="$*"
+
+#echo "$argFromC"
+argFromC=${argFromC/build-sdists/}
+local result=""
+ampersand='\&'
+#echo "$argFromC"
+
+if [[ $argFromC =~ '=' ]]; then
+#   echo "There is \"=\" character" 
+   argFromC=$(echo "$argFromC" | cut -f1 -d'=')
+fi
+
+if [[ $argFromC =~ $ampersand ]]; then
+#   echo "There is \"&\" character" 
+   argFromC=$(echo "$argFromC" | cut -f1 -d'&')
+   result+="refT $ "
+elif egrep -q "\*" <<< "$argFromC"; then
+   #echo "There is \"*\" character" 
+   argFromC=$(echo "$argFromC" | cut -f1 -d'\') # because asterisks have to be backlashed
+   result+="ptrT $ "
+fi
+
+if [[ "$argFromC" =~ "const" ]]; then
+#   echo "There is \"const\" word" 
+   argFromC=${argFromC/const/}
+   result+="constT $ "
+fi
+
+
+argFromC="$(trimBothSides $argFromC)"
+#echo "Trimmed argument is $argFromC"
+IFS=' '
+read -a strarrr <<< "$argFromC"
+    
+    
+if [ ${#strarrr[*]} -eq 1 ]; then # in other cases
+  result+="$(return_type_for_haskell $argFromC)"
+
+elif [ ${#strarrr[*]} -eq 2 ]; then # in the case of enum
+  result+="$(return_type_for_haskell ${argFromC[0]})"
+
+fi
+
+#echo "Created full parameter: $result"
+echo "$result"
+
+}
+
+
+convert_arg_to_haskell_2 () {
+
+local argFromC="$*"
+
+argFromC=${argFromC/build-sdists/}
+local result=""
+ampersand='\&'
+#echo "$argFromC"
+
+
+if [[ $argFromC =~ $ampersand ]]; then
+#   echo "There is \"&\" character" 
+   argFromC=$(echo "$argFromC" | cut -f1 -d'&')
+   result+="refT $ "
+elif egrep -q "\*" <<< "$argFromC"; then
+   #echo "There is \"*\" character" 
+   argFromC=$(echo "$argFromC" | cut -f1 -d'\') # because asterisks have to be backlashed
+   result+="ptrT $ "
+fi
+
+if [[ "$argFromC" =~ "const" ]]; then
+#   echo "There is \"const\" word" 
+   argFromC=${argFromC/const/}
+   result+="constT $ "
+fi
+
+argFromC=$(echo $argFromC | sed 's/\S*::\S*//g')
+
+
+argFromC="$(trimBothSides $argFromC)"
+#echo "Trimmed argument is $argFromC"
+IFS=' '
+read -a strarrr <<< "$argFromC"
+    
+    
+if [ ${#strarrr[*]} -eq 1 ]; then # in other cases
+  result+="$(return_type_for_haskell_2 $argFromC)"
+
+elif [ ${#strarrr[*]} -eq 2 ]; then # in the case of enum
+  result+="$(return_type_for_haskell_2 ${argFromC[0]})"
+
+fi
+
+#echo "Created full parameter: $result"
+echo "$result"
+
+}
+
+
+echo "amount of defaults parameters: $defaultsCount" 
+if [[ $ifFirstDefault == true ]]; then echo "first parameter is the default one"; fi 
+
+
+case "$method" in
+
+'static-method')  
+    
+    if [ $defaultsCount -gt 0 ]; then
+       if [[ $ifFirstDefault == true ]]; then
+         if [ ! -z "$minVersion" ]; then
+           majorVersion="$(cut -d'.' -f1 <<< "$minVersion")"
+           minorVersion="$(cut -d'.' -f2 <<< "$minVersion")"
+
+           echo "test (qtVersion >= [$majorVersion, $minorVersion]) $ mkStaticMethod' $methodName $methodName [] $ `echo $(convert_arg_to_haskell_2 $contentMain)`"
+           echo "test (qtVersion >= [$majorVersion, $minorVersion]) $ mkStaticMethod' $methodName ${methodName}WithArg1 [`echo $(convert_arg_to_haskell ${argArray[0]})`] $ `echo $(convert_arg_to_haskell_2 $contentMain)`"
+         else
+           echo "just $ mkStaticMethod' $methodName $methodName [] $ `echo $(convert_arg_to_haskell_2 $contentMain)`"
+           echo "just $ mkStaticMethod' $methodName ${methodName}WithArg1 [`echo $(convert_arg_to_haskell ${argArray[0]})`] $ `echo $(convert_arg_to_haskell_2 $contentMain)`"
+         fi
+       fi
+       
+    else
+      if [ ! -z "$minVersion" ]; then
+         majorVersion="$(cut -d'.' -f1 <<< "$minVersion")"
+         minorVersion="$(cut -d'.' -f2 <<< "$minVersion")"
+         echo "test (qtVersion >= [$majorVersion, $minorVersion]) $ mkStaticMethod $methodName [] $contentMain"
+      else
+         echo "just $ mkStaticMethod $methodName [] $contentMain"
+      fi
+    fi
+    ;;
+'regular-method')  
+
+    if [ $defaultsCount -gt 0 ]; then
+       if [[ $ifFirstDefault == true ]]; then
+         majorVersion="$(cut -d'.' -f1 <<< "$minVersion")"
+         minorVersion="$(cut -d'.' -f2 <<< "$minVersion")"
+       fi
+       
+    else
+      if [ ! -z "$minVersion" ]; then
+         majorVersion="$(cut -d'.' -f1 <<< "$minVersion")"
+         minorVersion="$(cut -d'.' -f2 <<< "$minVersion")"
+         echo "test (qtVersion >= [$majorVersion, $minorVersion]) $ mkMethod $methodName [] $returnedType"
+      else
+         echo "just $ mkMethod $methodName [] $returnedType"
+      fi    
+    fi
+    ;;
+'const-method')  
+
+    if [ $defaultsCount -gt 0 ]; then
+       if [[ $ifFirstDefault == true ]]; then
+         majorVersion="$(cut -d'.' -f1 <<< "$minVersion")"
+         minorVersion="$(cut -d'.' -f2 <<< "$minVersion")"
+       fi
+
+    else
+      if [ ! -z "$minVersion" ]; then
+         majorVersion="$(cut -d'.' -f1 <<< "$minVersion")"
+         minorVersion="$(cut -d'.' -f2 <<< "$minVersion")"
+         echo "test (qtVersion >= [$majorVersion, $minorVersion]) $ mkConstMethod $methodName [] $returnedType"
+      else
+         echo "just $ mkConstMethod $methodName [] $returnedType"
+      fi    
+    fi
+    ;;
+'constructor-method') 
+
+    if [ $defaultsCount -gt 0 ]; then
+       if [[ $ifFirstDefault == true ]]; then
+         majorVersion="$(cut -d'.' -f1 <<< "$minVersion")"
+         minorVersion="$(cut -d'.' -f2 <<< "$minVersion")"
+       fi    
+       
+    else
+      if [ ! -z "$minVersion" ]; then
+         majorVersion="$(cut -d'.' -f1 <<< "$minVersion")"
+         minorVersion="$(cut -d'.' -f2 <<< "$minVersion")"
+         echo "test (qtVersion >= [$majorVersion, $minorVersion]) $ mkCtor $methodName []"
+      else
+         echo "just $ mkCtor $methodName []"
+      fi    
+    fi
+   ;;
+*) 
+   ;;
+   
+esac

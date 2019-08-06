@@ -1,0 +1,382 @@
+#!/usr/bin/env bash
+
+# This file is part of Qtah.
+#
+# Copyright 2015-2019 The Qtah Authors.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# NOT PREPARED FOR CONTAINERS YET (QSet, QVector, QList, etc) !!!!
+
+# Generates class file without methods basing on arguments
+# ./class-template-maker modulename classname superclassname amountofenums amountofbitspaces ifSignals ifIncludedLocale classFeatures generalTypes coreTypes opList minVersion
+
+# generalTypes - http://hackage.haskell.org/package/hoppy-generator-0.5.2/docs/Foreign-Hoppy-Generator-Types.html
+# coreTypes - qtah/qtah-generator/src/Graphics/UI/Qtah/Generator/Interface/Core/Types.hs
+# opList - http://hackage.haskell.org/package/hoppy-generator-0.5.2/docs/Foreign-Hoppy-Generator-Spec.html#g:5 (data Operator)
+# classFeatures - https://hackage.haskell.org/package/hoppy-generator-0.5.2/docs/Foreign-Hoppy-Generator-Spec-ClassFeature.html
+
+# e_DateFormat instead of Qt::DateFormat
+
+# EXAMPLES
+
+# ./class-template-maker "Core" "QResource" "" 1 0 false false "" "ucharT, boolT" "longlong" "" "4.2"
+# ./class-template-maker "Core" "QTime" "" 0 0 false false "Equatable, Comparable" "boolT, intT" "e_DateFormat" "" ""
+# ./class-template-maker "Gui" "QVulkanWindow" "QWindow" 0 1 false false "Copyable" "boolT, intT, word32T" "" "" "5.10"
+# ./class-template-maker "Core" "QDir" "" 0 2 false false "Copyable, Assignable, Equatable" "boolT, uintT" "" "OpArray" ""
+
+# 1) of amountofbitspaces contains one enum and one bitspace
+# 2) There is no need to add such general types as  voidT, enumT, constT, objT, ptrT, refT. They are generated automatically
+
+# variables from arguments
+
+modulename=$1
+classname=$2
+superclassname=$3
+amountofenums=$4
+amountofbitspaces=$5
+ifSignals=$6
+ifIncludedLocale=$7
+classFeatures=$8
+generalTypes="$9, voidT, enumT, constT, objT, ptrT, refT"
+coreTypes=${10}
+opList=${11}
+minVersion=${12}
+
+
+# prepare paths
+
+HASKELL_FILE=../qtah-generator/src/Graphics/UI/Qtah/Generator/Interface/$modulename/$classname.hs
+HASKELL_FILE_DIR=../qtah-generator/src/Graphics/UI/Qtah/Generator/Interface/$modulename
+
+# create paths
+
+if [ -f "$HASKELL_FILE" ]; then
+
+    echo "$HASKELL_FILE exists. There is no need to generate a class."
+    exit 1
+    
+elif [ ! -d "$HASKELL_FILE_DIR" ]; then
+
+    echo "$HASKELL_FILE_DIR directory doesn't exist"
+    echo "Creating directory"
+    mkdir $HASKELL_FILE_DIR
+    echo "Creating class file"
+    touch $HASKELL_FILE
+    
+    echo "Remember to add proper changes about new module in:"
+    echo "1) qtah/qtah-generator/src/Graphics/UI/Qtah/Generator/Interface/$modulenames.hs"
+    echo "2) qtah/qtah-generator/src/Main.hs"
+    echo "3) qtah/qtah/Setup.hs"
+    
+elif [ ! -f "$HASKELL_FILE" ]; then
+
+    echo "$HASKELL_FILE file doesn't exist"
+    echo "Creating class file"
+    touch $HASKELL_FILE
+    
+fi 
+
+
+# create first part
+
+echo -e "module Graphics.UI.Qtah.Generator.Interface.$modulename.$classname (
+  aModule,
+  c_$2," >> $HASKELL_FILE
+  
+
+for (( c=1; c<=$amountofenums; c++ ))
+do  
+   echo -e "  e_," >> $HASKELL_FILE
+done
+
+
+for (( c=1; c<=$amountofbitspaces; c++ ))
+do  
+   echo -e "  e_," >> $HASKELL_FILE
+   echo -e "  bs_," >> $HASKELL_FILE
+done
+  
+echo -e "  ) where
+
+
+" >> $HASKELL_FILE 
+
+
+# create for Foreign.Hoppy.Generator.Spec
+
+exportString=""
+applicalibityString=""
+operatorString=""
+
+if [ $amountofbitspaces -gt 0 ]; then
+  exportString=", ExportBitspace, ExportEnum),"
+elif [ $amountofenums -gt 0 ]; then
+  exportString=", ExportEnum),"
+else
+  exportString="),"
+fi
+  
+if [ $ifIncludedLocale == true ]; then
+   applicalibityString="MethodApplicability (MConst, MNormal, MStatic),\n  Purity (Nonpure),"
+fi
+
+if [ ! -z "$opList" ]; then
+  operatorString="Operator ($opList),"
+fi
+  
+echo -e "import Foreign.Hoppy.Generator.Spec (
+  Export (ExportClass$exportString
+  $applicalibityString
+  $operatorString
+  addReqIncludes,
+  classSetEntityPrefix,
+  ident,
+  ident1,
+  ident2,
+  includeLocal,
+  includeStd,
+  makeClass,
+  makeFnMethod,
+  mkConstMethod,
+  mkConstMethod',
+  mkStaticMethod,
+  mkStaticMethod',
+  mkCtor,
+  mkMethod',
+  mkMethod
+  )
+  
+" >> $HASKELL_FILE 
+  
+  
+# add imports  
+  
+listenerPath=""
+makeModuleVer=""
+coreTypesString=""
+
+if [ $ifSignals == true ]; then
+   listenerPath="import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Internal.Listener ()"
+fi
+
+if [ ! -z "$minVersion" ]; then
+  makeModuleVer="makeQtModuleWithMinVersion),"
+else
+  makeModuleVer="makeQtModule),"
+fi
+
+if [ ! -z "$coreTypes" ]; then
+  coreTypesString="import Graphics.UI.Qtah.Generator.Interface.Core.Types ($coreTypes)"
+fi
+
+if [ ! -z "$superclassname" ]; then
+    echo -e "import Graphics.UI.Qtah.Generator.Interface.$modulename.$superclassname (c_$superclassname)" >> $HASKELL_FILE 
+fi
+
+echo -e "import Foreign.Hoppy.Generator.Types ($generalTypes)
+import Foreign.Hoppy.Generator.Version (collect, just, test)
+import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+$listenerPath
+import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), $makeModuleVer
+import Graphics.UI.Qtah.Generator.Types
+$coreTypesString
+
+
+{-# ANN module \"HLint: ignore Use camelCase\" #-}
+
+
+" >> $HASKELL_FILE 
+
+
+
+
+
+aModuleVersion=""
+
+if [ ! -z "$minVersion" ]; then
+  majorVersion="$(cut -d'.' -f1 <<<"$minVersion")"
+  minorVersion="$(cut -d'.' -f2 <<<"$minVersion")"
+  aModuleVersion="makeQtModuleWithMinVersion [$modulename, $classname] [$majorVersion, $minorVersion] $"
+else
+  aModuleVersion="makeQtModule [$modulename, $classname] $"
+fi
+
+
+# generate aModule
+
+if [ $ifSignals == true ] && [ $amountofbitspaces -eq 0 -a $amountofenums -eq 0 ]; then
+
+
+echo -e "aModule =
+  AQtModule $
+  $aModuleVersion
+  (QtExport $ ExportClass c_$classname) :
+  map QtExportSignal signals
+  
+" >> $HASKELL_FILE
+
+
+elif [ $ifSignals != true ] && [ $amountofbitspaces -gt 0 -o $amountofenums -gt 0 ]; then
+
+
+echo -e "aModule =
+  AQtModule $
+  $aModuleVersion
+  collect
+  [ just $ QtExport $ ExportClass c_$classname" >> $HASKELL_FILE
+  
+for (( c=1; c<=$amountofenums; c++ ))
+do  
+   echo -e "  , just $ QtExport $ ExportEnum e_" >> $HASKELL_FILE
+done
+
+
+for (( c=1; c<=$amountofbitspaces; c++ ))
+do  
+   echo -e "  , just $ QtExport $ ExportEnum e_" >> $HASKELL_FILE
+   echo -e "  , just $ QtExport $ ExportBitspace bs_" >> $HASKELL_FILE
+done
+
+echo -e "  ]
+
+" >> $HASKELL_FILE
+
+
+elif [ $ifSignals == true ] && [ $amountofbitspaces -gt 0 -o $amountofenums -gt 0 ]; then
+
+
+echo -e "aModule =
+  AQtModule $
+  $aModuleVersion
+  QtExport (ExportClass c_$classname) :
+  map QtExportSignal signals ++
+  collect
+  [" >> $HASKELL_FILE
+  
+if [ $amountofenums -gt 0 ]; then
+  echo -e "  just $ QtExport $ ExportEnum e_" >> $HASKELL_FILE
+elif [ $amountofbitspaces -gt 0 ]; then
+  echo -e "  just $ QtExport $ ExportEnum e_" >> $HASKELL_FILE
+  echo -e "  ,  just $ QtExport $ ExportBitspace bs_" >> $HASKELL_FILE
+fi
+  
+for (( c=2; c<=$amountofenums; c++ ))
+do  
+   echo -e "  , just $ QtExport $ ExportEnum e_" >> $HASKELL_FILE
+done
+
+
+for (( c=2; c<=$amountofbitspaces; c++ ))
+do  
+   echo -e "  , just $ QtExport $ ExportEnum e_" >> $HASKELL_FILE
+   echo -e "  , just $ QtExport $ ExportBitspace bs_" >> $HASKELL_FILE
+done
+
+echo -e "  ]
+
+" >> $HASKELL_FILE
+  
+fi
+
+
+# create class module for methods
+
+superclass=""
+classFeaturesString=""
+includeLocalString=""
+
+if [ ! -z "$superclassname" ]; then
+    superclass="c_$superclassname"
+fi
+
+if [ ! -z "$classFeatures" ]; then
+    classFeaturesString="classSetConversionToGc $\n  classAddFeatures [$classFeatures] $"
+fi
+
+if [ $ifIncludedLocale == true ]; then
+    ## Bash version 4.x+: Uppercase to lowercase or vice versa 
+    ## lower: ${classname,,}
+    ## upper: ${classname^^}
+    includeLocalString=", includeLocal \"wrap_${classname,,}.hpp\""
+fi  
+  
+echo -e "c_$classname =
+  addReqIncludes [ includeStd $classname$includeLocalString ] $
+  $classFeaturesString
+  classSetEntityPrefix "" $
+  makeClass (ident $classname]) Nothing [$superclass] $
+  collect
+  [ 
+  -- TODO Methods 
+  ]
+  
+  
+" >> $HASKELL_FILE
+
+
+# place for signal
+
+if [ $ifSignals == true ]; then
+
+  echo -e "signals :: [Signal]
+signals =
+  collect
+  [ 
+  ]
+  
+" >> $HASKELL_FILE
+  
+fi  
+
+# place for enums
+
+for (( c=1; c<=$amountofenums; c++ ))
+do  
+   echo -e "e_put_enum_name_here =
+  makeQtEnum (ident1 $classname \"put_enum_name_here\") [includeStd $classname]
+  [ ( , [])
+  , ( , [])
+  ]
+  
+  
+" >> $HASKELL_FILE
+done
+
+
+# place for enums with bitspaces
+
+for (( c=1; c<=$amountofbitspaces; c++ ))
+do  
+  echo -e "(e_put_enum_name_here, bs_put_flag_name_here) =
+  makeQtEnumBitspace (ident1 $classname \"put_enum_name_here\") \"put_flag_name_here\" [includeStd $classname]
+  [ ( , [])
+  , ( , [])
+  ]
+  
+" >> $HASKELL_FILE
+done
+
+
+# After generation add module paths to
+# 1) ../qtah/qtah.cabal
+# 2) ../qtah-generator/src/Graphics/UI/Qtah/Generator/Interface/$modulename.hs
+# 3) ../qtah-generator/qtah-generator.cabal
+
+
+# After creating directory for new module add proper changes to: 
+# 1) qtah-cpp/cpp/qtah.pro
+# 2) ../qtah-generator/src/Graphics/UI/Qtah/Generator/Interface/$modulename.hs
+# 3) qtah-generator/src/Main.hs
+# 4) qtah/Setup.hs
