@@ -137,9 +137,11 @@ if [ ! -z "$opList" ]; then
   operatorString="Operator ($opList),"
 fi
 
+
 if [ ! -z "$classFeatures" ]; then
   gcConversion="classSetConversionToGc,"
 fi
+
   
 echo -e "import Foreign.Hoppy.Generator.Spec (
   Export (ExportClass$exportString
@@ -167,6 +169,7 @@ echo -e "import Foreign.Hoppy.Generator.Spec (
 " >> $HASKELL_FILE 
   
 
+
 if [ ! -z "$classFeatures" ]; then
     echo -e "import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature ($classFeatures),
@@ -176,6 +179,7 @@ if [ ! -z "$classFeatures" ]; then
 " >> $HASKELL_FILE
 fi  
   
+
   
 # add imports  
   
@@ -311,7 +315,6 @@ echo -e "aModule =
   AQtModule $
   $aModuleVersion
   [QtExport $ ExportClass c_$classname]
-  
   
 " >> $HASKELL_FILE
 
