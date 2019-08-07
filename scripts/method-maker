@@ -141,13 +141,14 @@ case "$*" in
   echo "c_string"
 ;;
 'std::u16string')
-  echo "-- TODO std::u16string"
+  echo "word16T"
 ;;
 'std::u32string')
-  echo "-- TODO std::u32string"
+  echo "word32T"
 ;;
 'std::wstring')
-  echo "-- TODO std::wstring"
+  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (wchar_t)\" in class file" >> $OUTPUT_FILE
+  echo "wchar_t"
 ;;
 'uint')
   echo "uintT"
@@ -167,7 +168,8 @@ case "$*" in
   echo "ushortT"
 ;;
 'wchar_t')
-  echo "-- TODO wchar_t"
+  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (wchar_t)\" in class file" >> $OUTPUT_FILE
+  echo "wchar_t"
 ;;
 'char')
   echo "charT"
@@ -176,19 +178,16 @@ case "$*" in
   echo "shortT"
 ;;
 'char16_t')
-  echo "-- TODO char16_t"
+  echo "word16T"
 ;;
 'char32_t')
-  echo "-- TODO char32_t"
+  echo "word32T"
 ;;
 'long')
   echo "longT"
 ;;
-'qint64')
-  echo "int64_t"
-;;
-'quint64')
-  echo "uint64_t"
+'long long')
+  echo "llongT"
 ;;
 'float')
   echo "floatT"
@@ -205,6 +204,66 @@ case "$*" in
 'qreal')
   echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qreal)\" in class file" >> $OUTPUT_FILE
   echo "qreal"
+;;
+'QFunctionPointer')
+  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qfunctionpointer)\" in class file" >> $OUTPUT_FILE
+  echo "qfunctionpointer"
+;;
+#'QtMessageHandler')
+#  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qtmessagehandler)\" in class file" >> $OUTPUT_FILE
+#  echo "qtmessagehandler"
+#;;
+'')
+  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qint8)\" in class file" >> $OUTPUT_FILE
+  echo "qint8"
+;;
+'')
+  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qint16)\" in class file" >> $OUTPUT_FILE
+  echo "qint16"
+;;
+'')
+  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qint32)\" in class file" >> $OUTPUT_FILE
+  echo "qint32"
+;;
+'')
+  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qint64)\" in class file" >> $OUTPUT_FILE
+  echo "qint64"
+;;
+'')
+  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qintptr)\" in class file" >> $OUTPUT_FILE
+  echo "qintptr"
+;;
+'')
+  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qptrdiff)\" in class file" >> $OUTPUT_FILE
+  echo "qptrdiff"
+;;
+'')
+  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qsizetype)\" in class file" >> $OUTPUT_FILE
+  echo "qsizetype"
+;;
+'')
+  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (quint8)\" in class file" >> $OUTPUT_FILE
+  echo "quint8"
+;;
+'')
+  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (quint16)\" in class file" >> $OUTPUT_FILE
+  echo "quint16"
+;;
+'')
+  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (quint32)\" in class file" >> $OUTPUT_FILE
+  echo "quint32"
+;;
+'')
+  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (quint64)\" in class file" >> $OUTPUT_FILE
+  echo "quint64"
+;;
+'')
+  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (quintptr)\" in class file" >> $OUTPUT_FILE
+  echo "quintptr"
+;;
+'')
+  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (gluint)\" in class file" >> $OUTPUT_FILE
+  echo "gluint"
 ;;
 *) 
   if [[ "$*" =~ "::" ]] && [[ ! "$*" =~ "Qt::" ]]; then
@@ -248,13 +307,14 @@ case "$*" in
   echo "c_string"
 ;;
 'std::u16string')
-  echo "-- TODO std::u16string"
+  echo "word16T"
 ;;
 'std::u32string')
-  echo "-- TODO std::u32string"
+  echo "word32T"
 ;;
 'std::wstring')
-  echo "-- TODO std::wstring"
+  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (wchar_t)\" in class file" >> $OUTPUT_FILE
+  echo "wchar_t"
 ;;
 'uint')
   echo "uintT"
@@ -274,7 +334,8 @@ case "$*" in
   echo "ushortT"
 ;;
 'wchar_t')
-  echo "-- TODO wchar_t"
+  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (wchar_t)\" in class file" >> $OUTPUT_FILE
+  echo "wchar_t"
 ;;
 'char')
   echo "charT"
@@ -283,19 +344,16 @@ case "$*" in
   echo "shortT"
 ;;
 'char16_t')
-  echo "-- TODO char16_t"
+  echo "word16T"
 ;;
 'char32_t')
-  echo "-- TODO char32_t"
+  echo "word32T"
 ;;
 'long')
   echo "longT"
 ;;
-'qint64')
-  echo "int64_t"
-;;
-'quint64')
-  echo "uint64_t"
+'long long')
+  echo "llongT"
 ;;
 'float')
   echo "floatT"
@@ -313,7 +371,66 @@ case "$*" in
   echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qreal)\" in class file" >> $OUTPUT_FILE
   echo "qreal"
 ;;
-
+'QFunctionPointer')
+  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qfunctionpointer)\" in class file" >> $OUTPUT_FILE
+  echo "qfunctionpointer"
+;;
+#'QtMessageHandler')
+#  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qtmessagehandler)\" in class file" >> $OUTPUT_FILE
+#  echo "qtmessagehandler"
+#;;
+'')
+  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qint8)\" in class file" >> $OUTPUT_FILE
+  echo "qint8"
+;;
+'')
+  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qint16)\" in class file" >> $OUTPUT_FILE
+  echo "qint16"
+;;
+'')
+  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qint32)\" in class file" >> $OUTPUT_FILE
+  echo "qint32"
+;;
+'')
+  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qint64)\" in class file" >> $OUTPUT_FILE
+  echo "qint64"
+;;
+'')
+  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qintptr)\" in class file" >> $OUTPUT_FILE
+  echo "qintptr"
+;;
+'')
+  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qptrdiff)\" in class file" >> $OUTPUT_FILE
+  echo "qptrdiff"
+;;
+'')
+  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qsizetype)\" in class file" >> $OUTPUT_FILE
+  echo "qsizetype"
+;;
+'')
+  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (quint8)\" in class file" >> $OUTPUT_FILE
+  echo "quint8"
+;;
+'')
+  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (quint16)\" in class file" >> $OUTPUT_FILE
+  echo "quint16"
+;;
+'')
+  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (quint32)\" in class file" >> $OUTPUT_FILE
+  echo "quint32"
+;;
+'')
+  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (quint64)\" in class file" >> $OUTPUT_FILE
+  echo "quint64"
+;;
+'')
+  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (quintptr)\" in class file" >> $OUTPUT_FILE
+  echo "quintptr"
+;;
+'')
+  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (gluint)\" in class file" >> $OUTPUT_FILE
+  echo "gluint"
+;;
 *) 
 
   if [ $(grep -o "::" <<<"$*" | wc -l) -gt 1 ]; then

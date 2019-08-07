@@ -36,6 +36,7 @@ module Graphics.UI.Qtah.Generator.Interface.Core.Types (
   quint32,
   quint64,
   quintptr,
+  wchar_t,
   e_QtMsgType,
   e_AlignmentFlag,
   bs_Alignment,
@@ -163,6 +164,7 @@ import Foreign.Hoppy.Generator.Spec (
   includeStd,
   makeFn,
   )
+import System.Info (os) 
 import Foreign.Hoppy.Generator.Types (doubleT, floatT, objT, int8T, int16T, int32T, int64T, ssizeT, word8T, word16T, word32T, word64T, ptrT, fnT, voidT, enumT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
 import Graphics.UI.Qtah.Generator.Flags (qrealFloat, qtVersion)
@@ -346,6 +348,9 @@ quintptr = if finiteBitSize (undefined :: Int) == 64 then quint64 else quint32
 
 gluint :: Type
 gluint = word32T
+
+wchar_t :: Type
+wchar_t = if os == "mingw32" then word16T else word32T
 
 
 e_QtMsgType =
