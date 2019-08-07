@@ -49,6 +49,7 @@ import qualified Graphics.UI.Qtah.Generator.Interface.Core.Connection as Connect
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QMetaProperty as QMetaProperty
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QModelIndex as QModelIndex
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QObject as QObject
+import qualified Graphics.UI.Qtah.Generator.Interface.Core.QOperatingSystemVersion as QOperatingSystemVersion
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QPair as QPair
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QPalette as QPalette
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QPersistentModelIndex as QPersistentModelIndex
@@ -115,6 +116,7 @@ modules =
     , QMetaProperty.aModule
     , QModelIndex.aModule
     , QObject.aModule
+    , QOperatingSystemVersion.aModule
     , QPalette.aModule
     , QPersistentModelIndex.aModule
     , QProcess.aModule

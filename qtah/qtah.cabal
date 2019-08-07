@@ -72,6 +72,7 @@ library
     , Graphics.UI.Qtah.Core.QMetaProperty
     , Graphics.UI.Qtah.Core.QModelIndex
     , Graphics.UI.Qtah.Core.QObject
+    , Graphics.UI.Qtah.Core.QOperatingSystemVersion
     , Graphics.UI.Qtah.Core.QPair.IntInt
     , Graphics.UI.Qtah.Core.QPalette
     , Graphics.UI.Qtah.Core.QPersistentModelIndex
@@ -274,6 +275,7 @@ library
     , Graphics.UI.Qtah.Generated.Core.QMetaProperty
     , Graphics.UI.Qtah.Generated.Core.QModelIndex
     , Graphics.UI.Qtah.Generated.Core.QObject
+    , Graphics.UI.Qtah.Generated.Core.QOperatingSystemVersion
     , Graphics.UI.Qtah.Generated.Core.QPair.IntInt
     , Graphics.UI.Qtah.Generated.Core.QPalette
     , Graphics.UI.Qtah.Generated.Core.QPersistentModelIndex
