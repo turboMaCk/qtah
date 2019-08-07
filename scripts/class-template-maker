@@ -377,7 +377,7 @@ fi
 for (( c=1; c<=$amountofenums; c++ ))
 do  
    echo -e "e_put_enum_name_here =
-  makeQtEnum (ident1 $classname \"put_enum_name_here\") [includeStd $classname]
+  makeQtEnum (ident1 \"$classname\" \"put_enum_name_here\") [includeStd \"$classname\"]
   [ ( , [])
   , ( , [])
   ]
@@ -392,7 +392,7 @@ done
 for (( c=1; c<=$amountofbitspaces; c++ ))
 do  
   echo -e "(e_put_enum_name_here, bs_put_flag_name_here) =
-  makeQtEnumBitspace (ident1 $classname \"put_enum_name_here\") \"put_flag_name_here\" [includeStd $classname]
+  makeQtEnumBitspace (ident1 \"$classname\" \"put_enum_name_here\") \"put_flag_name_here\" [includeStd \"$classname\"]
   [ ( , [])
   , ( , [])
   ]
