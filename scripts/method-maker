@@ -29,6 +29,7 @@ ifStatic=$1
 minVersion=$2
 majorVersion="$(cut -d'.' -f1 <<< "$minVersion")"
 minorVersion="$(cut -d'.' -f2 <<< "$minVersion")"
+thirdPartVersion="" 
 methodName=""
 argList=""
 method=""
@@ -43,6 +44,10 @@ touch $OUTPUT_FILE
 # echo "contentMain is $contentMain"
 # echo "contentArg is $contentArg" 
 
+if [ ! -z "$(cut -d'.' -f3 <<< "$minVersion")" ]; then
+thirdPartVersion=", $(cut -d'.' -f3 <<< "$minVersion")"
+fi
+
 
 if [[ $contentMain =~ "::" ]]; then
 
@@ -52,7 +57,18 @@ if [[ $contentMain =~ "::" ]]; then
     
        #echo "Use other function than mkCtor"
        
+       # because the longest option I know is for example "const unsigned long long int classname::classmethod"
+       if [[ "${strarr[1]}" =~ "::" ]] && [[ ! "${strarr[1]}" =~ "Qt::" ]]; then
        methodName="$(sed 's/.*:://' <<< "${strarr[1]}")"
+       elif [[ "${strarr[2]}" =~ "::" ]] && [[ ! "${strarr[2]}" =~ "Qt::" ]]; then
+       methodName="$(sed 's/.*:://' <<< "${strarr[2]}")"
+       elif [[ "${strarr[3]}" =~ "::" ]] && [[ ! "${strarr[3]}" =~ "Qt::" ]]; then
+       methodName="$(sed 's/.*:://' <<< "${strarr[3]}")"
+       elif [[ "${strarr[4]}" =~ "::" ]] && [[ ! "${strarr[4]}" =~ "Qt::" ]]; then
+       methodName="$(sed 's/.*:://' <<< "${strarr[4]}")"
+       elif [[ "${strarr[5]}" =~ "::" ]] && [[ ! "${strarr[5]}" =~ "Qt::" ]]; then
+       methodName="$(sed 's/.*:://' <<< "${strarr[5]}")"
+       fi
        #echo "Method name is $methodName"
        
        if [ $ifStatic == true ]; then
@@ -590,11 +606,11 @@ if [ $index -eq 0 -a "${defaults_indexes[$index]}" -eq "0" ]; then
    if [ ! -z "$minVersion" ]; then
    
      if [ $ifProp == true ]; then
-        echo "test (qtVersion >= [$majorVersion, $minorVersion]) $ $mkMethodType \"new\" []"
-        echo "test (qtVersion >= [$majorVersion, $minorVersion]) $ $mkMethodType \"newWithArg1\" [`echo $(convert_arg_to_haskell ${argArray[0]})`]"
+        echo "test (qtVersion >= [$majorVersion, $minorVersion$thirdPartVersion]) $ $mkMethodType \"new\" []"
+        echo "test (qtVersion >= [$majorVersion, $minorVersion$thirdPartVersion]) $ $mkMethodType \"newWithArg1\" [`echo $(convert_arg_to_haskell ${argArray[0]})`]"
      elif [ $ifProp == false ]; then
-        echo "test (qtVersion >= [$majorVersion, $minorVersion]) $ $mkMethodType' \"$methodName\" \"$methodName\" [] $ `echo $(convert_arg_to_haskell_2 $contentMain)`"
-        echo "test (qtVersion >= [$majorVersion, $minorVersion]) $ $mkMethodType' \"$methodName\" \"${methodName}WithArg1\" [`echo $(convert_arg_to_haskell ${argArray[0]})`] $ `echo $(convert_arg_to_haskell_2 $contentMain)`"
+        echo "test (qtVersion >= [$majorVersion, $minorVersion$thirdPartVersion]) $ $mkMethodType' \"$methodName\" \"$methodName\" [] $ `echo $(convert_arg_to_haskell_2 $contentMain)`"
+        echo "test (qtVersion >= [$majorVersion, $minorVersion$thirdPartVersion]) $ $mkMethodType' \"$methodName\" \"${methodName}WithArg1\" [`echo $(convert_arg_to_haskell ${argArray[0]})`] $ `echo $(convert_arg_to_haskell_2 $contentMain)`"
      fi
      
    else
@@ -618,11 +634,11 @@ else
          res2=""
          
          if [ $ifProp == true ]; then
-             res1="test (qtVersion >= [$majorVersion, $minorVersion]) $ $mkMethodType \"new\" ["
-             res2="test (qtVersion >= [$majorVersion, $minorVersion]) $ $mkMethodType \"newWithArg1\" ["
+             res1="test (qtVersion >= [$majorVersion, $minorVersion$thirdPartVersion]) $ $mkMethodType \"new\" ["
+             res2="test (qtVersion >= [$majorVersion, $minorVersion$thirdPartVersion]) $ $mkMethodType \"newWithArg1\" ["
          elif [ $ifProp == false ]; then
-             res1="test (qtVersion >= [$majorVersion, $minorVersion]) $ $mkMethodType' \"$methodName\" \"$methodName\" ["
-             res2="test (qtVersion >= [$majorVersion, $minorVersion]) $ $mkMethodType' \"$methodName\" \"${methodName}WithArg1\" ["
+             res1="test (qtVersion >= [$majorVersion, $minorVersion$thirdPartVersion]) $ $mkMethodType' \"$methodName\" \"$methodName\" ["
+             res2="test (qtVersion >= [$majorVersion, $minorVersion$thirdPartVersion]) $ $mkMethodType' \"$methodName\" \"${methodName}WithArg1\" ["
          fi
          
          i=0
@@ -653,9 +669,9 @@ else
        else
        
          if [ $ifProp == true ]; then
-           res2="test (qtVersion >= [$majorVersion, $minorVersion]) $ $mkMethodType \"newWithArg$((index + 1))\" ["
+           res2="test (qtVersion >= [$majorVersion, $minorVersion$thirdPartVersion]) $ $mkMethodType \"newWithArg$((index + 1))\" ["
          elif [ $ifProp == false ]; then
-           res2="test (qtVersion >= [$majorVersion, $minorVersion]) $ $mkMethodType' \"$methodName\" \"${methodName}WithArg$((index + 1))\" ["
+           res2="test (qtVersion >= [$majorVersion, $minorVersion$thirdPartVersion]) $ $mkMethodType' \"$methodName\" \"${methodName}WithArg$((index + 1))\" ["
          fi
          
          i=0
@@ -792,7 +808,7 @@ case "$method" in
     else
     
       if [ ! -z "$minVersion" ]; then
-         echo "test (qtVersion >= [$majorVersion, $minorVersion]) $ mkStaticMethod \"$methodName\" [$(create_args)] $ `echo $(convert_arg_to_haskell_2 $contentMain)`"
+         echo "test (qtVersion >= [$majorVersion, $minorVersion$thirdPartVersion]) $ mkStaticMethod \"$methodName\" [$(create_args)] $ `echo $(convert_arg_to_haskell_2 $contentMain)`"
       else
          echo "just $ mkStaticMethod \"$methodName\" [$(create_args)] $ `echo $(convert_arg_to_haskell_2 $contentMain)`"
       fi
@@ -806,7 +822,7 @@ case "$method" in
     else
     
       if [ ! -z "$minVersion" ]; then
-         echo "test (qtVersion >= [$majorVersion, $minorVersion]) $ mkMethod \"$methodName\" [$(create_args)] $ `echo $(convert_arg_to_haskell_2 $contentMain)`"
+         echo "test (qtVersion >= [$majorVersion, $minorVersion$thirdPartVersion]) $ mkMethod \"$methodName\" [$(create_args)] $ `echo $(convert_arg_to_haskell_2 $contentMain)`"
       else
          echo "just $ mkMethod \"$methodName\" [$(create_args)] $ `echo $(convert_arg_to_haskell_2 $contentMain)`"
       fi    
@@ -820,7 +836,7 @@ case "$method" in
     else
     
       if [ ! -z "$minVersion" ]; then
-         echo "test (qtVersion >= [$majorVersion, $minorVersion]) $ mkConstMethod \"$methodName\" [$(create_args)] $ `echo $(convert_arg_to_haskell_2 $contentMain)`"
+         echo "test (qtVersion >= [$majorVersion, $minorVersion$thirdPartVersion]) $ mkConstMethod \"$methodName\" [$(create_args)] $ `echo $(convert_arg_to_haskell_2 $contentMain)`"
       else
          echo "just $ mkConstMethod \"$methodName\" [$(create_args)] $ `echo $(convert_arg_to_haskell_2 $contentMain)`"
       fi    
@@ -833,7 +849,7 @@ case "$method" in
        echo "$(create_def_args "mkCtor" true)"   
     else
       if [ ! -z "$minVersion" ]; then
-         echo "test (qtVersion >= [$majorVersion, $minorVersion]) $ mkCtor \"new\" [$(create_args)]"
+         echo "test (qtVersion >= [$majorVersion, $minorVersion$thirdPartVersion]) $ mkCtor \"new\" [$(create_args)]"
       else
          echo "just $ mkCtor \"new\" [$(create_args)]"
       fi    

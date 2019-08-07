@@ -7,6 +7,7 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QRandomGenerator64 (
 import Foreign.Hoppy.Generator.Spec (
   Export (ExportClass),
   Operator (OpCall),
+  classSetConversionToGc,
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -25,6 +26,11 @@ import Foreign.Hoppy.Generator.Spec (
   mkMethod
   )
   
+import Foreign.Hoppy.Generator.Spec.ClassFeature (
+  ClassFeature (Assignable, Copyable, Equatable),
+  classAddFeatures,
+  )
+
 import Foreign.Hoppy.Generator.Types (voidT, enumT, bitspaceT, constT, objT, ptrT, refT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
 import Graphics.UI.Qtah.Generator.Flags (qtVersion)
@@ -46,6 +52,8 @@ aModule =
 
 c_QRandomGenerator64 =
   addReqIncludes [ includeStd "QRandomGenerator64" ] $
+  classSetConversionToGc $
+  classAddFeatures [Assignable, Copyable, Equatable] $
   classSetEntityPrefix "" $
   makeClass (ident "QRandomGenerator64") Nothing [c_QRandomGenerator] $
   collect
