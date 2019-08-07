@@ -213,55 +213,55 @@ case "$*" in
   echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qtmessagehandler)\" in class file" >> $OUTPUT_FILE
   echo "qtmessagehandler"
 ;;
-'')
+'qint8')
   echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qint8)\" in class file" >> $OUTPUT_FILE
   echo "qint8"
 ;;
-'')
+'qint16')
   echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qint16)\" in class file" >> $OUTPUT_FILE
   echo "qint16"
 ;;
-'')
+'qint32')
   echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qint32)\" in class file" >> $OUTPUT_FILE
   echo "qint32"
 ;;
-'')
+'qint64')
   echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qint64)\" in class file" >> $OUTPUT_FILE
   echo "qint64"
 ;;
-'')
+'qintptr')
   echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qintptr)\" in class file" >> $OUTPUT_FILE
   echo "qintptr"
 ;;
-'')
+'qptrdiff')
   echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qptrdiff)\" in class file" >> $OUTPUT_FILE
   echo "qptrdiff"
 ;;
-'')
+'qsizetype')
   echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qsizetype)\" in class file" >> $OUTPUT_FILE
   echo "qsizetype"
 ;;
-'')
+'quint8')
   echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (quint8)\" in class file" >> $OUTPUT_FILE
   echo "quint8"
 ;;
-'')
+'quint16')
   echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (quint16)\" in class file" >> $OUTPUT_FILE
   echo "quint16"
 ;;
-'')
+'quint32')
   echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (quint32)\" in class file" >> $OUTPUT_FILE
   echo "quint32"
 ;;
-'')
+'quint64')
   echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (quint64)\" in class file" >> $OUTPUT_FILE
   echo "quint64"
 ;;
-'')
+'quintptr')
   echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (quintptr)\" in class file" >> $OUTPUT_FILE
   echo "quintptr"
 ;;
-'')
+'gluint')
   echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (gluint)\" in class file" >> $OUTPUT_FILE
   echo "gluint"
 ;;
@@ -379,55 +379,55 @@ case "$*" in
   echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qtmessagehandler)\" in class file" >> $OUTPUT_FILE
   echo "qtmessagehandler"
 ;;
-'')
+'qint8')
   echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qint8)\" in class file" >> $OUTPUT_FILE
   echo "qint8"
 ;;
-'')
+'qint16')
   echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qint16)\" in class file" >> $OUTPUT_FILE
   echo "qint16"
 ;;
-'')
+'qint32')
   echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qint32)\" in class file" >> $OUTPUT_FILE
   echo "qint32"
 ;;
-'')
+'qint64')
   echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qint64)\" in class file" >> $OUTPUT_FILE
   echo "qint64"
 ;;
-'')
+'qintptr')
   echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qintptr)\" in class file" >> $OUTPUT_FILE
   echo "qintptr"
 ;;
-'')
+'qptrdiff')
   echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qptrdiff)\" in class file" >> $OUTPUT_FILE
   echo "qptrdiff"
 ;;
-'')
+'qsizetype')
   echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qsizetype)\" in class file" >> $OUTPUT_FILE
   echo "qsizetype"
 ;;
-'')
+'quint8')
   echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (quint8)\" in class file" >> $OUTPUT_FILE
   echo "quint8"
 ;;
-'')
+'quint16')
   echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (quint16)\" in class file" >> $OUTPUT_FILE
   echo "quint16"
 ;;
-'')
+'quint32')
   echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (quint32)\" in class file" >> $OUTPUT_FILE
   echo "quint32"
 ;;
-'')
+'quint64')
   echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (quint64)\" in class file" >> $OUTPUT_FILE
   echo "quint64"
 ;;
-'')
+'quintptr')
   echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (quintptr)\" in class file" >> $OUTPUT_FILE
   echo "quintptr"
 ;;
-'')
+'gluint')
   echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (gluint)\" in class file" >> $OUTPUT_FILE
   echo "gluint"
 ;;
