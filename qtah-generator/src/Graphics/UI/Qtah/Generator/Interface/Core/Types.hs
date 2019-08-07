@@ -22,6 +22,20 @@ module Graphics.UI.Qtah.Generator.Interface.Core.Types (
   qulonglong,
   qlonglong,
   gluint,
+  qfunctionpointer,
+  --qtmessagehandler,
+  qint8,
+  qint16,
+  qint32,
+  qint64,
+  qintptr,
+  qptrdiff,
+  qsizetype,
+  quint8,
+  quint16,
+  quint32,
+  quint64,
+  quintptr,
   e_QtMsgType,
   e_AlignmentFlag,
   bs_Alignment,
@@ -136,7 +150,7 @@ module Graphics.UI.Qtah.Generator.Interface.Core.Types (
   bs_WindowFlags,
   ) where
 
-import Data.Bits ((.|.))
+import Data.Bits ((.|.), finiteBitSize)
 import Foreign.Hoppy.Generator.Spec (
   CppEnum,
   Export (ExportBitspace, ExportEnum, ExportFn),
@@ -149,7 +163,7 @@ import Foreign.Hoppy.Generator.Spec (
   includeStd,
   makeFn,
   )
-import Foreign.Hoppy.Generator.Types (doubleT, floatT, objT, word32T, word64T, int64T)
+import Foreign.Hoppy.Generator.Types (doubleT, floatT, objT, int8T, int16T, int32T, int64T, ssizeT, word8T, word16T, word32T, word64T, ptrT, fnT, voidT, enumT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
 import Graphics.UI.Qtah.Generator.Flags (qrealFloat, qtVersion)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
@@ -283,10 +297,52 @@ qreal :: Type
 qreal = if qrealFloat then floatT else doubleT
 
 qlonglong :: Type
-qlonglong = int64T
+qlonglong = qint64
 
 qulonglong :: Type
-qulonglong = word64T
+qulonglong = quint64
+
+qfunctionpointer :: Type
+qfunctionpointer = ptrT $ fnT [] voidT
+
+--qtmessagehandler :: Type
+--qtmessagehandler = ptrT $ fnT [enumT e_QtMsgType, refT $ constT $ objT c_QMessageLogContext, refT $ constT $ objT c_QString] voidT
+
+qint8 :: Type
+qint8 = int8T
+
+qint16 :: Type
+qint16 = int16T
+
+qint32 :: Type
+qint32 = int32T
+
+qint64 :: Type
+qint64 = int64T
+
+qintptr :: Type
+qintptr = if finiteBitSize (undefined :: Int) == 64 then qint64 else qint32
+
+qptrdiff :: Type
+qptrdiff = if finiteBitSize (undefined :: Int) == 64 then qint64 else qint32
+
+qsizetype :: Type
+qsizetype = ssizeT
+
+quint8 :: Type
+quint8 = word8T
+
+quint16 :: Type
+quint16 = word16T
+
+quint32 :: Type
+quint32 = word32T
+
+quint64 :: Type
+quint64 = word64T
+
+quintptr :: Type
+quintptr = if finiteBitSize (undefined :: Int) == 64 then quint64 else quint32
 
 gluint :: Type
 gluint = word32T
