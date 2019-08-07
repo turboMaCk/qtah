@@ -59,6 +59,7 @@ library
     , Graphics.UI.Qtah.Core.QList.QVariant
     , Graphics.UI.Qtah.Core.QList.QWidget
     , Graphics.UI.Qtah.Core.QList.QTreeWidgetItem
+    , Graphics.UI.Qtah.Core.QLoggingCategory
     , Graphics.UI.Qtah.Core.QMargins
     , Graphics.UI.Qtah.Core.QMarginsF
     , Graphics.UI.Qtah.Core.QMessageLogContext
@@ -257,6 +258,7 @@ library
     , Graphics.UI.Qtah.Generated.Core.QList.QVariant
     , Graphics.UI.Qtah.Generated.Core.QList.QWidget
     , Graphics.UI.Qtah.Generated.Core.QList.QTreeWidgetItem
+    , Graphics.UI.Qtah.Generated.Core.QLoggingCategory
     , Graphics.UI.Qtah.Generated.Core.QMargins
     , Graphics.UI.Qtah.Generated.Core.QMarginsF
     , Graphics.UI.Qtah.Generated.Core.QMessageLogContext

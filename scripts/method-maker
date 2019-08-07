@@ -273,7 +273,7 @@ case "$*" in
     echo "It may be typedef too" >> $OUTPUT_FILE
     echo "In the case of import error, try \"bitspaceT bs_$enumName\"" >> $OUTPUT_FILE
     echo "enumT e_$enumName"
-  elif [[ "$*" =~ "Qt::" ]]; then
+  elif [[ "$*" =~ "Qt::" ]] || [[ "$*" =~ "QtMsgType" ]]; then
     enumName="$(sed 's/.*:://' <<< "$*")"
     echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (e_$enumName)\" in class file" >> $OUTPUT_FILE
     echo "In the case of import error, try \"bitspaceT bs_$enumName\"" >> $OUTPUT_FILE
@@ -282,7 +282,7 @@ case "$*" in
     if [[ "$*" == "..." ]]; then
        echo ""
     else
-       echo "Don't forget to import class for $* or hide code with \"--\" comment characters" >> $OUTPUT_FILE
+       echo "Don't forget to import class for $* or hide code with \"--\" comment characters (only if it's not current class type)" >> $OUTPUT_FILE
        echo "objT c_$*" # return then objT
     fi
   fi
@@ -433,7 +433,19 @@ case "$*" in
 ;;
 *) 
 
-  if [ $(grep -o "::" <<<"$*" | wc -l) -gt 1 ]; then
+  #if [ $(grep -o "::" <<<"$*" | wc -l) -gt 1 ]; then
+  #  enumName="$(sed 's/.*:://' <<< "$*")"
+  #  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (e_$enumName)\" in class file" >> $OUTPUT_FILE
+  #  echo "In the case of import error, try \"bitspaceT bs_$enumName\"" >> $OUTPUT_FILE
+  #  echo "enumT e_$enumName"
+  if [[ "$*" =~ "::" ]] && [[ ! "$*" =~ "Qt::" ]]; then
+    enumName="$(sed 's/.*:://' <<< "$*")"
+    enumClass="$(sed 's/::.*//' <<< "$*")"
+    echo "attach import enum e_$enumName from module file $enumClass.hs" >> $OUTPUT_FILE
+    echo "It may be typedef too" >> $OUTPUT_FILE
+    echo "In the case of import error, try \"bitspaceT bs_$enumName\"" >> $OUTPUT_FILE
+    echo "enumT e_$enumName"
+  elif [[ "$*" =~ "Qt::" ]] || [[ "$*" =~ "QtMsgType" ]]; then
     enumName="$(sed 's/.*:://' <<< "$*")"
     echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (e_$enumName)\" in class file" >> $OUTPUT_FILE
     echo "In the case of import error, try \"bitspaceT bs_$enumName\"" >> $OUTPUT_FILE
@@ -442,7 +454,7 @@ case "$*" in
     if [[ "$*" == "..." ]]; then
        echo ""
     else
-       echo "Don't forget to import class for $* or hide code with \"--\" comment characters" >> $OUTPUT_FILE
+       echo "Don't forget to import class for $* or hide code with \"--\" comment characters (only if it's not current class type)" >> $OUTPUT_FILE
        echo "objT c_$*" # return then objT
     fi
   fi
@@ -532,21 +544,19 @@ if [[ "$argFromC" =~ "const" ]]; then
    result+="constT $ "
 fi
 
-argFromC=$(echo $argFromC | sed 's/\S*::\S*//g')
+argFromC=$(echo $argFromC | sed 's/\S*::\S*$//g')
 
 
 argFromC="$(trimBothSides $argFromC)"
-#echo "Trimmed argument is $argFromC"
+#echo "Trimmed argument is | $argFromC |"
 IFS=' '
 read -a strarrr <<< "$argFromC"
     
     
 if [ ${#strarrr[*]} -eq 1 ]; then # in other cases
   result+="$(return_type_for_haskell_2 $argFromC $MESSAGES)"
-
 elif [ ${#strarrr[*]} -eq 2 ]; then # in the case of enum
   result+="$(return_type_for_haskell_2 ${strarrr[0]} $MESSAGES)"
-
 fi
 
 #echo "Created full parameter: $result"
