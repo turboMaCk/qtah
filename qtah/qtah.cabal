@@ -79,6 +79,7 @@ library
     , Graphics.UI.Qtah.Core.QProcessEnvironment
     , Graphics.UI.Qtah.Core.QPoint
     , Graphics.UI.Qtah.Core.QPointF
+    , Graphics.UI.Qtah.Core.QRandomGenerator64
     , Graphics.UI.Qtah.Core.QRect
     , Graphics.UI.Qtah.Core.QRectF
     , Graphics.UI.Qtah.Core.QSaveFile
@@ -279,6 +280,7 @@ library
     , Graphics.UI.Qtah.Generated.Core.QProcessEnvironment
     , Graphics.UI.Qtah.Generated.Core.QPoint
     , Graphics.UI.Qtah.Generated.Core.QPointF
+    , Graphics.UI.Qtah.Generated.Core.QRandomGenerator64
     , Graphics.UI.Qtah.Generated.Core.QRect
     , Graphics.UI.Qtah.Generated.Core.QRectF
     , Graphics.UI.Qtah.Generated.Core.QSaveFile

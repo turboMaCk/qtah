@@ -91,6 +91,7 @@ executable qtah-generator
     , Graphics.UI.Qtah.Generator.Interface.Core.QProcessEnvironment
     , Graphics.UI.Qtah.Generator.Interface.Core.QPoint
     , Graphics.UI.Qtah.Generator.Interface.Core.QPointF
+    , Graphics.UI.Qtah.Generator.Interface.Core.QRandomGenerator64
     , Graphics.UI.Qtah.Generator.Interface.Core.QRect
     , Graphics.UI.Qtah.Generator.Interface.Core.QRectF
     , Graphics.UI.Qtah.Generator.Interface.Core.QSaveFile

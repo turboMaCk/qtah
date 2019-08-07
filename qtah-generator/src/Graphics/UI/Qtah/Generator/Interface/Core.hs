@@ -56,6 +56,7 @@ import qualified Graphics.UI.Qtah.Generator.Interface.Core.QProcess as QProcess
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QProcessEnvironment as QProcessEnvironment
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QPoint as QPoint
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QPointF as QPointF
+import qualified Graphics.UI.Qtah.Generator.Interface.Core.QRandomGenerator64 as QRandomGenerator64
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QRect as QRect
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QRectF as QRectF
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QSaveFile as QSaveFile
@@ -119,6 +120,7 @@ modules =
     , QProcessEnvironment.aModule
     , QPoint.aModule
     , QPointF.aModule
+    , QRandomGenerator64.aModule
     , QRect.aModule
     , QRectF.aModule
     , QSaveFile.aModule
