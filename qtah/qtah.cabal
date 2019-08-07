@@ -79,6 +79,7 @@ library
     , Graphics.UI.Qtah.Core.QProcessEnvironment
     , Graphics.UI.Qtah.Core.QPoint
     , Graphics.UI.Qtah.Core.QPointF
+    , Graphics.UI.Qtah.Core.QRandomGenerator
     , Graphics.UI.Qtah.Core.QRandomGenerator64
     , Graphics.UI.Qtah.Core.QRect
     , Graphics.UI.Qtah.Core.QRectF

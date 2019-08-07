@@ -153,6 +153,9 @@ case "$*" in
 'uint')
   echo "uintT"
 ;;
+'UInt')
+  echo "uintT"
+;;
 'ulong')
   echo "ulongT"
 ;;
@@ -317,6 +320,9 @@ case "$*" in
   echo "wchar_t"
 ;;
 'uint')
+  echo "uintT"
+;;
+'UInt')
   echo "uintT"
 ;;
 'ulong')
@@ -824,7 +830,7 @@ case "$method" in
 'constructor-method') 
 
     if [ $defaultsCount -gt 0 ]; then
-       echo "$(create_def_args "mkProp" true)"   
+       echo "$(create_def_args "mkCtor" true)"   
     else
       if [ ! -z "$minVersion" ]; then
          echo "test (qtVersion >= [$majorVersion, $minorVersion]) $ mkCtor \"new\" [$(create_args)]"

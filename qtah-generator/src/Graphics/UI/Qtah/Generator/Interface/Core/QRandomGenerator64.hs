@@ -31,6 +31,7 @@ import Graphics.UI.Qtah.Generator.Flags (qtVersion)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModuleWithMinVersion)
 import Graphics.UI.Qtah.Generator.Types
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (quint64)
+import Graphics.UI.Qtah.Generator.Interface.Core.QRandomGenerator (c_QRandomGenerator)
 
 
 {-# ANN module "HLint: ignore Use camelCase" #-}
@@ -46,7 +47,7 @@ aModule =
 c_QRandomGenerator64 =
   addReqIncludes [ includeStd "QRandomGenerator64" ] $
   classSetEntityPrefix "" $
-  makeClass (ident "QRandomGenerator64") Nothing [] $
+  makeClass (ident "QRandomGenerator64") Nothing [c_QRandomGenerator] $
   collect
   [ just $ mkMethod "generate" [] quint64
   , just $ mkMethod OpCall [] quint64
