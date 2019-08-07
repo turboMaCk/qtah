@@ -285,6 +285,7 @@ library
     , Graphics.UI.Qtah.Generated.Core.QProcessEnvironment
     , Graphics.UI.Qtah.Generated.Core.QPoint
     , Graphics.UI.Qtah.Generated.Core.QPointF
+    , Graphics.UI.Qtah.Generated.Core.QRandomGenerator
     , Graphics.UI.Qtah.Generated.Core.QRandomGenerator64
     , Graphics.UI.Qtah.Generated.Core.QRect
     , Graphics.UI.Qtah.Generated.Core.QRectF

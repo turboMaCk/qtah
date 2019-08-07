@@ -8,6 +8,7 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QOperatingSystemVersion (
 import Foreign.Hoppy.Generator.Spec (
   Export (ExportClass, ExportEnum),
   addReqIncludes,
+  classSetConversionToGc,
   classSetEntityPrefix,
   ident,
   ident1,
@@ -25,9 +26,15 @@ import Foreign.Hoppy.Generator.Spec (
   mkMethod
   )
 
+import Foreign.Hoppy.Generator.Spec.ClassFeature (
+    ClassFeature (Copyable),
+    classAddFeatures,
+    )  
+
 import Foreign.Hoppy.Generator.Types (boolT, intT, voidT, enumT, bitspaceT, constT, objT, ptrT, refT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
 import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModuleWithMinVersion)
 import Graphics.UI.Qtah.Generator.Types
 
@@ -46,6 +53,8 @@ aModule =
 
 c_QOperatingSystemVersion =
   addReqIncludes [ includeStd "QOperatingSystemVersion" ] $
+  classSetConversionToGc $ 
+  classAddFeatures [Copyable] $
   classSetEntityPrefix "" $
   makeClass (ident "QOperatingSystemVersion") Nothing [] $
   collect
@@ -60,28 +69,7 @@ c_QOperatingSystemVersion =
   , just $ mkConstMethod "minorVersion" [] intT
   , just $ mkConstMethod "name" [] $ objT c_QString
   , just $ mkConstMethod "segmentCount" [] intT
-  , just $ mkConstMethod "type" [] $ enumT e_OSType
-
-  , test (qtVersion >= [5, 9]) $ mkStaticMethod "AndroidJellyBean" [] $ constT $ objT c_QOperatingSystemVersion
-  , test (qtVersion >= [5, 9]) $ mkStaticMethod "AndroidJellyBean_MR1" [] $ constT $ objT c_QOperatingSystemVersion
-  , test (qtVersion >= [5, 9]) $ mkStaticMethod "AndroidJellyBean_MR2" [] $ constT $ objT c_QOperatingSystemVersion
-  , test (qtVersion >= [5, 9]) $ mkStaticMethod "AndroidKitKat" [] $ constT $ objT c_QOperatingSystemVersion
-  , test (qtVersion >= [5, 9]) $ mkStaticMethod "AndroidLollipop" [] $ constT $ objT c_QOperatingSystemVersion
-  , test (qtVersion >= [5, 9]) $ mkStaticMethod "AndroidLollipop_MR1" [] $ constT $ objT c_QOperatingSystemVersion
-  , test (qtVersion >= [5, 9]) $ mkStaticMethod "AndroidMarshmallow" [] $ constT $ objT c_QOperatingSystemVersion
-  , test (qtVersion >= [5, 9]) $ mkStaticMethod "AndroidNougat" [] $ constT $ objT c_QOperatingSystemVersion
-  , test (qtVersion >= [5, 9]) $ mkStaticMethod "AndroidNougat_MR1" [] $ constT $ objT c_QOperatingSystemVersion
-  , test (qtVersion >= [5, 9, 2]) $ mkStaticMethod "AndroidOreo" [] $ constT $ objT c_QOperatingSystemVersion
-  , test (qtVersion >= [5, 9, 1]) $ mkStaticMethod "MacOSHighSierra" [] $ constT $ objT c_QOperatingSystemVersion
-  , test (qtVersion >= [5, 11, 2]) $ mkStaticMethod "MacOSMojave" [] $ constT $ objT c_QOperatingSystemVersion
-  , test (qtVersion >= [5, 9]) $ mkStaticMethod "MacOSSierra" [] $ constT $ objT c_QOperatingSystemVersion
-  , test (qtVersion >= [5, 9]) $ mkStaticMethod "OSXElCapitan" [] $ constT $ objT c_QOperatingSystemVersion
-  , test (qtVersion >= [5, 9]) $ mkStaticMethod "OSXMavericks" [] $ constT $ objT c_QOperatingSystemVersion
-  , test (qtVersion >= [5, 9]) $ mkStaticMethod "OSXYosemite" [] $ constT $ objT c_QOperatingSystemVersion
-  , test (qtVersion >= [5, 9]) $ mkStaticMethod "Windows7" [] $ constT $ objT c_QOperatingSystemVersion
-  , test (qtVersion >= [5, 9]) $ mkStaticMethod "Windows8" [] $ constT $ objT c_QOperatingSystemVersion
-  , test (qtVersion >= [5, 9]) $ mkStaticMethod "Windows10" [] $ constT $ objT c_QOperatingSystemVersion
-  , test (qtVersion >= [5, 9]) $ mkStaticMethod "Windows8_1" [] $ constT $ objT c_QOperatingSystemVersion
+  , just $ mkConstMethod' "type" "typeOSType" [] $ enumT e_OSType
   ]
   
   
