@@ -74,6 +74,7 @@ executable qtah-generator
     , Graphics.UI.Qtah.Generator.Interface.Core.QList
     , Graphics.UI.Qtah.Generator.Interface.Core.QMargins
     , Graphics.UI.Qtah.Generator.Interface.Core.QMarginsF
+    , Graphics.UI.Qtah.Generator.Interface.Core.QMessageLogger
     , Graphics.UI.Qtah.Generator.Interface.Core.QMetaClassInfo
     , Graphics.UI.Qtah.Generator.Interface.Core.QMetaEnum
     , Graphics.UI.Qtah.Generator.Interface.Core.QMetaMethod

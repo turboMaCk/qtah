@@ -61,6 +61,7 @@ library
     , Graphics.UI.Qtah.Core.QList.QTreeWidgetItem
     , Graphics.UI.Qtah.Core.QMargins
     , Graphics.UI.Qtah.Core.QMarginsF
+    , Graphics.UI.Qtah.Core.QMessageLogger
     , Graphics.UI.Qtah.Core.QMetaClassInfo
     , Graphics.UI.Qtah.Core.QMetaEnum
     , Graphics.UI.Qtah.Core.QMetaMethod
@@ -257,6 +258,7 @@ library
     , Graphics.UI.Qtah.Generated.Core.QList.QTreeWidgetItem
     , Graphics.UI.Qtah.Generated.Core.QMargins
     , Graphics.UI.Qtah.Generated.Core.QMarginsF
+    , Graphics.UI.Qtah.Generated.Core.QMessageLogger
     , Graphics.UI.Qtah.Generated.Core.QMetaClassInfo
     , Graphics.UI.Qtah.Generated.Core.QMetaEnum
     , Graphics.UI.Qtah.Generated.Core.QMetaMethod

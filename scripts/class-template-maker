@@ -36,6 +36,8 @@
 # ./class-template-maker "Gui" "QVulkanWindow" "QWindow" 0 1 false false "Copyable" "boolT, intT, word32T" "" "" "5.10"
 # ./class-template-maker "Core" "QDir" "" 0 2 false false "Copyable, Assignable, Equatable" "boolT, uintT" "" "OpArray" ""
 
+
+
 # 1) of amountofbitspaces contains one enum and one bitspace
 # 2) There is no need to add such general types as  voidT, enumT, bitspaceT, constT, objT, ptrT, refT. They are generated automatically
 
@@ -399,14 +401,21 @@ do
 done
 
 
-# After generation add module paths to
-# 1) ../qtah/qtah.cabal
-# 2) ../qtah-generator/src/Graphics/UI/Qtah/Generator/Interface/$modulename.hs
-# 3) ../qtah-generator/qtah-generator.cabal
+echo ""
+echo ""
+echo "After generation add module paths to:"
+echo "1) ../qtah/qtah.cabal:"
+echo "     , Graphics.UI.Qtah.Generated.$modulename.$classname"
+echo "     , Graphics.UI.Qtah.$modulename.$classname"
+echo "2) ../qtah-generator/src/Graphics/UI/Qtah/Generator/Interface/$modulename.hs:"
+echo "     import qualified Graphics.UI.Qtah.Generator.Interface.$modulename.$classname as $classname"
+echo "     , $classname.aModule"
+echo "3) ../qtah-generator/qtah-generator.cabal:"
+echo "     , Graphics.UI.Qtah.Generator.Interface.$modulename.$classname"
 
-
-# After creating directory for new module add proper changes to: 
-# 1) qtah-cpp/cpp/qtah.pro
-# 2) ../qtah-generator/src/Graphics/UI/Qtah/Generator/Interface/$modulename.hs
-# 3) qtah-generator/src/Main.hs
-# 4) qtah/Setup.hs
+echo ""
+echo "After creating directory for new module add proper changes to:" 
+echo "1) qtah-cpp/cpp/qtah.pro"
+echo "2) ../qtah-generator/src/Graphics/UI/Qtah/Generator/Interface/$modulename.hs"
+echo "3) qtah-generator/src/Main.hs"
+echo "4) qtah/Setup.hs"
