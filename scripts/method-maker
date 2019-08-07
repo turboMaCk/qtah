@@ -209,10 +209,10 @@ case "$*" in
   echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qfunctionpointer)\" in class file" >> $OUTPUT_FILE
   echo "qfunctionpointer"
 ;;
-#'QtMessageHandler')
-#  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qtmessagehandler)\" in class file" >> $OUTPUT_FILE
-#  echo "qtmessagehandler"
-#;;
+'QtMessageHandler')
+  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qtmessagehandler)\" in class file" >> $OUTPUT_FILE
+  echo "qtmessagehandler"
+;;
 '')
   echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qint8)\" in class file" >> $OUTPUT_FILE
   echo "qint8"
@@ -375,10 +375,10 @@ case "$*" in
   echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qfunctionpointer)\" in class file" >> $OUTPUT_FILE
   echo "qfunctionpointer"
 ;;
-#'QtMessageHandler')
-#  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qtmessagehandler)\" in class file" >> $OUTPUT_FILE
-#  echo "qtmessagehandler"
-#;;
+'QtMessageHandler')
+  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qtmessagehandler)\" in class file" >> $OUTPUT_FILE
+  echo "qtmessagehandler"
+;;
 '')
   echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qint8)\" in class file" >> $OUTPUT_FILE
   echo "qint8"

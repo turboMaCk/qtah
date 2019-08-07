@@ -38,6 +38,7 @@ import qualified Graphics.UI.Qtah.Generator.Interface.Core.QItemSelectionRange a
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QList as QList
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QMargins as QMargins
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QMarginsF as QMarginsF
+import qualified Graphics.UI.Qtah.Generator.Interface.Core.QMessageLogContext as QMessageLogContext
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QMessageLogger as QMessageLogger
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QMetaClassInfo as QMetaClassInfo
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QMetaEnum as QMetaEnum
@@ -99,6 +100,7 @@ modules =
     , QItemSelectionRange.aModule
     , QMargins.aModule
     , QMarginsF.aModule
+    , QMessageLogContext.aModule
     , QMessageLogger.aModule
     , QMetaClassInfo.aModule
     , QMetaEnum.aModule

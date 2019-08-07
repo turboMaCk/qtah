@@ -165,10 +165,11 @@ import Foreign.Hoppy.Generator.Spec (
   makeFn,
   )
 import System.Info (os) 
-import Foreign.Hoppy.Generator.Types (doubleT, floatT, objT, int8T, int16T, int32T, int64T, ssizeT, word8T, word16T, word32T, word64T, ptrT, fnT, voidT, enumT)
+import Foreign.Hoppy.Generator.Types (doubleT, floatT, objT, int8T, int16T, int32T, int64T, ssizeT, word8T, word16T, word32T, word64T, ptrT, refT, fnT, voidT, enumT, constT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
 import Graphics.UI.Qtah.Generator.Flags (qrealFloat, qtVersion)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
+import Graphics.UI.Qtah.Generator.Interface.Core.QMessageLogContext (c_QMessageLogContext)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
 
@@ -307,8 +308,8 @@ qulonglong = quint64
 qfunctionpointer :: Type
 qfunctionpointer = ptrT $ fnT [] voidT
 
---qtmessagehandler :: Type
---qtmessagehandler = ptrT $ fnT [enumT e_QtMsgType, refT $ constT $ objT c_QMessageLogContext, refT $ constT $ objT c_QString] voidT
+qtmessagehandler :: Type
+qtmessagehandler = ptrT $ fnT [enumT e_QtMsgType, refT $ constT $ objT c_QMessageLogContext, refT $ constT $ objT c_QString] voidT
 
 qint8 :: Type
 qint8 = int8T
