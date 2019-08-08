@@ -113,6 +113,7 @@ executable qtah-generator
     , Graphics.UI.Qtah.Generator.Interface.Core.QTranslator
     , Graphics.UI.Qtah.Generator.Interface.Core.QVariant
     , Graphics.UI.Qtah.Generator.Interface.Core.QVector
+    , Graphics.UI.Qtah.Generator.Interface.Core.QVersionNumber
     , Graphics.UI.Qtah.Generator.Interface.Core.QPalette
     , Graphics.UI.Qtah.Generator.Interface.Core.Types
     , Graphics.UI.Qtah.Generator.Interface.Gui

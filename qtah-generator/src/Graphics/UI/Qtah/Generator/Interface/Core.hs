@@ -78,6 +78,7 @@ import qualified Graphics.UI.Qtah.Generator.Interface.Core.QTimerEvent as QTimer
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QTranslator as QTranslator
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QVariant as QVariant
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QVector as QVector
+import qualified Graphics.UI.Qtah.Generator.Interface.Core.QVersionNumber as QVersionNumber
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.Types as Types
 import Graphics.UI.Qtah.Generator.Module (AModule)
 
@@ -144,6 +145,7 @@ modules =
     , QTimerEvent.aModule
     , QTranslator.aModule
     , QVariant.aModule
+    , QVersionNumber.aModule
     , Types.aModule
     ]
   , QList.allModules

@@ -104,6 +104,7 @@ library
     , Graphics.UI.Qtah.Core.QVector.QPoint
     , Graphics.UI.Qtah.Core.QVector.QPointF
     , Graphics.UI.Qtah.Core.QVector.QRgb
+    , Graphics.UI.Qtah.Core.QVersionNumber
     , Graphics.UI.Qtah.Core.Types
     , Graphics.UI.Qtah.Event
     , Graphics.UI.Qtah.Gui.QBackingStore
@@ -308,6 +309,7 @@ library
     , Graphics.UI.Qtah.Generated.Core.QVector.QPoint
     , Graphics.UI.Qtah.Generated.Core.QVector.QPointF
     , Graphics.UI.Qtah.Generated.Core.QVector.QRgb
+    , Graphics.UI.Qtah.Generated.Core.QVersionNumber
     , Graphics.UI.Qtah.Generated.Core.Types
     , Graphics.UI.Qtah.Generated.Gui.QActionEvent
     , Graphics.UI.Qtah.Generated.Gui.QBackingStore
