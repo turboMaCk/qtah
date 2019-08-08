@@ -44,6 +44,7 @@ import qualified Graphics.UI.Qtah.Generator.Interface.Core.QList as QList
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QLoggingCategory as QLoggingCategory
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QMargins as QMargins
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QMarginsF as QMarginsF
+import qualified Graphics.UI.Qtah.Generator.Interface.Core.QMessageAuthenticationCode as QMessageAuthenticationCode
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QMessageLogContext as QMessageLogContext
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QMessageLogger as QMessageLogger
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QMetaClassInfo as QMetaClassInfo
@@ -119,6 +120,7 @@ modules =
     , QLoggingCategory.aModule
     , QMargins.aModule
     , QMarginsF.aModule
+    , QMessageAuthenticationCode.aModule
     , QMessageLogContext.aModule
     , QMessageLogger.aModule
     , QMetaClassInfo.aModule

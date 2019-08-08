@@ -80,6 +80,7 @@ executable qtah-generator
     , Graphics.UI.Qtah.Generator.Interface.Core.QLoggingCategory
     , Graphics.UI.Qtah.Generator.Interface.Core.QMargins
     , Graphics.UI.Qtah.Generator.Interface.Core.QMarginsF
+    , Graphics.UI.Qtah.Generator.Interface.Core.QMessageAuthenticationCode
     , Graphics.UI.Qtah.Generator.Interface.Core.QMessageLogContext
     , Graphics.UI.Qtah.Generator.Interface.Core.QMessageLogger
     , Graphics.UI.Qtah.Generator.Interface.Core.QMetaClassInfo

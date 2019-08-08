@@ -67,6 +67,7 @@ library
     , Graphics.UI.Qtah.Core.QLoggingCategory
     , Graphics.UI.Qtah.Core.QMargins
     , Graphics.UI.Qtah.Core.QMarginsF
+    , Graphics.UI.Qtah.Core.QMessageAuthenticationCode
     , Graphics.UI.Qtah.Core.QMessageLogContext
     , Graphics.UI.Qtah.Core.QMessageLogger
     , Graphics.UI.Qtah.Core.QMetaClassInfo
@@ -278,6 +279,7 @@ library
     , Graphics.UI.Qtah.Generated.Core.QLoggingCategory
     , Graphics.UI.Qtah.Generated.Core.QMargins
     , Graphics.UI.Qtah.Generated.Core.QMarginsF
+    , Graphics.UI.Qtah.Generated.Core.QMessageAuthenticationCode
     , Graphics.UI.Qtah.Generated.Core.QMessageLogContext
     , Graphics.UI.Qtah.Generated.Core.QMessageLogger
     , Graphics.UI.Qtah.Generated.Core.QMetaClassInfo
