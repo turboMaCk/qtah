@@ -39,7 +39,7 @@ import Graphics.UI.Qtah.Generator.Flags (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Graphics.UI.Qtah.Generator.Interface.Core.QList (c_QListQByteArray)
 import Graphics.UI.Qtah.Generator.Interface.Core.QByteArray (c_QByteArray)
-import Graphics.UI.Qtah.Generator.Interface.Core.QDateTime (c_QDateTime)
+import {-#SOURCE#-} Graphics.UI.Qtah.Generator.Interface.Core.QDateTime (c_QDateTime)
 --import Graphics.UI.Qtah.Generator.Interface.Core.QLocale (c_QLocale, e_Country)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModuleWithMinVersion)
 import Graphics.UI.Qtah.Generator.Types
