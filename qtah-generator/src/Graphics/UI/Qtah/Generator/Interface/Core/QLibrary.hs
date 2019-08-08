@@ -23,7 +23,8 @@ import Foreign.Hoppy.Generator.Spec (
   mkStaticMethod',
   mkCtor,
   mkMethod',
-  mkMethod
+  mkMethod,
+  mkProp
   )
 
 import Foreign.Hoppy.Generator.Types (charT, intT, boolT, voidT, enumT, bitspaceT, constT, objT, ptrT, refT)
@@ -73,6 +74,8 @@ c_QLibrary =
   , just $ mkMethod' "setFileNameAndVersion" "setFileNameAndVersionVerint" [refT $ constT $ objT c_QString, intT] voidT
   , test (qtVersion >= [4, 4]) $ mkMethod' "setFileNameAndVersion" "setFileNameAndVersionVerstr" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString] voidT
   , just $ mkMethod "unload" [] boolT
+  , just $ mkProp "fileName" $ objT c_QString
+  , just $ mkProp "loadHints" $ bitspaceT bs_LoadHints
   ]
   
   

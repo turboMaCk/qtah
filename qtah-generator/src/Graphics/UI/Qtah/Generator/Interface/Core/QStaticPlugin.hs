@@ -49,8 +49,8 @@ c_QStaticPlugin =
   classSetEntityPrefix "" $
   makeClass (ident "QStaticPlugin") Nothing [] $
   collect
-  [ just $ mkMethod "instance" [] $ ptrT $ objT c_QObject
-  , just $ mkConstMethod "metaData" [] $ objT c_QJsonObject
+  [ just $ mkMethod' "instance" "staticPluginInstance" [] $ ptrT $ objT c_QObject
+  --, just $ mkConstMethod "metaData" [] $ objT c_QJsonObject
   , just $ mkMethod "rawMetaData" [] $ ptrT $ constT charT 
   ]
   

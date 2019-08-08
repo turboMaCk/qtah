@@ -21,7 +21,8 @@ import Foreign.Hoppy.Generator.Spec (
   mkStaticMethod',
   mkCtor,
   mkMethod',
-  mkMethod
+  mkMethod,
+  mkProp
   )
 
 import Foreign.Hoppy.Generator.Types (charT, boolT, voidT, enumT, bitspaceT, constT, objT, ptrT, refT)
@@ -62,7 +63,9 @@ c_QPluginLoader =
   , just $ mkMethod "load" [] boolT
   --, just $ mkConstMethod "metaData" [] $ objT c_QJsonObject
   , just $ mkStaticMethod "staticInstances" [] $ objT c_QListQObject
-  --, TODO QVector<QStaticPlugin> QPluginLoader::staticPlugins()
+  --, just $ mkStaticMethod "staticPlugins" [] $ objT c_QVectorQStaticPlugin
   , just $ mkMethod "unload" [] boolT
+  , just $ mkProp "fileName" $ objT c_QString
+  , test (qtVersion >= [4, 4]) $ mkProp "loadHints" $ bitspaceT bs_LoadHints
   ]
   
