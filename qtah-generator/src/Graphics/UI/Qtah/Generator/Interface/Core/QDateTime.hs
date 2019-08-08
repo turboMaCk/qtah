@@ -37,7 +37,7 @@ import Foreign.Hoppy.Generator.Version (collect, just, test)
 import Graphics.UI.Qtah.Generator.Flags (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.QDate (c_QDate)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
---import Graphics.UI.Qtah.Generator.Interface.Core.QTime (c_QTime)
+import Graphics.UI.Qtah.Generator.Interface.Core.QTime (c_QTime)
 --import Graphics.UI.Qtah.Generator.Interface.Core.QTimeZone (c_QTimeZone)
 --import Graphics.UI.Qtah.Generator.Interface.Core.QDataStream (c_QDataStream)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
@@ -63,9 +63,9 @@ c_QDateTime =
   collect
   [ just $ mkCtor "new" []
   , just $ mkCtor "newWithQDate" [refT $ constT $ objT c_QDate]
-  --, just $ mkCtor "newWithQDateQTime" [refT $ constT $ objT c_QDate, refT $ constT $ objT c_QTime]
-  --, just $ mkCtor "newWithQDateQTimeTimespec" [refT $ constT $ objT c_QDate, refT $ constT $ objT c_QTime, enumT e_TimeSpec]
-  --, test (qtVersion >= [5, 2]) $ mkCtor "newWithQDateQTimeTimespecOffset" [refT $ constT $ objT c_QDate, refT $ constT $ objT c_QTime, enumT e_TimeSpec, intT]
+  , just $ mkCtor "newWithQDateQTime" [refT $ constT $ objT c_QDate, refT $ constT $ objT c_QTime]
+  , just $ mkCtor "newWithQDateQTimeTimespec" [refT $ constT $ objT c_QDate, refT $ constT $ objT c_QTime, enumT e_TimeSpec]
+  , test (qtVersion >= [5, 2]) $ mkCtor "newWithQDateQTimeTimespecOffset" [refT $ constT $ objT c_QDate, refT $ constT $ objT c_QTime, enumT e_TimeSpec, intT]
   --, test (qtVersion >= [5, 2]) $ mkCtor "newWithQDateQTimeQTimezone" [refT $ constT $ objT c_QDate, refT $ constT $ objT c_QTime, refT $ constT $ objT c_QTimeZone]
   , just $ mkConstMethod "addDays" [qint64] $ objT c_QDateTime
   , just $ mkConstMethod "addMSecs" [qint64] $ objT c_QDateTime
@@ -101,7 +101,7 @@ c_QDateTime =
   , test (qtVersion >= [4, 7]) $ mkMethod "setMSecsSinceEpoch" [qint64] voidT
   , test (qtVersion >= [5, 2]) $ mkMethod "setOffsetFromUtc" [intT] voidT
   , test (qtVersion >= [5, 8]) $ mkMethod "setSecsSinceEpoch" [qint64] voidT
-  --, just $ mkMethod "setTime" [refT $ constT $ objT c_QTime] voidT
+  , just $ mkMethod "setTime" [refT $ constT $ objT c_QTime] voidT
   , just $ mkMethod "setTimeSpec" [enumT e_TimeSpec] voidT
   --, test (qtVersion >= [5, 2]) $ mkMethod "setTimeZone" [refT $ constT $ objT c_QTimeZone] voidT
   , test (qtVersion >= [5, 0]) $ mkMethod "swap" [refT $ objT c_QDateTime] voidT
