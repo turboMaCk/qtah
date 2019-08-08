@@ -153,7 +153,11 @@ case "$*" in
   echo "intT"
 ;;
 'std::string')
-  echo "attach \"import Foreign.Hoppy.Generator.Std.String (c_string)\" in class file" >> $OUTPUT_FILE
+
+  if ! grep -q "attach \"import Foreign.Hoppy.Generator.Std.String (c_string)\" in class file" "$OUTPUT_FILE"; then
+    echo "attach \"import Foreign.Hoppy.Generator.Std.String (c_string)\" in class file" >> $OUTPUT_FILE
+  fi
+
   echo "c_string"
 ;;
 'std::u16string')
@@ -163,7 +167,11 @@ case "$*" in
   echo "word32T"
 ;;
 'std::wstring')
-  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (wchar_t)\" in class file" >> $OUTPUT_FILE
+
+  if ! grep -q "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (wchar_t)\" in class file" "$OUTPUT_FILE"; then
+    echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (wchar_t)\" in class file" >> $OUTPUT_FILE
+  fi
+
   echo "wchar_t"
 ;;
 'uint')
@@ -176,18 +184,30 @@ case "$*" in
   echo "ulongT"
 ;;
 'qulonglong')
-  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qulonglong)\" in class file" >> $OUTPUT_FILE
+
+  if ! grep -q "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qulonglong)\" in class file" "$OUTPUT_FILE"; then
+    echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qulonglong)\" in class file" >> $OUTPUT_FILE
+  fi
+
   echo "qulonglong"
 ;;
 'qlonglong')
-  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qlonglong)\" in class file" >> $OUTPUT_FILE
+
+  if ! grep -q "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qlonglong)\" in class file" "$OUTPUT_FILE"; then
+    echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qlonglong)\" in class file" >> $OUTPUT_FILE
+  fi
+
   echo "qlonglong"
 ;;
 'ushort')
   echo "ushortT"
 ;;
 'wchar_t')
-  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (wchar_t)\" in class file" >> $OUTPUT_FILE
+
+  if ! grep -q "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (wchar_t)\" in class file" "$OUTPUT_FILE"; then
+    echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (wchar_t)\" in class file" >> $OUTPUT_FILE
+  fi
+  
   echo "wchar_t"
 ;;
 'char')
@@ -208,6 +228,18 @@ case "$*" in
 'long long')
   echo "llongT"
 ;;
+'long long int')
+  echo "llongT"
+;;
+'signed long long')
+  echo "llongT"
+;;
+'unsigned long long')
+  echo "ullongT"
+;;
+'unsigned long long int')
+  echo "ullongT"
+;;
 'float')
   echo "floatT"
 ;;
@@ -221,88 +253,169 @@ case "$*" in
   echo "ucharT"
 ;;
 'qreal')
-  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qreal)\" in class file" >> $OUTPUT_FILE
+
+  if ! grep -q "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qreal)\" in class file" "$OUTPUT_FILE"; then
+    echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qreal)\" in class file" >> $OUTPUT_FILE
+  fi
+  
   echo "qreal"
 ;;
 'QFunctionPointer')
-  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qfunctionpointer)\" in class file" >> $OUTPUT_FILE
+
+  if ! grep -q "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qfunctionpointer)\" in class file" "$OUTPUT_FILE"; then
+    echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qfunctionpointer)\" in class file" >> $OUTPUT_FILE
+  fi
+  
   echo "qfunctionpointer"
 ;;
 'QtMessageHandler')
-  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qtmessagehandler)\" in class file" >> $OUTPUT_FILE
+
+  if ! grep -q "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qtmessagehandler)\" in class file" "$OUTPUT_FILE"; then
+    echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qtmessagehandler)\" in class file" >> $OUTPUT_FILE
+  fi
+
   echo "qtmessagehandler"
 ;;
 'qint8')
-  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qint8)\" in class file" >> $OUTPUT_FILE
+
+  if ! grep -q "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qint8)\" in class file" "$OUTPUT_FILE"; then
+    echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qint8)\" in class file" >> $OUTPUT_FILE
+  fi
+
   echo "qint8"
 ;;
 'qint16')
-  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qint16)\" in class file" >> $OUTPUT_FILE
+
+  if ! grep -q "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qint16)\" in class file" "$OUTPUT_FILE"; then
+    echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qint16)\" in class file" >> $OUTPUT_FILE
+  fi
+
   echo "qint16"
 ;;
 'qint32')
-  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qint32)\" in class file" >> $OUTPUT_FILE
+
+  if ! grep -q "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qint32)\" in class file" "$OUTPUT_FILE"; then
+    echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qint32)\" in class file" >> $OUTPUT_FILE
+  fi
+  
   echo "qint32"
 ;;
 'qint64')
-  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qint64)\" in class file" >> $OUTPUT_FILE
+
+  if ! grep -q "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qint64)\" in class file" "$OUTPUT_FILE"; then
+    echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qint64)\" in class file" >> $OUTPUT_FILE
+  fi
+
   echo "qint64"
 ;;
 'qintptr')
-  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qintptr)\" in class file" >> $OUTPUT_FILE
+
+  if ! grep -q "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qintptr)\" in class file" "$OUTPUT_FILE"; then
+    echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qintptr)\" in class file" >> $OUTPUT_FILE
+  fi
+
   echo "qintptr"
 ;;
 'qptrdiff')
-  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qptrdiff)\" in class file" >> $OUTPUT_FILE
+
+  if ! grep -q "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qptrdiff)\" in class file" "$OUTPUT_FILE"; then
+    echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qptrdiff)\" in class file" >> $OUTPUT_FILE
+  fi
+
   echo "qptrdiff"
 ;;
 'qsizetype')
-  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qsizetype)\" in class file" >> $OUTPUT_FILE
+
+  if ! grep -q "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qsizetype)\" in class file" "$OUTPUT_FILE"; then
+    echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qsizetype)\" in class file" >> $OUTPUT_FILE
+  fi
+
   echo "qsizetype"
 ;;
 'quint8')
-  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (quint8)\" in class file" >> $OUTPUT_FILE
+
+  if ! grep -q "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (quint8)\" in class file" "$OUTPUT_FILE"; then
+    echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (quint8)\" in class file" >> $OUTPUT_FILE
+  fi
+
   echo "quint8"
 ;;
 'quint16')
-  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (quint16)\" in class file" >> $OUTPUT_FILE
+
+  if ! grep -q "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (quint16)\" in class file" "$OUTPUT_FILE"; then
+    echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (quint16)\" in class file" >> $OUTPUT_FILE
+  fi
+
   echo "quint16"
 ;;
 'quint32')
-  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (quint32)\" in class file" >> $OUTPUT_FILE
+
+  if ! grep -q "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (quint32)\" in class file" "$OUTPUT_FILE"; then
+    echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (quint32)\" in class file" >> $OUTPUT_FILE
+  fi
+
   echo "quint32"
 ;;
 'quint64')
-  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (quint64)\" in class file" >> $OUTPUT_FILE
+
+  if ! grep -q "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (quint64)\" in class file" "$OUTPUT_FILE"; then
+    echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (quint64)\" in class file" >> $OUTPUT_FILE
+  fi
+
   echo "quint64"
 ;;
 'quintptr')
-  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (quintptr)\" in class file" >> $OUTPUT_FILE
+
+  if ! grep -q "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (quintptr)\" in class file" "$OUTPUT_FILE"; then
+    echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (quintptr)\" in class file" >> $OUTPUT_FILE
+  fi
+
   echo "quintptr"
 ;;
 'gluint')
-  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (gluint)\" in class file" >> $OUTPUT_FILE
+
+  if ! grep -q "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (gluint)\" in class file" "$OUTPUT_FILE"; then
+    echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (gluint)\" in class file" >> $OUTPUT_FILE
+  fi
+
   echo "gluint"
 ;;
 *) 
   if [[ "$*" =~ "::" ]] && [[ ! "$*" =~ "Qt::" ]]; then
+  
     enumName="$(sed 's/.*:://' <<< "$*")"
     enumClass="$(sed 's/::.*//' <<< "$*")"
+    
+  if ! grep -q "attach import enum e_$enumName from module file $enumClass.hs" "$OUTPUT_FILE"; then
     echo "attach import enum e_$enumName from module file $enumClass.hs" >> $OUTPUT_FILE
     echo "It may be typedef too" >> $OUTPUT_FILE
     echo "In the case of import error, try \"bitspaceT bs_$enumName\"" >> $OUTPUT_FILE
+  fi
+    
     echo "enumT e_$enumName"
+  
   elif [[ "$*" =~ "Qt::" ]] || [[ "$*" =~ "QtMsgType" ]]; then
+  
     enumName="$(sed 's/.*:://' <<< "$*")"
-    echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (e_$enumName)\" in class file" >> $OUTPUT_FILE
-    echo "In the case of import error, try \"bitspaceT bs_$enumName\"" >> $OUTPUT_FILE
+    
+  if ! grep -q "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (e_$enumName)\" in class file" "$OUTPUT_FILE"; then
+     echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (e_$enumName)\" in class file" >> $OUTPUT_FILE
+     echo "In the case of import error, try \"bitspaceT bs_$enumName\"" >> $OUTPUT_FILE
+  fi
+
     echo "enumT e_$enumName"
+
   else
     if [[ "$*" == "..." ]]; then
        echo ""
     else
-       echo "Don't forget to import class for $* or hide code with \"--\" comment characters (only if it's not current class type)" >> $OUTPUT_FILE
+    
+    if ! grep -q "Don't forget to import class for $* (only if it's not current class type) or hide code with \"--\" comment characters" "$OUTPUT_FILE"; then
+       echo "Don't forget to import class for $* (only if it's not current class type) or hide code with \"--\" comment characters" >> $OUTPUT_FILE
+    fi
+       
        echo "objT c_$*" # return then objT
+
     fi
   fi
 ;;
@@ -322,7 +435,11 @@ case "$*" in
   echo "intT"
 ;;
 'std::string')
-  echo "attach \"import Foreign.Hoppy.Generator.Std.String (c_string)\" in class file" >> $OUTPUT_FILE
+
+  if ! grep -q "attach \"import Foreign.Hoppy.Generator.Std.String (c_string)\" in class file" "$OUTPUT_FILE"; then
+    echo "attach \"import Foreign.Hoppy.Generator.Std.String (c_string)\" in class file" >> $OUTPUT_FILE
+  fi
+
   echo "c_string"
 ;;
 'std::u16string')
@@ -332,7 +449,11 @@ case "$*" in
   echo "word32T"
 ;;
 'std::wstring')
-  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (wchar_t)\" in class file" >> $OUTPUT_FILE
+
+  if ! grep -q "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (wchar_t)\" in class file" "$OUTPUT_FILE"; then
+    echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (wchar_t)\" in class file" >> $OUTPUT_FILE
+  fi
+
   echo "wchar_t"
 ;;
 'uint')
@@ -345,18 +466,30 @@ case "$*" in
   echo "ulongT"
 ;;
 'qulonglong')
-  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qulonglong)\" in class file" >> $OUTPUT_FILE
+
+  if ! grep -q "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qulonglong)\" in class file" "$OUTPUT_FILE"; then
+    echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qulonglong)\" in class file" >> $OUTPUT_FILE
+  fi
+
   echo "qulonglong"
 ;;
 'qlonglong')
-  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qlonglong)\" in class file" >> $OUTPUT_FILE
+
+  if ! grep -q "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qlonglong)\" in class file" "$OUTPUT_FILE"; then
+    echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qlonglong)\" in class file" >> $OUTPUT_FILE
+  fi
+
   echo "qlonglong"
 ;;
 'ushort')
   echo "ushortT"
 ;;
 'wchar_t')
-  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (wchar_t)\" in class file" >> $OUTPUT_FILE
+
+  if ! grep -q "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (wchar_t)\" in class file" "$OUTPUT_FILE"; then
+    echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (wchar_t)\" in class file" >> $OUTPUT_FILE
+  fi
+  
   echo "wchar_t"
 ;;
 'char')
@@ -377,6 +510,18 @@ case "$*" in
 'long long')
   echo "llongT"
 ;;
+'long long int')
+  echo "llongT"
+;;
+'signed long long')
+  echo "llongT"
+;;
+'unsigned long long')
+  echo "ullongT"
+;;
+'unsigned long long int')
+  echo "ullongT"
+;;
 'float')
   echo "floatT"
 ;;
@@ -390,67 +535,131 @@ case "$*" in
   echo "ucharT"
 ;;
 'qreal')
-  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qreal)\" in class file" >> $OUTPUT_FILE
+
+  if ! grep -q "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qreal)\" in class file" "$OUTPUT_FILE"; then
+    echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qreal)\" in class file" >> $OUTPUT_FILE
+  fi
+  
   echo "qreal"
 ;;
 'QFunctionPointer')
-  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qfunctionpointer)\" in class file" >> $OUTPUT_FILE
+
+  if ! grep -q "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qfunctionpointer)\" in class file" "$OUTPUT_FILE"; then
+    echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qfunctionpointer)\" in class file" >> $OUTPUT_FILE
+  fi
+  
   echo "qfunctionpointer"
 ;;
 'QtMessageHandler')
-  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qtmessagehandler)\" in class file" >> $OUTPUT_FILE
+
+  if ! grep -q "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qtmessagehandler)\" in class file" "$OUTPUT_FILE"; then
+    echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qtmessagehandler)\" in class file" >> $OUTPUT_FILE
+  fi
+
   echo "qtmessagehandler"
 ;;
 'qint8')
-  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qint8)\" in class file" >> $OUTPUT_FILE
+
+  if ! grep -q "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qint8)\" in class file" "$OUTPUT_FILE"; then
+    echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qint8)\" in class file" >> $OUTPUT_FILE
+  fi
+
   echo "qint8"
 ;;
 'qint16')
-  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qint16)\" in class file" >> $OUTPUT_FILE
+
+  if ! grep -q "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qint16)\" in class file" "$OUTPUT_FILE"; then
+    echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qint16)\" in class file" >> $OUTPUT_FILE
+  fi
+
   echo "qint16"
 ;;
 'qint32')
-  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qint32)\" in class file" >> $OUTPUT_FILE
+
+  if ! grep -q "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qint32)\" in class file" "$OUTPUT_FILE"; then
+    echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qint32)\" in class file" >> $OUTPUT_FILE
+  fi
+  
   echo "qint32"
 ;;
 'qint64')
-  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qint64)\" in class file" >> $OUTPUT_FILE
+
+  if ! grep -q "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qint64)\" in class file" "$OUTPUT_FILE"; then
+    echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qint64)\" in class file" >> $OUTPUT_FILE
+  fi
+
   echo "qint64"
 ;;
 'qintptr')
-  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qintptr)\" in class file" >> $OUTPUT_FILE
+
+  if ! grep -q "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qintptr)\" in class file" "$OUTPUT_FILE"; then
+    echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qintptr)\" in class file" >> $OUTPUT_FILE
+  fi
+
   echo "qintptr"
 ;;
 'qptrdiff')
-  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qptrdiff)\" in class file" >> $OUTPUT_FILE
+
+  if ! grep -q "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qptrdiff)\" in class file" "$OUTPUT_FILE"; then
+    echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qptrdiff)\" in class file" >> $OUTPUT_FILE
+  fi
+
   echo "qptrdiff"
 ;;
 'qsizetype')
-  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qsizetype)\" in class file" >> $OUTPUT_FILE
+
+  if ! grep -q "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qsizetype)\" in class file" "$OUTPUT_FILE"; then
+    echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qsizetype)\" in class file" >> $OUTPUT_FILE
+  fi
+
   echo "qsizetype"
 ;;
 'quint8')
-  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (quint8)\" in class file" >> $OUTPUT_FILE
+
+  if ! grep -q "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (quint8)\" in class file" "$OUTPUT_FILE"; then
+    echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (quint8)\" in class file" >> $OUTPUT_FILE
+  fi
+
   echo "quint8"
 ;;
 'quint16')
-  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (quint16)\" in class file" >> $OUTPUT_FILE
+
+  if ! grep -q "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (quint16)\" in class file" "$OUTPUT_FILE"; then
+    echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (quint16)\" in class file" >> $OUTPUT_FILE
+  fi
+
   echo "quint16"
 ;;
 'quint32')
-  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (quint32)\" in class file" >> $OUTPUT_FILE
+
+  if ! grep -q "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (quint32)\" in class file" "$OUTPUT_FILE"; then
+    echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (quint32)\" in class file" >> $OUTPUT_FILE
+  fi
+
   echo "quint32"
 ;;
 'quint64')
-  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (quint64)\" in class file" >> $OUTPUT_FILE
+
+  if ! grep -q "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (quint64)\" in class file" "$OUTPUT_FILE"; then
+    echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (quint64)\" in class file" >> $OUTPUT_FILE
+  fi
+
   echo "quint64"
 ;;
 'quintptr')
-  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (quintptr)\" in class file" >> $OUTPUT_FILE
+
+  if ! grep -q "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (quintptr)\" in class file" "$OUTPUT_FILE"; then
+    echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (quintptr)\" in class file" >> $OUTPUT_FILE
+  fi
+
   echo "quintptr"
 ;;
 'gluint')
-  echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (gluint)\" in class file" >> $OUTPUT_FILE
+
+  if ! grep -q "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (gluint)\" in class file" "$OUTPUT_FILE"; then
+    echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (gluint)\" in class file" >> $OUTPUT_FILE
+  fi
+
   echo "gluint"
 ;;
 *) 
@@ -461,23 +670,40 @@ case "$*" in
   #  echo "In the case of import error, try \"bitspaceT bs_$enumName\"" >> $OUTPUT_FILE
   #  echo "enumT e_$enumName"
   if [[ "$*" =~ "::" ]] && [[ ! "$*" =~ "Qt::" ]]; then
+  
     enumName="$(sed 's/.*:://' <<< "$*")"
     enumClass="$(sed 's/::.*//' <<< "$*")"
-    echo "attach import enum e_$enumName from module file $enumClass.hs" >> $OUTPUT_FILE
-    echo "It may be typedef too" >> $OUTPUT_FILE
-    echo "In the case of import error, try \"bitspaceT bs_$enumName\"" >> $OUTPUT_FILE
+    
+    if ! grep -q "attach import enum e_$enumName from module file $enumClass.hs" "$OUTPUT_FILE"; then
+      echo "attach import enum e_$enumName from module file $enumClass.hs" >> $OUTPUT_FILE
+      echo "It may be typedef too" >> $OUTPUT_FILE
+      echo "In the case of import error, try \"bitspaceT bs_$enumName\"" >> $OUTPUT_FILE
+    fi
+    
     echo "enumT e_$enumName"
+    
   elif [[ "$*" =~ "Qt::" ]] || [[ "$*" =~ "QtMsgType" ]]; then
+  
     enumName="$(sed 's/.*:://' <<< "$*")"
-    echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (e_$enumName)\" in class file" >> $OUTPUT_FILE
-    echo "In the case of import error, try \"bitspaceT bs_$enumName\"" >> $OUTPUT_FILE
+    
+    if ! grep -q "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (e_$enumName)\" in class file" "$OUTPUT_FILE"; then
+       echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (e_$enumName)\" in class file" >> $OUTPUT_FILE
+       echo "In the case of import error, try \"bitspaceT bs_$enumName\"" >> $OUTPUT_FILE
+    fi
+    
     echo "enumT e_$enumName"
+    
   else
     if [[ "$*" == "..." ]]; then
        echo ""
     else
-       echo "Don't forget to import class for $* or hide code with \"--\" comment characters (only if it's not current class type)" >> $OUTPUT_FILE
+    
+       if ! grep -q "Don't forget to import class for $* (only if it's not current class type) or hide code with \"--\" comment characters" "$OUTPUT_FILE"; then
+          echo "Don't forget to import class for $* (only if it's not current class type) or hide code with \"--\" comment characters" >> $OUTPUT_FILE
+       fi
+       
        echo "objT c_$*" # return then objT
+       
     fi
   fi
 ;;
@@ -521,17 +747,18 @@ fi
 
 
 argFromC="$(trimBothSides $argFromC)"
-#echo -n "Trimmed argument is $argFromC"
+#echo -n "Trimmed argument is | $argFromC |"
 IFS=' '
 read -a strarrr <<< "$argFromC"
     
 
 if [ ${#strarrr[*]} -eq 1 ]; then # in other cases
   result+="$(return_type_for_haskell $argFromC $MESSAGES)"
-
 elif [ ${#strarrr[*]} -eq 2 ]; then # in the case of enum
   result+="$(return_type_for_haskell ${strarrr[0]} $MESSAGES)"
-
+else  # in the case of for example "unsigned long long"
+  argFromC=${argFromC% *}
+  result+="$(return_type_for_haskell_2 $argFromC $MESSAGES)"
 fi
 
 #echo "Created full parameter: $result"
@@ -579,6 +806,8 @@ if [ ${#strarrr[*]} -eq 1 ]; then # in other cases
   result+="$(return_type_for_haskell_2 $argFromC $MESSAGES)"
 elif [ ${#strarrr[*]} -eq 2 ]; then # in the case of enum
   result+="$(return_type_for_haskell_2 ${strarrr[0]} $MESSAGES)"
+else  # in the case of for example "unsigned long long"
+  result+="$(return_type_for_haskell_2 $argFromC $MESSAGES)"
 fi
 
 #echo "Created full parameter: $result"
@@ -651,7 +880,7 @@ else
             
             if [ "$((defaults_indexes[0]))" -eq $i ]; then
                res2+="`echo $(convert_arg_to_haskell ${argArray[$i]})`"
-               res1="`echo $res1 | sed 's/\(.*\),/\1 /'`"
+               res1="`echo $res1 | sed 's/\(.*\),$/\1 /'`"
             fi
          done
          
@@ -724,7 +953,7 @@ else
             
             if [ "$((defaults_indexes[0]))" -eq $i ]; then
                res2+="`echo $(convert_arg_to_haskell ${argArray[$i]})`"
-               res1=$(echo $res1 | sed 's/\(.*\), /\1 /')
+               res1=$(echo $res1 | sed 's/\(.*\),$/\1 /')
             fi
          done
          

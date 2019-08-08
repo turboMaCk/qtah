@@ -62,6 +62,7 @@ executable qtah-generator
     , Graphics.UI.Qtah.Generator.Interface.Core.QChildEvent
     , Graphics.UI.Qtah.Generator.Interface.Core.QCoreApplication
     , Graphics.UI.Qtah.Generator.Interface.Core.QDate
+    , Graphics.UI.Qtah.Generator.Interface.Core.QDateTime
     , Graphics.UI.Qtah.Generator.Interface.Core.QDebug
     , Graphics.UI.Qtah.Generator.Interface.Core.QDebugStateSaver
     , Graphics.UI.Qtah.Generator.Interface.Core.QDir

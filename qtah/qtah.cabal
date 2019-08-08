@@ -38,6 +38,7 @@ library
     , Graphics.UI.Qtah.Core.QChildEvent
     , Graphics.UI.Qtah.Core.QCoreApplication
     , Graphics.UI.Qtah.Core.QDate
+    , Graphics.UI.Qtah.Core.QDateTime
     , Graphics.UI.Qtah.Core.QDebug
     , Graphics.UI.Qtah.Core.QDebugStateSaver
     , Graphics.UI.Qtah.Core.QDir
@@ -244,6 +245,7 @@ library
     , Graphics.UI.Qtah.Generated.Core.QChildEvent
     , Graphics.UI.Qtah.Generated.Core.QCoreApplication
     , Graphics.UI.Qtah.Generated.Core.QDate
+    , Graphics.UI.Qtah.Generated.Core.QDateTime
     , Graphics.UI.Qtah.Generated.Core.QDebug
     , Graphics.UI.Qtah.Generated.Core.QDebugStateSaver
     , Graphics.UI.Qtah.Generated.Core.QDir

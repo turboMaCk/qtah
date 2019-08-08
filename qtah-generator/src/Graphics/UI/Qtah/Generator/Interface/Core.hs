@@ -26,6 +26,7 @@ import qualified Graphics.UI.Qtah.Generator.Interface.Core.QChar as QChar
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QChildEvent as QChildEvent
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QCoreApplication as QCoreApplication
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QDate as QDate
+import qualified Graphics.UI.Qtah.Generator.Interface.Core.QDateTime as QDateTime
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QDebug as QDebug
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QDebugStateSaver as QDebugStateSaver
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QDir as QDir
@@ -97,6 +98,7 @@ modules =
     , QChildEvent.aModule
     , QCoreApplication.aModule
     , QDate.aModule
+    , QDateTime.aModule
     , QDebug.aModule
     , QDebugStateSaver.aModule
     , QDir.aModule
