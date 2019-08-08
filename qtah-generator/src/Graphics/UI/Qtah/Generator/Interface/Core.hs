@@ -37,6 +37,8 @@ import qualified Graphics.UI.Qtah.Generator.Interface.Core.QIODevice as QIODevic
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QItemSelection as QItemSelection
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QItemSelectionModel as QItemSelectionModel
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QItemSelectionRange as QItemSelectionRange
+import qualified Graphics.UI.Qtah.Generator.Interface.Core.QLatin1Char as QLatin1Char
+import qualified Graphics.UI.Qtah.Generator.Interface.Core.QLatin1String as QLatin1String
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QLibraryInfo as QLibraryInfo
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QList as QList
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QLoggingCategory as QLoggingCategory
@@ -111,6 +113,8 @@ modules =
     , QItemSelection.aModule
     , QItemSelectionModel.aModule
     , QItemSelectionRange.aModule
+    , QLatin1Char.aModule
+    , QLatin1String.aModule
     , QLibraryInfo.aModule
     , QLoggingCategory.aModule
     , QMargins.aModule
