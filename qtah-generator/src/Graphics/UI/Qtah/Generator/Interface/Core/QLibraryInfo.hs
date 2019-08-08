@@ -30,6 +30,7 @@ import Foreign.Hoppy.Generator.Types (boolT, voidT, enumT, bitspaceT, constT, ob
 import Foreign.Hoppy.Generator.Version (collect, just, test)
 import Graphics.UI.Qtah.Generator.Flags (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
+import Graphics.UI.Qtah.Generator.Interface.Core.QVersionNumber (c_QVersionNumber)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
 
@@ -53,7 +54,7 @@ c_QLibraryInfo =
   collect
   [ test (qtVersion >= [5, 0]) $ mkStaticMethod "isDebugBuild" [] $ boolT
   , just $ mkStaticMethod "location" [enumT e_LibraryLocation] $ objT c_QString
-  -- TODO test (qtVersion >= [5, 8]) $ mkStaticMethod "version" [] $ objT c_QVersionNumber
+  , test (qtVersion >= [5, 8]) $ mkStaticMethod "version" [] $ objT c_QVersionNumber
   ]
   
 
