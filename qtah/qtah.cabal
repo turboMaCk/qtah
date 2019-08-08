@@ -83,6 +83,7 @@ library
     , Graphics.UI.Qtah.Core.QPair.IntInt
     , Graphics.UI.Qtah.Core.QPalette
     , Graphics.UI.Qtah.Core.QPersistentModelIndex
+    , Graphics.UI.Qtah.Core.QPluginLoader
     , Graphics.UI.Qtah.Core.QProcess
     , Graphics.UI.Qtah.Core.QProcessEnvironment
     , Graphics.UI.Qtah.Core.QPoint
@@ -296,6 +297,7 @@ library
     , Graphics.UI.Qtah.Generated.Core.QPair.IntInt
     , Graphics.UI.Qtah.Generated.Core.QPalette
     , Graphics.UI.Qtah.Generated.Core.QPersistentModelIndex
+    , Graphics.UI.Qtah.Generated.Core.QPluginLoader
     , Graphics.UI.Qtah.Generated.Core.QProcess
     , Graphics.UI.Qtah.Generated.Core.QProcessEnvironment
     , Graphics.UI.Qtah.Generated.Core.QPoint

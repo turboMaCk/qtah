@@ -60,6 +60,7 @@ import qualified Graphics.UI.Qtah.Generator.Interface.Core.QOperatingSystemVersi
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QPair as QPair
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QPalette as QPalette
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QPersistentModelIndex as QPersistentModelIndex
+import qualified Graphics.UI.Qtah.Generator.Interface.Core.QPluginLoader as QPluginLoader
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QProcess as QProcess
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QProcessEnvironment as QProcessEnvironment
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QPoint as QPoint
@@ -138,6 +139,7 @@ modules =
     , QPersistentModelIndex.aModule
     , QProcess.aModule
     , QProcessEnvironment.aModule
+    , QPluginLoader.aModule
     , QPoint.aModule
     , QPointF.aModule
     , QRandomGenerator.aModule

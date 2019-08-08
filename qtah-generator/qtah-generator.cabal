@@ -95,6 +95,7 @@ executable qtah-generator
     , Graphics.UI.Qtah.Generator.Interface.Core.QOperatingSystemVersion
     , Graphics.UI.Qtah.Generator.Interface.Core.QPair
     , Graphics.UI.Qtah.Generator.Interface.Core.QPersistentModelIndex
+    , Graphics.UI.Qtah.Generator.Interface.Core.QPluginLoader
     , Graphics.UI.Qtah.Generator.Interface.Core.QProcess
     , Graphics.UI.Qtah.Generator.Interface.Core.QProcessEnvironment
     , Graphics.UI.Qtah.Generator.Interface.Core.QPoint
