@@ -75,6 +75,7 @@ executable qtah-generator
     , Graphics.UI.Qtah.Generator.Interface.Core.QItemSelectionRange
     , Graphics.UI.Qtah.Generator.Interface.Core.QLatin1Char
     , Graphics.UI.Qtah.Generator.Interface.Core.QLatin1String
+    , Graphics.UI.Qtah.Generator.Interface.Core.QLibrary
     , Graphics.UI.Qtah.Generator.Interface.Core.QLibraryInfo
     , Graphics.UI.Qtah.Generator.Interface.Core.QList
     , Graphics.UI.Qtah.Generator.Interface.Core.QLoggingCategory

@@ -51,6 +51,7 @@ library
     , Graphics.UI.Qtah.Core.QItemSelectionRange
     , Graphics.UI.Qtah.Core.QLatin1Char
     , Graphics.UI.Qtah.Core.QLatin1String
+    , Graphics.UI.Qtah.Core.QLibrary
     , Graphics.UI.Qtah.Core.QLibraryInfo
     , Graphics.UI.Qtah.Core.QList.Int
     , Graphics.UI.Qtah.Core.QList.QAbstractButton
@@ -263,6 +264,7 @@ library
     , Graphics.UI.Qtah.Generated.Core.QItemSelectionRange
     , Graphics.UI.Qtah.Generated.Core.QLatin1Char
     , Graphics.UI.Qtah.Generated.Core.QLatin1String
+    , Graphics.UI.Qtah.Generated.Core.QLibrary
     , Graphics.UI.Qtah.Generated.Core.QLibraryInfo
     , Graphics.UI.Qtah.Generated.Core.QList.Int
     , Graphics.UI.Qtah.Generated.Core.QList.QAbstractButton

@@ -39,6 +39,7 @@ import qualified Graphics.UI.Qtah.Generator.Interface.Core.QItemSelectionModel a
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QItemSelectionRange as QItemSelectionRange
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QLatin1Char as QLatin1Char
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QLatin1String as QLatin1String
+import qualified Graphics.UI.Qtah.Generator.Interface.Core.QLibrary as QLibrary
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QLibraryInfo as QLibraryInfo
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QList as QList
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QLoggingCategory as QLoggingCategory
@@ -116,6 +117,7 @@ modules =
     , QItemSelectionRange.aModule
     , QLatin1Char.aModule
     , QLatin1String.aModule
+    , QLibrary.aModule
     , QLibraryInfo.aModule
     , QLoggingCategory.aModule
     , QMargins.aModule
