@@ -110,6 +110,7 @@ executable qtah-generator
     , Graphics.UI.Qtah.Generator.Interface.Core.QTextCodec
     , Graphics.UI.Qtah.Generator.Interface.Core.QTextEncoder
     , Graphics.UI.Qtah.Generator.Interface.Core.QThread
+    , Graphics.UI.Qtah.Generator.Interface.Core.QTime
     , Graphics.UI.Qtah.Generator.Interface.Core.QTimer
     , Graphics.UI.Qtah.Generator.Interface.Core.QTimerEvent
     , Graphics.UI.Qtah.Generator.Interface.Core.QTranslator

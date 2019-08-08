@@ -98,6 +98,7 @@ library
     , Graphics.UI.Qtah.Core.QTextCodec
     , Graphics.UI.Qtah.Core.QTextEncoder
     , Graphics.UI.Qtah.Core.QThread
+    , Graphics.UI.Qtah.Core.QTime
     , Graphics.UI.Qtah.Core.QTimer
     , Graphics.UI.Qtah.Core.QTimerEvent
     , Graphics.UI.Qtah.Core.QTranslator
@@ -305,6 +306,7 @@ library
     , Graphics.UI.Qtah.Generated.Core.QTextCodec
     , Graphics.UI.Qtah.Generated.Core.QTextEncoder
     , Graphics.UI.Qtah.Generated.Core.QThread
+    , Graphics.UI.Qtah.Generated.Core.QTime
     , Graphics.UI.Qtah.Generated.Core.QTimer
     , Graphics.UI.Qtah.Generated.Core.QTimerEvent
     , Graphics.UI.Qtah.Generated.Core.QTranslator
