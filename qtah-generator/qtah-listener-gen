@@ -125,6 +125,7 @@ forEachListener() {
     $fn ProcessState "QProcess::ProcessState"
     $fn Direction "QAbstractAnimation::Direction"
     $fn StateState "QAbstractAnimation::State|QAbstractAnimation::State"
+    $fn QVariant "const QVariant&"
     $fn "" ""
 }
 
@@ -163,6 +164,7 @@ if [[ -n $cppDir ]]; then
     sayHpp '#include <QSystemTrayIcon>'
     sayHpp '#include <QTreeWidgetItem>'
     sayHpp '#include <QVector>'
+    sayHpp '#include <QVariant>'
     sayHpp '#include <QWidget>'
     sayHpp '#if QT_VERSION >= 0x050000'
     sayHpp '#include <QWindow>'

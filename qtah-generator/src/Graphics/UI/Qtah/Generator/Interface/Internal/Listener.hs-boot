@@ -53,4 +53,5 @@ c_ListenerIntExitStatus :: Class
 c_ListenerProcessState :: Class
 c_ListenerDirection :: Class
 c_ListenerStateState :: Class
+c_ListenerQVariant :: Class
 c_Listener :: Class

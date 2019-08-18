@@ -602,6 +602,18 @@ c_ListenerStateState =
     [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT
   ]
 
+c_ListenerQVariant =
+  S.makeClass (S.ident "ListenerQVariant") Nothing [QObject.c_QObject]
+  [ S.mkCtor "new" [S.callbackT C.cb_QVariantVoid]
+  , S.mkCtor "newWithParent"
+    [S.callbackT C.cb_QVariantVoid, S.ptrT $ S.objT QObject.c_QObject]
+  , S.mkStaticMethod "getInstance" [] $ S.ptrT $ S.objT c_ListenerQVariant
+  , S.mkMethod "connectListener"
+    [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] $ S.objT Connection.c_Connection
+  , S.mkMethod "disconnectListener"
+    [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT
+  ]
+
 c_Listener =
   S.makeClass (S.ident "Listener") Nothing [QObject.c_QObject]
   [ S.mkCtor "new" [S.callbackT C.cb_Void]
@@ -670,5 +682,6 @@ aModule =
       , V.just $ S.ExportClass c_ListenerProcessState
       , V.just $ S.ExportClass c_ListenerDirection
       , V.just $ S.ExportClass c_ListenerStateState
+      , V.just $ S.ExportClass c_ListenerQVariant
       , V.just $ S.ExportClass c_Listener
       ]
