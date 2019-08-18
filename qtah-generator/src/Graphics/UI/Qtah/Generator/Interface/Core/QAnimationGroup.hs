@@ -25,7 +25,7 @@ import Foreign.Hoppy.Generator.Spec (
   )
   
 
-import Graphics.UI.Qtah.Generator.Interface.Core.QAbstractAnimation (c_QAbstractAnimation)
+import Graphics.UI.Qtah.Generator.Interface.Core.QAbstractAnimation (c_QAbstractAnimation, e_State, e_Direction)
 import Graphics.UI.Qtah.Generator.Interface.Core.QObject (c_QObject)
 import Foreign.Hoppy.Generator.Types (intT, voidT, enumT, bitspaceT, constT, objT, ptrT, refT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
@@ -48,9 +48,7 @@ c_QAnimationGroup =
   classSetEntityPrefix "" $
   makeClass (ident "QAnimationGroup") Nothing [c_QAbstractAnimation] $
   collect
-  [ just $ mkCtor "new" []
-  , just $ mkCtor "newWithParent" [ptrT $ objT c_QObject]
-  , just $ mkMethod "addAnimation" [ptrT $ objT c_QAbstractAnimation] voidT
+  [ just $ mkMethod "addAnimation" [ptrT $ objT c_QAbstractAnimation] voidT
   , just $ mkConstMethod "animationAt" [intT] $ ptrT $ objT c_QAbstractAnimation
   , just $ mkConstMethod "animationCount" [] intT
   , just $ mkMethod "clear" [] voidT
@@ -58,5 +56,6 @@ c_QAnimationGroup =
   , just $ mkMethod "insertAnimation" [intT, ptrT $ objT c_QAbstractAnimation] voidT
   , just $ mkMethod "removeAnimation" [ptrT $ objT c_QAbstractAnimation] voidT
   , just $ mkMethod "takeAnimation" [intT] $ ptrT $ objT c_QAbstractAnimation
+  , just $ mkConstMethod "duration" [] intT
   ]
   
