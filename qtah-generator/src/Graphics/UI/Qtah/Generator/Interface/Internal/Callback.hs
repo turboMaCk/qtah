@@ -54,6 +54,7 @@ import Graphics.UI.Qtah.Generator.Interface.Core.QObject (c_QObject)
 import Graphics.UI.Qtah.Generator.Interface.Core.QPoint (c_QPoint)
 import Graphics.UI.Qtah.Generator.Interface.Core.QSize (c_QSize)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
+import Graphics.UI.Qtah.Generator.Interface.Core.QAbstractAnimation (e_Direction, e_State)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Core.QProcess (e_ProcessError, e_ExitStatus, e_ProcessState)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Core.QVector (c_QVectorInt)
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (
@@ -147,6 +148,8 @@ aModule =
       , just $ ExportCallback cb_ProcessErrorVoid
       , just $ ExportCallback cb_IntExitStatusVoid
       , just $ ExportCallback cb_ProcessStateVoid
+      , just $ ExportCallback cb_StateStateVoid
+      , just $ ExportCallback cb_DirectionVoid
       , just $ ExportCallback cb_Void
       ]
 
@@ -358,6 +361,16 @@ cb_IntExitStatusVoid =
 cb_ProcessStateVoid =
   makeCallback (toExtName "CallbackProcessStateVoid")
   [enumT e_ProcessState] voidT
+
+
+cb_DirectionVoid =
+  makeCallback (toExtName "CallbackDirectionVoid")
+  [enumT e_Direction] voidT
+
+
+cb_StateStateVoid =
+  makeCallback (toExtName "CallbackStateStateVoid")
+  [enumT e_State, enumT e_State] voidT
 
 cb_Void =
   makeCallback (toExtName "CallbackVoid")

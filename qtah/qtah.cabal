@@ -29,6 +29,7 @@ library
     , Graphics.UI.Qtah.Core.HPointF
     , Graphics.UI.Qtah.Core.HRect
     , Graphics.UI.Qtah.Core.HSize
+    , Graphics.UI.Qtah.Core.QAbstractAnimation
     , Graphics.UI.Qtah.Core.QAbstractItemModel
     , Graphics.UI.Qtah.Core.QAbstractListModel
     , Graphics.UI.Qtah.Core.QAbstractTableModel
@@ -244,7 +245,8 @@ library
     , Graphics.UI.Qtah.Widgets.QVBoxLayout
     , Graphics.UI.Qtah.Widgets.QWidget
   other-modules:
-      Graphics.UI.Qtah.Generated.Core.QAbstractItemModel
+      Graphics.UI.Qtah.Generated.Core.QAbstractAnimation
+    , Graphics.UI.Qtah.Generated.Core.QAbstractItemModel
     , Graphics.UI.Qtah.Generated.Core.QAbstractListModel
     , Graphics.UI.Qtah.Generated.Core.QAbstractTableModel
     , Graphics.UI.Qtah.Generated.Core.QByteArray

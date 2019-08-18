@@ -17,6 +17,7 @@
 
 module Graphics.UI.Qtah.Generator.Interface.Core (modules) where
 
+import qualified Graphics.UI.Qtah.Generator.Interface.Core.QAbstractAnimation as QAbstractAnimation
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QAbstractItemModel as QAbstractItemModel
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QAbstractListModel as QAbstractListModel
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QAbstractTableModel as QAbstractTableModel
@@ -97,7 +98,8 @@ import Graphics.UI.Qtah.Generator.Module (AModule)
 modules :: [AModule]
 modules =
   concat
-  [ [ QAbstractItemModel.aModule
+  [ [ QAbstractAnimation.aModule
+    , QAbstractItemModel.aModule
     , QAbstractListModel.aModule
     , QAbstractTableModel.aModule
     , QByteArray.aModule

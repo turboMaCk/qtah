@@ -51,4 +51,6 @@ c_ListenerIntQlonglong :: Class
 c_ListenerProcessError :: Class
 c_ListenerIntExitStatus :: Class
 c_ListenerProcessState :: Class
+c_ListenerDirection :: Class
+c_ListenerStateState :: Class
 c_Listener :: Class

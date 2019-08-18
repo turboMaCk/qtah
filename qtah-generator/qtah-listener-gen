@@ -123,6 +123,8 @@ forEachListener() {
     $fn ProcessError "QProcess::ProcessError"
     $fn IntExitStatus "int|QProcess::ExitStatus"
     $fn ProcessState "QProcess::ProcessState"
+    $fn Direction "QAbstractAnimation::Direction"
+    $fn StateState "QAbstractAnimation::State|QAbstractAnimation::State"
     $fn "" ""
 }
 
@@ -153,6 +155,7 @@ if [[ -n $cppDir ]]; then
     sayHpp '#include <QMetaObject>'
     sayHpp '#include <QItemSelection>'
     sayHpp '#include <QModelIndex>'
+    sayHpp '#include <QAbstractAnimation>'
     sayHpp '#include <QObject>'
     sayHpp '#include <QPoint>'
     sayHpp '#include <QProcess>'

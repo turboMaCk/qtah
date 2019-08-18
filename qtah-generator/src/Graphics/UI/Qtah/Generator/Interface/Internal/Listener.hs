@@ -578,6 +578,30 @@ c_ListenerProcessState =
     [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT
   ]
 
+c_ListenerDirection =
+  S.makeClass (S.ident "ListenerDirection") Nothing [QObject.c_QObject]
+  [ S.mkCtor "new" [S.callbackT C.cb_DirectionVoid]
+  , S.mkCtor "newWithParent"
+    [S.callbackT C.cb_DirectionVoid, S.ptrT $ S.objT QObject.c_QObject]
+  , S.mkStaticMethod "getInstance" [] $ S.ptrT $ S.objT c_ListenerDirection
+  , S.mkMethod "connectListener"
+    [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] $ S.objT Connection.c_Connection
+  , S.mkMethod "disconnectListener"
+    [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT
+  ]
+
+c_ListenerStateState =
+  S.makeClass (S.ident "ListenerStateState") Nothing [QObject.c_QObject]
+  [ S.mkCtor "new" [S.callbackT C.cb_StateStateVoid]
+  , S.mkCtor "newWithParent"
+    [S.callbackT C.cb_StateStateVoid, S.ptrT $ S.objT QObject.c_QObject]
+  , S.mkStaticMethod "getInstance" [] $ S.ptrT $ S.objT c_ListenerStateState
+  , S.mkMethod "connectListener"
+    [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] $ S.objT Connection.c_Connection
+  , S.mkMethod "disconnectListener"
+    [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT
+  ]
+
 c_Listener =
   S.makeClass (S.ident "Listener") Nothing [QObject.c_QObject]
   [ S.mkCtor "new" [S.callbackT C.cb_Void]
@@ -644,5 +668,7 @@ aModule =
       , V.just $ S.ExportClass c_ListenerProcessError
       , V.just $ S.ExportClass c_ListenerIntExitStatus
       , V.just $ S.ExportClass c_ListenerProcessState
+      , V.just $ S.ExportClass c_ListenerDirection
+      , V.just $ S.ExportClass c_ListenerStateState
       , V.just $ S.ExportClass c_Listener
       ]
