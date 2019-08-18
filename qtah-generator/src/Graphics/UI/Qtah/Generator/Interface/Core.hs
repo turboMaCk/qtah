@@ -21,6 +21,7 @@ import qualified Graphics.UI.Qtah.Generator.Interface.Core.QAbstractAnimation as
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QAbstractItemModel as QAbstractItemModel
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QAbstractListModel as QAbstractListModel
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QAbstractTableModel as QAbstractTableModel
+import qualified Graphics.UI.Qtah.Generator.Interface.Core.QAnimationGroup as QAnimationGroup
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QByteArray as QByteArray
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QBuffer as QBuffer
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QChar as QChar
@@ -102,6 +103,7 @@ modules =
     , QAbstractItemModel.aModule
     , QAbstractListModel.aModule
     , QAbstractTableModel.aModule
+    , QAnimationGroup.aModule
     , QByteArray.aModule
     , QBuffer.aModule
     , QChar.aModule

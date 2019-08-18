@@ -33,6 +33,7 @@ library
     , Graphics.UI.Qtah.Core.QAbstractItemModel
     , Graphics.UI.Qtah.Core.QAbstractListModel
     , Graphics.UI.Qtah.Core.QAbstractTableModel
+    , Graphics.UI.Qtah.Core.QAnimationGroup
     , Graphics.UI.Qtah.Core.QByteArray
     , Graphics.UI.Qtah.Core.QBuffer
     , Graphics.UI.Qtah.Core.QChar
@@ -249,6 +250,7 @@ library
     , Graphics.UI.Qtah.Generated.Core.QAbstractItemModel
     , Graphics.UI.Qtah.Generated.Core.QAbstractListModel
     , Graphics.UI.Qtah.Generated.Core.QAbstractTableModel
+    , Graphics.UI.Qtah.Generated.Core.QAnimationGroup
     , Graphics.UI.Qtah.Generated.Core.QByteArray
     , Graphics.UI.Qtah.Generated.Core.QBuffer
     , Graphics.UI.Qtah.Generated.Core.QChar
