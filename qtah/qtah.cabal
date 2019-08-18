@@ -85,6 +85,7 @@ library
     , Graphics.UI.Qtah.Core.QPair.IntInt
     , Graphics.UI.Qtah.Core.QPalette
     , Graphics.UI.Qtah.Core.QParallelAnimationGroup
+    , Graphics.UI.Qtah.Core.QPauseAnimation
     , Graphics.UI.Qtah.Core.QPersistentModelIndex
     , Graphics.UI.Qtah.Core.QPluginLoader
     , Graphics.UI.Qtah.Core.QProcess
@@ -303,6 +304,7 @@ library
     , Graphics.UI.Qtah.Generated.Core.QPair.IntInt
     , Graphics.UI.Qtah.Generated.Core.QPalette
     , Graphics.UI.Qtah.Generated.Core.QParallelAnimationGroup
+    , Graphics.UI.Qtah.Generated.Core.QPauseAnimation
     , Graphics.UI.Qtah.Generated.Core.QPersistentModelIndex
     , Graphics.UI.Qtah.Generated.Core.QPluginLoader
     , Graphics.UI.Qtah.Generated.Core.QProcess

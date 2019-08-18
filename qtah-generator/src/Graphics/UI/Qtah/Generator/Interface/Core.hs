@@ -61,6 +61,7 @@ import qualified Graphics.UI.Qtah.Generator.Interface.Core.QObject as QObject
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QOperatingSystemVersion as QOperatingSystemVersion
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QPair as QPair
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QParallelAnimationGroup as QParallelAnimationGroup
+import qualified Graphics.UI.Qtah.Generator.Interface.Core.QPauseAnimation as QPauseAnimation
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QPalette as QPalette
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QPersistentModelIndex as QPersistentModelIndex
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QPluginLoader as QPluginLoader
@@ -143,6 +144,7 @@ modules =
     , QOperatingSystemVersion.aModule
     , QPalette.aModule
     , QParallelAnimationGroup.aModule
+    , QPauseAnimation.aModule
     , QPersistentModelIndex.aModule
     , QProcess.aModule
     , QProcessEnvironment.aModule
