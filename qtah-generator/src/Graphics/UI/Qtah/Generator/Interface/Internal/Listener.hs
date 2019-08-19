@@ -618,7 +618,7 @@ c_ListenerQAbstractAnimation =
   S.makeClass (S.ident "ListenerQAbstractAnimation") Nothing [QObject.c_QObject]
   [ S.mkCtor "new" [S.callbackT C.cb_QAbstractAnimationVoid]
   , S.mkCtor "newWithParent"
-    [S.callbackT C.cb_QQAbstractAnimationVoid, S.ptrT $ S.objT QObject.c_QObject]
+    [S.callbackT C.cb_QAbstractAnimationVoid, S.ptrT $ S.objT QObject.c_QObject]
   , S.mkStaticMethod "getInstance" [] $ S.ptrT $ S.objT c_ListenerQAbstractAnimation
   , S.mkMethod "connectListener"
     [S.ptrT $ S.objT QObject.c_QObject, S.objT String.c_string] $ S.objT Connection.c_Connection

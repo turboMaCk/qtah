@@ -108,6 +108,7 @@ library
     , Graphics.UI.Qtah.Core.QStringListModel
     , Graphics.UI.Qtah.Core.QSysInfo
     , Graphics.UI.Qtah.Core.QTextCodec
+    , Graphics.UI.Qtah.Core.QTextDecoder
     , Graphics.UI.Qtah.Core.QTextEncoder
     , Graphics.UI.Qtah.Core.QThread
     , Graphics.UI.Qtah.Core.QTime
@@ -330,6 +331,7 @@ library
     , Graphics.UI.Qtah.Generated.Core.QStringListModel
     , Graphics.UI.Qtah.Generated.Core.QSysInfo
     , Graphics.UI.Qtah.Generated.Core.QTextCodec
+    , Graphics.UI.Qtah.Generated.Core.QTextDecoder
     , Graphics.UI.Qtah.Generated.Core.QTextEncoder
     , Graphics.UI.Qtah.Generated.Core.QThread
     , Graphics.UI.Qtah.Generated.Core.QTime

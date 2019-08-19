@@ -54,4 +54,5 @@ c_ListenerProcessState :: Class
 c_ListenerDirection :: Class
 c_ListenerStateState :: Class
 c_ListenerQVariant :: Class
+c_ListenerQAbstractAnimation :: Class
 c_Listener :: Class
