@@ -102,6 +102,7 @@ executable qtah-generator
     , Graphics.UI.Qtah.Generator.Interface.Core.QPluginLoader
     , Graphics.UI.Qtah.Generator.Interface.Core.QProcess
     , Graphics.UI.Qtah.Generator.Interface.Core.QProcessEnvironment
+    , Graphics.UI.Qtah.Generator.Interface.Core.QPropertyAnimation
     , Graphics.UI.Qtah.Generator.Interface.Core.QPoint
     , Graphics.UI.Qtah.Generator.Interface.Core.QPointF
     , Graphics.UI.Qtah.Generator.Interface.Core.QRandomGenerator

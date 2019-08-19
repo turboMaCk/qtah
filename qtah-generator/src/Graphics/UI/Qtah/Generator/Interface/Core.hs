@@ -67,6 +67,7 @@ import qualified Graphics.UI.Qtah.Generator.Interface.Core.QPersistentModelIndex
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QPluginLoader as QPluginLoader
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QProcess as QProcess
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QProcessEnvironment as QProcessEnvironment
+import qualified Graphics.UI.Qtah.Generator.Interface.Core.QPropertyAnimation as QPropertyAnimation
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QPoint as QPoint
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QPointF as QPointF
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QRandomGenerator as QRandomGenerator
@@ -149,6 +150,7 @@ modules =
     , QPersistentModelIndex.aModule
     , QProcess.aModule
     , QProcessEnvironment.aModule
+    , QPropertyAnimation.aModule
     , QPluginLoader.aModule
     , QPoint.aModule
     , QPointF.aModule

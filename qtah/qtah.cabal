@@ -90,6 +90,7 @@ library
     , Graphics.UI.Qtah.Core.QPluginLoader
     , Graphics.UI.Qtah.Core.QProcess
     , Graphics.UI.Qtah.Core.QProcessEnvironment
+    , Graphics.UI.Qtah.Core.QPropertyAnimation
     , Graphics.UI.Qtah.Core.QPoint
     , Graphics.UI.Qtah.Core.QPointF
     , Graphics.UI.Qtah.Core.QRandomGenerator
@@ -310,6 +311,7 @@ library
     , Graphics.UI.Qtah.Generated.Core.QPluginLoader
     , Graphics.UI.Qtah.Generated.Core.QProcess
     , Graphics.UI.Qtah.Generated.Core.QProcessEnvironment
+    , Graphics.UI.Qtah.Generated.Core.QPropertyAnimation
     , Graphics.UI.Qtah.Generated.Core.QPoint
     , Graphics.UI.Qtah.Generated.Core.QPointF
     , Graphics.UI.Qtah.Generated.Core.QRandomGenerator
