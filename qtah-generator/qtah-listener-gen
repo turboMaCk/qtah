@@ -126,6 +126,7 @@ forEachListener() {
     $fn Direction "QAbstractAnimation::Direction"
     $fn StateState "QAbstractAnimation::State|QAbstractAnimation::State"
     $fn QVariant "const QVariant&"
+    $fn QAbstractAnimation "QAbstractAnimation*"
     $fn "" ""
 }
 

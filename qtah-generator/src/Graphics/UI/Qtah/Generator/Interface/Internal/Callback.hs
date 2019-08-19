@@ -54,6 +54,7 @@ import Graphics.UI.Qtah.Generator.Interface.Core.QObject (c_QObject)
 import Graphics.UI.Qtah.Generator.Interface.Core.QPoint (c_QPoint)
 import Graphics.UI.Qtah.Generator.Interface.Core.QSize (c_QSize)
 import Graphics.UI.Qtah.Generator.Interface.Core.QVariant (c_QVariant)
+import Graphics.UI.Qtah.Generator.Interface.Core.QAbstractAnimation (c_QAbstractAnimation)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Graphics.UI.Qtah.Generator.Interface.Core.QAbstractAnimation (e_Direction, e_State)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Core.QProcess (e_ProcessError, e_ExitStatus, e_ProcessState)
@@ -152,6 +153,7 @@ aModule =
       , just $ ExportCallback cb_StateStateVoid
       , just $ ExportCallback cb_DirectionVoid
       , just $ ExportCallback cb_QVariantVoid
+      , just $ ExportCallback cb_QAbstractAnimationVoid
       , just $ ExportCallback cb_Void
       ]
 
@@ -378,6 +380,12 @@ cb_StateStateVoid =
 cb_QVariantVoid =
   makeCallback (toExtName "CallbackQVariantVoid")
   [refT $ constT $ objT c_QVariant] voidT
+
+
+cb_QAbstractAnimationVoid =
+  makeCallback (toExtName "CallbackQAbstractAnimationVoid")
+  [ptrT $ objT c_QAbstractAnimation] voidT
+
 
 cb_Void =
   makeCallback (toExtName "CallbackVoid")

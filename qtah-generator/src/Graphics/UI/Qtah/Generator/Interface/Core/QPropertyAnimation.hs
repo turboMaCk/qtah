@@ -58,7 +58,7 @@ c_QPropertyAnimation =
   classSetEntityPrefix "" $
   makeClass (ident "QPropertyAnimation") Nothing [c_QVariantAnimation] $
   collect
-  [ mkProp "propertyName" $ objT c_QByteArray
-  , mkProp "targetObject" $ ptrT $ objT c_QObject
+  [ just $ mkProp "propertyName" $ objT c_QByteArray
+  , just $ mkProp "targetObject" $ ptrT $ objT c_QObject
   ]
   
