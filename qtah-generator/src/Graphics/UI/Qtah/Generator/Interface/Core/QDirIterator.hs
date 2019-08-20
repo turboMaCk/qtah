@@ -32,7 +32,7 @@ import Foreign.Hoppy.Generator.Types (boolT, voidT, enumT, bitspaceT, constT, ob
 import Foreign.Hoppy.Generator.Version (collect, just, test)
 import Graphics.UI.Qtah.Generator.Flags (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
-import Graphics.UI.Qtah.Generator.Interface.Core.QFileInfo (c_QFileInfo)
+--import Graphics.UI.Qtah.Generator.Interface.Core.QFileInfo (c_QFileInfo)
 import Graphics.UI.Qtah.Generator.Interface.Core.QStringList (c_QStringList)
 import Graphics.UI.Qtah.Generator.Interface.Core.QDir (c_QDir, bs_Filters)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModuleWithMinVersion)
@@ -66,7 +66,7 @@ c_QDirIterator =
   , just $ mkCtor "newWithStrStrList" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QStringList]
   , just $ mkCtor "newWithStrStrListFilters" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QStringList, bitspaceT bs_Filters]
   , just $ mkCtor "newWithStrStrListFiltersFlags" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QStringList, bitspaceT bs_Filters, bitspaceT bs_IteratorFlags]
-  , just $ mkConstMethod "fileInfo" [] $ objT c_QFileInfo
+  --, just $ mkConstMethod "fileInfo" [] $ objT c_QFileInfo
   , just $ mkConstMethod "fileName" [] $ objT c_QString
   , just $ mkConstMethod "filePath" [] $ objT c_QString
   , just $ mkConstMethod "hasNext" [] boolT
