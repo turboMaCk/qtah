@@ -32,6 +32,7 @@ import qualified Graphics.UI.Qtah.Generator.Interface.Core.QDateTime as QDateTim
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QDebug as QDebug
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QDebugStateSaver as QDebugStateSaver
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QDir as QDir
+import qualified Graphics.UI.Qtah.Generator.Interface.Core.QDirIterator as QDirIterator
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QEvent as QEvent
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QFileDevice as QFileDevice
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QCryptographicHash as QCryptographicHash
@@ -120,6 +121,7 @@ modules =
     , QDebug.aModule
     , QDebugStateSaver.aModule
     , QDir.aModule
+    , QDirIterator.aModule
     , QEvent.aModule
     , QFileDevice.aModule
     , QCryptographicHash.aModule
