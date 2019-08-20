@@ -35,7 +35,7 @@
 # ./class-template-maker "Core" "QTime" "" 0 0 false false "Equatable, Comparable" "boolT, intT" "e_DateFormat" "" ""
 # ./class-template-maker "Gui" "QVulkanWindow" "QWindow" 0 1 false false "Copyable" "boolT, intT, word32T" "" "" "5.10"
 # ./class-template-maker "Core" "QDir" "" 0 2 false false "Copyable, Assignable, Equatable" "boolT, uintT" "" "OpArray" ""
-sh ./class-template-maker "Core" "QTextDecoder" "" 0 2 false false "Copyable, Assignable, Equatable" "boolT, uintT" "" "OpArray" ""
+
 
 
 # 1) of amountofbitspaces contains one enum and one bitspace

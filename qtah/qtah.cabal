@@ -48,6 +48,7 @@ library
     , Graphics.UI.Qtah.Core.QEvent
     , Graphics.UI.Qtah.Core.QFile
     , Graphics.UI.Qtah.Core.QFileDevice
+    , Graphics.UI.Qtah.Core.QFileInfo
     , Graphics.UI.Qtah.Core.QCryptographicHash
     , Graphics.UI.Qtah.Core.QIODevice
     , Graphics.UI.Qtah.Core.QItemSelection
@@ -273,6 +274,7 @@ library
     , Graphics.UI.Qtah.Generated.Core.QEvent
     , Graphics.UI.Qtah.Generated.Core.QFile
     , Graphics.UI.Qtah.Generated.Core.QFileDevice
+    , Graphics.UI.Qtah.Generated.Core.QFileInfo
     , Graphics.UI.Qtah.Generated.Core.QCryptographicHash
     , Graphics.UI.Qtah.Generated.Core.QIODevice
     , Graphics.UI.Qtah.Generated.Core.QItemSelection
