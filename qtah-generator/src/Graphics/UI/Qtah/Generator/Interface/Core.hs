@@ -34,6 +34,7 @@ import qualified Graphics.UI.Qtah.Generator.Interface.Core.QDebugStateSaver as Q
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QDir as QDir
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QDirIterator as QDirIterator
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QEvent as QEvent
+import qualified Graphics.UI.Qtah.Generator.Interface.Core.QFile as QFile
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QFileDevice as QFileDevice
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QCryptographicHash as QCryptographicHash
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QIODevice as QIODevice
@@ -123,6 +124,7 @@ modules =
     , QDir.aModule
     , QDirIterator.aModule
     , QEvent.aModule
+    , QFile.aModule
     , QFileDevice.aModule
     , QCryptographicHash.aModule
     , QIODevice.aModule
