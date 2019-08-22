@@ -49,6 +49,7 @@ import qualified Graphics.UI.Qtah.Generator.Interface.Core.QLatin1String as QLat
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QLibrary as QLibrary
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QLibraryInfo as QLibraryInfo
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QList as QList
+import qualified Graphics.UI.Qtah.Generator.Interface.Core.QLockFile as QLockFile
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QLoggingCategory as QLoggingCategory
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QMargins as QMargins
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QMarginsF as QMarginsF
@@ -141,6 +142,7 @@ modules =
     , QLatin1String.aModule
     , QLibrary.aModule
     , QLibraryInfo.aModule
+    , QLockFile.aModule
     , QLoggingCategory.aModule
     , QMargins.aModule
     , QMarginsF.aModule

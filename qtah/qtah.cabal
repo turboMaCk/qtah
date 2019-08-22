@@ -72,6 +72,7 @@ library
     , Graphics.UI.Qtah.Core.QList.QVariant
     , Graphics.UI.Qtah.Core.QList.QWidget
     , Graphics.UI.Qtah.Core.QList.QTreeWidgetItem
+    , Graphics.UI.Qtah.Core.QLockFile
     , Graphics.UI.Qtah.Core.QLoggingCategory
     , Graphics.UI.Qtah.Core.QMargins
     , Graphics.UI.Qtah.Core.QMarginsF
@@ -300,6 +301,7 @@ library
     , Graphics.UI.Qtah.Generated.Core.QList.QVariant
     , Graphics.UI.Qtah.Generated.Core.QList.QWidget
     , Graphics.UI.Qtah.Generated.Core.QList.QTreeWidgetItem
+    , Graphics.UI.Qtah.Generated.Core.QLockFile
     , Graphics.UI.Qtah.Generated.Core.QLoggingCategory
     , Graphics.UI.Qtah.Generated.Core.QMargins
     , Graphics.UI.Qtah.Generated.Core.QMarginsF

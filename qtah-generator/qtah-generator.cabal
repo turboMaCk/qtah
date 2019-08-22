@@ -85,6 +85,7 @@ executable qtah-generator
     , Graphics.UI.Qtah.Generator.Interface.Core.QLibrary
     , Graphics.UI.Qtah.Generator.Interface.Core.QLibraryInfo
     , Graphics.UI.Qtah.Generator.Interface.Core.QList
+    , Graphics.UI.Qtah.Generator.Interface.Core.QLockFile
     , Graphics.UI.Qtah.Generator.Interface.Core.QLoggingCategory
     , Graphics.UI.Qtah.Generator.Interface.Core.QMargins
     , Graphics.UI.Qtah.Generator.Interface.Core.QMarginsF
