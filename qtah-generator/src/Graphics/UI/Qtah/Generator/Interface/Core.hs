@@ -38,6 +38,7 @@ import qualified Graphics.UI.Qtah.Generator.Interface.Core.QFile as QFile
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QFileDevice as QFileDevice
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QFileInfo as QFileInfo
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QFileSelector as QFileSelector
+import qualified Graphics.UI.Qtah.Generator.Interface.Core.QFileSystemWatcher as QFileSystemWatcher
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QCryptographicHash as QCryptographicHash
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QIODevice as QIODevice
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QItemSelection as QItemSelection
@@ -130,6 +131,7 @@ modules =
     , QFileDevice.aModule
     , QFileInfo.aModule
     , QFileSelector.aModule
+    , QFileSystemWatcher.aModule
     , QCryptographicHash.aModule
     , QIODevice.aModule
     , QItemSelection.aModule
