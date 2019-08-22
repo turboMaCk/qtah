@@ -103,6 +103,7 @@ library
     , Graphics.UI.Qtah.Core.QRandomGenerator64
     , Graphics.UI.Qtah.Core.QRect
     , Graphics.UI.Qtah.Core.QRectF
+    , Graphics.UI.Qtah.Core.QResource
     , Graphics.UI.Qtah.Core.QSaveFile
     , Graphics.UI.Qtah.Core.QSequentialAnimationGroup
     , Graphics.UI.Qtah.Core.QSettings
@@ -332,6 +333,7 @@ library
     , Graphics.UI.Qtah.Generated.Core.QRandomGenerator64
     , Graphics.UI.Qtah.Generated.Core.QRect
     , Graphics.UI.Qtah.Generated.Core.QRectF
+    , Graphics.UI.Qtah.Generated.Core.QResource
     , Graphics.UI.Qtah.Generated.Core.QSaveFile
     , Graphics.UI.Qtah.Generated.Core.QSequentialAnimationGroup
     , Graphics.UI.Qtah.Generated.Core.QSettings

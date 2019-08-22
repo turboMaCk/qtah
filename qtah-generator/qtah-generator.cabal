@@ -115,6 +115,7 @@ executable qtah-generator
     , Graphics.UI.Qtah.Generator.Interface.Core.QRandomGenerator64
     , Graphics.UI.Qtah.Generator.Interface.Core.QRect
     , Graphics.UI.Qtah.Generator.Interface.Core.QRectF
+    , Graphics.UI.Qtah.Generator.Interface.Core.QResource
     , Graphics.UI.Qtah.Generator.Interface.Core.QSaveFile
     , Graphics.UI.Qtah.Generator.Interface.Core.QSequentialAnimationGroup
     , Graphics.UI.Qtah.Generator.Interface.Core.QSettings

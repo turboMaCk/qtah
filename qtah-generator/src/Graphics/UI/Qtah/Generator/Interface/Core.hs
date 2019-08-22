@@ -80,6 +80,7 @@ import qualified Graphics.UI.Qtah.Generator.Interface.Core.QRandomGenerator as Q
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QRandomGenerator64 as QRandomGenerator64
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QRect as QRect
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QRectF as QRectF
+import qualified Graphics.UI.Qtah.Generator.Interface.Core.QResource as QResource
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QSaveFile as QSaveFile
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QSequentialAnimationGroup as QSequentialAnimationGroup
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QSettings as QSettings
@@ -172,6 +173,7 @@ modules =
     , QRandomGenerator64.aModule
     , QRect.aModule
     , QRectF.aModule
+    , QResource.aModule
     , QSaveFile.aModule
     , QSequentialAnimationGroup.aModule
     , QSettings.aModule
