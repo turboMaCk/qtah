@@ -86,6 +86,7 @@ import qualified Graphics.UI.Qtah.Generator.Interface.Core.QSequentialAnimationG
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QSettings as QSettings
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QSize as QSize
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QSizeF as QSizeF
+import qualified Graphics.UI.Qtah.Generator.Interface.Core.QStandardPaths as QStandardPaths
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QStaticPlugin as QStaticPlugin
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QString as QString
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QStringList as QStringList
@@ -179,6 +180,7 @@ modules =
     , QSettings.aModule
     , QSize.aModule
     , QSizeF.aModule
+    , QStandardPaths.aModule
     , QStaticPlugin.aModule
     , QString.aModule
     , QStringList.aModule

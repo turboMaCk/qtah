@@ -121,6 +121,7 @@ executable qtah-generator
     , Graphics.UI.Qtah.Generator.Interface.Core.QSettings
     , Graphics.UI.Qtah.Generator.Interface.Core.QSize
     , Graphics.UI.Qtah.Generator.Interface.Core.QSizeF
+    , Graphics.UI.Qtah.Generator.Interface.Core.QStandardPaths
     , Graphics.UI.Qtah.Generator.Interface.Core.QStaticPlugin
     , Graphics.UI.Qtah.Generator.Interface.Core.QString
     , Graphics.UI.Qtah.Generator.Interface.Core.QStringList

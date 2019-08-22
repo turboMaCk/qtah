@@ -109,6 +109,7 @@ library
     , Graphics.UI.Qtah.Core.QSettings
     , Graphics.UI.Qtah.Core.QSize
     , Graphics.UI.Qtah.Core.QSizeF
+    , Graphics.UI.Qtah.Core.QStandardPaths
     , Graphics.UI.Qtah.Core.QStaticPlugin
     , Graphics.UI.Qtah.Core.QString
     , Graphics.UI.Qtah.Core.QStringList
@@ -339,6 +340,7 @@ library
     , Graphics.UI.Qtah.Generated.Core.QSettings
     , Graphics.UI.Qtah.Generated.Core.QSize
     , Graphics.UI.Qtah.Generated.Core.QSizeF
+    , Graphics.UI.Qtah.Generated.Core.QStandardPaths
     , Graphics.UI.Qtah.Generated.Core.QStaticPlugin
     , Graphics.UI.Qtah.Generated.Core.QString
     , Graphics.UI.Qtah.Generated.Core.QStringList
