@@ -11,6 +11,7 @@ import Foreign.Hoppy.Generator.Spec (
   Export (ExportClass, ExportBitspace, ExportEnum),
   addReqIncludes,
   classSetEntityPrefix,
+  classSetDtorPrivate,
   ident,
   ident1,
   ident2,
@@ -53,15 +54,16 @@ aModule =
 c_QStandardPaths =
   addReqIncludes [ includeStd "QStandardPaths" ] $
   classSetEntityPrefix "" $
+  classSetDtorPrivate $ 
   makeClass (ident "QStandardPaths") Nothing [] $
   collect
-  [ just $ mkStaticMethod "displayName" [enumT e_StandardLocation] $ objT c_QString
-  , just $ mkStaticMethod' "findExecutable" "findExecutable" [refT $ constT $ objT c_QString ] $ objT c_QString
-  , just $ mkStaticMethod' "findExecutable" "findExecutableWithPaths" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QStringList] $ objT c_QString
-  , just $ mkStaticMethod' "locate" "locate" [enumT e_StandardLocation, refT $ constT $ objT c_QString ] $ objT c_QString
-  , just $ mkStaticMethod' "locate" "locateWithOptions" [enumT e_StandardLocation, refT $ constT $ objT c_QString, bitspaceT bs_LocateOptions] $ objT c_QString
-  , just $ mkStaticMethod' "locateAll" "locateAll" [enumT e_StandardLocation, refT $ constT $ objT c_QString ] $ objT c_QStringList
-  , just $ mkStaticMethod' "locateAll" "locateAllWithOptions" [enumT e_StandardLocation, refT $ constT $ objT c_QString, bitspaceT bs_LocateOptions] $ objT c_QStringList
+  [just $ mkStaticMethod "displayName" [enumT e_StandardLocation] $ objT c_QString
+  , just $ mkStaticMethod' "findExecutable" "findExecutable" [constT $ objT c_QString ] $ objT c_QString
+  , just $ mkStaticMethod' "findExecutable" "findExecutableWithPaths" [constT $ objT c_QString, constT $ objT c_QStringList] $ objT c_QString
+  , just $ mkStaticMethod' "locate" "locate" [enumT e_StandardLocation, constT $ objT c_QString ] $ objT c_QString
+  , just $ mkStaticMethod' "locate" "locateWithOptions" [enumT e_StandardLocation, constT $ objT c_QString, bitspaceT bs_LocateOptions] $ objT c_QString
+  , just $ mkStaticMethod' "locateAll" "locateAll" [enumT e_StandardLocation, constT $ objT c_QString ] $ objT c_QStringList
+  , just $ mkStaticMethod' "locateAll" "locateAllWithOptions" [enumT e_StandardLocation, constT $ objT c_QString, bitspaceT bs_LocateOptions] $ objT c_QStringList
   , just $ mkStaticMethod "setTestModeEnabled" [boolT] voidT
   , just $ mkStaticMethod "standardLocations" [enumT e_StandardLocation] $ objT c_QStringList
   , just $ mkStaticMethod "writableLocation" [enumT e_StandardLocation] $ objT c_QString
