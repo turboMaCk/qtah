@@ -26,8 +26,8 @@ import Foreign.Hoppy.Generator.Spec (
   mkMethod
   )
   
-
-import Foreign.Hoppy.Generator.Types (boolT, intT, voidT, enumT, bitspaceT, constT, objT, ptrT, refT)
+import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
+import Foreign.Hoppy.Generator.Types (boolT, intT, voidT, enumT, bitspaceT, constT, objT, ptrT, refT, llongT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
 import Graphics.UI.Qtah.Generator.Flags (qtVersion)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModuleWithMinVersion)
@@ -55,7 +55,7 @@ c_QLockFile =
   collect
   [ just $ mkCtor "new" [refT $ constT $ objT c_QString]
   , just $ mkConstMethod "error" [] $ enumT e_LockError
-  , just $ mkConstMethod "getLockInfo" [ptrT $ qint64, ptrT $ objT c_QString, ptrT $ objT c_QString] boolT
+  , just $ mkConstMethod "getLockInfo" [ptrT $ llongT, ptrT $ objT c_QString, ptrT $ objT c_QString] boolT
   , just $ mkConstMethod "isLocked" [] boolT
   , just $ mkMethod "lock" [] boolT
   , just $ mkMethod "removeStaleLockFile" [] boolT
