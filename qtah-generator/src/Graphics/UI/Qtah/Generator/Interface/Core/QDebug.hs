@@ -87,7 +87,7 @@ c_QDebug =
   classSetEntityPrefix "" $
   makeClass (ident "QDebug") Nothing [] $
   collect
-  [ 
+  [
     just $ mkCtor "newWithMsgType" [enumT e_QtMsgType]
   , just $ mkCtor "newWithString" [ptrT $ objT c_QString]
   -- TODO QDebug(QIODevice *device)
@@ -129,7 +129,6 @@ c_QDebug =
   , just $ mkMethod' OpShl "qbyteArrayToStream" [refT $ constT $ objT c_QByteArray] $ refT $ objT c_QDebug
   , just $ mkMethod' OpShl "voidToStream" [ptrT $ constT voidT] $ refT $ objT c_QDebug
   ]
-
 
 e_VerbosityLevel =
   makeQtEnum (ident1 "QDebug" "VerbosityLevel") [includeStd "QDebug"]

@@ -73,9 +73,9 @@ c_QTranslator =
   , just $ mkMethod' "load" "loadFromStringDir" [objT c_QString, objT c_QString] boolT
   , just $ mkMethod' "load" "loadFromStringDirSearch" [objT c_QString, objT c_QString, objT c_QString] boolT
   , just $ mkMethod' "load" "loadFromStringDirSearchSuff" [objT c_QString, objT c_QString, objT c_QString, objT c_QString] boolT
-  
+
   -- TODO bool QTranslator::load(const QLocale &locale, const QString &filename, const QString &prefix = QString(), const QString &directory = QString(), const QString &suffix = QString())
-  
+
   , just $ mkMethod' "load" "loadFromUChar" [ptrT $ constT ucharT, intT] boolT
   , just $ mkMethod' "load" "loadFromUCharDir" [ptrT $ constT ucharT, intT, objT c_QString] boolT
 

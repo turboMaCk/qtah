@@ -78,7 +78,7 @@ aModule =
   QtExport (ExportClass c_QAbstractItemModel) :
   map QtExportSignal signals ++
   collect
-  [ just $ QtExport $ ExportEnum e_LayoutChangeHint 
+  [ just $ QtExport $ ExportEnum e_LayoutChangeHint
   , test (qtVersion >= [5, 11]) $ QtExport $ ExportEnum e_CheckIndexOption
   , test (qtVersion >= [5, 11]) $ QtExport $ ExportBitspace bs_CheckIndexOptions ]
 

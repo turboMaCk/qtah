@@ -1,8 +1,24 @@
+-- This file is part of Qtah.
+--
+-- Copyright 2015-2019 The Qtah Authors.
+--
+-- This program is free software: you can redistribute it and/or modify
+-- it under the terms of the GNU Lesser General Public License as published by
+-- the Free Software Foundation, either version 3 of the License, or
+-- (at your option) any later version.
+--
+-- This program is distributed in the hope that it will be useful,
+-- but WITHOUT ANY WARRANTY; without even the implied warranty of
+-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-- GNU Lesser General Public License for more details.
+--
+-- You should have received a copy of the GNU Lesser General Public License
+-- along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 module Graphics.UI.Qtah.Generator.Interface.Core.QLatin1String (
   aModule,
   c_QLatin1String,
   ) where
-
 
 import Foreign.Hoppy.Generator.Spec (
   Export (ExportClass),
@@ -25,12 +41,10 @@ import Foreign.Hoppy.Generator.Spec (
   mkMethod',
   mkMethod
   )
-  
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Equatable, Comparable, Copyable),
   classAddFeatures,
   )
-
 import Foreign.Hoppy.Generator.Types (toGcT, charT, intT, boolT, voidT, enumT, bitspaceT, constT, objT, ptrT, refT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
 import Graphics.UI.Qtah.Generator.Flags (qtVersion)
@@ -45,13 +59,10 @@ import Graphics.UI.Qtah.Generator.Types
 
 {-# ANN module "HLint: ignore Use camelCase" #-}
 
-
-
 aModule =
   AQtModule $
   makeQtModule ["Core", "QLatin1String"] $
   [QtExport $ ExportClass c_QLatin1String]
-  
 
 c_QLatin1String =
   addReqIncludes [ includeStd "QLatin1String" ] $
@@ -111,6 +122,5 @@ c_QLatin1String =
   , just $ mkConstMethod' OpGe "greaterOrEqThanQString" [refT $ constT $ objT c_QString] boolT
   , test (qtVersion >= [4, 3]) $ mkConstMethod' OpGe "greaterOrEqThanChar" [ptrT $ constT charT] boolT
   , test (qtVersion >= [5, 0]) $ mkConstMethod' OpGe "greaterOrEqThanQBytearray" [refT $ constT $ objT c_QByteArray] boolT
-  , test (qtVersion >= [5, 8]) $ mkConstMethod' OpArray "get" [intT] $ toGcT $ objT c_QLatin1Char 
+  , test (qtVersion >= [5, 8]) $ mkConstMethod' OpArray "get" [intT] $ toGcT $ objT c_QLatin1Char
   ]
-  

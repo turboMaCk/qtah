@@ -112,10 +112,10 @@ c_QString =
   , just $ mkCtor "newFromChar" [ptrT $ objT c_QChar]
   --, just $ mkCtor "newFromCharSize" [ptrT $ objT c_QChar, intT]
   --, test (qtVersion >= [5, 2]) $ mkCtor "newFromRef" [refT $ objT c_QString]
-  
+
   , just $ makeFnMethod (ident2 "qtah" "qstring" "set") "set" MNormal Nonpure
     [refT $ objT c_QString, intT, objT c_QChar] voidT
-  
+
     , just $ mkMethod' "append" "append" [objT c_QString] $ refT $ objT c_QString
 --, test (qtVersion >= [5, 0]) $ mkMethod' "append" "appendWithCharInt" [ptrT $ constT charT, intT] $ refT $ objT c_QString
   , just $ mkMethod' "append" "appendWithQChar" [objT c_QChar] $ refT $ objT c_QString
@@ -123,16 +123,16 @@ c_QString =
   -- TODO QString &QString::append(QLatin1String str)
   , just $ mkMethod' "append" "appendWithChar" [ptrT $ constT charT] $ refT $ objT c_QString
   , just $ mkMethod' "append" "appendWithQByteArray" [objT c_QByteArray] $ refT $ objT c_QString
-  
+
   , just $ mkConstMethod' "arg" "arg" [objT c_QString] $ objT c_QString
   , just $ mkConstMethod' "arg" "argWithStringSize" [objT c_QString, intT] $ objT c_QString
   , just $ mkConstMethod' "arg" "argWithStringSizeFill" [objT c_QString, intT, objT c_QChar] $ objT c_QString
-  
+
   , just $ mkConstMethod' "arg" "argWithULongLong" [qulonglong] $ objT c_QString
   , just $ mkConstMethod' "arg" "argWithULongLongField" [qulonglong, intT] $ objT c_QString
   , just $ mkConstMethod' "arg" "argWithULongLongFieldBase" [qulonglong, intT, intT] $ objT c_QString
   , just $ mkConstMethod' "arg" "argWithULongLongFieldBaseFill" [qulonglong, intT, intT, objT c_QChar] $ objT c_QString
-  
+
   , just $ mkConstMethod' "arg" "argWithLongLong" [qlonglong] $ objT c_QString
   , just $ mkConstMethod' "arg" "argWithLongLongField" [qlonglong, intT] $ objT c_QString
   , just $ mkConstMethod' "arg" "argWithLongLongFieldBase" [qlonglong, intT, intT] $ objT c_QString
@@ -142,12 +142,12 @@ c_QString =
   , just $ mkConstMethod' "arg" "argWithLongField" [longT, intT] $ objT c_QString
   , just $ mkConstMethod' "arg" "argWithLongFieldBase" [longT, intT, intT] $ objT c_QString
   , just $ mkConstMethod' "arg" "argWithLongFieldBaseFill" [longT, intT, intT, objT c_QChar] $ objT c_QString
-  
+
   , just $ mkConstMethod' "arg" "argWithULong" [ulongT] $ objT c_QString
   , just $ mkConstMethod' "arg" "argWithULongField" [ulongT, intT] $ objT c_QString
   , just $ mkConstMethod' "arg" "argWithULongFieldBase" [ulongT, intT, intT] $ objT c_QString
   , just $ mkConstMethod' "arg" "argWithULongFieldBaseFill" [ulongT, intT, intT, objT c_QChar] $ objT c_QString
-  
+
   , just $ mkConstMethod' "arg" "argWithInt" [intT] $ objT c_QString
   , just $ mkConstMethod' "arg" "argWithIntField" [intT, intT] $ objT c_QString
   , just $ mkConstMethod' "arg" "argWithIntFieldBase" [intT, intT, intT] $ objT c_QString
@@ -276,7 +276,6 @@ c_QString =
   --, just $ mkConstMethod "utf16" [] $ ptrT ushortT
     -- TODO Lots more method here.
   ]
-
 
 e_NormalizationForm =
     makeQtEnum (ident1 "QString" "NormalizationForm") [includeStd "QString"]

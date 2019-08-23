@@ -27,10 +27,10 @@ import Foreign.Hoppy.Generator.Spec (Class, CppEnum, Bitspace)
 
 c_QString :: Class
 
-e_SectionFlag :: CppEnum 
+e_SectionFlag :: CppEnum
 
-e_NormalizationForm :: CppEnum 
+e_NormalizationForm :: CppEnum
 
-e_SplitBehavior :: CppEnum 
+e_SplitBehavior :: CppEnum
 
 bs_SectionFlags :: Bitspace

@@ -1,11 +1,26 @@
+-- This file is part of Qtah.
+--
+-- Copyright 2015-2019 The Qtah Authors.
+--
+-- This program is free software: you can redistribute it and/or modify
+-- it under the terms of the GNU Lesser General Public License as published by
+-- the Free Software Foundation, either version 3 of the License, or
+-- (at your option) any later version.
+--
+-- This program is distributed in the hope that it will be useful,
+-- but WITHOUT ANY WARRANTY; without even the implied warranty of
+-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-- GNU Lesser General Public License for more details.
+--
+-- You should have received a copy of the GNU Lesser General Public License
+-- along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 module Graphics.UI.Qtah.Generator.Interface.Core.QDirIterator (
   aModule,
   c_QDirIterator,
   e_IteratorFlag,
   bs_IteratorFlags,
   ) where
-
-
 
 import Foreign.Hoppy.Generator.Spec (
   Export (ExportClass, ExportBitspace, ExportEnum),
@@ -26,8 +41,6 @@ import Foreign.Hoppy.Generator.Spec (
   mkMethod',
   mkMethod
   )
-  
-
 import Foreign.Hoppy.Generator.Types (boolT, voidT, enumT, bitspaceT, constT, objT, ptrT, refT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
 import Graphics.UI.Qtah.Generator.Flags (qtVersion)
@@ -38,9 +51,7 @@ import Graphics.UI.Qtah.Generator.Interface.Core.QDir (c_QDir, bs_Filters)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModuleWithMinVersion)
 import Graphics.UI.Qtah.Generator.Types
 
-
 {-# ANN module "HLint: ignore Use camelCase" #-}
-
 
 aModule =
   AQtModule $
@@ -51,14 +62,13 @@ aModule =
   , just $ QtExport $ ExportBitspace bs_IteratorFlags
   ]
 
-
 c_QDirIterator =
   addReqIncludes [ includeStd "QDirIterator" ] $
   classSetEntityPrefix "" $
   makeClass (ident "QDirIterator") Nothing [] $
   collect
   [ just $ mkCtor "new" [refT $ constT $ objT c_QDir]
-  , just $ mkCtor "newWithDirFlags" [refT $ constT $ objT c_QDir, bitspaceT bs_IteratorFlags] 
+  , just $ mkCtor "newWithDirFlags" [refT $ constT $ objT c_QDir, bitspaceT bs_IteratorFlags]
   , just $ mkCtor "newWithStr" [refT $ constT $ objT c_QString]
   , just $ mkCtor "newWithStrFlags" [refT $ constT $ objT c_QString, bitspaceT bs_IteratorFlags]
   , just $ mkCtor "newWithStrFiltres" [refT $ constT $ objT c_QString, bitspaceT bs_Filters]
@@ -73,12 +83,10 @@ c_QDirIterator =
   , just $ mkMethod "next" [] $ objT c_QString
   , just $ mkConstMethod "path" [] $ objT c_QString
   ]
-  
-  
+
 (e_IteratorFlag, bs_IteratorFlags) =
   makeQtEnumBitspace (ident1 "QDirIterator" "IteratorFlag") "IteratorFlags" [includeStd "QDirIterator"]
   [ (0x0, ["no", "iterator", "flags"])
   , (0x2, ["subdirectories"])
   , (0x1, ["follow", "symlinks"])
   ]
-  

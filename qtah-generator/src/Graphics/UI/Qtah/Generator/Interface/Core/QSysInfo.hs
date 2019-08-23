@@ -1,11 +1,26 @@
+-- This file is part of Qtah.
+--
+-- Copyright 2015-2019 The Qtah Authors.
+--
+-- This program is free software: you can redistribute it and/or modify
+-- it under the terms of the GNU Lesser General Public License as published by
+-- the Free Software Foundation, either version 3 of the License, or
+-- (at your option) any later version.
+--
+-- This program is distributed in the hope that it will be useful,
+-- but WITHOUT ANY WARRANTY; without even the implied warranty of
+-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-- GNU Lesser General Public License for more details.
+--
+-- You should have received a copy of the GNU Lesser General Public License
+-- along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 module Graphics.UI.Qtah.Generator.Interface.Core.QSysInfo (
   aModule,
   c_QSysInfo,
   e_Endian,
   e_Sizes,
   ) where
-
-
 
 import Foreign.Hoppy.Generator.Spec (
   Export (ExportClass, ExportEnum),
@@ -26,7 +41,6 @@ import Foreign.Hoppy.Generator.Spec (
   mkMethod',
   mkMethod
   )
-  
 import Data.Bits ((.|.), finiteBitSize)
 import Foreign.Ptr (IntPtr)
 import Foreign.Hoppy.Generator.Types (voidT, enumT, bitspaceT, constT, objT, ptrT, refT)
@@ -39,8 +53,6 @@ import Graphics.UI.Qtah.Generator.Types
 
 {-# ANN module "HLint: ignore Use camelCase" #-}
 
-
-
 aModule =
   AQtModule $
   makeQtModule ["Core", "QSysInfo"] $
@@ -49,7 +61,6 @@ aModule =
   , just $ QtExport $ ExportEnum e_Endian
   , just $ QtExport $ ExportEnum e_Sizes
   ]
-
 
 c_QSysInfo =
   addReqIncludes [ includeStd "QSysInfo" ] $
@@ -66,10 +77,9 @@ c_QSysInfo =
   , test (qtVersion >= [5, 11]) $ mkStaticMethod "machineUniqueId" [] $ objT c_QByteArray
   , test (qtVersion >= [5, 4]) $ mkStaticMethod "prettyProductName" [] $ objT c_QString
   , test (qtVersion >= [5, 4]) $ mkStaticMethod "productType" [] $ objT c_QString
-  , test (qtVersion >= [5, 4]) $ mkStaticMethod "productVersion" [] $ objT c_QString 
+  , test (qtVersion >= [5, 4]) $ mkStaticMethod "productVersion" [] $ objT c_QString
   ]
-  
-  
+
 e_Endian =
   makeQtEnum (ident1 "QSysInfo" "Endian") [includeStd "QSysInfo"] $
   let bigEndian = 0
@@ -78,10 +88,8 @@ e_Endian =
   in  [ (bigEndian, ["big", "endian"])
       , (littleEndian, ["little", "endian"])
       , (byteOrder, ["byte", "order"]) ]
-  
-  
+
 e_Sizes =
   makeQtEnum (ident1 "QSysInfo" "Sizes") [includeStd "QSysInfo"] $
   let wordSize = finiteBitSize (undefined :: IntPtr)
   in  [ (wordSize, ["word", "size"])]
-  

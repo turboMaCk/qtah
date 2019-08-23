@@ -164,7 +164,7 @@ import Foreign.Hoppy.Generator.Spec (
   includeStd,
   makeFn,
   )
-import System.Info (os) 
+import System.Info (os)
 import Foreign.Hoppy.Generator.Types (doubleT, floatT, objT, int8T, int16T, int32T, int64T, ssizeT, word8T, word16T, word32T, word64T, ptrT, refT, fnT, voidT, enumT, constT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
 import Graphics.UI.Qtah.Generator.Flags (qrealFloat, qtVersion)
@@ -199,7 +199,7 @@ exports =
   , just $ ExportEnum e_ClipOperation
   , just $ ExportEnum e_ConnectionType
   , just $ ExportEnum e_ContextMenuPolicy
-  , test (qtVersion >= [4, 6]) $ ExportEnum e_CoordinateSystem 
+  , test (qtVersion >= [4, 6]) $ ExportEnum e_CoordinateSystem
   , just $ ExportEnum e_Corner
   , just $ ExportEnum e_CursorMoveStyle
   , just $ ExportEnum e_CursorShape
@@ -353,7 +353,6 @@ gluint = word32T
 wchar_t :: Type
 wchar_t = if os == "mingw32" then word16T else word32T
 
-
 e_QtMsgType =
   makeQtEnum (ident "QtMsgType") qtInclude
   [ (0, ["qt", "debug", "msg"])
@@ -476,7 +475,7 @@ e_ClipOperation =
   ]
 
 e_ConnectionType =
-  makeQtEnum (ident1 "Qt" "ConnectionType") qtInclude $ 
+  makeQtEnum (ident1 "Qt" "ConnectionType") qtInclude $
   collect
   [ just (0, ["auto", "connection"])
   , just (1, ["direct", "connection"])
@@ -484,7 +483,6 @@ e_ConnectionType =
   , just (3, ["blocking", "queued", "connection"])
   , test (qtVersion >= [4,6]) (0x80, ["unique", "connection"])
   ]
-
 
 e_ContextMenuPolicy :: CppEnum
 e_ContextMenuPolicy =
@@ -501,7 +499,6 @@ e_CoordinateSystem =
   [ (0, ["device", "coordinates"])
   , (1, ["logical", "coordinates"])
   ]
-  
 
 e_Corner =
   makeQtEnum (ident1 "Qt" "Corner") qtInclude
@@ -1277,7 +1274,7 @@ e_MaskMode =
       extraButton21 = 0x00800000
       extraButton22 = 0x01000000
       extraButton23 = 0x02000000
-      extraButton24 = 0x04000000 
+      extraButton24 = 0x04000000
   in [ (noButton, ["no", "button"])
      , (allButtons, ["all", "buttons"])
      , (leftButton, ["left", "button"])
@@ -1314,7 +1311,6 @@ e_MaskMode =
      , (extraButton23, ["extra", "button23"])
      , (extraButton24, ["extra", "button24"])
      ]
-
 
 (e_MouseEventFlag, bs_MouseEventFlags) =
   makeQtEnumBitspace (ident1 "Qt" "MouseEventFlag") "MouseEventFlags" qtInclude
@@ -1679,7 +1675,7 @@ e_WindowModality =
   ]
 
 e_ApplicationAttribute =
-  makeQtEnum (ident1 "Qt" "ApplicationAttribute") qtInclude $ 
+  makeQtEnum (ident1 "Qt" "ApplicationAttribute") qtInclude $
   collect
   [ just (2, ["a", "a", "_", "dont", "show", "icons", "in", "menus"])
   , test (qtVersion >= [5,10]) (28, ["a", "a", "_", "dont", "show", "shortcuts", "in", "context", "menus"])

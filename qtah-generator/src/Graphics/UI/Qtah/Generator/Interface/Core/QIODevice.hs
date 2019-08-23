@@ -36,7 +36,7 @@ import Foreign.Hoppy.Generator.Spec (
   mkMethod,
   mkMethod',
   )
-import Data.Bits ((.|.))  
+import Data.Bits ((.|.))
 import Foreign.Hoppy.Generator.Types (boolT, bitspaceT, constT, intT, objT, ptrT, refT, ptrT, voidT, charT, enumT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
 import Graphics.UI.Qtah.Generator.Flags (qtVersion)
@@ -50,7 +50,6 @@ import Graphics.UI.Qtah.Generator.Interface.Core.Types (qlonglong)
 
 {-# ANN module "HLint: ignore Use camelCase" #-}
 
-
 aModule =
   AQtModule $
   makeQtModule ["Core", "QIODevice"] $
@@ -60,7 +59,6 @@ aModule =
   , QtExport $ ExportBitspace bs_OpenMode
   ]
 
-  
 c_QIODevice =
   addReqIncludes [ includeStd "QIODevice" ] $
   classSetEntityPrefix "" $
@@ -115,7 +113,6 @@ c_QIODevice =
   , test (qtVersion >= [5, 7]) $ mkConstMethod "writeChannelCount" [] intT
   ]
 
-
 (e_OpenModeFlag, bs_OpenMode) =
   makeQtEnumBitspace (ident1 "QIODevice" "OpenModeFlag") "OpenMode" [includeStd "QIODevice"] $
   let notOpen = 0x0000
@@ -139,7 +136,6 @@ c_QIODevice =
       , (newOnly, ["new", "only"])
       , (existingOnly, ["existing", "only"])
      ]
-
 
 signals =
   collect $

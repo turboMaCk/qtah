@@ -1,10 +1,25 @@
+-- This file is part of Qtah.
+--
+-- Copyright 2015-2019 The Qtah Authors.
+--
+-- This program is free software: you can redistribute it and/or modify
+-- it under the terms of the GNU Lesser General Public License as published by
+-- the Free Software Foundation, either version 3 of the License, or
+-- (at your option) any later version.
+--
+-- This program is distributed in the hope that it will be useful,
+-- but WITHOUT ANY WARRANTY; without even the implied warranty of
+-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-- GNU Lesser General Public License for more details.
+--
+-- You should have received a copy of the GNU Lesser General Public License
+-- along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 module Graphics.UI.Qtah.Generator.Interface.Core.QLockFile (
   aModule,
   c_QLockFile,
   e_LockError,
   ) where
-
-
 
 import Foreign.Hoppy.Generator.Spec (
   Export (ExportClass, ExportEnum),
@@ -25,7 +40,6 @@ import Foreign.Hoppy.Generator.Spec (
   mkMethod',
   mkMethod
   )
-  
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Foreign.Hoppy.Generator.Types (boolT, intT, voidT, enumT, bitspaceT, constT, objT, ptrT, refT, llongT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
@@ -34,10 +48,7 @@ import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModuleWithM
 import Graphics.UI.Qtah.Generator.Types
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (qint64)
 
-
 {-# ANN module "HLint: ignore Use camelCase" #-}
-
-
 
 aModule =
   AQtModule $
@@ -46,7 +57,6 @@ aModule =
   [ just $ QtExport $ ExportClass c_QLockFile
   , just $ QtExport $ ExportEnum e_LockError
   ]
-
 
 c_QLockFile =
   addReqIncludes [ includeStd "QLockFile" ] $
@@ -65,7 +75,6 @@ c_QLockFile =
   , just $ mkMethod' "tryLock" "tryLockWithTimeout" [intT] boolT
   , just $ mkMethod "unlock" [] voidT
   ]
-  
 
 e_LockError =
   makeQtEnum (ident1 "QLockFile" "LockError") [includeStd "QLockFile"]
@@ -74,4 +83,3 @@ e_LockError =
   , (2, ["permission", "error"])
   , (3, ["unknown", "error"])
   ]
-  

@@ -61,7 +61,6 @@ import Graphics.UI.Qtah.Generator.Interface.Gui.QColor (c_QColor)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
 
-
 {-# ANN module "HLint: ignore Use camelCase" #-}
 
 aModule =
@@ -73,7 +72,6 @@ aModule =
   , QtExport $ ExportEnum e_Spread
   , QtExport $ ExportEnum e_Type
   ]
-    
 
 c_QGradient =
   addReqIncludes [includeStd "QGradient"] $
@@ -83,14 +81,13 @@ c_QGradient =
   makeClass (ident "QGradient") Nothing [] $
   collect
   [ just $ mkCtor "new" [enumT e_Preset]
-  , just $ mkProp "coordinateMode" $ enumT e_CoordinateMode 
+  , just $ mkProp "coordinateMode" $ enumT e_CoordinateMode
   , just $ mkMethod "setColorAt" [qreal, constT $ objT c_QColor] voidT
   , just $ mkProp "spread" $ enumT e_Spread
-  -- TODO void	setStops(const QGradientStops &stopPoints)
-  -- TODO QGradientStops	stops() const
+  -- TODO void setStops(const QGradientStops &stopPoints)
+  -- TODO QGradientStops stops() const
   --, just $ mkConstMethod "type" [] $ enumT e_Type
   ]
- 
 
 e_CoordinateMode =
     makeQtEnum (ident1 "QGradient" "CoordinateMode") [includeStd "QGradient"]
@@ -298,4 +295,3 @@ e_Type =
     , (2, ["conical", "gradient"])
     , (3, ["no", "gradient"])
     ]
-

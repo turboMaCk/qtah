@@ -1,8 +1,24 @@
+-- This file is part of Qtah.
+--
+-- Copyright 2015-2019 The Qtah Authors.
+--
+-- This program is free software: you can redistribute it and/or modify
+-- it under the terms of the GNU Lesser General Public License as published by
+-- the Free Software Foundation, either version 3 of the License, or
+-- (at your option) any later version.
+--
+-- This program is distributed in the hope that it will be useful,
+-- but WITHOUT ANY WARRANTY; without even the implied warranty of
+-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-- GNU Lesser General Public License for more details.
+--
+-- You should have received a copy of the GNU Lesser General Public License
+-- along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 module Graphics.UI.Qtah.Generator.Interface.Core.QTime (
   aModule,
   c_QTime,
   ) where
-
 
 import Foreign.Hoppy.Generator.Spec (
   Export (ExportClass),
@@ -25,12 +41,10 @@ import Foreign.Hoppy.Generator.Spec (
   mkMethod',
   mkMethod
   )
-  
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Comparable, Equatable, Copyable),
   classAddFeatures,
   )
-  
 import Foreign.Hoppy.Generator.Types (boolT, intT, voidT, enumT, bitspaceT, constT, objT, ptrT, refT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
 import Graphics.UI.Qtah.Generator.Flags (qtVersion)
@@ -41,13 +55,10 @@ import Graphics.UI.Qtah.Generator.Interface.Core.Types (e_DateFormat)
 
 {-# ANN module "HLint: ignore Use camelCase" #-}
 
-
-
 aModule =
   AQtModule $
   makeQtModule ["Core", "QTime"] $
   [QtExport $ ExportClass c_QTime]
-  
 
 c_QTime =
   addReqIncludes [ includeStd "QTime" ] $
@@ -88,6 +99,3 @@ c_QTime =
   --, just $ mkMethod OpShl [refT $ objT c_QDataStream, refT $ objT c_QTime] $ refT $ objT c_QDataStream
   --, just $ mkMethod OpShr [refT $ objT c_QDataStream, refT $ objT c_QTime] $ refT $ objT c_QDataStream
   ]
-  
-  
-

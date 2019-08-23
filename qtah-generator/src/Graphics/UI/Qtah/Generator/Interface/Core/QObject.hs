@@ -82,10 +82,10 @@ c_QObject =
   , just $ mkCtor "newWithParent" [ptrT $ objT c_QObject]
   , just $ mkMethod "blockSignals" [boolT] boolT
   , just $ mkMethod "children" [] $ objT c_QListQObject
-  
+
   , just $ mkConstMethod' "connect" "connect" [ptrT $ constT $ objT c_QObject, ptrT $ constT charT, ptrT $ constT charT] $ objT c_Connection
   , just $ mkConstMethod' "connect" "connectWithType" [ptrT $ constT $ objT c_QObject, ptrT $ constT charT, ptrT $ constT charT, enumT e_ConnectionType] $ objT c_Connection
-  
+
   , just $ mkStaticMethod' "connect" "connectWithTypeStatic" [ptrT $ constT $ objT c_QObject, ptrT $ constT charT, ptrT $ constT $ objT c_QObject, ptrT $ constT charT, enumT e_ConnectionType] $ objT c_Connection
   , just $ mkStaticMethod' "connect" "connectWithSenderSignalStatic" [ptrT $ constT $ objT c_QObject, refT $ constT $ objT c_QMetaMethod, ptrT $ constT $ objT c_QObject, refT $ constT $ objT c_QMetaMethod] $ objT c_Connection
   , just $ mkStaticMethod' "connect" "connectWithSenderSignalTypeStatic" [ptrT $ constT $ objT c_QObject, refT $ constT $ objT c_QMetaMethod, ptrT $ constT $ objT c_QObject, refT $ constT $ objT c_QMetaMethod, enumT e_ConnectionType] $ objT c_Connection
@@ -94,7 +94,6 @@ c_QObject =
     [ptrT $ constT $ objT c_QObject, objT c_string, ptrT $ constT $ objT c_QObject, objT c_string] $ objT c_Connection
   , just $ makeFnMethod (ident2 "qtah" "qobject" "disconnect") "disconnectStatic" MStatic Nonpure
     [ptrT $ constT $ objT c_QObject, objT c_string, ptrT $ constT $ objT c_QObject, objT c_string] boolT
-
 
   , just $ mkMethod "deleteLater" [] voidT
 
@@ -105,8 +104,6 @@ c_QObject =
   , just $ mkConstMethod' "disconnect" "disconnectWithSignalReceiver" [ptrT $ constT charT, ptrT $ constT $ objT c_QObject] boolT
   , just $ mkConstMethod' "disconnect" "disconnectWithSignalReceiverMethod" [ptrT $ constT charT, ptrT $ constT $ objT c_QObject, ptrT $ constT charT] boolT
   , just $ mkStaticMethod' "disconnect" "disconnectWithMetaobject" [objT c_Connection] boolT
-
-
 
   , just $ mkMethod "dumpObjectInfo" [] voidT
   , just $ mkMethod "dumpObjectTree" [] voidT

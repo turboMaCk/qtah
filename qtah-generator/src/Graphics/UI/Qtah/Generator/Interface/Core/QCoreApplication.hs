@@ -88,12 +88,12 @@ c_QCoreApplication =
   , just $ mkStaticMethod "applicationFilePath" [] $ objT c_QString
   , test (qtVersion >= [4, 4]) $ mkStaticMethod "applicationPid" [] qlonglong
   , just $ mkStaticMethod "closingDown" [] boolT
-  -- TODO QAbstractEventDispatcher *	eventDispatcher()
-  -- TODO bool	installTranslator(QTranslator *translationFile)
+  -- TODO QAbstractEventDispatcher * eventDispatcher()
+  -- TODO bool installTranslator(QTranslator *translationFile)
   , test (qtVersion >= [5, 3]) $ mkStaticMethod "isSetuidAllowed" [] boolT
   , just $ mkStaticMethod "libraryPaths" [] $ objT c_QStringList
-  -- TODO void	processEvents(QEventLoop::ProcessEventsFlags flags = QEventLoop::AllEvents)
-  -- TODO void	processEvents(QEventLoop::ProcessEventsFlags flags, int maxtime)
+  -- TODO void processEvents(QEventLoop::ProcessEventsFlags flags = QEventLoop::AllEvents)
+  -- TODO void processEvents(QEventLoop::ProcessEventsFlags flags, int maxtime)
   , just $ mkStaticMethod "removeLibraryPath" [objT c_QString] voidT
   , just $ mkStaticMethod' "removePostedEvents" "removePostedEvents" [ptrT $ objT c_QObject] voidT
   , just $ mkStaticMethod' "removePostedEvents" "removePostedEventsWithEventType" [ ptrT $ objT c_QObject, intT] voidT
@@ -103,7 +103,7 @@ c_QCoreApplication =
   , just $ mkStaticMethod' "sendPostedEvents" "sendPostedEventsWithObjectEventType" [ ptrT $ objT c_QObject, intT] voidT
   , just $ mkStaticMethod' "setAttribute" "setAttribute" [enumT e_ApplicationAttribute] voidT
   , just $ mkStaticMethod' "setAttribute" "setAttributeWithBool" [enumT e_ApplicationAttribute, boolT] voidT
-  -- TODO void	setEventDispatcher(QAbstractEventDispatcher *eventDispatcher)
+  -- TODO void setEventDispatcher(QAbstractEventDispatcher *eventDispatcher)
   , just $ mkStaticMethod "setLibraryPaths" [objT c_QStringList] voidT
   , test (qtVersion >= [5, 3]) $ mkStaticMethod "setSetuidAllowed" [boolT] voidT
   , just $ mkStaticMethod "startingUp" [] boolT

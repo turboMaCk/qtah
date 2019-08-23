@@ -20,7 +20,6 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QBuffer (
   c_QBuffer,
   ) where
 
-
 import Foreign.Hoppy.Generator.Spec (
   Export (ExportClass),
   addReqIncludes,
@@ -41,7 +40,6 @@ import Foreign.Hoppy.Generator.Spec (
   mkMethod',
   mkMethod
   )
-  
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Copyable),
   classAddFeatures,
@@ -52,22 +50,16 @@ import Graphics.UI.Qtah.Generator.Interface.Core.QObject (c_QObject)
 import Foreign.Hoppy.Generator.Types (intT, charT, voidT, boolT, enumT, bitspaceT, constT, objT, ptrT, refT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
 import Graphics.UI.Qtah.Generator.Flags (qtVersion)
-
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (qlonglong)
 
-
 {-# ANN module "HLint: ignore Use camelCase" #-}
-
-
 
 aModule =
   AQtModule $
   makeQtModule ["Core", "QBuffer"]
   [ QtExport $ ExportClass c_QBuffer ]
-  
-  
 
 c_QBuffer =
   addReqIncludes [ includeStd "QBuffer" ] $
@@ -92,6 +84,3 @@ c_QBuffer =
   , just $ mkMethod "open" [bitspaceT bs_OpenMode] boolT
   , just $ mkConstMethod "pos" [] qlonglong
   ]
-  
-  
-

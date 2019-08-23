@@ -1,5 +1,23 @@
 #!/usr/bin/env bash
 
+# This file is part of Qtah.
+#
+# Copyright 2015-2019 The Qtah Authors.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
 # execution template:
 # ./method-maker ifStatic minVersion fullmethod
 
@@ -10,7 +28,7 @@
 # QByteArray QTextEncoder::fromUnicode(const QString &str)
 # QFileSelector(QObject *parent = nullptr)
 # void QProcess::setReadChannel(QProcess::ProcessChannel channel)
-# int QProcess::execute(const QString &program, const QStringList &arguments) 
+# int QProcess::execute(const QString &program, const QStringList &arguments)
 # void QProcess::setStandardErrorFile(const QString &fileName, QIODevice::OpenMode mode = Truncate)
 
 
@@ -21,15 +39,13 @@
 # ./method-maker true "5.10" "QChar QString::back() const"
 # ./method-maker false "" "int QString::compare(const QStringRef &ref, Qt::CaseSensitivity cs = ...) const"
 
-
-
 contentMain=$(echo "$3" | awk -F"(" '{print $1}') # everything before "(" character
 contentArg="("$(echo "$3" | awk -F"(" '{print $2}') # everything after "(" character
 ifStatic=$1
 minVersion=$2
 majorVersion="$(cut -d'.' -f1 <<< "$minVersion")"
 minorVersion="$(cut -d'.' -f2 <<< "$minVersion")"
-thirdPartVersion="" 
+thirdPartVersion=""
 methodName=""
 argList=""
 method=""
@@ -40,23 +56,21 @@ OUTPUT_FILE="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )/m
 rm -rf $OUTPUT_FILE
 touch $OUTPUT_FILE
 
-
 # echo "contentMain is $contentMain"
-# echo "contentArg is $contentArg" 
+# echo "contentArg is $contentArg"
 
 if [ ! -z "$(cut -d'.' -f3 <<< "$minVersion")" ]; then
 thirdPartVersion=", $(cut -d'.' -f3 <<< "$minVersion")"
 fi
 
-
 if [[ $contentMain =~ "::" ]]; then
 
     read -a strarr <<< "$contentMain"
-    
+
     if [ ${#strarr[*]} -gt 1 ]; then    # greater than 1 means it must have separated by whitespaces 1) return type and 2) classname::methodname
-    
+
        #echo "Use other function than mkCtor"
-       
+
        # because the longest option I know is for example "const unsigned long long int classname::classmethod"
        if [[ "${strarr[1]}" =~ "::" ]] && [[ ! "${strarr[1]}" =~ "Qt::" ]]; then
        methodName="$(sed 's/.*:://' <<< "${strarr[1]}")"
@@ -70,25 +84,24 @@ if [[ $contentMain =~ "::" ]]; then
        methodName="$(sed 's/.*:://' <<< "${strarr[5]}")"
        fi
        #echo "Method name is $methodName"
-       
+
        if [ $ifStatic == true ]; then
            method="static-method"
        elif [ `echo "$3" | awk '{print $NF}'` == "const" ]; then
            method="const-method"
-       else     
+       else
            method="regular-method"
        fi
-       
+
     else
        #echo "Use mkCtor function"
        method="constructor-method"
     fi
-    
+
 else
      #echo "Use mkCtor function"
      method="constructor-method"
 fi
-
 
 #echo "It's $method"
 
@@ -97,12 +110,11 @@ argList=${afterChar%)*}
 
 #echo "Parameters list is $argList"
 
-
 # https://stackoverflow.com/questions/369758/how-to-trim-whitespace-from-a-bash-variable
 trim() {
     local var="$*"
     # remove leading whitespace characters
-    var="${var#"${var%%[![:space:]]*}"}" 
+    var="${var#"${var%%[![:space:]]*}"}"
     echo -e "$var"
 }
 
@@ -111,12 +123,11 @@ trimBothSides() {
     # remove leading whitespace characters
     var="${var#"${var%%[![:space:]]*}"}"
     # remove trailing whitespace characters
-    var="${var%"${var##*[![:space:]]}"}"   
+    var="${var%"${var##*[![:space:]]}"}"
     echo -n "$var"
 }
 
 IFS=',' read -r -a argArray <<< "$argList"
-
 
 declare -a defaults_indexes
 
@@ -126,7 +137,7 @@ for index in "${!argArray[@]}"
 do
     #echo "$index)"
     #trim "${argArray[index]}"
-    
+
     if [[ "${argArray[index]}" =~ "=" ]]; then
        if [ $index -eq 0 ]; then
          ifFirstDefault=true
@@ -207,7 +218,7 @@ case "$*" in
   if ! grep -q "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (wchar_t)\" in class file" "$OUTPUT_FILE"; then
     echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (wchar_t)\" in class file" >> $OUTPUT_FILE
   fi
-  
+
   echo "wchar_t"
 ;;
 'char')
@@ -257,7 +268,7 @@ case "$*" in
   if ! grep -q "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qreal)\" in class file" "$OUTPUT_FILE"; then
     echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qreal)\" in class file" >> $OUTPUT_FILE
   fi
-  
+
   echo "qreal"
 ;;
 'QFunctionPointer')
@@ -265,7 +276,7 @@ case "$*" in
   if ! grep -q "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qfunctionpointer)\" in class file" "$OUTPUT_FILE"; then
     echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qfunctionpointer)\" in class file" >> $OUTPUT_FILE
   fi
-  
+
   echo "qfunctionpointer"
 ;;
 'QtMessageHandler')
@@ -297,7 +308,7 @@ case "$*" in
   if ! grep -q "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qint32)\" in class file" "$OUTPUT_FILE"; then
     echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qint32)\" in class file" >> $OUTPUT_FILE
   fi
-  
+
   echo "qint32"
 ;;
 'qint64')
@@ -380,24 +391,24 @@ case "$*" in
 
   echo "gluint"
 ;;
-*) 
+*)
   if [[ "$*" =~ "::" ]] && [[ ! "$*" =~ "Qt::" ]]; then
-  
+
     enumName="$(sed 's/.*:://' <<< "$*")"
     enumClass="$(sed 's/::.*//' <<< "$*")"
-    
+
   if ! grep -q "attach import enum e_$enumName from module file $enumClass.hs" "$OUTPUT_FILE"; then
     echo "attach import enum e_$enumName from module file $enumClass.hs" >> $OUTPUT_FILE
     echo "It may be typedef too" >> $OUTPUT_FILE
     echo "In the case of import error, try \"bitspaceT bs_$enumName\"" >> $OUTPUT_FILE
   fi
-    
+
     echo "enumT e_$enumName"
-  
+
   elif [[ "$*" =~ "Qt::" ]] || [[ "$*" =~ "QtMsgType" ]]; then
-  
+
     enumName="$(sed 's/.*:://' <<< "$*")"
-    
+
   if ! grep -q "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (e_$enumName)\" in class file" "$OUTPUT_FILE"; then
      echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (e_$enumName)\" in class file" >> $OUTPUT_FILE
      echo "In the case of import error, try \"bitspaceT bs_$enumName\"" >> $OUTPUT_FILE
@@ -409,11 +420,11 @@ case "$*" in
     if [[ "$*" == "..." ]]; then
        echo ""
     else
-    
+
     if ! grep -q "Don't forget to import class for $* (only if it's not current class type) or hide code with \"--\" comment characters" "$OUTPUT_FILE"; then
        echo "Don't forget to import class for $* (only if it's not current class type) or hide code with \"--\" comment characters" >> $OUTPUT_FILE
     fi
-       
+
        echo "objT c_$*" # return then objT
 
     fi
@@ -422,7 +433,6 @@ case "$*" in
 esac
 
 }
-
 
 return_type_for_haskell_2 () {
 
@@ -489,7 +499,7 @@ case "$*" in
   if ! grep -q "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (wchar_t)\" in class file" "$OUTPUT_FILE"; then
     echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (wchar_t)\" in class file" >> $OUTPUT_FILE
   fi
-  
+
   echo "wchar_t"
 ;;
 'char')
@@ -539,7 +549,7 @@ case "$*" in
   if ! grep -q "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qreal)\" in class file" "$OUTPUT_FILE"; then
     echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qreal)\" in class file" >> $OUTPUT_FILE
   fi
-  
+
   echo "qreal"
 ;;
 'QFunctionPointer')
@@ -547,7 +557,7 @@ case "$*" in
   if ! grep -q "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qfunctionpointer)\" in class file" "$OUTPUT_FILE"; then
     echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qfunctionpointer)\" in class file" >> $OUTPUT_FILE
   fi
-  
+
   echo "qfunctionpointer"
 ;;
 'QtMessageHandler')
@@ -579,7 +589,7 @@ case "$*" in
   if ! grep -q "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qint32)\" in class file" "$OUTPUT_FILE"; then
     echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (qint32)\" in class file" >> $OUTPUT_FILE
   fi
-  
+
   echo "qint32"
 ;;
 'qint64')
@@ -662,7 +672,7 @@ case "$*" in
 
   echo "gluint"
 ;;
-*) 
+*)
 
   #if [ $(grep -o "::" <<<"$*" | wc -l) -gt 1 ]; then
   #  enumName="$(sed 's/.*:://' <<< "$*")"
@@ -670,40 +680,40 @@ case "$*" in
   #  echo "In the case of import error, try \"bitspaceT bs_$enumName\"" >> $OUTPUT_FILE
   #  echo "enumT e_$enumName"
   if [[ "$*" =~ "::" ]] && [[ ! "$*" =~ "Qt::" ]]; then
-  
+
     enumName="$(sed 's/.*:://' <<< "$*")"
     enumClass="$(sed 's/::.*//' <<< "$*")"
-    
+
     if ! grep -q "attach import enum e_$enumName from module file $enumClass.hs" "$OUTPUT_FILE"; then
       echo "attach import enum e_$enumName from module file $enumClass.hs" >> $OUTPUT_FILE
       echo "It may be typedef too" >> $OUTPUT_FILE
       echo "In the case of import error, try \"bitspaceT bs_$enumName\"" >> $OUTPUT_FILE
     fi
-    
+
     echo "enumT e_$enumName"
-    
+
   elif [[ "$*" =~ "Qt::" ]] || [[ "$*" =~ "QtMsgType" ]]; then
-  
+
     enumName="$(sed 's/.*:://' <<< "$*")"
-    
+
     if ! grep -q "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (e_$enumName)\" in class file" "$OUTPUT_FILE"; then
        echo "attach \"import Graphics.UI.Qtah.Generator.Interface.Core.Types (e_$enumName)\" in class file" >> $OUTPUT_FILE
        echo "In the case of import error, try \"bitspaceT bs_$enumName\"" >> $OUTPUT_FILE
     fi
-    
+
     echo "enumT e_$enumName"
-    
+
   else
     if [[ "$*" == "..." ]]; then
        echo ""
     else
-    
+
        if ! grep -q "Don't forget to import class for $* (only if it's not current class type) or hide code with \"--\" comment characters" "$OUTPUT_FILE"; then
           echo "Don't forget to import class for $* (only if it's not current class type) or hide code with \"--\" comment characters" >> $OUTPUT_FILE
        fi
-       
+
        echo "objT c_$*" # return then objT
-       
+
     fi
   fi
 ;;
@@ -711,8 +721,6 @@ case "$*" in
 esac
 
 }
-
-
 
 convert_arg_to_haskell () {
 
@@ -725,32 +733,30 @@ ampersand='\&'
 #echo "$argFromC"
 
 if [[ $argFromC =~ '=' ]]; then
-#   echo "There is \"=\" character" 
+#   echo "There is \"=\" character"
    argFromC=$(echo "$argFromC" | cut -f1 -d'=')
 fi
 
 if [[ $argFromC =~ $ampersand ]]; then
-#   echo "There is \"&\" character" 
+#   echo "There is \"&\" character"
    argFromC=$(echo "$argFromC" | cut -f1 -d'&')
    result+="refT $ "
 elif egrep -q "\*" <<< "$argFromC"; then
-   #echo "There is \"*\" character" 
+   #echo "There is \"*\" character"
    argFromC=$(echo "$argFromC" | cut -f1 -d'\') # because asterisks have to be backlashed
    result+="ptrT $ "
 fi
 
 if [[ "$argFromC" =~ "const" ]]; then
-#   echo "There is \"const\" word" 
+#   echo "There is \"const\" word"
    argFromC=${argFromC/const/}
    result+="constT $ "
 fi
-
 
 argFromC="$(trimBothSides $argFromC)"
 #echo -n "Trimmed argument is | $argFromC |"
 IFS=' '
 read -a strarrr <<< "$argFromC"
-    
 
 if [ ${#strarrr[*]} -eq 1 ]; then # in other cases
   result+="$(return_type_for_haskell $argFromC $MESSAGES)"
@@ -766,7 +772,6 @@ echo "$result"
 
 }
 
-
 convert_arg_to_haskell_2 () {
 
 local argFromC="$*"
@@ -776,32 +781,29 @@ local result=""
 ampersand='\&'
 #echo "$argFromC"
 
-
 if [[ $argFromC =~ $ampersand ]]; then
-#   echo "There is \"&\" character" 
+#   echo "There is \"&\" character"
    argFromC=$(echo "$argFromC" | cut -f1 -d'&')
    result+="refT $ "
 elif egrep -q "\*" <<< "$argFromC"; then
-   #echo "There is \"*\" character" 
+   #echo "There is \"*\" character"
    argFromC=$(echo "$argFromC" | cut -f1 -d'\') # because asterisks have to be backlashed
    result+="ptrT $ "
 fi
 
 if [[ "$argFromC" =~ "const" ]]; then
-#   echo "There is \"const\" word" 
+#   echo "There is \"const\" word"
    argFromC=${argFromC/const/}
    result+="constT $ "
 fi
 
 argFromC=$(echo $argFromC | sed 's/\S*::\S*$//g')
 
-
 argFromC="$(trimBothSides $argFromC)"
 #echo "Trimmed argument is | $argFromC |"
 IFS=' '
 read -a strarrr <<< "$argFromC"
-    
-    
+
 if [ ${#strarrr[*]} -eq 1 ]; then # in other cases
   result+="$(return_type_for_haskell_2 $argFromC $MESSAGES)"
 elif [ ${#strarrr[*]} -eq 2 ]; then # in the case of enum
@@ -815,11 +817,8 @@ echo "$result"
 
 }
 
-
-#echo "amount of defaults parameters: $defaultsCount" 
-#if [[ $ifFirstDefault == true ]]; then echo "first parameter is the default one"; fi 
-
-
+#echo "amount of defaults parameters: $defaultsCount"
+#if [[ $ifFirstDefault == true ]]; then echo "first parameter is the default one"; fi
 
 # list of default parameters indexes
 create_def_args () {
@@ -833,7 +832,7 @@ do
 if [ $index -eq 0 -a "${defaults_indexes[$index]}" -eq "0" ]; then
 
    if [ ! -z "$minVersion" ]; then
-   
+
      if [ $ifProp == true ]; then
         echo "test (qtVersion >= [$majorVersion, $minorVersion$thirdPartVersion]) $ $mkMethodType \"new\" []"
         echo "test (qtVersion >= [$majorVersion, $minorVersion$thirdPartVersion]) $ $mkMethodType \"newWithArg1\" [`echo $(convert_arg_to_haskell ${argArray[0]})`]"
@@ -841,9 +840,9 @@ if [ $index -eq 0 -a "${defaults_indexes[$index]}" -eq "0" ]; then
         echo "test (qtVersion >= [$majorVersion, $minorVersion$thirdPartVersion]) $ $mkMethodType' \"$methodName\" \"$methodName\" [] $ `echo $(convert_arg_to_haskell_2 $contentMain)`"
         echo "test (qtVersion >= [$majorVersion, $minorVersion$thirdPartVersion]) $ $mkMethodType' \"$methodName\" \"${methodName}WithArg1\" [`echo $(convert_arg_to_haskell ${argArray[0]})`] $ `echo $(convert_arg_to_haskell_2 $contentMain)`"
      fi
-     
+
    else
-   
+
      if [ $ifProp == true ]; then
         echo "just $ $mkMethodType \"new\" []"
         echo "just $ $mkMethodType \"newWithArg1\" [`echo $(convert_arg_to_haskell ${argArray[0]})`]"
@@ -851,17 +850,17 @@ if [ $index -eq 0 -a "${defaults_indexes[$index]}" -eq "0" ]; then
         echo "just $ $mkMethodType' \"$methodName\" \"$methodName\" [] $ `echo $(convert_arg_to_haskell_2 $contentMain)`"
         echo "just $ $mkMethodType' \"$methodName\" \"${methodName}WithArg1\" [`echo $(convert_arg_to_haskell ${argArray[0]})`] $ `echo $(convert_arg_to_haskell_2 $contentMain)`"
      fi
-     
+
    fi
 
 else
-    
+
     if [ ! -z "$minVersion" ]; then
        if [ $index -eq 0 ]; then ## add version without defaults and with first default with min version
-    
+
          res1=""
          res2=""
-         
+
          if [ $ifProp == true ]; then
              res1="test (qtVersion >= [$majorVersion, $minorVersion$thirdPartVersion]) $ $mkMethodType \"new\" ["
              res2="test (qtVersion >= [$majorVersion, $minorVersion$thirdPartVersion]) $ $mkMethodType \"newWithArg1\" ["
@@ -869,21 +868,21 @@ else
              res1="test (qtVersion >= [$majorVersion, $minorVersion$thirdPartVersion]) $ $mkMethodType' \"$methodName\" \"$methodName\" ["
              res2="test (qtVersion >= [$majorVersion, $minorVersion$thirdPartVersion]) $ $mkMethodType' \"$methodName\" \"${methodName}WithArg1\" ["
          fi
-         
+
          i=0
-         
+
          while [ "$((defaults_indexes[0]))" -gt $i ] # first index of defaults has to be greater than indexes of non defaults parameters
          do
              res1+="`echo $(convert_arg_to_haskell ${argArray[$i]})`, "
              res2+="`echo $(convert_arg_to_haskell ${argArray[$i]})`, "
              i=$(( $i + 1 ))
-            
+
             if [ "$((defaults_indexes[0]))" -eq $i ]; then
                res2+="`echo $(convert_arg_to_haskell ${argArray[$i]})`"
                res1="`echo $res1 | sed 's/\(.*\),$/\1 /'`"
             fi
          done
-         
+
          if [ $ifProp == true ]; then
             res1+="]"
             res2+="]"
@@ -891,72 +890,72 @@ else
             res1+="] $ `echo $(convert_arg_to_haskell_2 $contentMain)`"
             res2+="] $ `echo $(convert_arg_to_haskell_2 $contentMain)`"
          fi
-         
+
          echo "$res1"
          echo "$res2"
-         
+
        else
-       
+
          if [ $ifProp == true ]; then
            res2="test (qtVersion >= [$majorVersion, $minorVersion$thirdPartVersion]) $ $mkMethodType \"newWithArg$((index + 1))\" ["
          elif [ $ifProp == false ]; then
            res2="test (qtVersion >= [$majorVersion, $minorVersion$thirdPartVersion]) $ $mkMethodType' \"$methodName\" \"${methodName}WithArg$((index + 1))\" ["
          fi
-         
+
          i=0
-         
+
          while [ "$((defaults_indexes[$index]))" -gt $i ] # first index of defaults has to be greater than indexes of non defaults parameters
          do
             res2+="`echo $(convert_arg_to_haskell ${argArray[$i]})`, "
             i=$(( $i + 1 ))
-            
+
             if [ "$((defaults_indexes[$index]))" -eq $i ]; then
                res2+="`echo $(convert_arg_to_haskell ${argArray[$i]})`"
             fi
          done
-         
+
          if [ $ifProp == true ]; then
             res2+="]"
          elif [ $ifProp == false ]; then
             res2+="] $ `echo $(convert_arg_to_haskell_2 $contentMain)`"
          fi
-         
+
          echo "$res2"
-    
+
        fi
-    
+
     else
        if [ $index -eq 0 ]; then ## add version without defaults and with first default with min version
-    
+
          res1=""
          res2=""
-    
+
          if [ $ifProp == true ]; then
-         
+
            res1="just $ $mkMethodType \"new\" ["
            res2="just $ $mkMethodType \"newWithArg1\" ["
-         
+
          elif [ $ifProp == false ]; then
-         
+
            res1="just $ $mkMethodType' \"$methodName\" \"$methodName\" ["
            res2="just $ $mkMethodType' \"$methodName\" \"${methodName}WithArg1\" ["
-         
+
          fi
-         
+
          i=0
-         
+
          while [ "$((defaults_indexes[0]))" -gt $i ] # first index of defaults has to be greater than indexes of non defaults parameters
          do
             res1+="`echo $(convert_arg_to_haskell ${argArray[$i]})`, "
             res2+="`echo $(convert_arg_to_haskell ${argArray[$i]})`, "
             i=$(( $i + 1 ))
-            
+
             if [ "$((defaults_indexes[0]))" -eq $i ]; then
                res2+="`echo $(convert_arg_to_haskell ${argArray[$i]})`"
                res1=$(echo $res1 | sed 's/\(.*\),$/\1 /')
             fi
          done
-         
+
          if [ $ifProp == true ]; then
             res1+="]"
             res2+="]"
@@ -964,47 +963,45 @@ else
             res1+="] $ `echo $(convert_arg_to_haskell_2 $contentMain)`"
             res2+="] $ `echo $(convert_arg_to_haskell_2 $contentMain)`"
          fi
-         
+
          echo "$res1"
          echo "$res2"
-         
+
        else
-       
+
          if [ $ifProp == true ]; then
             res2="just $ $mkMethodType \"newWithArg$((index + 1))\" ["
          elif [ $ifProp == false ]; then
             res2="just $ $mkMethodType' \"$methodName\" \"${methodName}WithArg$((index + 1))\" ["
          fi
-         
+
          i=0
-         
+
          while [ "$((defaults_indexes[$index]))" -gt $i ] # first index of defaults has to be greater than indexes of non defaults parameters
          do
             res2+="`echo $(convert_arg_to_haskell ${argArray[$i]})`, "
             i=$(( $i + 1 ))
-            
+
             if [ "$((defaults_indexes[$index]))" -eq $i ]; then
                res2+="`echo $(convert_arg_to_haskell ${argArray[$i]})`"
             fi
          done
-         
+
          if [ $ifProp == true ]; then
             res2+="]"
          elif [ $ifProp == false ]; then
             res2+="] $ `echo $(convert_arg_to_haskell_2 $contentMain)`"
          fi
-    
+
          echo "$res2"
-    
-       fi  
+
+       fi
     fi
 fi
 
 done
 
 }
-
-
 
 create_args () {
 
@@ -1026,68 +1023,66 @@ echo "$res"
 
 }
 
-
-
 case "$method" in
 
-'static-method') 
+'static-method')
 
-    if [ $defaultsCount -gt 0 ]; then    
+    if [ $defaultsCount -gt 0 ]; then
         echo "$(create_def_args "mkStaticMethod" false)"
     else
-    
+
       if [ ! -z "$minVersion" ]; then
          echo "test (qtVersion >= [$majorVersion, $minorVersion$thirdPartVersion]) $ mkStaticMethod \"$methodName\" [$(create_args)] $ `echo $(convert_arg_to_haskell_2 $contentMain)`"
       else
          echo "just $ mkStaticMethod \"$methodName\" [$(create_args)] $ `echo $(convert_arg_to_haskell_2 $contentMain)`"
       fi
-      
+
     fi
     ;;
-'regular-method')  
+'regular-method')
 
     if [ $defaultsCount -gt 0 ]; then
        echo "$(create_def_args "mkMethod" false)"
     else
-    
+
       if [ ! -z "$minVersion" ]; then
          echo "test (qtVersion >= [$majorVersion, $minorVersion$thirdPartVersion]) $ mkMethod \"$methodName\" [$(create_args)] $ `echo $(convert_arg_to_haskell_2 $contentMain)`"
       else
          echo "just $ mkMethod \"$methodName\" [$(create_args)] $ `echo $(convert_arg_to_haskell_2 $contentMain)`"
-      fi    
-      
+      fi
+
     fi
     ;;
-'const-method')  
+'const-method')
 
     if [ $defaultsCount -gt 0 ]; then
       echo "$(create_def_args "mkConstMethod" false)"
     else
-    
+
       if [ ! -z "$minVersion" ]; then
          echo "test (qtVersion >= [$majorVersion, $minorVersion$thirdPartVersion]) $ mkConstMethod \"$methodName\" [$(create_args)] $ `echo $(convert_arg_to_haskell_2 $contentMain)`"
       else
          echo "just $ mkConstMethod \"$methodName\" [$(create_args)] $ `echo $(convert_arg_to_haskell_2 $contentMain)`"
-      fi    
-      
+      fi
+
     fi
     ;;
-'constructor-method') 
+'constructor-method')
 
     if [ $defaultsCount -gt 0 ]; then
-       echo "$(create_def_args "mkCtor" true)"   
+       echo "$(create_def_args "mkCtor" true)"
     else
       if [ ! -z "$minVersion" ]; then
          echo "test (qtVersion >= [$majorVersion, $minorVersion$thirdPartVersion]) $ mkCtor \"new\" [$(create_args)]"
       else
          echo "just $ mkCtor \"new\" [$(create_args)]"
-      fi    
+      fi
     fi
    ;;
-*) 
+*)
   echo "The method type is unknown"
    ;;
-   
+
 esac
 
 echo ""

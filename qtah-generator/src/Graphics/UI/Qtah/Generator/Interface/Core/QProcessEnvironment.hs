@@ -53,7 +53,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModuleWithMinVersion ["Core", "QProcessEnvironment"] [4, 6]
-  [QtExport $ ExportClass c_QProcessEnvironment] 
+  [QtExport $ ExportClass c_QProcessEnvironment]
 
 c_QProcessEnvironment =
   addReqIncludes [includeStd "QProcessEnvironment"] $
@@ -67,12 +67,12 @@ c_QProcessEnvironment =
   , just $ mkConstMethod "contains" [refT $ constT $ objT c_QString] boolT
   , just $ mkMethod' "insert" "insertWithName" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString] voidT
   , test (qtVersion >= [4, 8]) $ mkMethod' "insert" "insert" [refT $ constT $ objT c_QProcessEnvironment] voidT
-  , just $ mkConstMethod "isEmpty" [] boolT 
+  , just $ mkConstMethod "isEmpty" [] boolT
   , test (qtVersion >= [4, 8]) $ mkConstMethod "keys" [] $ objT c_QStringList
   , just $ mkMethod "remove" [refT $ constT $ objT c_QString] voidT
   , test (qtVersion >= [5, 0]) $ mkMethod "swap" [refT $ objT c_QProcessEnvironment] voidT
-  , just $ mkConstMethod "toStringList" [] $ objT c_QStringList 
-  , just $ mkConstMethod' "value" "value" [refT $ constT $ objT c_QString] $ objT c_QString 
-  , just $ mkConstMethod' "value" "valueWithDefault" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString] $ objT c_QString 
+  , just $ mkConstMethod "toStringList" [] $ objT c_QStringList
+  , just $ mkConstMethod' "value" "value" [refT $ constT $ objT c_QString] $ objT c_QString
+  , just $ mkConstMethod' "value" "valueWithDefault" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString] $ objT c_QString
   , test (qtVersion >= [4, 6]) $ mkStaticMethod "systemEnvironment" [] $ objT c_QProcessEnvironment
   ]

@@ -42,23 +42,19 @@ import Graphics.UI.Qtah.Generator.Types
 
 {-# ANN module "HLint: ignore Use camelCase" #-}
 
-
 aModule =
   AQtModule $
   makeQtModule ["Core", "Connection"]
-  [ QtExport $ ExportClass c_Connection ]  
-
+  [ QtExport $ ExportClass c_Connection ]
 
 c_Connection =
   addReqIncludes [ includeStd "QMetaObject"
                  , includeLocal "wrap_qmetaobject.hpp"
                  ] $
-  classSetConversionToGc $               
+  classSetConversionToGc $
   classSetEntityPrefix "" $
   classAddFeatures [Assignable, Copyable] $
   makeClass (ident1 "QMetaObject" "Connection") Nothing [] $
   [
     mkCtor "new" []
   ]
-  
-

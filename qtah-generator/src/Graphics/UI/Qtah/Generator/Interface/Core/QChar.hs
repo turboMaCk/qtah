@@ -24,7 +24,6 @@ import Foreign.Hoppy.Generator.Language.Haskell (
   addImports,
   sayLn,
   )
-
 import Foreign.Hoppy.Generator.Spec (
     ClassHaskellConversion (
       ClassHaskellConversion,
@@ -53,7 +52,6 @@ import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Assignable, Copyable, Comparable, Equatable),
   classAddFeatures,
   )
-
 import Foreign.Hoppy.Generator.Types (boolT, charT, intT, enumT, objT, refT, ucharT, ushortT, uintT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
 import Graphics.UI.Qtah.Generator.Flags (qtVersion)

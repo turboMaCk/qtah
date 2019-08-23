@@ -81,7 +81,6 @@ c_QMetaMethod =
   -- TODO invoke methods
   ]
 
-  
 e_Access =
   makeQtEnum (ident1 "QMetaMethod" "Access") [includeStd "QMetaMethod"]
   [ (0, ["private"])

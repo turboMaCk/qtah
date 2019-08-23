@@ -128,7 +128,6 @@ forEachListener() {
     $fn WindowModality "Qt::WindowModality"
     $fn WindowState "Qt::WindowState"
     $fn "" ""
-
 }
 
 #### Generate C++ listener classes.
@@ -256,21 +255,21 @@ if [[ -n $cppDir ]]; then
         sayCpp "    setParent(source);"
         sayCpp "    disconnected_ = false;"
         sayCpp "    return connect(source, signal.c_str(), this, SLOT(invoke(${paramTypeList})));"
-        sayCpp      
+        sayCpp
         sayCpp "}"
-        sayCpp 
-        sayCpp 
+        sayCpp
+        sayCpp
         sayCpp "${className}* ${className}::getInstance() {"
         sayCpp "    return m_instance;"
         sayCpp "}"
-        sayCpp 
+        sayCpp
         sayCpp "bool ${className}::disconnectListener(QObject* emitter, const std::string& signal) {"
         sayCpp "    if (!disconnected_) {"
         sayCpp "        bool disconnected_ = disconnect(emitter, signal.c_str(), 0, 0);"
         sayCpp "        disconnected_ = true;"
         sayCpp "        return disconnected_;"
         sayCpp "    }"
-        sayCpp "    disconnected_ = false;"    
+        sayCpp "    disconnected_ = false;"
         sayCpp "    return disconnected_;"
         sayCpp "}"
         sayCpp

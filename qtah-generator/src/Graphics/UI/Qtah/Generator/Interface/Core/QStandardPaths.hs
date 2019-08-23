@@ -1,3 +1,20 @@
+-- This file is part of Qtah.
+--
+-- Copyright 2015-2019 The Qtah Authors.
+--
+-- This program is free software: you can redistribute it and/or modify
+-- it under the terms of the GNU Lesser General Public License as published by
+-- the Free Software Foundation, either version 3 of the License, or
+-- (at your option) any later version.
+--
+-- This program is distributed in the hope that it will be useful,
+-- but WITHOUT ANY WARRANTY; without even the implied warranty of
+-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-- GNU Lesser General Public License for more details.
+--
+-- You should have received a copy of the GNU Lesser General Public License
+-- along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 module Graphics.UI.Qtah.Generator.Interface.Core.QStandardPaths (
   aModule,
   c_QStandardPaths,
@@ -5,7 +22,6 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QStandardPaths (
   e_LocateOption,
   bs_LocateOptions,
   ) where
-
 
 import Foreign.Hoppy.Generator.Spec (
   Export (ExportClass, ExportBitspace, ExportEnum),
@@ -27,7 +43,6 @@ import Foreign.Hoppy.Generator.Spec (
   mkMethod',
   mkMethod
   )
-  
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Graphics.UI.Qtah.Generator.Interface.Core.QStringList (c_QStringList)
 import Foreign.Hoppy.Generator.Types (boolT, voidT, enumT, bitspaceT, constT, objT, ptrT, refT)
@@ -37,8 +52,6 @@ import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModuleWithM
 import Graphics.UI.Qtah.Generator.Types
 
 {-# ANN module "HLint: ignore Use camelCase" #-}
-
-
 
 aModule =
   AQtModule $
@@ -50,11 +63,10 @@ aModule =
   , just $ QtExport $ ExportBitspace bs_LocateOptions
   ]
 
-
 c_QStandardPaths =
   addReqIncludes [ includeStd "QStandardPaths" ] $
   classSetEntityPrefix "" $
-  classSetDtorPrivate $ 
+  classSetDtorPrivate $
   makeClass (ident "QStandardPaths") Nothing [] $
   collect
   [just $ mkStaticMethod "displayName" [enumT e_StandardLocation] $ objT c_QString
@@ -68,8 +80,7 @@ c_QStandardPaths =
   , just $ mkStaticMethod "standardLocations" [enumT e_StandardLocation] $ objT c_QStringList
   , just $ mkStaticMethod "writableLocation" [enumT e_StandardLocation] $ objT c_QString
   ]
-  
-  
+
 e_StandardLocation =
   makeQtEnum (ident1 "QStandardPaths" "StandardLocation") [includeStd "QStandardPaths"] $
   collect
@@ -93,11 +104,9 @@ e_StandardLocation =
   ,test (qtVersion >= [5, 4]) $ (17, ["app", "data", "location"])
   ,test (qtVersion >= [5, 5]) $ (18, ["app", "config", "location"])
   ]
-  
-  
+
 (e_LocateOption, bs_LocateOptions) =
   makeQtEnumBitspace (ident1 "QStandardPaths" "LocateOption") "LocateOptions" [includeStd "QStandardPaths"]
   [ (0x0, ["locate", "file"])
   , (0x1, ["locate", "directory"])
   ]
-  

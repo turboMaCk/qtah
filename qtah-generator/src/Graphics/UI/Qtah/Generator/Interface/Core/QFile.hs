@@ -1,9 +1,25 @@
+-- This file is part of Qtah.
+--
+-- Copyright 2015-2019 The Qtah Authors.
+--
+-- This program is free software: you can redistribute it and/or modify
+-- it under the terms of the GNU Lesser General Public License as published by
+-- the Free Software Foundation, either version 3 of the License, or
+-- (at your option) any later version.
+--
+-- This program is distributed in the hope that it will be useful,
+-- but WITHOUT ANY WARRANTY; without even the implied warranty of
+-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-- GNU Lesser General Public License for more details.
+--
+-- You should have received a copy of the GNU Lesser General Public License
+-- along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 module Graphics.UI.Qtah.Generator.Interface.Core.QFile (
   aModule,
   c_QFile,
   decoderFn,
   ) where
-
 
 import Foreign.Hoppy.Generator.Spec (
   Export (ExportClass),
@@ -25,8 +41,6 @@ import Foreign.Hoppy.Generator.Spec (
   mkMethod',
   mkMethod
   )
-  
-
 import Graphics.UI.Qtah.Generator.Interface.Core.QFileDevice (c_QFileDevice, bs_FileHandleFlags, bs_Permissions)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Graphics.UI.Qtah.Generator.Interface.Core.QByteArray (c_QByteArray)
@@ -39,16 +53,12 @@ import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (qint64)
 
-
 {-# ANN module "HLint: ignore Use camelCase" #-}
-
-
 
 aModule =
   AQtModule $
   makeQtModule ["Core", "QFile"] $
   [QtExport $ ExportClass c_QFile]
-  
 
 c_QFile =
   addReqIncludes [ includeStd "QFile" ] $
@@ -88,7 +98,6 @@ c_QFile =
   , test (qtVersion >= [4, 2]) $ mkStaticMethod' "symLinkTarget" "symLinkTargetWithFilename" [refT $ constT $ objT c_QString] $ objT c_QString
   , test (qtVersion >= [4, 2]) $ mkConstMethod' "symLinkTarget" "symLinkTarget" [] $ objT c_QString
   ]
-  
-  
+
 decoderFn :: Type
 decoderFn = ptrT $ fnT [refT $ constT $ objT c_QByteArray] $ objT c_QString

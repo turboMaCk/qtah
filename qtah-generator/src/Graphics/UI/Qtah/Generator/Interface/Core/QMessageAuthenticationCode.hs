@@ -1,9 +1,24 @@
+-- This file is part of Qtah.
+--
+-- Copyright 2015-2019 The Qtah Authors.
+--
+-- This program is free software: you can redistribute it and/or modify
+-- it under the terms of the GNU Lesser General Public License as published by
+-- the Free Software Foundation, either version 3 of the License, or
+-- (at your option) any later version.
+--
+-- This program is distributed in the hope that it will be useful,
+-- but WITHOUT ANY WARRANTY; without even the implied warranty of
+-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-- GNU Lesser General Public License for more details.
+--
+-- You should have received a copy of the GNU Lesser General Public License
+-- along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 module Graphics.UI.Qtah.Generator.Interface.Core.QMessageAuthenticationCode (
   aModule,
   c_QMessageAuthenticationCode,
   ) where
-
-
 
 import Foreign.Hoppy.Generator.Spec (
   Export (ExportClass),
@@ -24,8 +39,6 @@ import Foreign.Hoppy.Generator.Spec (
   mkMethod',
   mkMethod
   )
-  
-
 import Foreign.Hoppy.Generator.Types (charT, intT, boolT, voidT, enumT, bitspaceT, constT, objT, ptrT, refT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
 import Graphics.UI.Qtah.Generator.Flags (qtVersion)
@@ -37,13 +50,10 @@ import Graphics.UI.Qtah.Generator.Types
 
 {-# ANN module "HLint: ignore Use camelCase" #-}
 
-
-
 aModule =
   AQtModule $
   makeQtModuleWithMinVersion ["Core", "QMessageAuthenticationCode"] [5, 1] $
   [QtExport $ ExportClass c_QMessageAuthenticationCode]
-  
 
 c_QMessageAuthenticationCode =
   addReqIncludes [ includeStd "QMessageAuthenticationCode" ] $
@@ -60,4 +70,3 @@ c_QMessageAuthenticationCode =
   , just $ mkConstMethod' "result" "resetReturnByte" [] $ objT c_QByteArray
   , just $ mkMethod "setKey" [refT $ constT $ objT c_QByteArray] voidT
   ]
-  

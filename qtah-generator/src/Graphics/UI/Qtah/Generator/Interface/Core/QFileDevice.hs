@@ -110,13 +110,12 @@ e_FileError =
     , (14, ["copy", "error"])
     ]
 
-
 (e_FileHandleFlag, bs_FileHandleFlags) =
     makeQtEnumBitspace (ident1 "QFileDevice" "FileHandleFlag") "FileHandleFlags" [includeStd "QFileDevice"]
     [ (0, ["dont", "close", "handle"])
     , (0x0001, ["auto", "close", "handle"])
     ]
-    
+
 e_FileTime =
     makeQtEnum (ident1 "QFileDevice" "FileTime") [includeStd "QFileDevice"]
     [ (0, ["file", "access", "time"])
@@ -131,7 +130,6 @@ e_MemoryMapFlags =
     [ just $ (0, ["no", "options"])
     , test (qtVersion >= [5, 4]) $ (0x0001, ["standard", "error"])
     ]
-
 
 (e_Permission, bs_Permissions) =
     makeQtEnumBitspace (ident1 "QFileDevice" "Permission") "Permissions" [includeStd "QFileDevice"]

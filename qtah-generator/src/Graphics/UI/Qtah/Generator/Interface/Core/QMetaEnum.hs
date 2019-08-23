@@ -63,10 +63,10 @@ c_QMetaEnum =
   , just $ mkConstMethod "isValid" [] boolT
   , just $ mkConstMethod "key" [intT] $ ptrT $ constT charT
   , just $ mkConstMethod "keyCount" [] intT
-  , just $ mkConstMethod' "keyToValue" "keyToValue" [ptrT $ constT charT] intT 
-  , just $ mkConstMethod' "keyToValue" "keyToValueWithBool" [ptrT $ constT charT, ptrT boolT] intT 
-  , just $ mkConstMethod' "keysToValue" "keysToValue" [ptrT $ constT charT] intT 
-  , just $ mkConstMethod' "keysToValue" "keysToValueWithBool" [ptrT $ constT charT, ptrT boolT] intT 
+  , just $ mkConstMethod' "keyToValue" "keyToValue" [ptrT $ constT charT] intT
+  , just $ mkConstMethod' "keyToValue" "keyToValueWithBool" [ptrT $ constT charT, ptrT boolT] intT
+  , just $ mkConstMethod' "keysToValue" "keysToValue" [ptrT $ constT charT] intT
+  , just $ mkConstMethod' "keysToValue" "keysToValueWithBool" [ptrT $ constT charT, ptrT boolT] intT
   , just $ mkConstMethod "name" [] $ ptrT $ constT charT
   , just $ mkConstMethod "scope" [] $ ptrT $ constT charT
   , just $ mkConstMethod "value" [intT] intT

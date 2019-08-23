@@ -80,7 +80,7 @@ aModule =
   collect
   [ just $ QtExport $ ExportClass c_QByteArray
   , test (qtVersion >= [5, 2]) $ QtExport $ ExportEnum e_Base64Option
-  , test (qtVersion >= [5, 2]) $ QtExport $ ExportBitspace bs_Base64Options  
+  , test (qtVersion >= [5, 2]) $ QtExport $ ExportBitspace bs_Base64Options
   ]
 
 c_QByteArray :: Class
@@ -110,13 +110,13 @@ c_QByteArray =
   , test (qtVersion >= [4, 6]) $  mkMethod' "insert" "insertWithIntConstCharLen" [intT, ptrT $ constT charT, intT] $ refT $ objT c_QByteArray
   , just $ mkMethod' "insert" "insertWithIntChar" [intT, charT] $ refT $ objT c_QByteArray
   , just $ mkMethod' "insert" "insertWithIntQString" [intT, objT c_QString] $ refT $ objT c_QByteArray
-  
+
   , just $ mkMethod' "prepend" "prepend" [objT c_QByteArray] $ refT $ objT c_QByteArray
   , test (qtVersion >= [5, 7]) $ mkMethod' "prepend" "prependWithIntChar" [intT, charT] $ refT $ objT c_QByteArray
   , just $ mkMethod' "prepend" "prependWithConstChar" [ptrT $ constT charT] $ refT $ objT c_QByteArray
   , test (qtVersion >= [4, 6]) $ mkMethod' "prepend" "prependWithConstCharInt" [ptrT $ constT charT, intT] $ refT $ objT c_QByteArray
   , just $ mkMethod' "prepend" "prependWithChar" [charT] $ refT $ objT c_QByteArray
-  
+
   , just $ mkMethod' "replace" "replace" [intT, intT, objT c_QByteArray] $ refT $ objT c_QByteArray
   , test (qtVersion >= [4, 7]) $ mkMethod' "replace" "replaceWithPosLenConstCharInt" [intT, intT, ptrT $ constT charT, intT] $ refT $ objT c_QByteArray
   , just $ mkMethod' "replace" "replaceWithPosLenConstChar" [intT, intT, ptrT $ constT charT] $ refT $ objT c_QByteArray
@@ -131,7 +131,7 @@ c_QByteArray =
   , just $ mkMethod' "replace" "replaceWithQStringConstChar" [objT c_QString, ptrT $ constT charT] $ refT $ objT c_QByteArray
   , just $ mkMethod' "replace" "replaceWithCharQString" [charT, objT c_QString] $ refT $ objT c_QByteArray
   , just $ mkMethod' "replace" "replaceWithQStringQBytearray" [objT c_QString, objT c_QByteArray] $ refT $ objT c_QByteArray
-  
+
   , just $ mkConstMethod' "indexOf" "indexOf" [objT c_QByteArray] intT
   , just $ mkConstMethod' "indexOf" "indexOfFrom" [objT c_QByteArray, intT] intT
   , just $ mkConstMethod' "indexOf" "indexOfConstChar" [ptrT $ constT charT] intT
@@ -171,21 +171,21 @@ c_QByteArray =
 
   , just $ mkConstMethod "at" [intT] charT
   , test (qtVersion >= [5, 10]) $ mkConstMethod "back" [] charT
-  -- TODO QByteRef	back()
-  -- TODO QByteArray::iterator	begin()
-  -- TODO QByteArray::const_iterator	begin() const
+  -- TODO QByteRef back()
+  -- TODO QByteArray::iterator begin()
+  -- TODO QByteArray::const_iterator begin() const
   , just $ mkConstMethod "capacity" [] intT
-  -- QByteArray::const_iterator	cbegin() const
-  -- QByteArray::const_iterator	cend() const
+  -- QByteArray::const_iterator cbegin() const
+  -- QByteArray::const_iterator cend() const
   , just $ mkMethod "chop" [intT] voidT
   , test (qtVersion >= [5, 10]) $ mkConstMethod "chopped" [intT] $ objT c_QByteArray
   , test (qtVersion >= [5, 12]) $ mkConstMethod' "compare" "compare" [ptrT $ constT charT] intT
   , test (qtVersion >= [5, 12]) $ mkConstMethod' "compare" "compareWithCase" [ptrT $ constT charT, enumT e_CaseSensitivity] intT
   , test (qtVersion >= [5, 12]) $ mkConstMethod' "compare" "compareWithQBytearray" [objT c_QByteArray] intT
   , test (qtVersion >= [5, 12]) $ mkConstMethod' "compare" "compareWithQBytearrayCase" [objT c_QByteArray, enumT e_CaseSensitivity] intT
-  -- TODO QByteArray::const_iterator	constBegin() const
+  -- TODO QByteArray::const_iterator constBegin() const
   , just $ mkConstMethod "constData" [] $ ptrT $ constT charT
-  -- TODO QByteArray::const_iterator	constEnd() const
+  -- TODO QByteArray::const_iterator constEnd() const
   , just $ mkConstMethod' "contains" "contains" [objT c_QByteArray] boolT
   , just $ mkConstMethod' "contains" "containsWithConstChar" [ptrT $ constT charT] boolT
   , just $ mkConstMethod' "contains" "containsWithChar" [charT] boolT
@@ -193,20 +193,20 @@ c_QByteArray =
   , just $ mkConstMethod' "count" "countWithConstChar" [ptrT $ constT charT] intT
   , just $ mkConstMethod' "count" "countWithChar" [charT] intT
   , just $ mkConstMethod' "count" "count" [] intT
-  -- TODO QByteArray::const_reverse_iterator	crbegin() const
-  -- TODO QByteArray::const_reverse_iterator	crend() const
+  -- TODO QByteArray::const_reverse_iterator crbegin() const
+  -- TODO QByteArray::const_reverse_iterator crend() const
   , just $ mkMethod "clear" [] voidT
   , just $ mkMethod' "data" "getData" [] $ ptrT charT
   , just $ mkConstMethod' "data" "getDataConst" [] $ ptrT $ constT charT
-  -- TODO QByteArray::iterator	end()
-  -- TODO QByteArray::const_iterator	end() const
+  -- TODO QByteArray::iterator end()
+  -- TODO QByteArray::const_iterator end() const
   , just $ mkConstMethod' "endsWith" "endsWithQBytearray" [objT c_QByteArray] boolT
   , just $ mkConstMethod' "endsWith" "endsWithConstChar" [ptrT $ constT charT] boolT
   , just $ mkConstMethod' "endsWith" "endsWithChar" [charT] boolT
   , just $ mkMethod' "fill" "fill" [charT] $ refT $ objT c_QByteArray
   , just $ mkMethod' "fill" "fillWithSize" [charT, intT] $ refT $ objT c_QByteArray
   , test (qtVersion >= [5, 10]) $ mkConstMethod "front" [] charT
-  -- TODO QByteRef	front()
+  -- TODO QByteRef front()
   , just $ mkConstMethod "isEmpty" [] boolT
   , test (qtVersion >= [5, 12]) $ mkConstMethod "isLower" [] boolT
   , just $ mkConstMethod "isNull" [] boolT
@@ -248,7 +248,6 @@ addAddendum = addAddendumHaskell $ do
     sayLn "d <- getDataConst ba"
     sayLn "len <- size ba"
     sayLn "QtahDBS.packCStringLen (d, len)"
-
 
 (e_Base64Option, bs_Base64Options) =
   makeQtEnumBitspace (ident1 "QByteArray" "Base64Option") "Base64Options" [includeStd "QByteArray"]

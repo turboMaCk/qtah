@@ -30,14 +30,14 @@ import Foreign.Hoppy.Generator.Spec (Class, CppEnum)
 
 c_QProcess :: Class
 
-e_ExitStatus :: CppEnum 
+e_ExitStatus :: CppEnum
 
-e_InputChannelMode :: CppEnum 
+e_InputChannelMode :: CppEnum
 
-e_ProcessChannel :: CppEnum 
+e_ProcessChannel :: CppEnum
 
-e_ProcessChannelMode :: CppEnum 
+e_ProcessChannelMode :: CppEnum
 
-e_ProcessError :: CppEnum 
+e_ProcessError :: CppEnum
 
-e_ProcessState :: CppEnum 
+e_ProcessState :: CppEnum

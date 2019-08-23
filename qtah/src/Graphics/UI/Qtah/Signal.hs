@@ -34,12 +34,10 @@ module Graphics.UI.Qtah.Signal (
   disconnect_,
   disconnectWithConn_,
   ) where
-
 import Control.Monad (unless)
 import Graphics.UI.Qtah.Core.Connection (Connection)
-import Graphics.UI.Qtah.Generated.Core.QObject (QObject) 
+import Graphics.UI.Qtah.Generated.Core.QObject (QObject)
 import {-# SOURCE #-} qualified Graphics.UI.Qtah.Object as Object
-
 
 nullptr :: Bool -> IO ()
 nullptr = \_ -> return ()
@@ -47,7 +45,6 @@ nullptr = \_ -> return ()
 -- | Universal disconnection taking argument with QMetaObject::Connection type, which is always a result of all connections
 disconnectWithConn_ :: Connection -> IO Bool
 disconnectWithConn_ = Object.disconnectWithConn_
-
 
 -- | A signal that can be connected to an instance of the @object@ (C++) class,
 -- and when invoked will call a function of the given @handler@ type.
@@ -60,19 +57,17 @@ data Signal object handler = Signal
 instance Show (Signal object handler) where
   show signal = concat ["<Signal ", internalName signal, ">"]
 
-
 -- | Registers a handler function to listen to a signal an object emits, via
--- 'connect'. 
+-- 'connect'.
 connect_ :: object -> Signal object handler -> handler -> IO Connection
 connect_ object signal handler = internalConnectSignal signal object handler
 
-
 -- | Registers a handler function to listen to a signal an object emits, via
--- 'disconnect'. 
+-- 'disconnect'.
 disconnect_ :: object -> Signal object handler -> handler -> IO Bool
 disconnect_ object signal handler = internalDisconnectSignal signal object handler
 
 -- | Registers a handler function to listen to a signal an object emits, via
 -- 'connect'.  If the connection fails, then the program aborts.
 --disconnect_ :: Connection -> Signal object handler -> object -> handler -> IO Bool
---disconnect_ connection signal object handler = internalDisconnectSignal signal connection 
+--disconnect_ connection signal object handler = internalDisconnectSignal signal connection

@@ -112,19 +112,13 @@ makeMainWindow = do
     unless continue $ QEvent.ignore event
     return $ not continue
 
- -- tt1 <- newCString "2textChanged()" >>= QString.newFromCString
- -- tt2 <- newCString "1showMinimized()" >>= QString.newFromCString
-
-
-  textEditConn <- QObject.connectStatic text "textChanged()" window "showMinimized()" 
+  textEditConn <- QObject.connectStatic text "textChanged()" window "showMinimized()"
 
   metabobj <- connect_ menuFileNew triggeredSignal $ \_ -> fileNew me
-  -- disconnect_ metabobj triggeredSignal menuFileNew (\_ -> fileNew me) 
+  -- disconnect_ metabobj triggeredSignal menuFileNew (\_ -> fileNew me)
   disconnectWithConn_ metabobj
-  -- QObject.disconnectStatic text "textChanged()" window "showMinimized()" 
+  -- QObject.disconnectStatic text "textChanged()" window "showMinimized()"
   disconnectWithConn_ textEditConn
-
-  
 
   connect_ menuFileOpen triggeredSignal $ \_ -> fileOpen me
   connect_ menuFileSave triggeredSignal $ \_ -> void $ fileSave me

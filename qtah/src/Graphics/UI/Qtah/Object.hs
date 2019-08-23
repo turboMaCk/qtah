@@ -21,10 +21,9 @@
 module Graphics.UI.Qtah.Object (
   disconnectWithConn_,
   ) where
-
-import qualified Graphics.UI.Qtah.Core.QObject as QObject 
+    
+import qualified Graphics.UI.Qtah.Core.QObject as QObject
 import Graphics.UI.Qtah.Core.Connection (Connection)
-
 
 disconnectWithConn_ :: Connection -> IO Bool
 disconnectWithConn_ = QObject.disconnectWithMetaobject

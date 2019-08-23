@@ -53,7 +53,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModuleWithMinVersion ["Core", "QSaveFile"] [5, 1]
-  [QtExport $ ExportClass c_QSaveFile] 
+  [QtExport $ ExportClass c_QSaveFile]
 
 c_QSaveFile =
   addReqIncludes [includeStd "QSaveFile"] $

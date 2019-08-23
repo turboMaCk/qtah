@@ -79,7 +79,7 @@ aModule =
   makeQtModule ["Gui", "QPixmap"]
   [ QtExport $ ExportClass c_QPixmap
   ]
-    
+
 
 c_QPixmap =
   addReqIncludes [includeStd "QPixmap"] $

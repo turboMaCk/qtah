@@ -66,7 +66,7 @@ aModule =
   makeQtModule ["Gui", "QBitmap"]
   [ QtExport $ ExportClass c_QBitmap
   ]
-  
+
 
 c_QBitmap =
   addReqIncludes [includeStd "QBitmap"] $
@@ -88,4 +88,4 @@ c_QBitmap =
   , just $ mkStaticMethod' "fromImage" "fromImage" [objT c_QImage] $ objT c_QBitmap
   , just $ mkStaticMethod' "fromImage" "fromImageAll" [objT c_QImage, bitspaceT bs_ImageConversionFlags] $ objT c_QBitmap
   ]
- 
+

@@ -57,7 +57,6 @@ aModule =
   makeQtModule ["Gui", "QBackingStore"]
   [ QtExport $ ExportClass c_QBackingStore
   ]
-    
 
 c_QBackingStore =
   addReqIncludes [includeStd "QBackingStore"] $
@@ -80,4 +79,3 @@ c_QBackingStore =
   , just $ mkConstMethod "staticContents" [] $ objT c_QRegion
   , just $ mkConstMethod "window" [] $ ptrT $ objT c_QWindow
   ]
- 

@@ -84,16 +84,16 @@ c_QTreeWidget =
   , just $ mkMethod' "closePersistentEditor" "closePersistentEditor" [ptrT $ objT c_QTreeWidgetItem] voidT
   , just $ mkMethod' "closePersistentEditor" "closePersistentEditorWithColumn" [ptrT $ objT c_QTreeWidgetItem, intT] voidT
   , just $ mkProp "columnCount" intT
-  , test (qtVersion >= [4, 1]) $ mkConstMethod "currentColumn" [] intT 
+  , test (qtVersion >= [4, 1]) $ mkConstMethod "currentColumn" [] intT
   , just $ mkConstMethod "currentItem" [] (ptrT $ objT c_QTreeWidgetItem)
   , just $ mkMethod' "editItem" "editItem" [ptrT $ objT c_QTreeWidgetItem] voidT
   , just $ mkMethod' "editItem" "editItemWithColumn" [ptrT $ objT c_QTreeWidgetItem, intT] voidT
   , just $ mkConstMethod' "findItems" "findItems" [objT c_QString, bitspaceT bs_MatchFlags] $ objT c_QListQTreeWidgetItem
   , just $ mkConstMethod' "findItems" "findItemsWithColumn" [objT c_QString, bitspaceT bs_MatchFlags, intT] $ objT c_QListQTreeWidgetItem
   , just $ mkConstMethod "headerItem" [] (ptrT $ objT c_QTreeWidgetItem)
-  , just $ mkConstMethod "indexOfTopLevelItem" [ptrT $ objT c_QTreeWidgetItem] intT 
-  , just $ mkMethod "insertTopLevelItem" [intT, ptrT $ objT c_QTreeWidgetItem] voidT 
-  , test (qtVersion >= [4, 1]) $ mkMethod "insertTopLevelItems" [intT, refT $ constT $ objT c_QListQTreeWidgetItem] voidT 
+  , just $ mkConstMethod "indexOfTopLevelItem" [ptrT $ objT c_QTreeWidgetItem] intT
+  , just $ mkMethod "insertTopLevelItem" [intT, ptrT $ objT c_QTreeWidgetItem] voidT
+  , test (qtVersion >= [4, 1]) $ mkMethod "insertTopLevelItems" [intT, refT $ constT $ objT c_QListQTreeWidgetItem] voidT
   , test (qtVersion >= [4, 2]) $ mkConstMethod "invisibleRootItem" [] (ptrT $ objT c_QTreeWidgetItem)
   , test (qtVersion >= [5, 10]) $ mkConstMethod' "isPersistentEditorOpen" "isPersistentEditorOpen" [ptrT $ objT c_QTreeWidgetItem] boolT
   , test (qtVersion >= [5, 10]) $ mkConstMethod' "isPersistentEditorOpen" "isPersistentEditorOpenWithColumn" [ptrT $ objT c_QTreeWidgetItem, intT] boolT
@@ -104,7 +104,7 @@ c_QTreeWidget =
   -- TODO QTreeWidgetItem *QTreeWidget::itemFromIndex(const QModelIndex &index) const
   , test (qtVersion >= [4, 1]) $ mkConstMethod "itemWidget" [ptrT $ objT c_QTreeWidgetItem, intT] $ ptrT $ objT c_QWidget
   , just $ mkMethod' "openPersistentEditor" "openPersistentEditor" [ptrT $ objT c_QTreeWidgetItem] voidT
-  , just $ mkMethod' "openPersistentEditor" "openPersistentEditorWithColumn" [ptrT $ objT c_QTreeWidgetItem, intT] voidT  
+  , just $ mkMethod' "openPersistentEditor" "openPersistentEditorWithColumn" [ptrT $ objT c_QTreeWidgetItem, intT] voidT
   , test (qtVersion >= [4, 3]) $ mkMethod "removeItemWidget" [ptrT $ objT c_QTreeWidgetItem, intT] voidT
   , just $ mkConstMethod "selectedItems" [] $ objT c_QListQTreeWidgetItem
   , just $ mkMethod' "setCurrentItem" "setCurrentItem" [ptrT $ objT c_QTreeWidgetItem] voidT

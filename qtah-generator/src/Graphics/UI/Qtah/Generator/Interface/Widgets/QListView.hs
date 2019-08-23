@@ -95,12 +95,12 @@ c_QListView =
   ]
 
 
-signals = 
+signals =
   collect
   [ test (qtVersion >= [4, 2]) $ makeSignal c_QListView "indexesMoved" c_ListenerRefConstQListQModelIndex ]
 
 
-e_Flow = 
+e_Flow =
   makeQtEnum (ident1 "QListView" "Flow") [includeStd "QListView"]
   [ (0, ["left", "to", "right"])
   , (1, ["top", "to", "bottom"])

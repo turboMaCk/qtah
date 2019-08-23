@@ -156,7 +156,7 @@ e_ExitStatus =
     [ (0, ["normal", "exit"])
     , (1, ["crash", "exit"])
     ]
-    
+
 e_InputChannelMode =
     makeQtEnum (ident1 "QProcess" "InputChannelMode") [includeStd "QProcess"]
     [ (0, ["managed", "input", "channel"])
@@ -195,8 +195,7 @@ e_ProcessState =
     , (1, ["starting"])
     , (2, ["running"])
     ]
-
-
+    
 signals =
   collect $
   [ test (qtVersion >= [5, 6]) $ makeSignal c_QProcess "errorOccurred" c_ListenerProcessError
