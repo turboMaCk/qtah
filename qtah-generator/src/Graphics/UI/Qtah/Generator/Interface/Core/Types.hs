@@ -23,7 +23,7 @@ module Graphics.UI.Qtah.Generator.Interface.Core.Types (
   qlonglong,
   gluint,
   qfunctionpointer,
-  --qtmessagehandler,
+  qtmessagehandler,
   qint8,
   qint16,
   qint32,
@@ -83,8 +83,6 @@ module Graphics.UI.Qtah.Generator.Interface.Core.Types (
   e_ImageConversionFlag,
   bs_ImageConversionFlags,
   e_GlobalColor,
-  e_ImageConversionFlag,
-  bs_ImageConversionFlags,
   e_InputMethodHint,
   bs_InputMethodHints,
   e_InputMethodQuery,
@@ -227,8 +225,6 @@ exports =
   , just $ ExportEnum e_ImageConversionFlag
   , just $ ExportBitspace bs_ImageConversionFlags
   , just $ ExportEnum e_GlobalColor
-  , just $ ExportEnum e_ImageConversionFlag
-  , just $ ExportBitspace bs_ImageConversionFlags
   , just $ ExportEnum e_InputMethodHint
   , just $ ExportBitspace bs_InputMethodHints
   , just $ ExportEnum e_InputMethodQuery
@@ -353,12 +349,13 @@ gluint = word32T
 wchar_t :: Type
 wchar_t = if os == "mingw32" then word16T else word32T
 
+e_QtMsgType :: CppEnum
 e_QtMsgType =
   makeQtEnum (ident "QtMsgType") qtInclude
   [ (0, ["qt", "debug", "msg"])
   , (1, ["qt", "warning", "msg"])
   , (2, ["qt", "critical", "msg"])
-  , (2, ["qt", "system", "msg"])
+ -- , (2, ["qt", "system", "msg"])
   , (3, ["qt", "fatal", "msg"])
   , (4, ["qt", "info", "msg"])
   ]
@@ -552,7 +549,6 @@ e_DateFormat =
       defaultLocaleLongDate = 7
       systemLocaleDate = 2
       localeDate = 3
-      localDate = systemLocaleDate
       rFC2822Date = 8
   in [(textDate, ["text", "date"])
      , (iSODate, ["i", "s", "o", "date"])
@@ -563,7 +559,6 @@ e_DateFormat =
      , (defaultLocaleLongDate, ["default", "locale", "long", "date"])
      , (systemLocaleDate, ["system", "locale", "date"])
      , (localeDate, ["locale", "date"])
-     , (localDate, ["local", "date"])
      , (rFC2822Date, ["r", "f", "c2822", "date"])
      ]
 
@@ -701,15 +696,15 @@ e_HitTestAccuracy =
   [ (0x00000000, ["auto", "color"])
   , (0x00000003, ["color", "only"])
   , (0x00000002, ["mono", "only"])
-  , (0x00000000, ["diffuse", "dither"])
+ -- , (0x00000000, ["diffuse", "dither"])
   , (0x00000010, ["ordered", "dither"])
   , (0x00000020, ["threshold", "dither"])
-  , (0x00000000, ["threshold", "alpha", "dither"])
+ -- , (0x00000000, ["threshold", "alpha", "dither"])
   , (0x00000004, ["ordered", "alpha", "dither"])
   , (0x00000008, ["diffuse", "alpha", "dither"])
   , (0x00000040, ["prefer", "dither"])
   , (0x00000080, ["avoid", "dither"])
-  , (0x00000000, ["auto", "dither"])
+ -- , (0x00000000, ["auto", "dither"])
   , (0x00000100, ["no", "opaque", "detection"])
   , (0x00000200, ["no", "format", "conversion"])
   ]
@@ -737,26 +732,6 @@ e_GlobalColor =
   , (0, ["color0"])
   , (1, ["color1"])
   ]
-
---(e_ImageConversionFlag, bs_ImageConversionFlags) =
---  makeQtEnumBitspace (ident1 "Qt" "ImageConversionFlag") "ImageConversionFlags" qtInclude
-  -- TODO Lots of synonyms for 0x0.  Hoppy doesn't support these.
---  [ (0x0, ["auto"])  -- Not real, this is because Hoppy doesn't support duplicate enum values.
-    -- Color/mono preference:
---  , (0x3, ["color", "only"])
---  , (0x2, ["mono", "only"])
-    -- Dithering mode preference for RGB channels:
---  , (0x10, ["ordered", "dither"])
---  , (0x20, ["threshold", "dither"])
-    -- Dithering mode preference for alpha channel:
---  , (0x4, ["ordered", "alpha", "dither"])
---  , (0x8, ["diffuse", "alpha", "dither"])
-    -- Color matching versus dithering preference:
---  , (0x40, ["prefer", "dither"])
---  , (0x80, ["avoid", "dither"])
---  , (0x100, ["no", "opaque", "detection"])
---  , (0x200, ["no", "format", "conversion"])
---  ]
 
 (e_InputMethodHint, bs_InputMethodHints) =
   makeQtEnumBitspace (ident1 "Qt" "InputMethodHint") "InputMethodHints" qtInclude
@@ -788,7 +763,7 @@ e_GlobalColor =
   collect
   [ just (0x1, ["im", "enabled"])
   , just (0x2, ["im", "micro", "focus"])
-  , just (0x2, ["im", "cursor", "rectangle"])
+ -- , just (0x2, ["im", "cursor", "rectangle"])
   , just (0x4, ["im", "font"])
   , just (0x8, ["im", "cursor", "position"])
   , just (0x10, ["im", "surrounding", "text"])
@@ -1087,7 +1062,7 @@ e_Key =
   , (0x01001127, ["key_", "hiragana_", "katakana"])
   , (0x01001128, ["key_", "zenkaku"])
   , (0x01001129, ["key_", "hankaku"])
-  , (0x01001129, ["key_", "zenkaku_", "hankaku"])
+  --, (0x01001129, ["key_", "zenkaku_", "hankaku"])
   , (0x0100112b, ["key_", "touroku"])
   , (0x0100112c, ["key_", "massyo"])
   , (0x0100112d, ["key_", "kana_", "lock"])
@@ -1172,7 +1147,7 @@ e_Key =
   , (0x01000084, ["key_", "media", "record"])
   , (0x1000085, ["key_", "media", "pause"])
   , (0x1000086, ["key_", "media", "toggle", "play", "pause"])
-  , (0x1000086, ["key_", "home", "page"])
+  --, (0x1000086, ["key_", "home", "page"])
   , (0x01000091, ["key_", "favorites"])
   , (0x01000092, ["key_", "search"])
   , (0x01000093, ["key_", "standby"])
@@ -1192,7 +1167,7 @@ e_Key =
   , (0x010000ac, ["key_", "launch", "a"])
   , (0x010000ad, ["key_", "launch", "b"])
   , (0x010000ae, ["key_", "launch", "c"])
-  , (0x010000ae, ["key_", "launch", "d"])
+  --, (0x010000ae, ["key_", "launch", "d"])
   , (0x010000b0, ["key_", "launch", "e"])
   , (0x010000b1, ["key_", "launch", "f"])
   , (0x0100010e, ["key_", "launch", "g"])
@@ -1245,15 +1220,15 @@ e_MaskMode =
       leftButton = 0x00000001
       rightButton = 0x00000002
       midButton = 0x00000004
-      middleButton = midButton
+    --  middleButton = midButton
       backButton = 0x00000008
-      xButton1 = backButton
-      extraButton1 = xButton1
+   --   xButton1 = backButton
+   --   extraButton1 = xButton1
       forwardButton = 0x00000010
-      xButton2 = forwardButton
-      extraButton2 = forwardButton
+   --   xButton2 = forwardButton
+   --   extraButton2 = forwardButton
       taskButton = 0x00000020
-      extraButton3 = taskButton
+   --   extraButton3 = taskButton
       extraButton4 = 0x00000040
       extraButton5 = 0x00000080
       extraButton6 = 0x00000100
@@ -1280,15 +1255,15 @@ e_MaskMode =
      , (leftButton, ["left", "button"])
      , (rightButton, ["right", "button"])
      , (midButton, ["mid", "button"])
-     , (middleButton, ["middle", "button"])
+   --  , (middleButton, ["middle", "button"])
      , (backButton, ["back", "button"])
-     , (xButton1, ["x", "button1"])
-     , (extraButton1, ["extra", "button1"])
+   --  , (xButton1, ["x", "button1"])
+   --  , (extraButton1, ["extra", "button1"])
      , (forwardButton, ["forward", "button"])
-     , (xButton2, ["x", "button2"])
-     , (extraButton2, ["extra", "button2"])
+   --  , (xButton2, ["x", "button2"])
+   --  , (extraButton2, ["extra", "button2"])
      , (taskButton, ["task", "button"])
-     , (extraButton3, ["extra", "button3"])
+   --  , (extraButton3, ["extra", "button3"])
      , (extraButton4, ["extra", "button4"])
      , (extraButton5, ["extra", "button5"])
      , (extraButton6, ["extra", "button6"])

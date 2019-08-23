@@ -75,7 +75,6 @@ import Foreign.Hoppy.Generator.Types (boolT, constT, intT, objT, ptrT, refT, toG
 import Foreign.Hoppy.Generator.Version (collect, just, test)
 import Graphics.UI.Qtah.Generator.Flags (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.QPoint (c_QPoint)
-import Graphics.UI.Qtah.Generator.Interface.Core.QStaticPlugin (c_QStaticPlugin)
 import Graphics.UI.Qtah.Generator.Interface.Core.QPointF (c_QPointF)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QColor (qrgb)
 import Graphics.UI.Qtah.Generator.Interface.Imports

@@ -29,24 +29,16 @@ import Foreign.Hoppy.Generator.Spec (
   classSetEntityPrefix,
   ident,
   ident1,
-  ident2,
-  includeLocal,
   includeStd,
   makeClass,
-  makeFnMethod,
   mkConstMethod,
-  mkConstMethod',
-  mkStaticMethod,
-  mkStaticMethod',
-  mkCtor,
   mkMethod',
   mkMethod
   )
 import Graphics.UI.Qtah.Generator.Interface.Core.QObject (c_QObject)
-import Foreign.Hoppy.Generator.Types (boolT, intT, voidT, enumT, bitspaceT, constT, objT, ptrT, refT)
-import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
-import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Internal.Listener(
+import Foreign.Hoppy.Generator.Types (boolT, intT, voidT, enumT)
+import Foreign.Hoppy.Generator.Version (collect, just)
+import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
   c_ListenerInt,
   c_Listener,
   c_ListenerStateState,

@@ -54,8 +54,8 @@ import Graphics.UI.Qtah.Generator.Interface.Core.QSize (c_QSize)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (bs_ImageConversionFlags)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QImage (c_QImage, e_Format)
+import Graphics.UI.Qtah.Generator.Interface.Gui.QPixmap (c_QPixmap)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QTransform (c_QTransform)
-import  Graphics.UI.Qtah.Generator.Interface.Gui.QPixmap (c_QPixmap)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
 
@@ -66,7 +66,6 @@ aModule =
   makeQtModule ["Gui", "QBitmap"]
   [ QtExport $ ExportClass c_QBitmap
   ]
-
 
 c_QBitmap =
   addReqIncludes [includeStd "QBitmap"] $
@@ -88,4 +87,3 @@ c_QBitmap =
   , just $ mkStaticMethod' "fromImage" "fromImage" [objT c_QImage] $ objT c_QBitmap
   , just $ mkStaticMethod' "fromImage" "fromImageAll" [objT c_QImage, bitspaceT bs_ImageConversionFlags] $ objT c_QBitmap
   ]
-

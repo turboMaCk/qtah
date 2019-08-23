@@ -37,7 +37,7 @@ import Foreign.Hoppy.Generator.Version (collect, just, test)
 import Graphics.UI.Qtah.Generator.Flags (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.QDate (c_QDate)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
-import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Internal.Listener (c_ListenerQDate)
+import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (c_ListenerQDate)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QAbstractSpinBox (
   c_QAbstractSpinBox,
   )

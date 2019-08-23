@@ -34,13 +34,12 @@ import Foreign.Hoppy.Generator.Spec (
   makeFnMethod,
   mkConstMethod,
   mkConstMethod',
-  mkStaticMethod,
   mkStaticMethod',
   mkCtor,
   mkMethod,
   mkProp,
   )
-import Foreign.Hoppy.Generator.Types (fnT, boolT, constT, intT, objT, ptrT, refT, ptrT, voidT, charT, enumT, toGcT)
+import Foreign.Hoppy.Generator.Types (boolT, constT, intT, objT, ptrT, refT, ptrT, voidT, charT, enumT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
 import Graphics.UI.Qtah.Generator.Flags (qtVersion)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Core.QList (
@@ -61,7 +60,7 @@ import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
   )
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
-import Graphics.UI.Qtah.Generator.Interface.Core.Types (e_ConnectionType, bs_FindChildOptions, e_TimerType)
+import Graphics.UI.Qtah.Generator.Interface.Core.Types (e_ConnectionType)
 
 {-# ANN module "HLint: ignore Use camelCase" #-}
 

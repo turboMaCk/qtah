@@ -62,7 +62,7 @@ import Foreign.Hoppy.Generator.Version (collect, just, test)
 import Graphics.UI.Qtah.Generator.Flags (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.QChar (c_QChar)
 import Graphics.UI.Qtah.Generator.Interface.Core.QList (c_QListQString)
-import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
+import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (e_CaseSensitivity)
 import Graphics.UI.Qtah.Generator.Interface.Imports
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)

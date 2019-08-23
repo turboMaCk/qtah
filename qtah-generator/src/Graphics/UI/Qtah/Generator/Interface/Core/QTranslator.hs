@@ -23,7 +23,6 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QTranslator (
 import Foreign.Hoppy.Generator.Spec (
   Export (ExportClass),
   addReqIncludes,
-  classSetConversionToGc,
   classSetEntityPrefix,
   ident,
   includeStd,
@@ -31,7 +30,6 @@ import Foreign.Hoppy.Generator.Spec (
   mkConstMethod,
   mkConstMethod',
   mkCtor,
-  mkMethod,
   mkMethod',
   )
 import Foreign.Hoppy.Generator.Types (
@@ -40,13 +38,10 @@ import Foreign.Hoppy.Generator.Types (
   intT,
   objT,
   ptrT,
-  refT,
   ucharT,
   charT,
-  uintT,
   )
-import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Foreign.Hoppy.Generator.Version (collect, just)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Graphics.UI.Qtah.Generator.Interface.Core.QObject (c_QObject)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)

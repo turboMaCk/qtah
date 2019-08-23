@@ -25,7 +25,6 @@ import Foreign.Hoppy.Generator.Spec (
   addReqIncludes,
   classSetConversionToGc,
   classSetEntityPrefix,
-  ident,
   ident1,
   includeLocal,
   includeStd,
@@ -36,7 +35,6 @@ import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Assignable, Copyable),
   classAddFeatures,
   )
-import Foreign.Hoppy.Generator.Types (boolT)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
 

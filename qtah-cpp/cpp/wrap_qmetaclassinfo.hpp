@@ -24,9 +24,9 @@
 namespace qtah {
 namespace qmetaclassinfo {
 
-const char * name(const QMetaClassInfo& self);
+QString name(const QMetaClassInfo& self);
 
-const char * value(const QMetaClassInfo& self);
+QString value(const QMetaClassInfo& self);
 
 }  // namespace qmetaclassinfo
 }  // namespace qtah

@@ -28,22 +28,13 @@ import Foreign.Hoppy.Generator.Spec (
   classSetEntityPrefix,
   ident,
   ident1,
-  ident2,
-  includeLocal,
   includeStd,
   makeClass,
-  makeFnMethod,
-  mkConstMethod,
-  mkConstMethod',
   mkStaticMethod,
-  mkStaticMethod',
-  mkCtor,
-  mkMethod',
-  mkMethod
   )
 import Data.Bits ((.|.), finiteBitSize)
 import Foreign.Ptr (IntPtr)
-import Foreign.Hoppy.Generator.Types (voidT, enumT, bitspaceT, constT, objT, ptrT, refT)
+import Foreign.Hoppy.Generator.Types (objT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
 import Graphics.UI.Qtah.Generator.Flags (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.QByteArray (c_QByteArray)
@@ -80,16 +71,15 @@ c_QSysInfo =
   , test (qtVersion >= [5, 4]) $ mkStaticMethod "productVersion" [] $ objT c_QString
   ]
 
+e_Sizes =
+    makeQtEnum (ident1 "QSysInfo" "Sizes") [includeStd "QSysInfo"]
+    [(finiteBitSize (undefined :: IntPtr), ["word", "size"])]
+
 e_Endian =
   makeQtEnum (ident1 "QSysInfo" "Endian") [includeStd "QSysInfo"] $
   let bigEndian = 0
       littleEndian = 1
-      byteOrder = bigEndian .|. littleEndian
+  --  byteOrder = bigEndian .|. littleEndian
   in  [ (bigEndian, ["big", "endian"])
-      , (littleEndian, ["little", "endian"])
-      , (byteOrder, ["byte", "order"]) ]
-
-e_Sizes =
-  makeQtEnum (ident1 "QSysInfo" "Sizes") [includeStd "QSysInfo"] $
-  let wordSize = finiteBitSize (undefined :: IntPtr)
-  in  [ (wordSize, ["word", "size"])]
+      , (littleEndian, ["little", "endian"])]
+  --  , (byteOrder, ["byte", "order"]) ]

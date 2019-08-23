@@ -17,6 +17,7 @@
 
 module Graphics.UI.Qtah.Generator.Interface.Widgets.QInputDialog (
   aModule,
+  c_QInputDialog,
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
@@ -40,7 +41,7 @@ import Graphics.UI.Qtah.Generator.Flags (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Graphics.UI.Qtah.Generator.Interface.Core.QStringList (c_QStringList)
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (bs_InputMethodHints, bs_WindowFlags)
-import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
+import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
   c_ListenerDouble,
   c_ListenerInt,
   c_ListenerQString,

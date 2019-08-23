@@ -22,17 +22,12 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QTime (
 
 import Foreign.Hoppy.Generator.Spec (
   Export (ExportClass),
-  Operator (OpShl, OpShr),
   classSetConversionToGc,
   addReqIncludes,
   classSetEntityPrefix,
   ident,
-  ident1,
-  ident2,
-  includeLocal,
   includeStd,
   makeClass,
-  makeFnMethod,
   mkConstMethod,
   mkConstMethod',
   mkStaticMethod,
@@ -45,9 +40,8 @@ import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Comparable, Equatable, Copyable),
   classAddFeatures,
   )
-import Foreign.Hoppy.Generator.Types (boolT, intT, voidT, enumT, bitspaceT, constT, objT, ptrT, refT)
-import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Foreign.Hoppy.Generator.Types (boolT, intT, voidT, enumT, constT, objT, refT)
+import Foreign.Hoppy.Generator.Version (collect, just)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types

@@ -23,10 +23,8 @@ module Graphics.UI.Qtah.Example.Notepad (run) where
 import Control.Monad (forM_, unless, when)
 import Data.Bits ((.|.))
 import Data.Functor (void)
-import Foreign.C.String (newCString)
 import Data.IORef (IORef, newIORef, readIORef, writeIORef)
 import qualified Graphics.UI.Qtah.Core.QCoreApplication as QCoreApplication
-import qualified Graphics.UI.Qtah.Core.QProcessEnvironment as QProcessEnvironment
 import Graphics.UI.Qtah.Event
 import Graphics.UI.Qtah.Gui.QCloseEvent (QCloseEvent)
 import Graphics.UI.Qtah.Signal (nullptr, connect_, disconnect_, disconnectWithConn_)
@@ -34,7 +32,6 @@ import qualified Graphics.UI.Qtah.Core.QEvent as QEvent
 import qualified Graphics.UI.Qtah.Widgets.QAction as QAction
 import Graphics.UI.Qtah.Widgets.QAction (triggeredSignal)
 import qualified Graphics.UI.Qtah.Widgets.QFileDialog as QFileDialog
-import qualified Graphics.UI.Qtah.Core.QString as QString
 import qualified Graphics.UI.Qtah.Widgets.QMainWindow as QMainWindow
 import Graphics.UI.Qtah.Widgets.QMainWindow (QMainWindow)
 import qualified Graphics.UI.Qtah.Widgets.QMenu as QMenu
@@ -116,9 +113,9 @@ makeMainWindow = do
 
   metabobj <- connect_ menuFileNew triggeredSignal $ \_ -> fileNew me
   -- disconnect_ metabobj triggeredSignal menuFileNew (\_ -> fileNew me)
-  disconnectWithConn_ metabobj
+  dconResult <- disconnectWithConn_ metabobj
   -- QObject.disconnectStatic text "textChanged()" window "showMinimized()"
-  disconnectWithConn_ textEditConn
+  dconResult2 <- disconnectWithConn_ textEditConn
 
   connect_ menuFileOpen triggeredSignal $ \_ -> fileOpen me
   connect_ menuFileSave triggeredSignal $ \_ -> void $ fileSave me
@@ -135,7 +132,7 @@ makeMainWindow = do
   connect_ menuEditPaste triggeredSignal $ \_ -> QTextEdit.paste text
   connect_ menuEditSelectAll triggeredSignal $ \_ -> QTextEdit.selectAll text
 
-  disconnect_ menuFileClose triggeredSignal nullptr
+  ifDisconnected <- disconnect_ menuFileClose triggeredSignal nullptr
 
   connect_ text textChangedSignal $ setDirty me True
   connect_ text undoAvailableSignal $ \b -> QAction.setEnabled menuEditUndo b

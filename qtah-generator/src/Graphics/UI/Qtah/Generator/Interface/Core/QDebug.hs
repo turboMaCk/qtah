@@ -49,8 +49,6 @@ import Foreign.Hoppy.Generator.Types (
   objT,
   ptrT,
   refT,
-  toGcT,
-  ucharT,
   uintT,
   shortT,
   ushortT,

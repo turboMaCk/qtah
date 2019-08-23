@@ -22,30 +22,24 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QDateTime (
 
 import Foreign.Hoppy.Generator.Spec (
   Export (ExportClass),
-  Operator (OpShl, OpShr),
   classSetConversionToGc,
   addReqIncludes,
   classSetEntityPrefix,
   ident,
-  ident1,
-  ident2,
-  includeLocal,
   includeStd,
   makeClass,
-  makeFnMethod,
   mkConstMethod,
   mkConstMethod',
   mkStaticMethod,
   mkStaticMethod',
   mkCtor,
-  mkMethod',
   mkMethod
   )
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Assignable, Comparable, Equatable, Copyable),
   classAddFeatures,
   )
-import Foreign.Hoppy.Generator.Types (boolT, intT, voidT, enumT, bitspaceT, constT, objT, ptrT, refT)
+import Foreign.Hoppy.Generator.Types (boolT, intT, voidT, enumT, constT, objT, refT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
 import Graphics.UI.Qtah.Generator.Flags (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.QDate (c_QDate)

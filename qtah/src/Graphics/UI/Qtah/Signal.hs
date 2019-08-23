@@ -34,9 +34,7 @@ module Graphics.UI.Qtah.Signal (
   disconnect_,
   disconnectWithConn_,
   ) where
-import Control.Monad (unless)
 import Graphics.UI.Qtah.Core.Connection (Connection)
-import Graphics.UI.Qtah.Generated.Core.QObject (QObject)
 import {-# SOURCE #-} qualified Graphics.UI.Qtah.Object as Object
 
 nullptr :: Bool -> IO ()

@@ -30,7 +30,6 @@ import Foreign.Hoppy.Generator.Spec (
   makeClass,
   mkConstMethod,
   mkConstMethod',
-  mkMethod,
   )
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Copyable),

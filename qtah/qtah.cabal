@@ -131,7 +131,7 @@ library
     , Graphics.UI.Qtah.Core.QVector.QPointF
     , Graphics.UI.Qtah.Core.QVector.QRgb
     , Graphics.UI.Qtah.Core.QVersionNumber
-    , Graphics.UI.Qtah.Core.Types    
+    , Graphics.UI.Qtah.Core.Types
     , Graphics.UI.Qtah.Event
     , Graphics.UI.Qtah.Gui.HColor
     , Graphics.UI.Qtah.Gui.QActionEvent
@@ -178,7 +178,7 @@ library
     , Graphics.UI.Qtah.Gui.QWheelEvent
     , Graphics.UI.Qtah.Gui.QWindow
     , Graphics.UI.Qtah.Gui.QtahOpenGLWindow
-    , Graphics.UI.Qtah.Gui.QtahRasterWindow    
+    , Graphics.UI.Qtah.Gui.QtahRasterWindow
     , Graphics.UI.Qtah.SceneEvent
     , Graphics.UI.Qtah.Signal
     , Graphics.UI.Qtah.Object
@@ -362,7 +362,7 @@ library
     , Graphics.UI.Qtah.Generated.Core.QVector.QPointF
     , Graphics.UI.Qtah.Generated.Core.QVector.QRgb
     , Graphics.UI.Qtah.Generated.Core.QVersionNumber
-    , Graphics.UI.Qtah.Generated.Core.Types    
+    , Graphics.UI.Qtah.Generated.Core.Types
     , Graphics.UI.Qtah.Generated.Gui.QActionEvent
     , Graphics.UI.Qtah.Generated.Gui.QBackingStore
     , Graphics.UI.Qtah.Generated.Gui.QBitmap
@@ -407,7 +407,7 @@ library
     , Graphics.UI.Qtah.Generated.Gui.QWheelEvent
     , Graphics.UI.Qtah.Generated.Gui.QWindow
     , Graphics.UI.Qtah.Generated.Gui.QtahOpenGLWindow
-    , Graphics.UI.Qtah.Generated.Gui.QtahRasterWindow    
+    , Graphics.UI.Qtah.Generated.Gui.QtahRasterWindow
     , Graphics.UI.Qtah.Generated.Internal.EventListener
     , Graphics.UI.Qtah.Generated.Internal.SceneEventListener
     , Graphics.UI.Qtah.Generated.Widgets.QAbstractButton
@@ -483,7 +483,7 @@ library
     , Graphics.UI.Qtah.Generated.Widgets.QTreeWidget
     , Graphics.UI.Qtah.Generated.Widgets.QTreeWidgetItem
     , Graphics.UI.Qtah.Generated.Widgets.QVBoxLayout
-    , Graphics.UI.Qtah.Generated.Widgets.QWidget    
+    , Graphics.UI.Qtah.Generated.Widgets.QWidget
     , Graphics.UI.Qtah.Internal.Callback
     , Graphics.UI.Qtah.Internal.EventListener
     , Graphics.UI.Qtah.Internal.Listener

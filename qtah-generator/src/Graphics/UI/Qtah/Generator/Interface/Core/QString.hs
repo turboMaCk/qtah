@@ -60,7 +60,7 @@ import Foreign.Hoppy.Generator.Spec.ClassFeature (
   classAddFeatures,
   )
 import Foreign.Hoppy.Generator.Std.String (c_string)
-import Foreign.Hoppy.Generator.Types (toGcT, doubleT, charT, constT, intT, objT, ptrT, refT, voidT, longT, ulongT, uintT, shortT, ushortT, boolT, floatT)
+import Foreign.Hoppy.Generator.Types (doubleT, charT, constT, intT, objT, ptrT, refT, voidT, longT, ulongT, uintT, shortT, ushortT, boolT, floatT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
 import Graphics.UI.Qtah.Generator.Flags (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.QByteArray (c_QByteArray)
@@ -68,7 +68,7 @@ import Graphics.UI.Qtah.Generator.Interface.Core.QChar (c_QChar)
 import Graphics.UI.Qtah.Generator.Interface.Imports
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (qulonglong, qlonglong)
-import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Core.QVector (c_QVectorUInt)
+--import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Core.QVector (c_QVectorUInt)
 import Graphics.UI.Qtah.Generator.Types
 import Language.Haskell.Syntax (
   HsName (HsIdent),

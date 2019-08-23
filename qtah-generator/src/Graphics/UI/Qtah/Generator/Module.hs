@@ -453,5 +453,3 @@ importWholeModuleForExtName :: ExtName -> Generator ()
 importWholeModuleForExtName extName = do
   iface <- askInterface
   addImports . hsWholeModuleImport . getModuleName iface =<< getModuleForExtName extName
-
---  addImports . (if fromExtName extName == "QObject" then hsImportSetMakeSource . hsWholeModuleImport else hsWholeModuleImport) . getModuleName iface =<< getModuleForExtName extName

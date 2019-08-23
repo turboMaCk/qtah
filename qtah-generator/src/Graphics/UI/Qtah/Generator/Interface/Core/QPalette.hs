@@ -25,10 +25,8 @@ import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Assignable, Copyable, Equatable),
   classAddFeatures,
   )
-import Foreign.Hoppy.Generator.Std.String (c_string)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QColor (c_QColor)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QBrush (c_QBrush)
-import Graphics.UI.Qtah.Generator.Interface.Core.QVariant (c_QVariant)
 import Foreign.Hoppy.Generator.Types (int64T, constT, objT, refT, voidT, boolT, enumT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
 import Graphics.UI.Qtah.Generator.Flags (qtVersion)
@@ -40,7 +38,6 @@ import Foreign.Hoppy.Generator.Spec (
   classSetEntityPrefix,
   ident,
   ident1,
-  ident2,
   makeClass,
   mkConstMethod,
   mkConstMethod',
@@ -124,7 +121,7 @@ e_ColorGroup =
   [ (1, ["disabled"])
   , (0, ["active"])
   , (2, ["inactive"])
-  , (0, ["normal"])
+ -- , (0, ["normal"])
   ]
 
 e_ColorRole =

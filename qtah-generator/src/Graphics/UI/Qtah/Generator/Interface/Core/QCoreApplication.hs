@@ -37,7 +37,7 @@ import Foreign.Hoppy.Generator.Spec (
   )
 import Foreign.Hoppy.Generator.Types (boolT, intT, objT, ptrT, voidT, enumT, constT, charT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Interface.Core.Types (qulonglong, qlonglong)
+import Graphics.UI.Qtah.Generator.Interface.Core.Types (qlonglong, e_ApplicationAttribute)
 import Graphics.UI.Qtah.Generator.Flags (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.QEvent (c_QEvent)
 import Graphics.UI.Qtah.Generator.Interface.Core.QObject (c_QObject)
@@ -45,7 +45,6 @@ import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Graphics.UI.Qtah.Generator.Interface.Core.QStringList (c_QStringList)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
-import Graphics.UI.Qtah.Generator.Interface.Core.Types (e_ApplicationAttribute)
 
 {-# ANN module "HLint: ignore Use camelCase" #-}
 

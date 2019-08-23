@@ -31,13 +31,11 @@ import Foreign.Hoppy.Generator.Spec (
   includeStd,
   makeClass,
   mkConstMethod,
-  mkConstMethod',
-  mkCtor,
   mkMethod,
   mkMethod',
   )
 import Data.Bits ((.|.))
-import Foreign.Hoppy.Generator.Types (boolT, bitspaceT, constT, intT, objT, ptrT, refT, ptrT, voidT, charT, enumT)
+import Foreign.Hoppy.Generator.Types (boolT, bitspaceT, constT, intT, objT, ptrT, refT, ptrT, voidT, charT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
 import Graphics.UI.Qtah.Generator.Flags (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)

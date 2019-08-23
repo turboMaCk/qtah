@@ -41,7 +41,7 @@ import Graphics.UI.Qtah.Generator.Interface.Core.QSize (c_QSize)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (e_Corner, e_TextElideMode)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QIcon (c_QIcon)
-import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Internal.Listener (c_ListenerInt)
+import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (c_ListenerInt)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QWidget (c_QWidget)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types

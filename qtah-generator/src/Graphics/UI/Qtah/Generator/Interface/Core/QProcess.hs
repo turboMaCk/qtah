@@ -35,17 +35,15 @@ import Foreign.Hoppy.Generator.Spec (
   includeStd,
   makeClass,
   mkConstMethod,
-  mkConstMethod',
   mkCtor,
   mkMethod,
   mkMethod',
   mkStaticMethod,
   mkStaticMethod',
   )
-import Foreign.Hoppy.Generator.Types (bitspaceT, boolT, intT, longT, objT, refT, voidT, enumT, charT, constT, ptrT)
+import Foreign.Hoppy.Generator.Types (bitspaceT, boolT, intT, objT, refT, voidT, enumT, constT, ptrT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
 import Graphics.UI.Qtah.Generator.Flags (qtVersion)
-import Graphics.UI.Qtah.Generator.Interface.Core.QChar (c_QChar)
 import Graphics.UI.Qtah.Generator.Interface.Core.QIODevice (c_QIODevice, bs_OpenMode)
 import Graphics.UI.Qtah.Generator.Interface.Core.QObject (c_QObject)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
@@ -54,7 +52,12 @@ import Graphics.UI.Qtah.Generator.Interface.Core.QByteArray (c_QByteArray)
 import Graphics.UI.Qtah.Generator.Interface.Core.QProcessEnvironment (c_QProcessEnvironment)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
-import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Internal.Listener (c_Listener, c_ListenerProcessError, c_ListenerIntExitStatus, c_ListenerProcessState)
+import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
+  c_Listener, 
+  c_ListenerProcessError, 
+  c_ListenerIntExitStatus, 
+  c_ListenerProcessState
+  )
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (qlonglong)
 
 {-# ANN module "HLint: ignore Use camelCase" #-}
@@ -192,7 +195,7 @@ e_ProcessState =
     , (1, ["starting"])
     , (2, ["running"])
     ]
-    
+
 signals =
   collect $
   [ test (qtVersion >= [5, 6]) $ makeSignal c_QProcess "errorOccurred" c_ListenerProcessError

@@ -24,32 +24,20 @@ import Foreign.Hoppy.Generator.Spec (
   Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
-  classSetConversionToGc,
   ident,
-  ident1,
-  ident2,
-  includeLocal,
   includeStd,
   makeClass,
-  makeFnMethod,
   mkConstMethod,
   mkConstMethod',
-  mkStaticMethod,
-  mkStaticMethod',
   mkCtor,
   mkMethod',
   mkMethod
   )
-import Foreign.Hoppy.Generator.Spec.ClassFeature (
-  ClassFeature (Copyable),
-  classAddFeatures,
-  )
 import Graphics.UI.Qtah.Generator.Interface.Core.QIODevice (c_QIODevice, bs_OpenMode)
 import Graphics.UI.Qtah.Generator.Interface.Core.QByteArray (c_QByteArray)
 import Graphics.UI.Qtah.Generator.Interface.Core.QObject (c_QObject)
-import Foreign.Hoppy.Generator.Types (intT, charT, voidT, boolT, enumT, bitspaceT, constT, objT, ptrT, refT)
-import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Foreign.Hoppy.Generator.Types (intT, charT, voidT, boolT, bitspaceT, constT, objT, ptrT, refT)
+import Foreign.Hoppy.Generator.Version (collect, just)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (qlonglong)

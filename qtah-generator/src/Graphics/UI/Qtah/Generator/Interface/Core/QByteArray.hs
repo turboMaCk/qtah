@@ -57,13 +57,12 @@ import Foreign.Hoppy.Generator.Spec.ClassFeature (
   classAddFeatures,
   )
 import Foreign.Hoppy.Generator.Types (ushortT, shortT, uintT, floatT, doubleT, boolT, charT, constT, intT, ptrT, voidT, refT, objT, enumT)
-import Graphics.UI.Qtah.Generator.Interface.Core.Types (qulonglong, qlonglong)
+import Graphics.UI.Qtah.Generator.Interface.Core.Types (e_CaseSensitivity)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
 import Graphics.UI.Qtah.Generator.Flags (qtVersion)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Graphics.UI.Qtah.Generator.Interface.Imports
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
-import Graphics.UI.Qtah.Generator.Interface.Core.Types (e_CaseSensitivity)
 import Graphics.UI.Qtah.Generator.Types
 import Language.Haskell.Syntax (
   HsName (HsIdent),
@@ -252,7 +251,7 @@ addAddendum = addAddendumHaskell $ do
 (e_Base64Option, bs_Base64Options) =
   makeQtEnumBitspace (ident1 "QByteArray" "Base64Option") "Base64Options" [includeStd "QByteArray"]
   [ (0, ["base64", "encoding"])
-  , (0, ["keep", "trailing", "equals"])
+ -- , (0, ["keep", "trailing", "equals"])
   , (1, ["base64", "url", "encoding"])
   , (2, ["omit", "trailing", "equals"])
   ]

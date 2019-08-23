@@ -34,7 +34,7 @@ import Foreign.Hoppy.Generator.Spec (
   )
 import Foreign.Hoppy.Generator.Types (doubleT, intT, objT, ptrT, voidT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
-import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
+import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
   c_ListenerDouble,
   c_ListenerQString,
   )

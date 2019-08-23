@@ -30,13 +30,12 @@ import Foreign.Hoppy.Generator.Spec (
   makeClass,
   mkConstMethod,
   mkConstMethod',
-  mkStaticMethod,
   )
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Copyable),
   classAddFeatures,
   )
-import Foreign.Hoppy.Generator.Types (boolT, intT, objT, ptrT, refT, voidT, constT, charT)
+import Foreign.Hoppy.Generator.Types (boolT, intT, objT, ptrT, constT, charT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
 import Graphics.UI.Qtah.Generator.Flags (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.QByteArray (c_QByteArray)

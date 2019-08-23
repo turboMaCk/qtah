@@ -51,7 +51,7 @@ import Graphics.UI.Qtah.Generator.Interface.Core.Types (e_LayoutDirection, e_Nav
 import Graphics.UI.Qtah.Generator.Interface.Gui.QClipboard (c_QClipboard)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QFont (c_QFont)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QIcon (c_QIcon)
-import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
+import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
   c_Listener,
   c_ListenerPtrQWidgetPtrQWidget,
   )

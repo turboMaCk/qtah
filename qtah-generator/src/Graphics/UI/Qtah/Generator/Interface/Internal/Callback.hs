@@ -87,8 +87,6 @@ import Graphics.UI.Qtah.Generator.Interface.Widgets.QGraphicsItem (c_QGraphicsIt
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Widgets.QSystemTrayIcon (
   e_ActivationReason,
   )
-import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Widgets.QTreeWidget (c_QTreeWidget)
-import Graphics.UI.Qtah.Generator.Interface.Widgets.QTreeView (c_QTreeView)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Widgets.QTreeWidgetItem (c_QTreeWidgetItem)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Widgets.QWidget (c_QWidget)
 import Graphics.UI.Qtah.Generator.Module (AModule (AHoppyModule))

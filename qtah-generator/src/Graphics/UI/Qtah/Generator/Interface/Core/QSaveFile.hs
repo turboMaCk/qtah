@@ -24,23 +24,15 @@ import Foreign.Hoppy.Generator.Spec (
   Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
-  classSetConversionToGc,
   ident,
   includeStd,
   makeClass,
   mkConstMethod,
-  mkConstMethod',
   mkCtor,
   mkMethod,
-  mkMethod',
-  )
-import Foreign.Hoppy.Generator.Spec.ClassFeature (
-  ClassFeature (Assignable, Copyable, Equatable),
-  classAddFeatures,
   )
 import Foreign.Hoppy.Generator.Types (bitspaceT, ptrT, boolT, objT, voidT, constT)
-import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Foreign.Hoppy.Generator.Version (collect, just)
 import Graphics.UI.Qtah.Generator.Interface.Core.QFileDevice (c_QFileDevice)
 import Graphics.UI.Qtah.Generator.Interface.Core.QIODevice (bs_OpenMode)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)

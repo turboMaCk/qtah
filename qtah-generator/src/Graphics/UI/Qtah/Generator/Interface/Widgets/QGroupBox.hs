@@ -17,6 +17,7 @@
 
 module Graphics.UI.Qtah.Generator.Interface.Widgets.QGroupBox (
   aModule,
+  c_QGroupBox,
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
@@ -35,7 +36,7 @@ import Foreign.Hoppy.Generator.Version (collect, just, test)
 import Graphics.UI.Qtah.Generator.Flags (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (bs_Alignment)
-import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
+import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
   c_ListenerBool,
   )
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QWidget (c_QWidget)

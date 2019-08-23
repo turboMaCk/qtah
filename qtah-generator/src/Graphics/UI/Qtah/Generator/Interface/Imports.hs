@@ -31,7 +31,7 @@ module Graphics.UI.Qtah.Generator.Interface.Imports (
   importForRuntime,
   ) where
 
-import Foreign.Hoppy.Generator.Spec (HsImportSet, hsQualifiedImport, hsImportSetMakeSource)
+import Foreign.Hoppy.Generator.Spec (HsImportSet, hsQualifiedImport)
 
 importForByteString :: HsImportSet
 importForByteString = hsQualifiedImport "Data.ByteString" "QtahDBS"

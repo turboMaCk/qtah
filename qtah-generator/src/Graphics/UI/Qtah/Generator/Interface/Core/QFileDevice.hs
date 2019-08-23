@@ -36,11 +36,10 @@ import Foreign.Hoppy.Generator.Spec (
   includeStd,
   makeClass,
   mkConstMethod,
-  mkConstMethod',
   mkMethod,
   mkMethod',
   )
-import Foreign.Hoppy.Generator.Types (bitspaceT, ucharT, boolT, intT, objT, voidT, enumT, charT, ptrT)
+import Foreign.Hoppy.Generator.Types (bitspaceT, ucharT, boolT, intT, objT, voidT, enumT, ptrT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
 import Graphics.UI.Qtah.Generator.Flags (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.QIODevice (c_QIODevice)

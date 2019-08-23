@@ -28,22 +28,17 @@ import Foreign.Hoppy.Generator.Spec (
   addReqIncludes,
   classSetEntityPrefix,
   ident,
-  ident1,
-  ident2,
-  includeLocal,
   includeStd,
   makeClass,
-  makeFnMethod,
   mkConstMethod,
   mkConstMethod',
   mkStaticMethod,
-  mkStaticMethod',
   mkCtor,
   mkMethod',
   mkMethod
   )
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
-import Foreign.Hoppy.Generator.Types (charT, voidT, boolT, enumT, bitspaceT, constT, objT, ptrT, refT, fnT)
+import Foreign.Hoppy.Generator.Types (charT, voidT, boolT, enumT, constT, objT, ptrT, refT, fnT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
 import Graphics.UI.Qtah.Generator.Flags (qtVersion)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModuleWithMinVersion)

@@ -27,12 +27,8 @@ import Foreign.Hoppy.Generator.Spec (
   addReqIncludes,
   classSetEntityPrefix,
   ident,
-  ident1,
-  ident2,
-  includeLocal,
   includeStd,
   makeClass,
-  makeFnMethod,
   mkConstMethod,
   mkConstMethod',
   mkStaticMethod,
@@ -45,8 +41,8 @@ import Graphics.UI.Qtah.Generator.Interface.Core.QFileDevice (c_QFileDevice, bs_
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Graphics.UI.Qtah.Generator.Interface.Core.QByteArray (c_QByteArray)
 import Graphics.UI.Qtah.Generator.Interface.Core.QObject (c_QObject)
-import Graphics.UI.Qtah.Generator.Interface.Core.QIODevice (c_QIODevice, bs_OpenMode)
-import Foreign.Hoppy.Generator.Types (boolT, intT, charT, voidT, enumT, bitspaceT, constT, objT, ptrT, refT, fnT)
+import Graphics.UI.Qtah.Generator.Interface.Core.QIODevice (bs_OpenMode)
+import Foreign.Hoppy.Generator.Types (boolT, intT, charT, voidT, bitspaceT, constT, objT, ptrT, refT, fnT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
 import Graphics.UI.Qtah.Generator.Flags (qtVersion)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)

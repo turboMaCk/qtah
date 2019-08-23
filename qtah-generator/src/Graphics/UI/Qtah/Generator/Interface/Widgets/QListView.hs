@@ -34,7 +34,7 @@ import Foreign.Hoppy.Generator.Spec (
   mkMethod,
   mkMethod',
   )
-import Foreign.Hoppy.Generator.Types (boolT, intT, objT, ptrT, refT, voidT, enumT, constT, charT, bitspaceT)
+import Foreign.Hoppy.Generator.Types (boolT, intT, objT, ptrT, refT, voidT, enumT, constT, bitspaceT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
 import Graphics.UI.Qtah.Generator.Flags (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QWidget (c_QWidget)
@@ -42,10 +42,9 @@ import Graphics.UI.Qtah.Generator.Interface.Core.QSize (c_QSize)
 import Graphics.UI.Qtah.Generator.Interface.Core.QPoint (c_QPoint)
 import Graphics.UI.Qtah.Generator.Interface.Core.QRect (c_QRect)
 import Graphics.UI.Qtah.Generator.Interface.Core.QModelIndex (c_QModelIndex)
-import Graphics.UI.Qtah.Generator.Interface.Widgets.QAbstractItemView (e_ScrollHint)
-import Graphics.UI.Qtah.Generator.Interface.Widgets.QAbstractItemView (c_QAbstractItemView)
+import Graphics.UI.Qtah.Generator.Interface.Widgets.QAbstractItemView (c_QAbstractItemView, e_ScrollHint)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
-import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Internal.Listener (c_ListenerRefConstQListQModelIndex)
+import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (c_ListenerRefConstQListQModelIndex)
 import Graphics.UI.Qtah.Generator.Types
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (bs_Alignment)
 

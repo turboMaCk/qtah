@@ -29,34 +29,22 @@ import Foreign.Hoppy.Generator.Spec (
   ident1,
   includeStd,
   makeClass,
-  mkConstMethod,
-  mkConstMethod',
   mkCtor,
   mkMethod,
-  mkMethod',
   mkProp,
-  mkStaticMethod,
-  mkStaticMethod',
   )
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
-  ClassFeature (Assignable, Copyable, Equatable),
+  ClassFeature (Copyable, Equatable),
   classAddFeatures,
   )
 import Foreign.Hoppy.Generator.Types (
-  bitspaceT,
-  boolT,
   enumT,
   constT,
-  intT,
-  int64T,
   objT,
-  ptrT,
-  refT,
   voidT,
   )
-import Foreign.Hoppy.Generator.Version (collect, just, test)
+import Foreign.Hoppy.Generator.Version (collect, just)
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (qreal)
-import Graphics.UI.Qtah.Generator.Interface.Core.QPair (c_QPairDoubleQColor)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QColor (c_QColor)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types

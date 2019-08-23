@@ -22,8 +22,7 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QTreeWidget (
 
 import Foreign.Hoppy.Generator.Spec (
   Class,
-  CppEnum,
-  Export (ExportClass, ExportEnum),
+  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -44,7 +43,7 @@ import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Core.QList (c_QListQTreeWidgetItem)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Widgets.QTreeWidgetItem (c_QTreeWidgetItem)
 import Graphics.UI.Qtah.Generator.Interface.Core.QStringList (c_QStringList)
-import Graphics.UI.Qtah.Generator.Interface.Core.Types (e_SortOrder)
+import Graphics.UI.Qtah.Generator.Interface.Core.Types (e_SortOrder, bs_MatchFlags)
 import Graphics.UI.Qtah.Generator.Interface.Core.QPoint (c_QPoint)
 import Graphics.UI.Qtah.Generator.Interface.Core.QRect (c_QRect)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QAbstractItemView (e_ScrollHint)
@@ -59,7 +58,6 @@ import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Widgets.QWidget (c_QW
 import Graphics.UI.Qtah.Generator.Interface.Core.QItemSelectionModel (bs_SelectionFlags, c_QItemSelectionModel)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
-import Graphics.UI.Qtah.Generator.Interface.Core.Types (bs_MatchFlags, bs_DropActions)
 
 {-# ANN module "HLint: ignore Use camelCase" #-}
 

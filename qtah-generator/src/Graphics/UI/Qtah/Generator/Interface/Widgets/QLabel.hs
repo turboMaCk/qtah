@@ -51,7 +51,7 @@ import Graphics.UI.Qtah.Generator.Interface.Core.Types (
   e_TextFormat,
   )
 import Graphics.UI.Qtah.Generator.Interface.Gui.QPixmap (c_QPixmap)
-import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Internal.Listener (c_ListenerQString)
+import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (c_ListenerQString)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QFrame (c_QFrame)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QWidget (c_QWidget)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)

@@ -25,23 +25,13 @@ import Foreign.Hoppy.Generator.Spec (
   addReqIncludes,
   classSetEntityPrefix,
   ident,
-  ident1,
-  ident2,
-  includeLocal,
   includeStd,
   makeClass,
-  makeFnMethod,
-  mkConstMethod,
-  mkConstMethod',
-  mkStaticMethod,
-  mkStaticMethod',
   mkCtor,
   mkMethod',
-  mkMethod
   )
-import Foreign.Hoppy.Generator.Types (intT, charT, voidT, enumT, bitspaceT, constT, objT, ptrT, refT)
-import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Foreign.Hoppy.Generator.Types (intT, charT, voidT, constT, objT, ptrT, refT)
+import Foreign.Hoppy.Generator.Version (collect, just)
 import Graphics.UI.Qtah.Generator.Interface.Core.QTextCodec (c_QTextCodec)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Graphics.UI.Qtah.Generator.Interface.Core.QByteArray (c_QByteArray)

@@ -17,6 +17,7 @@
 
 module Graphics.UI.Qtah.Generator.Interface.Gui.QActionEvent (
   aModule,
+  c_QActionEvent
   ) where
 
 import Foreign.Hoppy.Generator.Spec (

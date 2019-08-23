@@ -22,7 +22,6 @@ module Graphics.UI.Qtah.Generator.Interface.Gui.QCursor (
 
 import Foreign.Hoppy.Generator.Spec (
   Export (ExportClass),
-  Operator (OpCall),
   addReqIncludes,
   classSetConversionToGc,
   classSetEntityPrefix,
@@ -33,7 +32,6 @@ import Foreign.Hoppy.Generator.Spec (
   mkStaticMethod,
   mkStaticMethod',
   mkConstMethod,
-  mkConstMethod',
   mkMethod,
   )
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
@@ -46,7 +44,6 @@ import Graphics.UI.Qtah.Generator.Flags (qtVersion)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Gui.QPixmap (c_QPixmap)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Gui.QBitmap (c_QBitmap)
 import Graphics.UI.Qtah.Generator.Interface.Core.QPoint (c_QPoint)
-import Graphics.UI.Qtah.Generator.Interface.Core.QVariant (c_QVariant)
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (e_CursorShape)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types

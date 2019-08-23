@@ -25,27 +25,17 @@ import Foreign.Hoppy.Generator.Spec (
   addReqIncludes,
   classSetEntityPrefix,
   ident,
-  ident1,
-  ident2,
-  includeLocal,
   includeStd,
   makeClass,
-  makeFnMethod,
   mkConstMethod,
-  mkConstMethod',
-  mkStaticMethod,
-  mkStaticMethod',
-  mkCtor,
-  mkMethod',
   mkMethod,
   mkProp
   )
 import Graphics.UI.Qtah.Generator.Interface.Core.QAbstractAnimation (c_QAbstractAnimation)
-import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Core.QVariant (c_QVariant)
-import Foreign.Hoppy.Generator.Types (intT, voidT, enumT, bitspaceT, constT, objT, ptrT, refT)
-import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
-import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Internal.Listener (c_ListenerQVariant)
+import Graphics.UI.Qtah.Generator.Interface.Core.QVariant (c_QVariant)
+import Foreign.Hoppy.Generator.Types (intT, voidT, constT, objT, refT)
+import Foreign.Hoppy.Generator.Version (collect, just)
+import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (c_ListenerQVariant)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModuleWithMinVersion)
 import Graphics.UI.Qtah.Generator.Types
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (qreal)

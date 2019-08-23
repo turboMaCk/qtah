@@ -93,7 +93,6 @@ instantiate' pairName t1 t2 tReqs opts =
 
       pair =
         addReqs reqs $
-        addAddendumHaskell addendum $
         classAddFeatures features $
         classSetMonomorphicSuperclass $
         classSetEntityPrefix "" $
@@ -104,14 +103,6 @@ instantiate' pairName t1 t2 tReqs opts =
         , test (qtVersion >= [5, 2]) $ mkCtor "newCopyPair" [objT pair]
         , test (qtVersion >= [5, 5]) $ mkMethod "swap" [refT $ objT pair] voidT
         ]
-
-      -- The addendum for the vector class contains HasContents and FromContents
-      -- instances.
-      addendum = do
-        addImports $ mconcat [hsImports "Prelude" ["($)", "(-)"],
-                              hsImport1 "Control.Monad" "(<=<)",
-                              importForPrelude,
-                              importForRuntime]
 
 
   in Contents

@@ -22,27 +22,15 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QMessageLogger (
 
 import Foreign.Hoppy.Generator.Spec (
   Export (ExportClass),
-  Type,
-  makeCallback,
-  toExtName,
   addReqIncludes,
   classSetEntityPrefix,
   ident,
-  ident1,
-  ident2,
-  includeLocal,
   includeStd,
   makeClass,
-  makeFnMethod,
-  mkConstMethod,
   mkConstMethod',
-  mkStaticMethod,
-  mkStaticMethod',
   mkCtor,
-  mkMethod',
-  mkMethod
   )
-import Foreign.Hoppy.Generator.Types (callbackT, charT, intT, voidT, enumT, bitspaceT, constT, objT, ptrT, refT, fnT)
+import Foreign.Hoppy.Generator.Types (charT, intT, voidT, constT, objT, ptrT, refT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
 import Graphics.UI.Qtah.Generator.Flags (qtVersion)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModuleWithMinVersion)

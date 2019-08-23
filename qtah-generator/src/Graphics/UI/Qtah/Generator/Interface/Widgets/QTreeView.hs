@@ -50,7 +50,6 @@ import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (e_SortOrder)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
-  c_Listener,
   c_ListenerRefConstQModelIndex,
   )
 
