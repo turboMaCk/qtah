@@ -53,9 +53,9 @@ import Graphics.UI.Qtah.Generator.Interface.Core.QProcessEnvironment (c_QProcess
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
-  c_Listener, 
-  c_ListenerProcessError, 
-  c_ListenerIntExitStatus, 
+  c_Listener,
+  c_ListenerProcessError,
+  c_ListenerIntExitStatus,
   c_ListenerProcessState
   )
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (qlonglong)
