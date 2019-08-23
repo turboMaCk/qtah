@@ -17,6 +17,8 @@
 
 /qtah-examples/dist
 /qtah-generator/dist
+/qtah-generator/src/Graphics/UI/Qtah/Generator/Interface/Internal/Listener.hs
+/qtah-generator/src/Graphics/UI/Qtah/Generator/Interface/Internal/Listener.hs-boot
 
 /qtah-cpp/cpp/Makefile
 /qtah-cpp/cpp/b_*
@@ -38,6 +40,7 @@
 /qtah-cpp-qt?/dist
 
 /qtah/dist
+/qtah/src/Graphics/UI/Qtah/Core/Connection.hs
 /qtah/src/Graphics/UI/Qtah/Core/Q*
 /qtah/src/Graphics/UI/Qtah/Core/Types.hs
 /qtah/src/Graphics/UI/Qtah/Generated
@@ -65,4 +68,4 @@
 *~
 .qmake.stash
 .stack-work
-/qtah-cpp/cpp/*.pro.user
+
