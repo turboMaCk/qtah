@@ -38,7 +38,9 @@ import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Copyable),
   classAddFeatures,
   )
+
 import Foreign.Hoppy.Generator.Types (constT, ptrT, charT, objT)
+import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
 
@@ -58,7 +60,7 @@ c_QMetaClassInfo =
   classSetEntityPrefix "" $
   makeClass (ident "QMetaClassInfo") Nothing []
   [ makeFnMethod (ident2 "qtah" "qmetaclassinfo" "name") "name" MConst Nonpure
-    [objT c_QMetaClassInfo] $ ptrT $ constT charT
+    [objT c_QMetaClassInfo] $ objT c_QString
   , makeFnMethod (ident2 "qtah" "qmetaclassinfo" "value") "value" MConst Nonpure
-    [objT c_QMetaClassInfo] $ ptrT $ constT charT
+    [objT c_QMetaClassInfo] $ objT c_QString
   ]
