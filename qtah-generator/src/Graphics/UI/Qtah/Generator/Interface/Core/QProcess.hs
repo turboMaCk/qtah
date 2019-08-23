@@ -144,11 +144,8 @@ c_QProcess =
   , just $ mkMethod' "waitForStarted" "waitForStartedMsecs" [intT] boolT
   , just $ mkConstMethod "workingDirectory" [] $ objT c_QString
 
-  -- SLOTS
-
   , just $ mkMethod "kill" [] voidT
   , just $ mkMethod "terminate" [] voidT
-
   ]
 
 e_ExitStatus =

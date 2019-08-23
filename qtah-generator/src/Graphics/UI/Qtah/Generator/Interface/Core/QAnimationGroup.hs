@@ -19,7 +19,7 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QAnimationGroup (
   aModule,
   c_QAnimationGroup,
   ) where
-    
+
 import Foreign.Hoppy.Generator.Spec (
   Export (ExportClass),
   addReqIncludes,

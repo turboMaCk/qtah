@@ -21,7 +21,7 @@
 module Graphics.UI.Qtah.Object (
   disconnectWithConn_,
   ) where
-    
+
 import qualified Graphics.UI.Qtah.Core.QObject as QObject
 import Graphics.UI.Qtah.Core.Connection (Connection)
 

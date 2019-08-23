@@ -25,6 +25,7 @@ flag qt5
 library
   exposed-modules:
       Graphics.UI.Qtah.Core.HMargins
+    , Graphics.UI.Qtah.Core.Connection
     , Graphics.UI.Qtah.Core.HPoint
     , Graphics.UI.Qtah.Core.HPointF
     , Graphics.UI.Qtah.Core.HRect
@@ -34,11 +35,12 @@ library
     , Graphics.UI.Qtah.Core.QAbstractListModel
     , Graphics.UI.Qtah.Core.QAbstractTableModel
     , Graphics.UI.Qtah.Core.QAnimationGroup
-    , Graphics.UI.Qtah.Core.QByteArray
     , Graphics.UI.Qtah.Core.QBuffer
+    , Graphics.UI.Qtah.Core.QByteArray
     , Graphics.UI.Qtah.Core.QChar
     , Graphics.UI.Qtah.Core.QChildEvent
     , Graphics.UI.Qtah.Core.QCoreApplication
+    , Graphics.UI.Qtah.Core.QCryptographicHash
     , Graphics.UI.Qtah.Core.QDate
     , Graphics.UI.Qtah.Core.QDateTime
     , Graphics.UI.Qtah.Core.QDebug
@@ -51,7 +53,6 @@ library
     , Graphics.UI.Qtah.Core.QFileInfo
     , Graphics.UI.Qtah.Core.QFileSelector
     , Graphics.UI.Qtah.Core.QFileSystemWatcher
-    , Graphics.UI.Qtah.Core.QCryptographicHash
     , Graphics.UI.Qtah.Core.QIODevice
     , Graphics.UI.Qtah.Core.QItemSelection
     , Graphics.UI.Qtah.Core.QItemSelectionModel
@@ -69,9 +70,9 @@ library
     , Graphics.UI.Qtah.Core.QList.QSize
     , Graphics.UI.Qtah.Core.QList.QStandardItem
     , Graphics.UI.Qtah.Core.QList.QString
+    , Graphics.UI.Qtah.Core.QList.QTreeWidgetItem
     , Graphics.UI.Qtah.Core.QList.QVariant
     , Graphics.UI.Qtah.Core.QList.QWidget
-    , Graphics.UI.Qtah.Core.QList.QTreeWidgetItem
     , Graphics.UI.Qtah.Core.QLockFile
     , Graphics.UI.Qtah.Core.QLoggingCategory
     , Graphics.UI.Qtah.Core.QMargins
@@ -83,7 +84,6 @@ library
     , Graphics.UI.Qtah.Core.QMetaEnum
     , Graphics.UI.Qtah.Core.QMetaMethod
     , Graphics.UI.Qtah.Core.QMetaObject
-    , Graphics.UI.Qtah.Core.Connection
     , Graphics.UI.Qtah.Core.QMetaProperty
     , Graphics.UI.Qtah.Core.QModelIndex
     , Graphics.UI.Qtah.Core.QObject
@@ -94,11 +94,11 @@ library
     , Graphics.UI.Qtah.Core.QPauseAnimation
     , Graphics.UI.Qtah.Core.QPersistentModelIndex
     , Graphics.UI.Qtah.Core.QPluginLoader
+    , Graphics.UI.Qtah.Core.QPoint
+    , Graphics.UI.Qtah.Core.QPointF
     , Graphics.UI.Qtah.Core.QProcess
     , Graphics.UI.Qtah.Core.QProcessEnvironment
     , Graphics.UI.Qtah.Core.QPropertyAnimation
-    , Graphics.UI.Qtah.Core.QPoint
-    , Graphics.UI.Qtah.Core.QPointF
     , Graphics.UI.Qtah.Core.QRandomGenerator
     , Graphics.UI.Qtah.Core.QRandomGenerator64
     , Graphics.UI.Qtah.Core.QRect
@@ -120,9 +120,9 @@ library
     , Graphics.UI.Qtah.Core.QTextEncoder
     , Graphics.UI.Qtah.Core.QThread
     , Graphics.UI.Qtah.Core.QTime
+    , Graphics.UI.Qtah.Core.QTimeZone
     , Graphics.UI.Qtah.Core.QTimer
     , Graphics.UI.Qtah.Core.QTimerEvent
-    , Graphics.UI.Qtah.Core.QTimeZone
     , Graphics.UI.Qtah.Core.QTranslator
     , Graphics.UI.Qtah.Core.QVariant
     , Graphics.UI.Qtah.Core.QVariantAnimation
@@ -131,11 +131,12 @@ library
     , Graphics.UI.Qtah.Core.QVector.QPointF
     , Graphics.UI.Qtah.Core.QVector.QRgb
     , Graphics.UI.Qtah.Core.QVersionNumber
-    , Graphics.UI.Qtah.Core.Types
+    , Graphics.UI.Qtah.Core.Types    
     , Graphics.UI.Qtah.Event
-    , Graphics.UI.Qtah.Gui.QBackingStore
     , Graphics.UI.Qtah.Gui.HColor
     , Graphics.UI.Qtah.Gui.QActionEvent
+    , Graphics.UI.Qtah.Gui.QBackingStore
+    , Graphics.UI.Qtah.Gui.QBitmap
     , Graphics.UI.Qtah.Gui.QBrush
     , Graphics.UI.Qtah.Gui.QClipboard
     , Graphics.UI.Qtah.Gui.QCloseEvent
@@ -163,7 +164,6 @@ library
     , Graphics.UI.Qtah.Gui.QPainter
     , Graphics.UI.Qtah.Gui.QPainterPath
     , Graphics.UI.Qtah.Gui.QPen
-    , Graphics.UI.Qtah.Gui.QBitmap
     , Graphics.UI.Qtah.Gui.QPixmap
     , Graphics.UI.Qtah.Gui.QPolygon
     , Graphics.UI.Qtah.Gui.QPolygonF
@@ -178,7 +178,7 @@ library
     , Graphics.UI.Qtah.Gui.QWheelEvent
     , Graphics.UI.Qtah.Gui.QWindow
     , Graphics.UI.Qtah.Gui.QtahOpenGLWindow
-    , Graphics.UI.Qtah.Gui.QtahRasterWindow
+    , Graphics.UI.Qtah.Gui.QtahRasterWindow    
     , Graphics.UI.Qtah.SceneEvent
     , Graphics.UI.Qtah.Signal
     , Graphics.UI.Qtah.Object
@@ -260,16 +260,18 @@ library
     , Graphics.UI.Qtah.Widgets.QVBoxLayout
     , Graphics.UI.Qtah.Widgets.QWidget
   other-modules:
-      Graphics.UI.Qtah.Generated.Core.QAbstractAnimation
+      Graphics.UI.Qtah.Generated.Core.Connection
+    , Graphics.UI.Qtah.Generated.Core.QAbstractAnimation
     , Graphics.UI.Qtah.Generated.Core.QAbstractItemModel
     , Graphics.UI.Qtah.Generated.Core.QAbstractListModel
     , Graphics.UI.Qtah.Generated.Core.QAbstractTableModel
     , Graphics.UI.Qtah.Generated.Core.QAnimationGroup
-    , Graphics.UI.Qtah.Generated.Core.QByteArray
     , Graphics.UI.Qtah.Generated.Core.QBuffer
+    , Graphics.UI.Qtah.Generated.Core.QByteArray
     , Graphics.UI.Qtah.Generated.Core.QChar
     , Graphics.UI.Qtah.Generated.Core.QChildEvent
     , Graphics.UI.Qtah.Generated.Core.QCoreApplication
+    , Graphics.UI.Qtah.Generated.Core.QCryptographicHash
     , Graphics.UI.Qtah.Generated.Core.QDate
     , Graphics.UI.Qtah.Generated.Core.QDateTime
     , Graphics.UI.Qtah.Generated.Core.QDebug
@@ -282,7 +284,6 @@ library
     , Graphics.UI.Qtah.Generated.Core.QFileInfo
     , Graphics.UI.Qtah.Generated.Core.QFileSelector
     , Graphics.UI.Qtah.Generated.Core.QFileSystemWatcher
-    , Graphics.UI.Qtah.Generated.Core.QCryptographicHash
     , Graphics.UI.Qtah.Generated.Core.QIODevice
     , Graphics.UI.Qtah.Generated.Core.QItemSelection
     , Graphics.UI.Qtah.Generated.Core.QItemSelectionModel
@@ -300,9 +301,9 @@ library
     , Graphics.UI.Qtah.Generated.Core.QList.QSize
     , Graphics.UI.Qtah.Generated.Core.QList.QStandardItem
     , Graphics.UI.Qtah.Generated.Core.QList.QString
+    , Graphics.UI.Qtah.Generated.Core.QList.QTreeWidgetItem
     , Graphics.UI.Qtah.Generated.Core.QList.QVariant
     , Graphics.UI.Qtah.Generated.Core.QList.QWidget
-    , Graphics.UI.Qtah.Generated.Core.QList.QTreeWidgetItem
     , Graphics.UI.Qtah.Generated.Core.QLockFile
     , Graphics.UI.Qtah.Generated.Core.QLoggingCategory
     , Graphics.UI.Qtah.Generated.Core.QMargins
@@ -314,7 +315,6 @@ library
     , Graphics.UI.Qtah.Generated.Core.QMetaEnum
     , Graphics.UI.Qtah.Generated.Core.QMetaMethod
     , Graphics.UI.Qtah.Generated.Core.QMetaObject
-    , Graphics.UI.Qtah.Generated.Core.Connection
     , Graphics.UI.Qtah.Generated.Core.QMetaProperty
     , Graphics.UI.Qtah.Generated.Core.QModelIndex
     , Graphics.UI.Qtah.Generated.Core.QObject
@@ -325,11 +325,11 @@ library
     , Graphics.UI.Qtah.Generated.Core.QPauseAnimation
     , Graphics.UI.Qtah.Generated.Core.QPersistentModelIndex
     , Graphics.UI.Qtah.Generated.Core.QPluginLoader
+    , Graphics.UI.Qtah.Generated.Core.QPoint
+    , Graphics.UI.Qtah.Generated.Core.QPointF
     , Graphics.UI.Qtah.Generated.Core.QProcess
     , Graphics.UI.Qtah.Generated.Core.QProcessEnvironment
     , Graphics.UI.Qtah.Generated.Core.QPropertyAnimation
-    , Graphics.UI.Qtah.Generated.Core.QPoint
-    , Graphics.UI.Qtah.Generated.Core.QPointF
     , Graphics.UI.Qtah.Generated.Core.QRandomGenerator
     , Graphics.UI.Qtah.Generated.Core.QRandomGenerator64
     , Graphics.UI.Qtah.Generated.Core.QRect
@@ -351,9 +351,9 @@ library
     , Graphics.UI.Qtah.Generated.Core.QTextEncoder
     , Graphics.UI.Qtah.Generated.Core.QThread
     , Graphics.UI.Qtah.Generated.Core.QTime
+    , Graphics.UI.Qtah.Generated.Core.QTimeZone
     , Graphics.UI.Qtah.Generated.Core.QTimer
     , Graphics.UI.Qtah.Generated.Core.QTimerEvent
-    , Graphics.UI.Qtah.Generated.Core.QTimeZone
     , Graphics.UI.Qtah.Generated.Core.QTranslator
     , Graphics.UI.Qtah.Generated.Core.QVariant
     , Graphics.UI.Qtah.Generated.Core.QVariantAnimation
@@ -362,9 +362,10 @@ library
     , Graphics.UI.Qtah.Generated.Core.QVector.QPointF
     , Graphics.UI.Qtah.Generated.Core.QVector.QRgb
     , Graphics.UI.Qtah.Generated.Core.QVersionNumber
-    , Graphics.UI.Qtah.Generated.Core.Types
+    , Graphics.UI.Qtah.Generated.Core.Types    
     , Graphics.UI.Qtah.Generated.Gui.QActionEvent
     , Graphics.UI.Qtah.Generated.Gui.QBackingStore
+    , Graphics.UI.Qtah.Generated.Gui.QBitmap
     , Graphics.UI.Qtah.Generated.Gui.QBrush
     , Graphics.UI.Qtah.Generated.Gui.QClipboard
     , Graphics.UI.Qtah.Generated.Gui.QCloseEvent
@@ -392,7 +393,6 @@ library
     , Graphics.UI.Qtah.Generated.Gui.QPainter
     , Graphics.UI.Qtah.Generated.Gui.QPainterPath
     , Graphics.UI.Qtah.Generated.Gui.QPen
-    , Graphics.UI.Qtah.Generated.Gui.QBitmap
     , Graphics.UI.Qtah.Generated.Gui.QPixmap
     , Graphics.UI.Qtah.Generated.Gui.QPolygon
     , Graphics.UI.Qtah.Generated.Gui.QPolygonF
@@ -407,7 +407,7 @@ library
     , Graphics.UI.Qtah.Generated.Gui.QWheelEvent
     , Graphics.UI.Qtah.Generated.Gui.QWindow
     , Graphics.UI.Qtah.Generated.Gui.QtahOpenGLWindow
-    , Graphics.UI.Qtah.Generated.Gui.QtahRasterWindow
+    , Graphics.UI.Qtah.Generated.Gui.QtahRasterWindow    
     , Graphics.UI.Qtah.Generated.Internal.EventListener
     , Graphics.UI.Qtah.Generated.Internal.SceneEventListener
     , Graphics.UI.Qtah.Generated.Widgets.QAbstractButton
@@ -483,7 +483,7 @@ library
     , Graphics.UI.Qtah.Generated.Widgets.QTreeWidget
     , Graphics.UI.Qtah.Generated.Widgets.QTreeWidgetItem
     , Graphics.UI.Qtah.Generated.Widgets.QVBoxLayout
-    , Graphics.UI.Qtah.Generated.Widgets.QWidget
+    , Graphics.UI.Qtah.Generated.Widgets.QWidget    
     , Graphics.UI.Qtah.Internal.Callback
     , Graphics.UI.Qtah.Internal.EventListener
     , Graphics.UI.Qtah.Internal.Listener

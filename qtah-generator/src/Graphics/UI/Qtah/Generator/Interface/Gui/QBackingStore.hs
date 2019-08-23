@@ -69,7 +69,7 @@ c_QBackingStore =
   , just $ mkMethod' "flush" "flush" [objT c_QRegion] voidT
   , just $ mkMethod' "flush" "flushWithWindow" [objT c_QRegion, ptrT $ objT c_QWindow] voidT
   , just $ mkMethod' "flush" "flushAll" [objT c_QRegion, ptrT $ objT c_QWindow, objT c_QPoint] voidT
-  -- TODO QPlatformBackingStore *	handle() const
+  -- TODO QPlatformBackingStore* handle() const
   , just $ mkConstMethod "hasStaticContents" [] boolT
   , just $ mkMethod "paintDevice" [] $ ptrT $ objT c_QPaintDevice
   , just $ mkMethod "resize" [objT c_QSize] voidT
