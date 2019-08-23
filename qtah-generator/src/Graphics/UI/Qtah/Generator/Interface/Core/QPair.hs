@@ -27,18 +27,14 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QPair (
   c_QPairDoubleQColor,
   ) where
 
-import Foreign.Hoppy.Generator.Language.Haskell (addImports)
 import Foreign.Hoppy.Generator.Spec (
   Class,
   Export (ExportClass),
   Reqs,
   Type,
   addReqs,
-  addAddendumHaskell,
   classSetEntityPrefix,
   classSetMonomorphicSuperclass,
-  hsImport1,
-  hsImports,
   identT,
   includeStd,
   makeClass,
@@ -56,7 +52,6 @@ import Foreign.Hoppy.Generator.Version (collect, just, test)
 import Graphics.UI.Qtah.Generator.Flags (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (qreal)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QColor (c_QColor)
-import Graphics.UI.Qtah.Generator.Interface.Imports
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), QtModule, makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
 

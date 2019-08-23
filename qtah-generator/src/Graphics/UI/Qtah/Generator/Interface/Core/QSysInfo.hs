@@ -32,7 +32,7 @@ import Foreign.Hoppy.Generator.Spec (
   makeClass,
   mkStaticMethod,
   )
-import Data.Bits ((.|.), finiteBitSize)
+import Data.Bits (finiteBitSize)
 import Foreign.Ptr (IntPtr)
 import Foreign.Hoppy.Generator.Types (objT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
