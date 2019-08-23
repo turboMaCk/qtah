@@ -20,13 +20,13 @@
 namespace qtah {
 namespace qmetaclassinfo {
 
-const char * name(const QMetaClassInfo& self) {
+QString name(const QMetaClassInfo& self) {
     return self.name();
 }
 
-const char * value(const QMetaClassInfo& self) {
+QString value(const QMetaClassInfo& self) {
     return self.value();
 }
 
 }  // namespace qmetaclassinfo
-}  // namespace qtah
+} 
