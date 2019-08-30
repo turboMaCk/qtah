@@ -27,7 +27,7 @@ import Data.IORef (IORef, newIORef, readIORef, writeIORef)
 import qualified Graphics.UI.Qtah.Core.QCoreApplication as QCoreApplication
 import Graphics.UI.Qtah.Event
 import Graphics.UI.Qtah.Gui.QCloseEvent (QCloseEvent)
-import Graphics.UI.Qtah.Signal (nullptr, connect_, disconnect_, disconnectWithConn_)
+import Graphics.UI.Qtah.Signal (connect, connect_, disconnect)
 import qualified Graphics.UI.Qtah.Core.QEvent as QEvent
 import qualified Graphics.UI.Qtah.Widgets.QAction as QAction
 import Graphics.UI.Qtah.Widgets.QAction (triggeredSignal)
@@ -111,11 +111,11 @@ makeMainWindow = do
 
   textEditConn <- QObject.connectStatic text "textChanged()" window "showMinimized()"
 
-  metabobj <- connect_ menuFileNew triggeredSignal $ \_ -> fileNew me
-  -- disconnect_ metabobj triggeredSignal menuFileNew (\_ -> fileNew me)
-  dconResult <- disconnectWithConn_ metabobj
-  -- QObject.disconnectStatic text "textChanged()" window "showMinimized()"
-  dconResult2 <- disconnectWithConn_ textEditConn
+  Just metabobj <- connect menuFileNew triggeredSignal $ \_ -> fileNew me
+  print =<< disconnect metabobj
+  print =<< disconnect metabobj
+  --print =<< QObject.disconnectStatic text "textChanged()" window "showMinimized()"
+  --print =<< QObject.disconnectWithMetaobject textEditConn
 
   connect_ menuFileOpen triggeredSignal $ \_ -> fileOpen me
   connect_ menuFileSave triggeredSignal $ \_ -> void $ fileSave me
@@ -131,8 +131,6 @@ makeMainWindow = do
   connect_ menuEditCopy triggeredSignal $ \_ -> QTextEdit.copy text
   connect_ menuEditPaste triggeredSignal $ \_ -> QTextEdit.paste text
   connect_ menuEditSelectAll triggeredSignal $ \_ -> QTextEdit.selectAll text
-
-  ifDisconnected <- disconnect_ menuFileClose triggeredSignal nullptr
 
   connect_ text textChangedSignal $ setDirty me True
   connect_ text undoAvailableSignal $ \b -> QAction.setEnabled menuEditUndo b

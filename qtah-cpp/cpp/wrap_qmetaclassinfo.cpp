@@ -29,4 +29,4 @@ QString value(const QMetaClassInfo& self) {
 }
 
 }  // namespace qmetaclassinfo
-}
+}  // namespace qtah
