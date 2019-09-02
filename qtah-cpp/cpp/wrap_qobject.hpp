@@ -37,6 +37,7 @@ QVariant property(const QObject& obj, const QString& propertyName);
 void setProperty(QObject& obj, const QString& propertyName, const QVariant& value);
 
 QMetaObject::Connection connect(const QObject* obj1, std::string signalName, const QObject* obj2, std::string slotName);
+
 bool disconnect(const QObject* obj1, std::string signalName, const QObject* obj2, std::string slotName);
 
 
