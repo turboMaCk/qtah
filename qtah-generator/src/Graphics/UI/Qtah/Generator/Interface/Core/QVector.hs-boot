@@ -17,11 +17,8 @@
 
 module Graphics.UI.Qtah.Generator.Interface.Core.QVector (
   c_QVectorInt,
-  c_QVectorUInt,
   ) where
 
 import Foreign.Hoppy.Generator.Spec (Class)
 
 c_QVectorInt :: Class
-
-c_QVectorUInt :: Class

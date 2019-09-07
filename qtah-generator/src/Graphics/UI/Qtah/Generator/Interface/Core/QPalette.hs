@@ -79,12 +79,12 @@ c_QPalette =
   , just $ mkConstMethod "alternateBase" [] $ refT $ constT $ objT c_QBrush
   , just $ mkConstMethod "base" [] $ refT $ constT $ objT c_QBrush
   , just $ mkConstMethod "brightText" [] $ refT $ constT $ objT c_QBrush
-  , just $ mkConstMethod' "brush" "brushWithGroupRole" [enumT e_ColorGroup, enumT e_ColorRole] $ refT $ constT $ objT c_QBrush
+  , just $ mkConstMethod' "brush" "brushWithGroup" [enumT e_ColorGroup, enumT e_ColorRole] $ refT $ constT $ objT c_QBrush
   , just $ mkConstMethod' "brush" "brush" [enumT e_ColorRole] $ refT $ constT $ objT c_QBrush
   , just $ mkConstMethod "button" [] $ refT $ constT $ objT c_QBrush
   , just $ mkConstMethod "buttonText" [] $ refT $ constT $ objT c_QBrush
   , just $ mkConstMethod "cacheKey" [] int64T
-  , just $ mkConstMethod' "color" "colorWithGroupRole" [enumT e_ColorGroup, enumT e_ColorRole] $ refT $ constT $ objT c_QColor
+  , just $ mkConstMethod' "color" "colorWithGroup" [enumT e_ColorGroup, enumT e_ColorRole] $ refT $ constT $ objT c_QColor
   , just $ mkConstMethod' "color" "color" [enumT e_ColorRole] $ refT $ constT $ objT c_QColor
   , just $ mkConstMethod "currentColorGroup" [] $ enumT e_ColorGroup
   , just $ mkConstMethod "dark" [] $ refT $ constT $ objT c_QBrush
@@ -121,7 +121,7 @@ e_ColorGroup =
   [ (1, ["disabled"])
   , (0, ["active"])
   , (2, ["inactive"])
- -- , (0, ["normal"])
+ --, (0, ["normal"])
   ]
 
 e_ColorRole =

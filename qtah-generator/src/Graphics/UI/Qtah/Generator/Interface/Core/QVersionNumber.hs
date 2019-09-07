@@ -37,7 +37,7 @@ import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Assignable, Comparable, Copyable, Equatable),
   classAddFeatures,
   )
-import Foreign.Hoppy.Generator.Types (toGcT, boolT, intT, constT, objT, ptrT, refT)
+import Foreign.Hoppy.Generator.Types (toGcT, boolT, intT, constT, objT, refT)
 import Foreign.Hoppy.Generator.Version (collect, just)
 import Graphics.UI.Qtah.Generator.Interface.Core.QVector (c_QVectorInt)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
@@ -59,14 +59,15 @@ c_QVersionNumber =
   makeClass (ident "QVersionNumber") Nothing [] $
   collect
   [ just $ mkCtor "new" []
-  , just $ mkCtor "newWithQVectorint" [refT $ objT c_QVectorInt]
-  , just $ mkCtor "newWithMajVer" [intT]
-  , just $ mkCtor "newWithMajMinVer" [intT, intT]
-  , just $ mkCtor "newWithMajMinMicVer" [intT, intT, intT]
+  , just $ mkCtor "newWithVector" [refT $ objT c_QVectorInt]
+  , just $ mkCtor "newWithMajor" [intT]
+  , just $ mkCtor "newWithMajorMinor" [intT, intT]
+  , just $ mkCtor "newWithMajorMinorMicro" [intT, intT, intT]
   , just $ mkStaticMethod "commonPrefix" [refT $ constT $ objT c_QVersionNumber, refT $ constT $ objT c_QVersionNumber] $ objT c_QVersionNumber
   , just $ mkStaticMethod "compare" [refT $ constT $ objT c_QVersionNumber, refT $ constT $ objT c_QVersionNumber] intT
   , just $ mkStaticMethod' "fromString" "fromString" [refT $ constT $ objT c_QString] $ objT c_QVersionNumber
-  , just $ mkStaticMethod' "fromString" "fromStringWithSuffIndex" [refT $ constT $ objT c_QString, ptrT intT] $ objT c_QVersionNumber
+    -- TODO Use a pair to return the suffix index:
+  --, just $ mkStaticMethod' "fromString" "fromStringWithSuffIndex" [refT $ constT $ objT c_QString, ptrT intT] $ objT c_QVersionNumber
   --, test (qtVersion >= [5, 10]) $ mkStaticMethod' "fromString" "fromStringWithQLatin" [objT c_QLatin1String] $ objT c_QVersionNumber
   --, test (qtVersion >= [5, 10]) $ mkStaticMethod' "fromString" "fromStringWithQLatinSuffIndex" [objT c_QLatin1String, ptrT intT] $ objT c_QVersionNumber
   --, test (qtVersion >= [5, 10]) $ mkStaticMethod' "fromString" "fromStringWithQStringView" [objT c_QStringView] $ objT c_QVersionNumber

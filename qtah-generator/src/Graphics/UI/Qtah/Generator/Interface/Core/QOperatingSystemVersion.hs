@@ -63,8 +63,8 @@ c_QOperatingSystemVersion =
   makeClass (ident "QOperatingSystemVersion") Nothing [] $
   collect
   [ just $ mkCtor "new" [enumT e_OSType, intT]
-  , just $ mkCtor "newWithVMinor" [enumT e_OSType, intT, intT]
-  , just $ mkCtor "newWithVMinorVMicro" [enumT e_OSType, intT, intT, intT]
+  , just $ mkCtor "newWithMinor" [enumT e_OSType, intT, intT]
+  , just $ mkCtor "newWithMinorAndMicro" [enumT e_OSType, intT, intT, intT]
   , just $ mkStaticMethod "current" [] $ objT c_QOperatingSystemVersion
   , just $ mkStaticMethod "currentType" [] $ enumT e_OSType
   -- TODO bool QOperatingSystemVersion::isAnyOfType(std::initializer_list<OSType> types) const
@@ -73,7 +73,7 @@ c_QOperatingSystemVersion =
   , just $ mkConstMethod "minorVersion" [] intT
   , just $ mkConstMethod "name" [] $ objT c_QString
   , just $ mkConstMethod "segmentCount" [] intT
-  , just $ mkConstMethod' "type" "typeOSType" [] $ enumT e_OSType
+  , just $ mkConstMethod' "type" "getType" [] $ enumT e_OSType
   ]
 
 e_OSType =

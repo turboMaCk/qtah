@@ -86,7 +86,7 @@ c_QMetaProperty =
   , just $ mkConstMethod "reset" [ptrT $ objT c_QObject] boolT
   , test (qtVersion >= [5, 5]) $ mkConstMethod "resetOnGadget" [ptrT voidT] boolT
   , test (qtVersion >= [5, 1]) $ mkConstMethod "revision" [] intT
-  , just $ mkConstMethod' "type" "typeMetaProperty" [] $ enumT e_Type
+  , just $ mkConstMethod' "type" "getType" [] $ enumT e_Type
   , just $ mkConstMethod "typeName" [] $ ptrT $ constT charT
   , test (qtVersion >= [4, 2]) $ mkConstMethod "userType" [] intT
   , just $ mkConstMethod "write" [ptrT $ objT c_QObject, refT $ constT $ objT c_QVariant] boolT

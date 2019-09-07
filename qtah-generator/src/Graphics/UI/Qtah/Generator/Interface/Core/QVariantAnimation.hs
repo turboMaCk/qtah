@@ -33,9 +33,9 @@ import Foreign.Hoppy.Generator.Spec (
   )
 import Graphics.UI.Qtah.Generator.Interface.Core.QAbstractAnimation (c_QAbstractAnimation)
 import Graphics.UI.Qtah.Generator.Interface.Core.QVariant (c_QVariant)
-import Foreign.Hoppy.Generator.Types (intT, voidT, constT, objT, refT)
+import Foreign.Hoppy.Generator.Types (voidT, constT, objT, refT)
 import Foreign.Hoppy.Generator.Version (collect, just)
-import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (c_ListenerQVariant)
+import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (c_ListenerRefConstQVariant)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModuleWithMinVersion)
 import Graphics.UI.Qtah.Generator.Types
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (qreal)
@@ -53,17 +53,17 @@ c_QVariantAnimation =
   classSetEntityPrefix "" $
   makeClass (ident "QVariantAnimation") Nothing [c_QAbstractAnimation] $
   collect
-  [ just $ mkProp "duration" intT
-  , just $ mkProp "endValue" $ objT c_QVariant
+  [ just $ mkProp "endValue" $ objT c_QVariant
   , just $ mkProp "startValue" $ objT c_QVariant
   , just $ mkConstMethod "keyValueAt" [qreal] $ objT c_QVariant
   -- TODO QVariantAnimation::KeyValues QVariantAnimation::keyValues() const
   , just $ mkMethod "setKeyValueAt" [qreal, refT $ constT $ objT c_QVariant] voidT
   -- TODO just $ mkMethod "setKeyValueAt" [qreal, refT $ constT $ objT c_QVariant] $ voidT
+    -- TODO Other methods.
   ]
 
 signals :: [Signal]
 signals =
   collect
-  [ just $ makeSignal c_QVariantAnimation "valueChanged" c_ListenerQVariant
+  [ just $ makeSignal c_QVariantAnimation "valueChanged" c_ListenerRefConstQVariant
   ]

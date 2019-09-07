@@ -64,7 +64,7 @@ c_QTime =
   [ just $ mkCtor "new" []
   , just $ mkCtor "newWithHM" [intT, intT]
   , just $ mkCtor "newWithHMS" [intT, intT, intT]
-  , just $ mkCtor "newWithHMSms" [intT, intT, intT, intT]
+  , just $ mkCtor "newWithHMSMs" [intT, intT, intT, intT]
   , just $ mkConstMethod "addMSecs" [intT] $ objT c_QTime
   , just $ mkConstMethod "addSecs" [intT] $ objT c_QTime
   , just $ mkStaticMethod "currentTime" [] $ objT c_QTime
@@ -72,12 +72,12 @@ c_QTime =
   , just $ mkStaticMethod "fromMSecsSinceStartOfDay" [intT] $ objT c_QTime
   , just $ mkStaticMethod' "fromString" "fromString" [refT $ constT $ objT c_QString] $ objT c_QTime
   , just $ mkStaticMethod' "fromString" "fromStringWithDateFormat" [refT $ constT $ objT c_QString, enumT e_DateFormat] $ objT c_QTime
-  , just $ mkStaticMethod' "fromString" "fromStrings" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString] $ objT c_QTime
+  , just $ mkStaticMethod' "fromString" "fromStringWithStringFormat" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString] $ objT c_QTime
   , just $ mkConstMethod "hour" [] intT
   , just $ mkConstMethod "isNull" [] boolT
   , just $ mkConstMethod' "isValid" "isValid" [] boolT
-  , just $ mkMethod' "isValid" "isValidWithHMS" [intT, intT, intT] boolT
-  , just $ mkMethod' "isValid" "isValidWithHMSms" [intT, intT, intT, intT] boolT
+  , just $ mkMethod' "isValid" "isValidStatic" [intT, intT, intT] boolT
+  , just $ mkMethod' "isValid" "isValidStaticWithMs" [intT, intT, intT, intT] boolT
   , just $ mkConstMethod "minute" [] intT
   , just $ mkConstMethod "msec" [] intT
   , just $ mkConstMethod "msecsSinceStartOfDay" [] intT
@@ -89,7 +89,8 @@ c_QTime =
   , just $ mkMethod' "setHMS" "setHMSWithMs" [intT, intT, intT, intT] boolT
   , just $ mkMethod "start" [] voidT
   , just $ mkConstMethod' "toString" "toString" [] $ objT c_QString
-  , just $ mkConstMethod' "toString" "toStringWithDateformat" [enumT e_DateFormat] $ objT c_QString
+  , just $ mkConstMethod' "toString" "toStringWithDateFormat" [enumT e_DateFormat] $ objT c_QString
+  , just $ mkConstMethod' "toString" "toStringWithStringFormat" [objT c_QString] $ objT c_QString
   --, just $ mkMethod OpShl [refT $ objT c_QDataStream, refT $ objT c_QTime] $ refT $ objT c_QDataStream
   --, just $ mkMethod OpShr [refT $ objT c_QDataStream, refT $ objT c_QTime] $ refT $ objT c_QDataStream
   ]

@@ -51,7 +51,7 @@ library
       base >=4 && <5
     , process >=1.2 && <1.7
     , qtah-generator >=0.6 && <0.7
-  ghc-options: -O2 -W -fwarn-incomplete-patterns -fwarn-unused-do-bind
+  ghc-options: -W -fwarn-incomplete-patterns -fwarn-unused-do-bind
 
 custom-setup
   setup-depends:

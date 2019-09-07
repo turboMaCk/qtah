@@ -27,8 +27,8 @@ import Foreign.Hoppy.Generator.Spec (
   ident,
   includeStd,
   makeClass,
-  mkConstMethod',
   mkStaticMethod,
+  mkConstMethod,
   mkCtor,
   mkMethod',
   mkMethod
@@ -55,11 +55,11 @@ c_QMessageAuthenticationCode =
   collect
   [ just $ mkCtor "new" [enumT e_Algorithm]
   , just $ mkCtor "newWithKey" [enumT e_Algorithm, refT $ constT $ objT c_QByteArray]
-  , just $ mkMethod' "addData" "addData" [ptrT $ constT charT, intT] voidT
-  , just $ mkMethod' "addData" "addDataQBytearray" [refT $ constT $ objT c_QByteArray] voidT
+  , just $ mkMethod' "addData" "addDataRaw" [ptrT $ constT charT, intT] voidT
+  , just $ mkMethod' "addData" "addDataByteArray" [refT $ constT $ objT c_QByteArray] voidT
   , just $ mkMethod' "addData" "addDataDevice" [ptrT $ objT c_QIODevice] boolT
   , just $ mkStaticMethod "hash" [refT $ constT $ objT c_QByteArray, refT $ constT $ objT c_QByteArray, enumT e_Algorithm] $ objT c_QByteArray
-  , just $ mkMethod' "reset" "reset" [] voidT
-  , just $ mkConstMethod' "result" "resetReturnByte" [] $ objT c_QByteArray
+  , just $ mkMethod "reset" [] voidT
+  , just $ mkConstMethod "result" [] $ objT c_QByteArray
   , just $ mkMethod "setKey" [refT $ constT $ objT c_QByteArray] voidT
   ]

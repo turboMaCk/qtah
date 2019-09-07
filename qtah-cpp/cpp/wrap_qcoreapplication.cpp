@@ -35,5 +35,33 @@ QCoreApplication* create(const QStringList& args) {
     return new QCoreApplication(*argc, argv);
 }
 
+QString translate(const QString& context, const QString& sourceText) {
+    return QCoreApplication::translate(
+        context.toStdString().c_str(),
+        sourceText.toStdString().c_str());
+}
+
+QString translate(
+    const QString& context,
+    const QString& sourceText,
+    const QString& disambiguation) {
+    return QCoreApplication::translate(
+        context.toStdString().c_str(),
+        sourceText.toStdString().c_str(),
+        disambiguation.toStdString().c_str());
+}
+
+QString translate(
+    const QString& context,
+    const QString& sourceText,
+    const QString& disambiguation,
+    int n) {
+    return QCoreApplication::translate(
+        context.toStdString().c_str(),
+        sourceText.toStdString().c_str(),
+        disambiguation.toStdString().c_str(),
+        n);
+}
+
 }  // namespace qcoreapplication
 }  // namespace qtah

@@ -62,9 +62,9 @@ c_QPluginLoader =
   [ just $ mkCtor "new" []
   , just $ mkCtor "newWithParent" [ptrT $ objT c_QObject]
   , just $ mkCtor "newWithFilename" [refT $ constT $ objT c_QString]
-  , just $ mkCtor "newWithFilenameParent" [refT $ constT $ objT c_QString, ptrT $ objT c_QObject]
+  , just $ mkCtor "newWithFilenameAndParent" [refT $ constT $ objT c_QString, ptrT $ objT c_QObject]
   , test (qtVersion >= [4, 2]) $ mkConstMethod "errorString" [] $ objT c_QString
-  , just $ mkMethod' "instance" "pluginInstance" [] $ ptrT $ objT c_QObject
+  , just $ mkMethod' "instance" "getInstance" [] $ ptrT $ objT c_QObject
   , just $ mkConstMethod "isLoaded" [] $ boolT
   , just $ mkMethod "load" [] boolT
   --, just $ mkConstMethod "metaData" [] $ objT c_QJsonObject

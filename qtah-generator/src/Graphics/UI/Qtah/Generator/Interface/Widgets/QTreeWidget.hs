@@ -55,7 +55,7 @@ import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
   )
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QTreeView (c_QTreeView)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Widgets.QWidget (c_QWidget)
-import Graphics.UI.Qtah.Generator.Interface.Core.QItemSelectionModel (bs_SelectionFlags, c_QItemSelectionModel)
+import Graphics.UI.Qtah.Generator.Interface.Core.QItemSelectionModel (bs_SelectionFlags)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
 
@@ -97,7 +97,7 @@ c_QTreeWidget =
   , test (qtVersion >= [5, 10]) $ mkConstMethod' "isPersistentEditorOpen" "isPersistentEditorOpenWithColumn" [ptrT $ objT c_QTreeWidgetItem, intT] boolT
   , test (qtVersion >= [4, 3]) $ mkConstMethod "itemAbove" [constT $ ptrT $ objT c_QTreeWidgetItem] (ptrT $ objT c_QTreeWidgetItem)
   , just $ mkConstMethod' "itemAt" "itemAt" [constT $ objT c_QPoint] (ptrT $ objT c_QTreeWidgetItem)
-  , just $ mkConstMethod' "itemAt" "itemAtWithCoordinates" [intT, intT] (ptrT $ objT c_QTreeWidgetItem)
+  , just $ mkConstMethod' "itemAt" "itemAtRaw" [intT, intT] (ptrT $ objT c_QTreeWidgetItem)
   , test (qtVersion >= [4, 3]) $ mkConstMethod "itemBelow" [constT $ ptrT $ objT c_QTreeWidgetItem] (ptrT $ objT c_QTreeWidgetItem)
   -- TODO QTreeWidgetItem *QTreeWidget::itemFromIndex(const QModelIndex &index) const
   , test (qtVersion >= [4, 1]) $ mkConstMethod "itemWidget" [ptrT $ objT c_QTreeWidgetItem, intT] $ ptrT $ objT c_QWidget
@@ -107,12 +107,11 @@ c_QTreeWidget =
   , just $ mkConstMethod "selectedItems" [] $ objT c_QListQTreeWidgetItem
   , just $ mkMethod' "setCurrentItem" "setCurrentItem" [ptrT $ objT c_QTreeWidgetItem] voidT
   , test (qtVersion >= [4, 1]) $ mkMethod' "setCurrentItem" "setCurrentItemWithColumn" [ptrT $ objT c_QTreeWidgetItem, intT] voidT
-  , test (qtVersion >= [4, 4]) $ mkMethod' "setCurrentItem" "setCurrentItemWithColFlags" [ptrT $ objT c_QTreeWidgetItem, intT, bitspaceT bs_SelectionFlags] voidT
+  , test (qtVersion >= [4, 4]) $ mkMethod' "setCurrentItem" "setCurrentItemWithColumnAndFlags" [ptrT $ objT c_QTreeWidgetItem, intT, bitspaceT bs_SelectionFlags] voidT
   , just $ mkMethod "setHeaderItem" [ptrT $ objT c_QTreeWidgetItem] voidT
   , test (qtVersion >= [4, 2]) $ mkMethod "setHeaderLabel" [objT c_QString] voidT
   , just $ mkMethod "setHeaderLabels" [objT c_QStringList] voidT
   , test (qtVersion >= [4, 1]) $ mkMethod "setItemWidget" [ptrT $ objT c_QTreeWidgetItem, intT, ptrT $ objT c_QWidget] voidT
-  , just $ mkMethod "setSelectionModel" [ptrT $ objT c_QItemSelectionModel] voidT
   , test (qtVersion >= [4, 1]) $ mkConstMethod "sortColumn" [] intT
   , just $ mkMethod "sortItems" [intT, enumT e_SortOrder] voidT
   , just $ mkMethod "takeTopLevelItem" [intT] $ ptrT $ objT c_QTreeWidgetItem

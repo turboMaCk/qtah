@@ -62,9 +62,7 @@ c_QIODevice =
   classSetEntityPrefix "" $
   makeClass (ident "QIODevice") Nothing [c_QObject] $
   collect
-  [ --just $ mkCtor "new" []
-   -- just $ mkCtor "newWithParent" [ptrT $ objT c_QObject]
-    just $ mkConstMethod "atEnd" [] boolT
+  [ just $ mkConstMethod "atEnd" [] boolT
   , just $ mkConstMethod "bytesAvailable" [] qlonglong
   , just $ mkConstMethod "bytesToWrite" [] qlonglong
   , just $ mkConstMethod "canReadLine" [] boolT
@@ -73,7 +71,7 @@ c_QIODevice =
   , test (qtVersion >= [5, 7]) $ mkConstMethod "currentReadChannel" [] intT
   , test (qtVersion >= [5, 7]) $ mkConstMethod "currentWriteChannel" [] intT
   , just $ mkConstMethod "errorString" [] $ objT c_QString
-  , just $ mkMethod "getChar" [ptrT charT] boolT
+    -- TODO bool getChar(char*)
   , just $ mkConstMethod "isOpen" [] boolT
   , just $ mkConstMethod "isReadable" [] boolT
   , just $ mkConstMethod "isSequential" [] boolT
@@ -82,17 +80,17 @@ c_QIODevice =
   , just $ mkConstMethod "isWritable" [] boolT
   , just $ mkMethod "open" [bitspaceT bs_OpenMode] boolT
   , just $ mkConstMethod "openMode" [] $ bitspaceT bs_OpenMode
-  , test (qtVersion >= [4, 1]) $ mkMethod' "peek" "peek" [ptrT charT, qlonglong] qlonglong
-  , test (qtVersion >= [4, 1]) $ mkMethod' "peek" "peekWithBytearray" [qlonglong] $ objT c_QByteArray
+  , test (qtVersion >= [4, 1]) $ mkMethod' "peek" "peekByteArray" [qlonglong] $ objT c_QByteArray
+  , test (qtVersion >= [4, 1]) $ mkMethod' "peek" "peekRaw" [ptrT charT, qlonglong] qlonglong
   , just $ mkConstMethod "pos" [] qlonglong
   , just $ mkMethod "putChar" [charT] boolT
-  , just $ mkMethod' "read" "read" [ptrT charT, qlonglong] qlonglong
-  , just $ mkMethod' "read" "readWithBytearray" [qlonglong] $ objT c_QByteArray
+  , just $ mkMethod' "read" "readByteArray" [qlonglong] $ objT c_QByteArray
+  , just $ mkMethod' "read" "readRaw" [ptrT charT, qlonglong] qlonglong
   , just $ mkMethod "readAll" [] $ objT c_QByteArray
   , test (qtVersion >= [5, 7]) $ mkConstMethod "readChannelCount" [] intT
-  , just $ mkMethod' "readLine" "readLineWithText" [ptrT charT, qlonglong] qlonglong
-  , just $ mkMethod' "readLine" "readLine" [] $ objT c_QByteArray
-  , just $ mkMethod' "readLine" "readLineWithBytearray" [qlonglong] $ objT c_QByteArray
+  , just $ mkMethod' "readLine" "readLineByteArray" [] $ objT c_QByteArray
+  , just $ mkMethod' "readLine" "readLineByteArrayWithSize" [qlonglong] $ objT c_QByteArray
+  , just $ mkMethod' "readLine" "readLineRaw" [ptrT charT, qlonglong] qlonglong
   , just $ mkMethod "reset" [] boolT
   , test (qtVersion >= [5, 7]) $ mkMethod "rollbackTransaction" [] voidT
   , just $ mkMethod "seek" [qlonglong] boolT
@@ -105,9 +103,9 @@ c_QIODevice =
   , just $ mkMethod "ungetChar" [charT] voidT
   , just $ mkMethod "waitForBytesWritten" [intT] boolT
   , just $ mkMethod "waitForReadyRead" [intT] boolT
-  , just $ mkMethod' "write" "write" [ptrT $ constT charT, qlonglong] qlonglong
-  , just $ mkMethod' "write" "writeWithText" [ptrT $ constT charT] qlonglong
-  , just $ mkMethod' "write" "writeWithBytearray" [refT $ constT $ objT c_QByteArray] qlonglong
+  , just $ mkMethod' "write" "writeByteArray" [refT $ constT $ objT c_QByteArray] qlonglong
+  , just $ mkMethod' "write" "writeRaw" [ptrT $ constT charT] qlonglong
+  , just $ mkMethod' "write" "writeRawWithSize" [ptrT $ constT charT, qlonglong] qlonglong
   , test (qtVersion >= [5, 7]) $ mkConstMethod "writeChannelCount" [] intT
   ]
 
@@ -124,15 +122,15 @@ c_QIODevice =
       existingOnly = 0x0080
       readWrite = readOnly .|. writeOnly
   in [ (notOpen, ["not", "open"])
-      , (readOnly, ["read", "only"])
-      , (writeOnly, ["write", "only"])
-      , (readWrite, ["read", "write"])
-      , (append, ["append"])
-      , (truncate, ["truncate"])
-      , (text, ["text"])
-      , (unbuffered, ["unbuffered"])
-      , (newOnly, ["new", "only"])
-      , (existingOnly, ["existing", "only"])
+     , (readOnly, ["read", "only"])
+     , (writeOnly, ["write", "only"])
+     , (readWrite, ["read", "write"])
+     , (append, ["append"])
+     , (truncate, ["truncate"])
+     , (text, ["text"])
+     , (unbuffered, ["unbuffered"])
+     , (newOnly, ["new", "only"])
+     , (existingOnly, ["existing", "only"])
      ]
 
 signals =

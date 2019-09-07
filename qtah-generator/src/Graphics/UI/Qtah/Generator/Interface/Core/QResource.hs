@@ -62,26 +62,26 @@ c_QResource =
   collect
   [ just $ mkCtor "new" []
   , just $ mkCtor "newWithFile" [refT $ constT $ objT c_QString]
-  --, just $ mkCtor "newWithFileLocale" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QLocale]
+  --, just $ mkCtor "newWithFileAndLocale" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QLocale]
   , just $ mkConstMethod "absoluteFilePath" [] $ objT c_QString
   , test (qtVersion >= [5, 13]) $ mkConstMethod "compressionAlgorithm" [] $ enumT e_Compression
-  , just $ mkConstMethod' "data" "dataRes" [] $ ptrT $ constT ucharT
+  , just $ mkConstMethod' "data" "getData" [] $ ptrT $ constT ucharT
   , just $ mkConstMethod "fileName" [] $ objT c_QString
   , just $ mkConstMethod "isCompressed" [] boolT
   , just $ mkConstMethod "isValid" [] boolT
   , just $ mkConstMethod "lastModified" [] $ objT c_QDateTime
   --, just $ mkConstMethod "locale" [] $ objT c_QLocale
-  , just $ mkStaticMethod' "registerResource" "registerResource" [refT $ constT $ objT c_QString ] boolT
-  , just $ mkStaticMethod' "registerResource" "registerResourceWithResTree" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString] boolT
-  , test (qtVersion >= [4, 3]) $ mkStaticMethod' "registerResource" "registerResourceUchar" [ptrT $ constT ucharT] boolT
-  , test (qtVersion >= [4, 3]) $ mkStaticMethod' "registerResource" "registerResourceUcharTree" [ptrT $ constT ucharT, refT $ constT $ objT c_QString] boolT
+  , just $ mkStaticMethod' "registerResource" "registerResourcePath" [refT $ constT $ objT c_QString ] boolT
+  , just $ mkStaticMethod' "registerResource" "registerResourcePathAndTree" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString] boolT
+  , test (qtVersion >= [4, 3]) $ mkStaticMethod' "registerResource" "registerResourceData" [ptrT $ constT ucharT] boolT
+  , test (qtVersion >= [4, 3]) $ mkStaticMethod' "registerResource" "registerResourceDataAndTree" [ptrT $ constT ucharT, refT $ constT $ objT c_QString] boolT
   , just $ mkMethod "setFileName" [refT $ constT $ objT c_QString] voidT
   -- just $ mkMethod "setLocale" [refT $ constT $ objT c_QLocale] $ voidT
   , just $ mkConstMethod "size" [] qint64
-  , just $ mkStaticMethod' "unregisterResource" "unregisterResource" [refT $ constT $ objT c_QString ] boolT
-  , just $ mkStaticMethod' "unregisterResource" "unregisterResourceWithResTree" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString] boolT
-  , test (qtVersion >= [4, 3]) $ mkStaticMethod' "unregisterResource" "unregisterResourceUchar" [ptrT $ constT ucharT] boolT
-  , test (qtVersion >= [4, 3]) $ mkStaticMethod' "unregisterResource" "unregisterResourceUcharTree" [ptrT $ constT ucharT, refT $ constT $ objT c_QString] boolT
+  , just $ mkStaticMethod' "unregisterResource" "unregisterResourcePath" [refT $ constT $ objT c_QString ] boolT
+  , just $ mkStaticMethod' "unregisterResource" "unregisterResourcePathAndTree" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString] boolT
+  , test (qtVersion >= [4, 3]) $ mkStaticMethod' "unregisterResource" "unregisterResourceData" [ptrT $ constT ucharT] boolT
+  , test (qtVersion >= [4, 3]) $ mkStaticMethod' "unregisterResource" "unregisterResourceDataAndTree" [ptrT $ constT ucharT, refT $ constT $ objT c_QString] boolT
   ]
 
 e_Compression =

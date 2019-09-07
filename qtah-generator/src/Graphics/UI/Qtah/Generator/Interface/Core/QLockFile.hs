@@ -57,7 +57,8 @@ c_QLockFile =
   collect
   [ just $ mkCtor "new" [refT $ constT $ objT c_QString]
   , just $ mkConstMethod "error" [] $ enumT e_LockError
-  , just $ mkConstMethod "getLockInfo" [ptrT $ llongT, ptrT $ objT c_QString, ptrT $ objT c_QString] boolT
+  , -- TODO Return a tuple instead.
+    just $ mkConstMethod "getLockInfo" [ptrT $ llongT, ptrT $ objT c_QString, ptrT $ objT c_QString] boolT
   , just $ mkConstMethod "isLocked" [] boolT
   , just $ mkMethod "lock" [] boolT
   , just $ mkMethod "removeStaleLockFile" [] boolT

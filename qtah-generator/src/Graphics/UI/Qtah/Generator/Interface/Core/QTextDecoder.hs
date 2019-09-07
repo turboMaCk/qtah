@@ -52,7 +52,7 @@ c_QTextDecoder =
   collect
   [ just $ mkCtor "new" [ptrT $ constT $ objT c_QTextCodec]
    -- TODO QTextDecoder::QTextDecoder(const QTextCodec *codec, QTextCodec::ConversionFlags flags)
-  , just $ mkMethod' "toUnicode" "toUnicode" [ptrT $ constT $ charT, intT] $ objT c_QString
-  , just $ mkMethod' "toUnicode" "toUnicodeWithByte" [refT $ constT $ objT c_QByteArray] $ objT c_QString
-  , just $ mkMethod' "toUnicode" "toUnicodeWithStr" [ptrT $ objT c_QString, ptrT $ constT $ charT, intT] voidT
+  , just $ mkMethod' "toUnicode" "toUnicodeRaw" [ptrT $ constT $ charT, intT] $ objT c_QString
+  , just $ mkMethod' "toUnicode" "toUnicodeByteArray" [refT $ constT $ objT c_QByteArray] $ objT c_QString
+  , just $ mkMethod' "toUnicode" "toUnicodeString" [ptrT $ objT c_QString, ptrT $ constT $ charT, intT] voidT
   ]

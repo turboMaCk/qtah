@@ -27,7 +27,6 @@ import Foreign.Hoppy.Generator.Spec (
   ident,
   includeStd,
   makeClass,
-  mkConstMethod,
   mkMethod
   )
 import Graphics.UI.Qtah.Generator.Interface.Core.QAbstractAnimation (c_QAbstractAnimation)
@@ -48,6 +47,5 @@ c_QPauseAnimation =
   classSetEntityPrefix "" $
   makeClass (ident "QPauseAnimation") Nothing [c_QAbstractAnimation] $
   collect
-  [ just $ mkConstMethod "duration" [] $ intT
-  , just $ mkMethod "setDuration" [intT] voidT
+  [ just $ mkMethod "setDuration" [intT] voidT
   ]

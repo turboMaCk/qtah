@@ -40,7 +40,6 @@
 /qtah-cpp-qt?/dist
 
 /qtah/dist
-/qtah/src/Graphics/UI/Qtah/Core/Connection.hs
 /qtah/src/Graphics/UI/Qtah/Core/Q*
 /qtah/src/Graphics/UI/Qtah/Core/Types.hs
 /qtah/src/Graphics/UI/Qtah/Generated
@@ -68,4 +67,3 @@
 *~
 .qmake.stash
 .stack-work
-

@@ -29,6 +29,7 @@ import Foreign.Hoppy.Generator.Spec (
   ident1,
   includeStd,
   makeClass,
+  mkConstMethod',
   mkCtor,
   mkMethod,
   mkProp,
@@ -74,7 +75,7 @@ c_QGradient =
   , just $ mkProp "spread" $ enumT e_Spread
   -- TODO void setStops(const QGradientStops &stopPoints)
   -- TODO QGradientStops stops() const
-  --, just $ mkConstMethod "type" [] $ enumT e_Type
+  , just $ mkConstMethod' "type" "getType" [] $ enumT e_Type
   ]
 
 e_CoordinateMode =
@@ -87,7 +88,9 @@ e_CoordinateMode =
 
 e_Preset =
     makeQtEnum (ident1 "QGradient" "Preset") [includeStd "QGradient"]
-    [ (0, ["warm", "flame"])
+    [ (1, ["warm", "flame"])
+      {- TODO Fix off-by-one.  Also it looks like some of these are missing from
+       the Qt headers (Arielle's Smile, Above Clouds)?
     , (1, ["night", "fade"])
     , (2, ["spring", "warmth"])
     , (3, ["juicy", "peach"])
@@ -267,6 +270,7 @@ e_Preset =
     , (177, ["gagarin", "view"])
     , (178, ["fabled", "sunset"])
     , (179, ["perfect", "blue"])
+    -}
     ]
 
 e_Spread =

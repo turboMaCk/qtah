@@ -48,8 +48,8 @@ import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Core.QList (
   )
 import Graphics.UI.Qtah.Generator.Interface.Core.QEvent (c_QEvent)
 import Graphics.UI.Qtah.Generator.Interface.Core.QMetaObject (c_QMetaObject)
+import Graphics.UI.Qtah.Generator.Interface.Core.QMetaObject.Connection (c_Connection)
 import Graphics.UI.Qtah.Generator.Interface.Core.QMetaMethod (c_QMetaMethod)
-import Graphics.UI.Qtah.Generator.Interface.Core.Connection (c_Connection)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Foreign.Hoppy.Generator.Std.String (c_string)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Core.QThread (c_QThread)
@@ -82,6 +82,7 @@ c_QObject =
   , just $ mkMethod "blockSignals" [boolT] boolT
   , just $ mkMethod "children" [] $ objT c_QListQObject
 
+    -- TODO QStrings instead of const char*.
   , just $ mkConstMethod' "connect" "connect" [ptrT $ constT $ objT c_QObject, ptrT $ constT charT, ptrT $ constT charT] $ objT c_Connection
   , just $ mkConstMethod' "connect" "connectWithType" [ptrT $ constT $ objT c_QObject, ptrT $ constT charT, ptrT $ constT charT, enumT e_ConnectionType] $ objT c_Connection
 
@@ -98,10 +99,10 @@ c_QObject =
 
   , just $ mkConstMethod' "disconnect" "disconnect" [] boolT
   , just $ mkConstMethod' "disconnect" "disconnectWithReceiver" [ptrT $ constT $ objT c_QObject] boolT
-  , just $ mkConstMethod' "disconnect" "disconnectWithMethod" [ptrT $ constT $ objT c_QObject, ptrT $ constT charT] boolT
+  , just $ mkConstMethod' "disconnect" "disconnectWithReceiverAndMethod" [ptrT $ constT $ objT c_QObject, ptrT $ constT charT] boolT
   , just $ mkConstMethod' "disconnect" "disconnectWithSignal" [ptrT $ constT charT] boolT
-  , just $ mkConstMethod' "disconnect" "disconnectWithSignalReceiver" [ptrT $ constT charT, ptrT $ constT $ objT c_QObject] boolT
-  , just $ mkConstMethod' "disconnect" "disconnectWithSignalReceiverMethod" [ptrT $ constT charT, ptrT $ constT $ objT c_QObject, ptrT $ constT charT] boolT
+  , just $ mkConstMethod' "disconnect" "disconnectWithSignalAndReceiver" [ptrT $ constT charT, ptrT $ constT $ objT c_QObject] boolT
+  , just $ mkConstMethod' "disconnect" "disconnectWithSignalAndReceiverAndMethod" [ptrT $ constT charT, ptrT $ constT $ objT c_QObject, ptrT $ constT charT] boolT
   , just $ mkStaticMethod' "disconnect" "disconnectWithMetaobject" [objT c_Connection] boolT
 
   , just $ mkMethod "dumpObjectInfo" [] voidT

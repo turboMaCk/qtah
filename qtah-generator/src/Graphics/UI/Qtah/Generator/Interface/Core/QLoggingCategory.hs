@@ -23,7 +23,6 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QLoggingCategory (
 
 import Foreign.Hoppy.Generator.Spec (
   Export (ExportClass),
-  Operator (OpCall),
   Type,
   addReqIncludes,
   classSetEntityPrefix,
@@ -31,10 +30,8 @@ import Foreign.Hoppy.Generator.Spec (
   includeStd,
   makeClass,
   mkConstMethod,
-  mkConstMethod',
   mkStaticMethod,
   mkCtor,
-  mkMethod',
   mkMethod
   )
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
@@ -57,7 +54,8 @@ c_QLoggingCategory =
   classSetEntityPrefix "" $
   makeClass (ident "QLoggingCategory") Nothing [] $
   collect
-  [ test (qtVersion >= [5, 4]) $ mkCtor "newWithMsgType" [ptrT $ constT charT, enumT e_QtMsgType]
+  [ -- TODO QStrings instead of const char*.
+    test (qtVersion >= [5, 4]) $ mkCtor "newWithMsgType" [ptrT $ constT charT, enumT e_QtMsgType]
   , just $ mkCtor "new" [ptrT $ constT charT]
   , just $ mkConstMethod "categoryName" [] $ ptrT $ constT charT
   , just $ mkStaticMethod "defaultCategory" [] $ ptrT $ objT c_QLoggingCategory
@@ -69,8 +67,7 @@ c_QLoggingCategory =
   , just $ mkConstMethod "isWarningEnabled" [] boolT
   , just $ mkMethod "setEnabled" [enumT e_QtMsgType, boolT] voidT
   , just $ mkStaticMethod "setFilterRules" [refT $ constT $ objT c_QString] voidT
-  , just $ mkMethod' OpCall "call" [] $ refT $ objT c_QLoggingCategory
-  , just $ mkConstMethod' OpCall "callConst" [] $ refT $ constT $ objT c_QLoggingCategory
+    -- OMIT operator()
   ]
 
 categoryFilter :: Type

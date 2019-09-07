@@ -25,7 +25,7 @@ import Foreign.Hoppy.Generator.Spec (
   Class,
   CppEnum,
   Export (ExportClass, ExportEnum),
-  Operator (OpAssign, OpLt),
+  Operator (OpLt),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -36,9 +36,11 @@ import Foreign.Hoppy.Generator.Spec (
   mkConstMethod',
   mkCtor,
   mkMethod,
-  mkMethod',
   )
-
+import Foreign.Hoppy.Generator.Spec.ClassFeature (
+  ClassFeature (Assignable),
+  classAddFeatures,
+  )
 import Foreign.Hoppy.Generator.Types (intT, objT, ptrT, refT, constT, voidT, boolT, enumT, bitspaceT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
 import Graphics.UI.Qtah.Generator.Flags (qtVersion)
@@ -72,6 +74,7 @@ aModule =
 c_QTreeWidgetItem :: Class
 c_QTreeWidgetItem =
   addReqIncludes [includeStd "QTreeWidgetItem"] $
+  classAddFeatures [Assignable] $
   classSetEntityPrefix "" $
   makeClass (ident "QTreeWidgetItem") Nothing [] $
   collect
@@ -96,7 +99,7 @@ c_QTreeWidgetItem =
   , just $ mkConstMethod "child" [intT] (ptrT $ objT c_QTreeWidgetItem)
   , just $ mkConstMethod "childCount" [] intT
   , just $ mkConstMethod "childIndicatorPolicy" [] (enumT e_ChildIndicatorPolicy)
-  , just $ mkConstMethod' "clone" "getClone" [] $ ptrT $ objT c_QTreeWidgetItem
+  , just $ mkConstMethod "clone" [] $ ptrT $ objT c_QTreeWidgetItem
   , just $ mkConstMethod "columnCount" [] intT
   , just $ mkConstMethod' "data" "getData" [intT, intT] (objT c_QVariant)
   , just $ mkConstMethod "flags" [] $ bitspaceT bs_ItemFlags
@@ -144,8 +147,7 @@ c_QTreeWidgetItem =
   , just $ mkConstMethod "treeWidget" [] $ ptrT $ objT c_QTreeWidget
   , just $ mkConstMethod' "type" "getType" [] intT
   , just $ mkConstMethod "whatsThis" [intT] $ objT c_QString
-  , just $ mkMethod' OpAssign "assign" [objT c_QTreeWidgetItem] $ refT $ objT c_QTreeWidgetItem
-  , just $ mkMethod' OpLt "lessThan" [refT $ constT $ objT c_QTreeWidgetItem] boolT
+  , just $ mkMethod OpLt [refT $ constT $ objT c_QTreeWidgetItem] boolT
   -- TODO void QTreeWidgetItem::write(QDataStream &out) const
   ]
 

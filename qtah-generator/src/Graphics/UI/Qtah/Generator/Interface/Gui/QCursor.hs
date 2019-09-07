@@ -67,11 +67,9 @@ c_QCursor =
   [ just $ mkCtor "new" []
   , just $ mkCtor "newWithCursorShape" [enumT e_CursorShape]
   , just $ mkCtor "newWithPixmap" [refT $ constT $ objT c_QPixmap]
-  , just $ mkCtor "newWithPixmapX" [refT $ constT $ objT c_QPixmap, intT]
-  , just $ mkCtor "newWithPixmapXY" [refT $ constT $ objT c_QPixmap, intT, intT]
+  , just $ mkCtor "newWithPixmapAndHotSpot" [refT $ constT $ objT c_QPixmap, intT, intT]
   , just $ mkCtor "newWithBitmap" [refT $ constT $ objT c_QBitmap, refT $ constT $ objT c_QBitmap]
-  , just $ mkCtor "newWithBitmapX" [refT $ constT $ objT c_QBitmap, refT $ constT $ objT c_QBitmap, intT]
-  , just $ mkCtor "newWithBitmapXY" [refT $ constT $ objT c_QBitmap, refT $ constT $ objT c_QBitmap, intT, intT]
+  , just $ mkCtor "newWithBitmapAndHotSpot" [refT $ constT $ objT c_QBitmap, refT $ constT $ objT c_QBitmap, intT, intT]
   , just $ mkConstMethod "bitmap" [] $ ptrT $ constT $ objT c_QBitmap
   , just $ mkConstMethod "hotSpot" [] $ objT c_QPoint
   , just $ mkConstMethod "mask" [] $ ptrT $ constT $ objT c_QBitmap

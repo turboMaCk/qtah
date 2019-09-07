@@ -66,21 +66,22 @@ c_QLibrary =
   [ just $ mkCtor "new" []
   , just $ mkCtor "newWithParent" [ptrT $ objT c_QObject]
   , just $ mkCtor "newWithFilename" [refT $ constT $ objT c_QString]
-  , just $ mkCtor "newWithFilenameParent" [refT $ constT $ objT c_QString, ptrT $ objT c_QObject]
-  , just $ mkCtor "newWithFilenameVer" [refT $ constT $ objT c_QString, intT]
-  , just $ mkCtor "newWithFilenameVerParent" [refT $ constT $ objT c_QString, intT, ptrT $ objT c_QObject]
-  , just $ mkCtor "newWithFilenameVerstr" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString]
-  , just $ mkCtor "newWithFilenameVerstrParent" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString, ptrT $ objT c_QObject]
+  , just $ mkCtor "newWithFilenameAndParent" [refT $ constT $ objT c_QString, ptrT $ objT c_QObject]
+  , just $ mkCtor "newWithFilenameAndMajorVersion" [refT $ constT $ objT c_QString, intT]
+  , just $ mkCtor "newWithFilenameAndMajorVersionAndParent" [refT $ constT $ objT c_QString, intT, ptrT $ objT c_QObject]
+  , just $ mkCtor "newWithFilenameAndVersion" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString]
+  , just $ mkCtor "newWithFilenameAndVersionAndParent" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString, ptrT $ objT c_QObject]
   , test (qtVersion >= [4, 2]) $ mkConstMethod "errorString" [] $ objT c_QString
   , just $ mkStaticMethod "isLibrary" [refT $ constT $ objT c_QString] boolT
   , just $ mkConstMethod "isLoaded" [] boolT
   , just $ mkMethod "load" [] boolT
-  , just $ mkMethod' "resolve" "resolve" [ptrT $ constT $ charT] qfunctionpointer
-  , just $ mkStaticMethod' "resolve" "resolveWithFilenameSymbol" [refT $ constT $ objT c_QString, ptrT $ constT charT] qfunctionpointer
-  , just $ mkStaticMethod' "resolve" "resolveWithFilenameVerSymbol" [refT $ constT $ objT c_QString, intT, ptrT $ constT charT] qfunctionpointer
-  , test (qtVersion >= [4, 4]) $ mkStaticMethod' "resolve" "resolveWithFilenameVerstrSymbol" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString, ptrT $ constT charT] qfunctionpointer
-  , just $ mkMethod' "setFileNameAndVersion" "setFileNameAndVersionVerint" [refT $ constT $ objT c_QString, intT] voidT
-  , test (qtVersion >= [4, 4]) $ mkMethod' "setFileNameAndVersion" "setFileNameAndVersionVerstr" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString] voidT
+  , -- TODO Make these functions take QStrings.
+    just $ mkMethod' "resolve" "resolve" [ptrT $ constT $ charT] qfunctionpointer
+  , just $ mkStaticMethod' "resolve" "resolveStatic" [refT $ constT $ objT c_QString, ptrT $ constT charT] qfunctionpointer
+  , just $ mkStaticMethod' "resolve" "resolveStaticWithMajorVersion" [refT $ constT $ objT c_QString, intT, ptrT $ constT charT] qfunctionpointer
+  , test (qtVersion >= [4, 4]) $ mkStaticMethod' "resolve" "resolveStaticWithVersion" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString, ptrT $ constT charT] qfunctionpointer
+  , just $ mkMethod' "setFileNameAndVersion" "setFileNameAndMajorVersion" [refT $ constT $ objT c_QString, intT] voidT
+  , test (qtVersion >= [4, 4]) $ mkMethod' "setFileNameAndVersion" "setFileNameAndVersion" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString] voidT
   , just $ mkMethod "unload" [] boolT
   , just $ mkProp "fileName" $ objT c_QString
   , just $ mkProp "loadHints" $ bitspaceT bs_LoadHints

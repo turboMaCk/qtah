@@ -27,20 +27,18 @@ import Foreign.Hoppy.Generator.Spec (
   ident,
   includeStd,
   makeClass,
-  mkConstMethod,
   mkConstMethod',
   mkCtor,
   mkMethod',
   mkMethod
   )
-import Graphics.UI.Qtah.Generator.Interface.Core.QIODevice (c_QIODevice, bs_OpenMode)
+import Graphics.UI.Qtah.Generator.Interface.Core.QIODevice (c_QIODevice)
 import Graphics.UI.Qtah.Generator.Interface.Core.QByteArray (c_QByteArray)
 import Graphics.UI.Qtah.Generator.Interface.Core.QObject (c_QObject)
-import Foreign.Hoppy.Generator.Types (intT, charT, voidT, boolT, bitspaceT, constT, objT, ptrT, refT)
+import Foreign.Hoppy.Generator.Types (intT, charT, voidT, constT, objT, ptrT, refT)
 import Foreign.Hoppy.Generator.Version (collect, just)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
-import Graphics.UI.Qtah.Generator.Interface.Core.Types (qlonglong)
 
 {-# ANN module "HLint: ignore Use camelCase" #-}
 
@@ -57,18 +55,11 @@ c_QBuffer =
   [ just $ mkCtor "new" []
   , just $ mkCtor "newWithParent" [ptrT $ objT c_QObject]
   , just $ mkCtor "newWithByteArray" [ptrT $ objT c_QByteArray]
-  , just $ mkCtor "newWithByteArrayParent" [ptrT $ objT c_QByteArray, ptrT $ objT c_QObject]
+  , just $ mkCtor "newWithByteArrayAndParent" [ptrT $ objT c_QByteArray, ptrT $ objT c_QObject]
   , just $ mkMethod' "buffer" "buffer" [] $ refT $ objT c_QByteArray
   , just $ mkConstMethod' "buffer" "bufferConst" [] $ refT $ constT $ objT c_QByteArray
   , just $ mkConstMethod' "data" "getData" [] $ refT $ constT $ objT c_QByteArray
-  , just $ mkMethod "seek" [qlonglong] boolT
   , just $ mkMethod "setBuffer" [ptrT $ objT c_QByteArray] voidT
-  , just $ mkMethod' "setData" "setDataWithByteArray" [refT $ constT $ objT c_QByteArray] voidT
-  , just $ mkMethod' "setData" "setDataWithDataSize" [ptrT $ constT charT, intT] voidT
-  , just $ mkConstMethod "size" [] qlonglong
-  , just $ mkConstMethod "atEnd" [] boolT
-  , just $ mkConstMethod "canReadLine" [] boolT
-  , just $ mkMethod "close" [] voidT
-  , just $ mkMethod "open" [bitspaceT bs_OpenMode] boolT
-  , just $ mkConstMethod "pos" [] qlonglong
+  , just $ mkMethod' "setData" "setDataByteArray" [refT $ constT $ objT c_QByteArray] voidT
+  , just $ mkMethod' "setData" "setDataRaw" [ptrT $ constT charT, intT] voidT
   ]

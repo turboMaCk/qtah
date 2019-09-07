@@ -56,6 +56,6 @@ c_QTextEncoder =
     just $ mkCtor "new" [ptrT $ objT c_QTextCodec]
   --, test (qtVersion >= [4, 7]) $ mkCtor "newWithConverFlags" [ptrT $ objT c_QTextCodec, bitspaceT bs_ConversionFlags]
   --, test (qtVersion >= [5, 10]) $ mkMethod' "fromUnicode" "fromUnicodeWithStringview" [objT c_QStringView] $ objT c_QByteArray
-  , just $ mkMethod' "fromUnicode" "fromUnicodeWithString" [refT $ constT $ objT c_QString] $ objT c_QByteArray
-  , just $ mkMethod' "fromUnicode" "fromUnicodeWithQChar" [ptrT $ constT $ objT c_QChar, intT] $ objT c_QByteArray
+  , just $ mkMethod' "fromUnicode" "fromUnicodeString" [refT $ constT $ objT c_QString] $ objT c_QByteArray
+  , just $ mkMethod' "fromUnicode" "fromUnicodeQChar" [ptrT $ constT $ objT c_QChar, intT] $ objT c_QByteArray
   ]

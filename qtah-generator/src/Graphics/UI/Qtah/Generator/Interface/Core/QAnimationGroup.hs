@@ -52,9 +52,9 @@ c_QAnimationGroup =
   , just $ mkConstMethod "animationAt" [intT] $ ptrT $ objT c_QAbstractAnimation
   , just $ mkConstMethod "animationCount" [] intT
   , just $ mkMethod "clear" [] voidT
+  , just $ mkConstMethod "duration" [] intT
   , just $ mkConstMethod "indexOfAnimation" [ptrT $ objT c_QAbstractAnimation] intT
   , just $ mkMethod "insertAnimation" [intT, ptrT $ objT c_QAbstractAnimation] voidT
   , just $ mkMethod "removeAnimation" [ptrT $ objT c_QAbstractAnimation] voidT
   , just $ mkMethod "takeAnimation" [intT] $ ptrT $ objT c_QAbstractAnimation
-  , just $ mkConstMethod "duration" [] intT
   ]

@@ -73,6 +73,7 @@ c_QMetaMethod =
   , just $ mkConstMethod "parameterTypes" [] $ objT c_QListQByteArray
   , test (qtVersion >= [5, 0]) $ mkConstMethod "returnType" [] intT
   , test (qtVersion >= [5, 1]) $ mkConstMethod "revision" [] intT
+    -- TODO QStrings instead of const char*.
   , just $ mkConstMethod "tag" [] $ ptrT $ constT charT
   , just $ mkConstMethod "typeName" [] $ ptrT $ constT charT
   , test (qtVersion >= [5, 0]) $ mkMethod OpNe [refT $ constT $ objT c_QMetaMethod] boolT

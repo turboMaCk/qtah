@@ -73,13 +73,13 @@ c_QSysInfo =
 
 e_Sizes =
     makeQtEnum (ident1 "QSysInfo" "Sizes") [includeStd "QSysInfo"]
-    [(finiteBitSize (undefined :: IntPtr), ["word", "size"])]
+    [(finiteBitSize (undefined :: IntPtr), ["word", "size"])]  -- TODO (Autodetection.)
 
 e_Endian =
   makeQtEnum (ident1 "QSysInfo" "Endian") [includeStd "QSysInfo"] $
   let bigEndian = 0
       littleEndian = 1
-  --  byteOrder = bigEndian .|. littleEndian
+  --  byteOrder = TODO (Autodetection.)
   in  [ (bigEndian, ["big", "endian"])
       , (littleEndian, ["little", "endian"])]
   --  , (byteOrder, ["byte", "order"]) ]
