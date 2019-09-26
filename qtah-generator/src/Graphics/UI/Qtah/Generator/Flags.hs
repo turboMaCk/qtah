@@ -58,7 +58,6 @@ import Foreign.Hoppy.Generator.Spec (
   conversionSpecCppConversionType,
   conversionSpecHaskell,
   conversionSpecHaskellHsArgType,
-  conversionSpecHaskellHsType,
   evaluatedEnumType,
   evaluatedEnumValueMap,
   getAddendum,
@@ -201,7 +200,6 @@ makeConversion flags =
                                          importForFlags,
                                          importForPrelude]
                 convertFn <- toHsFlagsConvertFnName flags
-                hsTypeStr <- LH.prettyPrint <$> conversionSpecHaskellHsType hs
                 LH.saysLn ["QtahP.return . QtahFlags.flagsToNum . ", convertFn])
              (CustomConversion $ do
                 LH.addImports $ mconcat [hsImport1 "Prelude" "(.)",
