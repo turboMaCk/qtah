@@ -21,6 +21,7 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QObject (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
+  (~:),
   MethodApplicability (MConst, MNormal),
   Purity (Nonpure),
   addReqIncludes,
@@ -72,8 +73,8 @@ c_QObject =
   makeClass (ident "QObject") Nothing [] $
   collect
   [ just $ mkCtor "new" np
-  , just $ mkCtor "newWithParent" [ptrT $ objT c_QObject]
-  , just $ mkMethod "blockSignals" [boolT] boolT
+  , just $ mkCtor "newWithParent" ["parent" ~: ptrT $ objT c_QObject]
+  , just $ mkMethod "blockSignals" ["block" ~: boolT] boolT
   , just $ mkMethod "children" np $ objT c_QListQObject
     -- TODO connect
   , just $ mkMethod "deleteLater" np voidT
@@ -81,28 +82,29 @@ c_QObject =
   , just $ mkMethod "dumpObjectInfo" np voidT
   , just $ mkMethod "dumpObjectTree" np voidT
   , just $ mkConstMethod "dynamicPropertyNames" np $ objT c_QListQByteArray
-  , just $ mkMethod "event" [ptrT $ objT c_QEvent] boolT
-  , just $ mkMethod "eventFilter" [ptrT $ objT c_QObject, ptrT $ objT c_QEvent] boolT
+  , just $ mkMethod "event" ["event" ~: ptrT $ objT c_QEvent] boolT
+  , just $ mkMethod "eventFilter"
+    ["watched" ~: ptrT $ objT c_QObject, "event" ~: ptrT $ objT c_QEvent] boolT
     -- TODO findChild
     -- TODO findChildren
   , just $ makeFnMethod (ident2 "qtah" "qobject" "inherits") "inherits" MConst Nonpure
-    [objT c_QObject, objT c_QString] boolT
-  , just $ mkMethod "installEventFilter" [ptrT $ objT c_QObject] voidT
+    ["" ~: objT c_QObject, "className" ~: objT c_QString] boolT
+  , just $ mkMethod "installEventFilter" ["filterObj" ~: ptrT $ objT c_QObject] voidT
   , just $ mkConstMethod "isWidgetType" np boolT
   , -- This is a guess on the version bound.
     test (qtVersion >= [5, 0]) $ mkConstMethod "isWindowType" np boolT
-  , just $ mkMethod "killTimer" [intT] voidT
+  , just $ mkMethod "killTimer" ["id" ~: intT] voidT
   , just $ mkConstMethod "metaObject" np $ ptrT $ constT $ objT c_QMetaObject
-  , just $ mkMethod "moveToThread" [ptrT $ objT c_QThread] voidT
+  , just $ mkMethod "moveToThread" ["targetThread" ~: ptrT $ objT c_QThread] voidT
   , just $ mkProp "objectName" $ objT c_QString
   , just $ mkProp "parent" $ ptrT $ objT c_QObject
   , just $ makeFnMethod (ident2 "qtah" "qobject" "property") "property" MConst Nonpure
-    [objT c_QObject, objT c_QString] $ objT c_QVariant
-  , just $ mkMethod "removeEventFilter" [ptrT $ objT c_QObject] voidT
+    ["" ~: objT c_QObject, "name" ~: objT c_QString] $ objT c_QVariant
+  , just $ mkMethod "removeEventFilter" ["obj" ~: ptrT $ objT c_QObject] voidT
   , just $ makeFnMethod (ident2 "qtah" "qobject" "setProperty") "setProperty" MNormal Nonpure
-    [refT $ objT c_QObject, objT c_QString, objT c_QVariant] voidT
+    ["" ~: refT $ objT c_QObject, "name" ~: objT c_QString, "value" ~: objT c_QVariant] voidT
   , just $ mkConstMethod "signalsBlocked" np boolT
-  , just $ mkMethod "startTimer" [intT] intT
+  , just $ mkMethod "startTimer" ["interval" ~: intT] intT
   , just $ mkConstMethod "thread" np $ ptrT $ objT c_QThread
   ]
 
