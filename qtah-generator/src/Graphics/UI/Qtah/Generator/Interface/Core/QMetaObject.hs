@@ -40,6 +40,8 @@ import Foreign.Hoppy.Generator.Spec.ClassFeature (
   classAddFeatures,
   )
 import Foreign.Hoppy.Generator.Types (boolT, constT, intT, objT, ptrT)
+import Foreign.Hoppy.Generator.Version (collect, just, test)
+import Graphics.UI.Qtah.Generator.Flags (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.QMetaClassInfo (c_QMetaClassInfo)
 import Graphics.UI.Qtah.Generator.Interface.Core.QMetaEnum (c_QMetaEnum)
 import Graphics.UI.Qtah.Generator.Interface.Core.QMetaMethod (c_QMetaMethod)
@@ -62,39 +64,48 @@ c_QMetaObject =
   classSetConversionToGc $
   classAddFeatures [Copyable] $
   classSetEntityPrefix "" $
-  makeClass (ident "QMetaObject") Nothing []
-  [ mkConstMethod "classInfo" [intT] $ objT c_QMetaClassInfo
-  , mkConstMethod "classInfoCount" [] intT
-  , mkConstMethod "classInfoOffset" [] intT
-  , mkConstMethod "constructor" [intT] $ objT c_QMetaMethod
-  , mkConstMethod "constructorCount" [] intT
-  , mkConstMethod "enumerator" [intT] $ objT c_QMetaEnum
-  , mkConstMethod "enumeratorCount" [] intT
-  , mkConstMethod "enumeratorOffset" [] intT
-  , makeFnMethod (ident2 "qtah" "qmetaobject" "indexOfClassInfo") "indexOfClassInfo"
+  makeClass (ident "QMetaObject") Nothing [] $
+  collect
+  [ just $ mkConstMethod "classInfo" [intT] $ objT c_QMetaClassInfo
+  , just $ mkConstMethod "classInfoCount" [] intT
+  , just $ mkConstMethod "classInfoOffset" [] intT
+  , just $ mkConstMethod "constructor" [intT] $ objT c_QMetaMethod
+  , just $ mkConstMethod "constructorCount" [] intT
+  , just $ mkConstMethod "enumerator" [intT] $ objT c_QMetaEnum
+  , just $ mkConstMethod "enumeratorCount" [] intT
+  , just $ mkConstMethod "enumeratorOffset" [] intT
+  , just $
+    makeFnMethod (ident2 "qtah" "qmetaobject" "indexOfClassInfo") "indexOfClassInfo"
     MConst Nonpure [objT c_QMetaObject, objT c_QString] intT
-  , makeFnMethod (ident2 "qtah" "qmetaobject" "indexOfConstructor") "indexOfConstructor"
+  , just $
+    makeFnMethod (ident2 "qtah" "qmetaobject" "indexOfConstructor") "indexOfConstructor"
     MConst Nonpure [objT c_QMetaObject, objT c_QString] intT
-  , makeFnMethod (ident2 "qtah" "qmetaobject" "indexOfEnumerator") "indexOfEnumerator"
+  , just $
+    makeFnMethod (ident2 "qtah" "qmetaobject" "indexOfEnumerator") "indexOfEnumerator"
     MConst Nonpure [objT c_QMetaObject, objT c_QString] intT
-  , makeFnMethod (ident2 "qtah" "qmetaobject" "indexOfMethod") "indexOfMethod"
+  , just $
+    makeFnMethod (ident2 "qtah" "qmetaobject" "indexOfMethod") "indexOfMethod"
     MConst Nonpure [objT c_QMetaObject, objT c_QString] intT
-  , makeFnMethod (ident2 "qtah" "qmetaobject" "indexOfProperty") "indexOfProperty"
+  , just $
+    makeFnMethod (ident2 "qtah" "qmetaobject" "indexOfProperty") "indexOfProperty"
     MConst Nonpure [objT c_QMetaObject, objT c_QString] intT
-  , makeFnMethod (ident2 "qtah" "qmetaobject" "indexOfSignal") "indexOfSignal"
+  , just $
+    makeFnMethod (ident2 "qtah" "qmetaobject" "indexOfSignal") "indexOfSignal"
     MConst Nonpure [objT c_QMetaObject, objT c_QString] intT
-  , makeFnMethod (ident2 "qtah" "qmetaobject" "indexOfSlot") "indexOfSlot"
+  , just $
+    makeFnMethod (ident2 "qtah" "qmetaobject" "indexOfSlot") "indexOfSlot"
     MConst Nonpure [objT c_QMetaObject, objT c_QString] intT
-  , mkConstMethod "inherits" [ptrT $ constT $ objT c_QMetaObject] boolT
-  , mkConstMethod "method" [intT] $ objT c_QMetaMethod
-  , mkConstMethod "methodCount" [] intT
-  , mkConstMethod "methodOffset" [] intT
+  , test (qtVersion >= [5, 7]) $
+    mkConstMethod "inherits" [ptrT $ constT $ objT c_QMetaObject] boolT
+  , just $ mkConstMethod "method" [intT] $ objT c_QMetaMethod
+  , just $ mkConstMethod "methodCount" [] intT
+  , just $ mkConstMethod "methodOffset" [] intT
     -- TODO newInstance
-  , mkConstMethod "property" [intT] $ objT c_QMetaProperty
-  , mkConstMethod "propertyCount" [] intT
-  , mkConstMethod "propertyOffset" [] intT
-  , mkConstMethod "superClass" [] $ ptrT $ constT $ objT c_QMetaObject
-  , mkConstMethod "userProperty" [] $ objT c_QMetaProperty
+  , just $ mkConstMethod "property" [intT] $ objT c_QMetaProperty
+  , just $ mkConstMethod "propertyCount" [] intT
+  , just $ mkConstMethod "propertyOffset" [] intT
+  , just $ mkConstMethod "superClass" [] $ ptrT $ constT $ objT c_QMetaObject
+  , just $ mkConstMethod "userProperty" [] $ objT c_QMetaProperty
 
     -- TODO Static methods
   ]
