@@ -41,6 +41,7 @@ import Foreign.Hoppy.Generator.Spec (
   addReqIncludes,
   enumAddEntryNameOverrides,
   enumSetHasBitOperations,
+  enumSetUnknownValueEntry,
   enumSetValuePrefix,
   identifierParts,
   idPartBase,
@@ -78,13 +79,15 @@ makeQtEnum :: Identifier -> [Include] -> [String] -> CppEnum
 makeQtEnum identifier includes names =
   addReqIncludes includes $
   enumSetValuePrefix "" $
+  enumSetUnknownValueEntry ("Unknown" ++ niceName) $
   enumSetHasBitOperations False $
   addEntryOverrides $
   makeAutoEnum identifier
-               (Just $ toExtName $ concatMap idPartBase $ identifierParts identifier)
+               (Just $ toExtName niceName)
                False  -- Qt enums are unscoped.
                names
-  where addEntryOverrides = enumAddEntryNameOverrides Haskell applicableOverrides
+  where niceName = concatMap idPartBase $ identifierParts identifier
+        addEntryOverrides = enumAddEntryNameOverrides Haskell applicableOverrides
         applicableOverrides = filter (\(from, _) -> S.member from nameSet) enumNameOverrides
         nameSet = S.fromList names
 
