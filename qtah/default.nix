@@ -36,4 +36,7 @@ mkDerivation {
     if forceParallelBuilding
     then "configureFlags+=\" --ghc-option=-j$NIX_BUILD_CORES\""
     else null;
+
+  # Save 9000+ lines of useless warnings.
+  haddockFlags = [ "--haddock-options=--no-print-missing-docs" ];
 }
