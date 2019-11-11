@@ -18,10 +18,13 @@
 module Graphics.UI.Qtah.Generator.Interface.Core.QAbstractItemModel (
   aModule,
   c_QAbstractItemModel,
+  e_LayoutChangeHint,
+  e_CheckIndexOption,
+  bs_CheckIndexOptions,
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportEnum, ExportClass),
+  Export (ExportEnum, ExportClass, ExportBitspace),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -40,24 +43,29 @@ import Foreign.Hoppy.Generator.Types (
   intT,
   objT,
   voidT,
+  refT,
+  constT,
   )
 import Foreign.Hoppy.Generator.Version (collect, just, test)
 import Graphics.UI.Qtah.Generator.Flags (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.QModelIndex (c_QModelIndex)
 import Graphics.UI.Qtah.Generator.Interface.Core.QObject (c_QObject)
 import Graphics.UI.Qtah.Generator.Interface.Core.QSize (c_QSize)
+import Graphics.UI.Qtah.Generator.Interface.Core.QStringList (c_QStringList)
 import Graphics.UI.Qtah.Generator.Interface.Core.QVariant (c_QVariant)
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (
   bs_ItemFlags,
   e_ItemDataRole,
   e_Orientation,
   e_SortOrder,
+  bs_DropActions,
   )
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
   c_Listener,
   c_ListenerQModelIndexIntInt,
   c_ListenerQModelIndexIntIntQModelIndexInt,
   c_ListenerQModelIndexQModelIndexQVectorInt,
+  c_ListenerOrientationIntInt
   )
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
@@ -69,7 +77,11 @@ aModule =
   makeQtModule ["Core", "QAbstractItemModel"] $
   QtExport (ExportClass c_QAbstractItemModel) :
   map QtExportSignal signals ++
-  [ QtExport $ ExportEnum e_LayoutChangeHint ]
+  collect
+  [ just $ QtExport $ ExportEnum e_LayoutChangeHint
+  , test (qtVersion >= [5, 11]) $ QtExport $ ExportEnum e_CheckIndexOption
+  , test (qtVersion >= [5, 11]) $ QtExport $ ExportBitspace bs_CheckIndexOptions ]
+
 
 c_QAbstractItemModel =
   addReqIncludes [includeStd "QAbstractItemModel"] $
@@ -79,6 +91,8 @@ c_QAbstractItemModel =
   [ just $ mkConstMethod "buddy" [objT c_QModelIndex] $ objT c_QModelIndex
     -- TODO canDropMimeData
   , just $ mkConstMethod "canFetchMore" [objT c_QModelIndex] boolT
+  , test (qtVersion >= [5, 11]) $ mkConstMethod' "checkIndex" "checkIndex" [refT $ constT $ objT c_QModelIndex] boolT
+  , test (qtVersion >= [5, 11]) $ mkConstMethod' "checkIndex" "checkIndexWithOptions" [refT $ constT $ objT c_QModelIndex, bitspaceT bs_CheckIndexOptions] boolT
   , just $ mkConstMethod' "columnCount" "columnCount" [] intT
   , just $ mkConstMethod' "columnCount" "columnCountAt" [objT c_QModelIndex] intT
   , just $ mkConstMethod' "data" "getData" [objT c_QModelIndex] $ objT c_QVariant
@@ -107,7 +121,7 @@ c_QAbstractItemModel =
     -- TODO itemData
     -- TODO match
     -- TODO mimeData
-    -- TODO mimeTypes
+  , just $ mkConstMethod "mimeTypes" [] $ objT c_QStringList
   , test (qtVersion >= [5, 0]) $ mkMethod "moveColumn"
     [objT c_QModelIndex, intT, objT c_QModelIndex, intT] boolT
   , test (qtVersion >= [5, 0]) $ mkMethod "moveColumns"
@@ -142,8 +156,8 @@ c_QAbstractItemModel =
   , just $ mkMethod' "sort" "sortWithOrder" [intT, enumT e_SortOrder] voidT
   , just $ mkConstMethod "span" [objT c_QModelIndex] $ objT c_QSize
   , just $ mkMethod "submit" [] boolT
-    -- TODO suportedDragActions
-    -- TODO supportedDropActions (>=4.2)
+  , just $ mkConstMethod "supportedDragActions" [] $ bitspaceT bs_DropActions
+  , test (qtVersion >= [4, 2]) $ mkConstMethod "supportedDropActions" [] $ bitspaceT bs_DropActions
   ]
 
 signals =
@@ -157,6 +171,7 @@ signals =
     c_ListenerQModelIndexIntIntQModelIndexInt
   , just $ makeSignal c_QAbstractItemModel "columnsRemoved" c_ListenerQModelIndexIntInt
   , just $ makeSignal c_QAbstractItemModel "dataChanged" c_ListenerQModelIndexQModelIndexQVectorInt
+  , just $ makeSignal c_QAbstractItemModel "headerDataChanged" c_ListenerOrientationIntInt
     -- TODO layoutAboutToBeChanged (>=5.0)
     -- TODO layoutChanged (>=5.0)
   , test (qtVersion >= [4, 2]) $ makeSignal c_QAbstractItemModel "modelAboutToBeReset" c_Listener
@@ -176,4 +191,12 @@ e_LayoutChangeHint =
   [ (0, ["no", "layout", "change", "hint"])
   , (1, ["vertical", "sort", "hint"])
   , (2, ["horizontal", "sort", "hint"])
+  ]
+
+(e_CheckIndexOption, bs_CheckIndexOptions) =
+  makeQtEnumBitspace (ident1 "QAbstractItemModel" "CheckIndexOption") "CheckIndexOptions" [includeStd "QAbstractItemModel"]
+  [ (0x00, ["no", "option"])
+  , (0x01, ["index", "is", "valid"])
+  , (0x02, ["do", "not", "use", "parent"])
+  , (0x04, ["parent", "is", "invalid"])
   ]

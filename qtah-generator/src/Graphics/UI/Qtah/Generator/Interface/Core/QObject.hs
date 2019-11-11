@@ -22,7 +22,7 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QObject (
 
 import Foreign.Hoppy.Generator.Spec (
   Export (ExportClass),
-  MethodApplicability (MConst, MNormal),
+  MethodApplicability (MConst, MNormal, MStatic),
   Purity (Nonpure),
   addReqIncludes,
   classSetEntityPrefix,
@@ -33,11 +33,13 @@ import Foreign.Hoppy.Generator.Spec (
   makeClass,
   makeFnMethod,
   mkConstMethod,
+  mkConstMethod',
+  mkStaticMethod',
   mkCtor,
   mkMethod,
   mkProp,
   )
-import Foreign.Hoppy.Generator.Types (boolT, constT, intT, objT, ptrT, refT, voidT)
+import Foreign.Hoppy.Generator.Types (boolT, constT, intT, objT, ptrT, refT, ptrT, voidT, charT, enumT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
 import Graphics.UI.Qtah.Generator.Flags (qtVersion)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Core.QList (
@@ -46,7 +48,10 @@ import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Core.QList (
   )
 import Graphics.UI.Qtah.Generator.Interface.Core.QEvent (c_QEvent)
 import Graphics.UI.Qtah.Generator.Interface.Core.QMetaObject (c_QMetaObject)
+import Graphics.UI.Qtah.Generator.Interface.Core.QMetaObject.Connection (c_Connection)
+import Graphics.UI.Qtah.Generator.Interface.Core.QMetaMethod (c_QMetaMethod)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
+import Foreign.Hoppy.Generator.Std.String (c_string)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Core.QThread (c_QThread)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Core.QVariant (c_QVariant)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
@@ -55,6 +60,7 @@ import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
   )
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
+import Graphics.UI.Qtah.Generator.Interface.Core.Types (e_ConnectionType)
 
 {-# ANN module "HLint: ignore Use camelCase" #-}
 
@@ -75,9 +81,30 @@ c_QObject =
   , just $ mkCtor "newWithParent" [ptrT $ objT c_QObject]
   , just $ mkMethod "blockSignals" [boolT] boolT
   , just $ mkMethod "children" [] $ objT c_QListQObject
-    -- TODO connect
+
+    -- TODO QStrings instead of const char*.
+  , just $ mkConstMethod' "connect" "connect" [ptrT $ constT $ objT c_QObject, ptrT $ constT charT, ptrT $ constT charT] $ objT c_Connection
+  , just $ mkConstMethod' "connect" "connectWithType" [ptrT $ constT $ objT c_QObject, ptrT $ constT charT, ptrT $ constT charT, enumT e_ConnectionType] $ objT c_Connection
+
+  , just $ mkStaticMethod' "connect" "connectWithTypeStatic" [ptrT $ constT $ objT c_QObject, ptrT $ constT charT, ptrT $ constT $ objT c_QObject, ptrT $ constT charT, enumT e_ConnectionType] $ objT c_Connection
+  , just $ mkStaticMethod' "connect" "connectWithSenderSignalStatic" [ptrT $ constT $ objT c_QObject, refT $ constT $ objT c_QMetaMethod, ptrT $ constT $ objT c_QObject, refT $ constT $ objT c_QMetaMethod] $ objT c_Connection
+  , just $ mkStaticMethod' "connect" "connectWithSenderSignalTypeStatic" [ptrT $ constT $ objT c_QObject, refT $ constT $ objT c_QMetaMethod, ptrT $ constT $ objT c_QObject, refT $ constT $ objT c_QMetaMethod, enumT e_ConnectionType] $ objT c_Connection
+
+  , just $ makeFnMethod (ident2 "qtah" "qobject" "connect") "connectStatic" MStatic Nonpure
+    [ptrT $ constT $ objT c_QObject, objT c_string, ptrT $ constT $ objT c_QObject, objT c_string] $ objT c_Connection
+  , just $ makeFnMethod (ident2 "qtah" "qobject" "disconnect") "disconnectStatic" MStatic Nonpure
+    [ptrT $ constT $ objT c_QObject, objT c_string, ptrT $ constT $ objT c_QObject, objT c_string] boolT
+
   , just $ mkMethod "deleteLater" [] voidT
-    -- TODO disconnect
+
+  , just $ mkConstMethod' "disconnect" "disconnect" [] boolT
+  , just $ mkConstMethod' "disconnect" "disconnectWithReceiver" [ptrT $ constT $ objT c_QObject] boolT
+  , just $ mkConstMethod' "disconnect" "disconnectWithReceiverAndMethod" [ptrT $ constT $ objT c_QObject, ptrT $ constT charT] boolT
+  , just $ mkConstMethod' "disconnect" "disconnectWithSignal" [ptrT $ constT charT] boolT
+  , just $ mkConstMethod' "disconnect" "disconnectWithSignalAndReceiver" [ptrT $ constT charT, ptrT $ constT $ objT c_QObject] boolT
+  , just $ mkConstMethod' "disconnect" "disconnectWithSignalAndReceiverAndMethod" [ptrT $ constT charT, ptrT $ constT $ objT c_QObject, ptrT $ constT charT] boolT
+  , just $ mkStaticMethod' "disconnect" "disconnectWithMetaobject" [objT c_Connection] boolT
+
   , just $ mkMethod "dumpObjectInfo" [] voidT
   , just $ mkMethod "dumpObjectTree" [] voidT
   , just $ mkConstMethod "dynamicPropertyNames" [] $ objT c_QListQByteArray

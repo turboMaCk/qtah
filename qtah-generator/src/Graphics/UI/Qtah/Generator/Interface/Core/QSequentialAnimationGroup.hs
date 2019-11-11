@@ -1,0 +1,64 @@
+-- This file is part of Qtah.
+--
+-- Copyright 2015-2019 The Qtah Authors.
+--
+-- This program is free software: you can redistribute it and/or modify
+-- it under the terms of the GNU Lesser General Public License as published by
+-- the Free Software Foundation, either version 3 of the License, or
+-- (at your option) any later version.
+--
+-- This program is distributed in the hope that it will be useful,
+-- but WITHOUT ANY WARRANTY; without even the implied warranty of
+-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-- GNU Lesser General Public License for more details.
+--
+-- You should have received a copy of the GNU Lesser General Public License
+-- along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+module Graphics.UI.Qtah.Generator.Interface.Core.QSequentialAnimationGroup (
+  aModule,
+  c_QSequentialAnimationGroup,
+  ) where
+
+import Foreign.Hoppy.Generator.Spec (
+  Export (ExportClass),
+  addReqIncludes,
+  classSetEntityPrefix,
+  ident,
+  includeStd,
+  makeClass,
+  mkConstMethod,
+  mkMethod
+  )
+import Graphics.UI.Qtah.Generator.Interface.Core.QAnimationGroup (c_QAnimationGroup)
+import Graphics.UI.Qtah.Generator.Interface.Core.QPauseAnimation (c_QPauseAnimation)
+import Graphics.UI.Qtah.Generator.Interface.Core.QAbstractAnimation (c_QAbstractAnimation)
+import Foreign.Hoppy.Generator.Types (intT, objT, ptrT)
+import Foreign.Hoppy.Generator.Version (collect, just)
+import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (c_ListenerQAbstractAnimation)
+import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModuleWithMinVersion)
+import Graphics.UI.Qtah.Generator.Types
+
+{-# ANN module "HLint: ignore Use camelCase" #-}
+
+aModule =
+  AQtModule $
+  makeQtModuleWithMinVersion ["Core", "QSequentialAnimationGroup"] [4, 6] $
+  (QtExport $ ExportClass c_QSequentialAnimationGroup) :
+  map QtExportSignal signals
+
+c_QSequentialAnimationGroup =
+  addReqIncludes [ includeStd "QSequentialAnimationGroup" ] $
+  classSetEntityPrefix "" $
+  makeClass (ident "QSequentialAnimationGroup") Nothing [c_QAnimationGroup] $
+  collect
+  [ just $ mkMethod "addPause" [intT] $ ptrT $ objT c_QPauseAnimation
+  , just $ mkMethod "insertPause" [intT, intT] $ ptrT $ objT c_QPauseAnimation
+  , just $ mkConstMethod "currentAnimation" [] $ ptrT $ objT c_QAbstractAnimation
+  ]
+
+signals :: [Signal]
+signals =
+  collect
+  [ just $ makeSignal c_QSequentialAnimationGroup "currentAnimationChanged" c_ListenerQAbstractAnimation
+  ]

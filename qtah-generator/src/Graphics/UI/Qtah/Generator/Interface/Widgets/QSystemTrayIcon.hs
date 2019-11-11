@@ -42,19 +42,19 @@ import Graphics.UI.Qtah.Generator.Interface.Core.QObject (c_QObject)
 import Graphics.UI.Qtah.Generator.Interface.Core.QRect (c_QRect)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QIcon (c_QIcon)
-import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
+import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
   c_Listener,
   c_ListenerQSystemTrayIconActivationReason,
   )
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QMenu (c_QMenu)
-import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
+import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModuleWithMinVersion)
 import Graphics.UI.Qtah.Generator.Types
 
 {-# ANN module "HLint: ignore Use camelCase" #-}
 
 aModule =
   AQtModule $
-  makeQtModule ["Widgets", "QSystemTrayIcon"] $
+  makeQtModuleWithMinVersion ["Widgets", "QSystemTrayIcon"] [4, 2] $
   QtExport (ExportClass c_QSystemTrayIcon) :
   map QtExportSignal signals ++
   [ QtExport $ ExportEnum e_ActivationReason

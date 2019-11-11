@@ -88,6 +88,7 @@ import qualified Graphics.UI.Qtah.Generator.Interface.Widgets.QToolBox as QToolB
 import qualified Graphics.UI.Qtah.Generator.Interface.Widgets.QToolButton as QToolButton
 import qualified Graphics.UI.Qtah.Generator.Interface.Widgets.QTreeView as QTreeView
 import qualified Graphics.UI.Qtah.Generator.Interface.Widgets.QTreeWidget as QTreeWidget
+import qualified Graphics.UI.Qtah.Generator.Interface.Widgets.QTreeWidgetItem as QTreeWidgetItem
 import qualified Graphics.UI.Qtah.Generator.Interface.Widgets.QVBoxLayout as QVBoxLayout
 import qualified Graphics.UI.Qtah.Generator.Interface.Widgets.QWidget as QWidget
 import Graphics.UI.Qtah.Generator.Module (AModule)
@@ -167,7 +168,7 @@ modules =
   , QToolButton.aModule
   , QTreeView.aModule
   , QTreeWidget.aModule
-  , QTreeWidget.itemModule
+  , QTreeWidgetItem.aModule
   , QVBoxLayout.aModule
   , QWidget.aModule
   ]

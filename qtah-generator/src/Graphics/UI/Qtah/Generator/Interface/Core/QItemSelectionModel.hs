@@ -51,7 +51,7 @@ import Graphics.UI.Qtah.Generator.Interface.Core.QItemSelection (c_QItemSelectio
 import Graphics.UI.Qtah.Generator.Interface.Core.QList (c_QListQModelIndex)
 import Graphics.UI.Qtah.Generator.Interface.Core.QModelIndex (c_QModelIndex)
 import Graphics.UI.Qtah.Generator.Interface.Core.QObject (c_QObject)
-import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
+import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
   c_ListenerPtrQAbstractItemModel,
   c_ListenerRefConstQItemSelectionRefConstQItemSelection,
   c_ListenerQModelIndexQModelIndex,

@@ -29,19 +29,37 @@ library
     , Graphics.UI.Qtah.Core.HPointF
     , Graphics.UI.Qtah.Core.HRect
     , Graphics.UI.Qtah.Core.HSize
+    , Graphics.UI.Qtah.Core.QAbstractAnimation
     , Graphics.UI.Qtah.Core.QAbstractItemModel
     , Graphics.UI.Qtah.Core.QAbstractListModel
     , Graphics.UI.Qtah.Core.QAbstractTableModel
+    , Graphics.UI.Qtah.Core.QAnimationGroup
+    , Graphics.UI.Qtah.Core.QBuffer
     , Graphics.UI.Qtah.Core.QByteArray
     , Graphics.UI.Qtah.Core.QChar
     , Graphics.UI.Qtah.Core.QChildEvent
     , Graphics.UI.Qtah.Core.QCoreApplication
+    , Graphics.UI.Qtah.Core.QCryptographicHash
     , Graphics.UI.Qtah.Core.QDate
+    , Graphics.UI.Qtah.Core.QDateTime
+    , Graphics.UI.Qtah.Core.QDebug
+    , Graphics.UI.Qtah.Core.QDebugStateSaver
     , Graphics.UI.Qtah.Core.QDir
+    , Graphics.UI.Qtah.Core.QDirIterator
     , Graphics.UI.Qtah.Core.QEvent
+    , Graphics.UI.Qtah.Core.QFile
+    , Graphics.UI.Qtah.Core.QFileDevice
+    , Graphics.UI.Qtah.Core.QFileInfo
+    , Graphics.UI.Qtah.Core.QFileSelector
+    , Graphics.UI.Qtah.Core.QFileSystemWatcher
+    , Graphics.UI.Qtah.Core.QIODevice
     , Graphics.UI.Qtah.Core.QItemSelection
     , Graphics.UI.Qtah.Core.QItemSelectionModel
     , Graphics.UI.Qtah.Core.QItemSelectionRange
+    , Graphics.UI.Qtah.Core.QLatin1Char
+    , Graphics.UI.Qtah.Core.QLatin1String
+    , Graphics.UI.Qtah.Core.QLibrary
+    , Graphics.UI.Qtah.Core.QLibraryInfo
     , Graphics.UI.Qtah.Core.QList.Int
     , Graphics.UI.Qtah.Core.QList.QAbstractButton
     , Graphics.UI.Qtah.Core.QList.QByteArray
@@ -51,42 +69,74 @@ library
     , Graphics.UI.Qtah.Core.QList.QSize
     , Graphics.UI.Qtah.Core.QList.QStandardItem
     , Graphics.UI.Qtah.Core.QList.QString
+    , Graphics.UI.Qtah.Core.QList.QTreeWidgetItem
     , Graphics.UI.Qtah.Core.QList.QVariant
     , Graphics.UI.Qtah.Core.QList.QWidget
+    , Graphics.UI.Qtah.Core.QLockFile
+    , Graphics.UI.Qtah.Core.QLoggingCategory
     , Graphics.UI.Qtah.Core.QMargins
     , Graphics.UI.Qtah.Core.QMarginsF
+    , Graphics.UI.Qtah.Core.QMessageAuthenticationCode
+    , Graphics.UI.Qtah.Core.QMessageLogContext
+    , Graphics.UI.Qtah.Core.QMessageLogger
     , Graphics.UI.Qtah.Core.QMetaClassInfo
     , Graphics.UI.Qtah.Core.QMetaEnum
     , Graphics.UI.Qtah.Core.QMetaMethod
     , Graphics.UI.Qtah.Core.QMetaObject
+    , Graphics.UI.Qtah.Core.QMetaObject.Connection
     , Graphics.UI.Qtah.Core.QMetaProperty
     , Graphics.UI.Qtah.Core.QModelIndex
     , Graphics.UI.Qtah.Core.QObject
+    , Graphics.UI.Qtah.Core.QOperatingSystemVersion
+    , Graphics.UI.Qtah.Core.QPair.IntInt
     , Graphics.UI.Qtah.Core.QPalette
+    , Graphics.UI.Qtah.Core.QParallelAnimationGroup
+    , Graphics.UI.Qtah.Core.QPauseAnimation
     , Graphics.UI.Qtah.Core.QPersistentModelIndex
+    , Graphics.UI.Qtah.Core.QPluginLoader
     , Graphics.UI.Qtah.Core.QPoint
     , Graphics.UI.Qtah.Core.QPointF
+    , Graphics.UI.Qtah.Core.QProcess
+    , Graphics.UI.Qtah.Core.QProcessEnvironment
+    , Graphics.UI.Qtah.Core.QPropertyAnimation
+    , Graphics.UI.Qtah.Core.QRandomGenerator
+    , Graphics.UI.Qtah.Core.QRandomGenerator64
     , Graphics.UI.Qtah.Core.QRect
     , Graphics.UI.Qtah.Core.QRectF
+    , Graphics.UI.Qtah.Core.QResource
+    , Graphics.UI.Qtah.Core.QSaveFile
+    , Graphics.UI.Qtah.Core.QSequentialAnimationGroup
     , Graphics.UI.Qtah.Core.QSettings
     , Graphics.UI.Qtah.Core.QSize
     , Graphics.UI.Qtah.Core.QSizeF
+    , Graphics.UI.Qtah.Core.QStandardPaths
+    , Graphics.UI.Qtah.Core.QStaticPlugin
     , Graphics.UI.Qtah.Core.QString
     , Graphics.UI.Qtah.Core.QStringList
     , Graphics.UI.Qtah.Core.QStringListModel
+    , Graphics.UI.Qtah.Core.QSysInfo
     , Graphics.UI.Qtah.Core.QTextCodec
+    , Graphics.UI.Qtah.Core.QTextDecoder
+    , Graphics.UI.Qtah.Core.QTextEncoder
     , Graphics.UI.Qtah.Core.QThread
+    , Graphics.UI.Qtah.Core.QTime
+    , Graphics.UI.Qtah.Core.QTimeZone
     , Graphics.UI.Qtah.Core.QTimer
     , Graphics.UI.Qtah.Core.QTimerEvent
+    , Graphics.UI.Qtah.Core.QTranslator
     , Graphics.UI.Qtah.Core.QVariant
+    , Graphics.UI.Qtah.Core.QVariantAnimation
     , Graphics.UI.Qtah.Core.QVector.Int
     , Graphics.UI.Qtah.Core.QVector.QPoint
     , Graphics.UI.Qtah.Core.QVector.QPointF
     , Graphics.UI.Qtah.Core.QVector.QRgb
+    , Graphics.UI.Qtah.Core.QVersionNumber
     , Graphics.UI.Qtah.Core.Types
     , Graphics.UI.Qtah.Event
     , Graphics.UI.Qtah.Gui.HColor
     , Graphics.UI.Qtah.Gui.QActionEvent
+    , Graphics.UI.Qtah.Gui.QBackingStore
+    , Graphics.UI.Qtah.Gui.QBitmap
     , Graphics.UI.Qtah.Gui.QBrush
     , Graphics.UI.Qtah.Gui.QClipboard
     , Graphics.UI.Qtah.Gui.QCloseEvent
@@ -98,6 +148,7 @@ library
     , Graphics.UI.Qtah.Gui.QFocusEvent
     , Graphics.UI.Qtah.Gui.QFont
     , Graphics.UI.Qtah.Gui.QFontDatabase
+    , Graphics.UI.Qtah.Gui.QGradient
     , Graphics.UI.Qtah.Gui.QHideEvent
     , Graphics.UI.Qtah.Gui.QHoverEvent
     , Graphics.UI.Qtah.Gui.QIcon
@@ -208,19 +259,37 @@ library
     , Graphics.UI.Qtah.Widgets.QVBoxLayout
     , Graphics.UI.Qtah.Widgets.QWidget
   other-modules:
-      Graphics.UI.Qtah.Generated.Core.QAbstractItemModel
+      Graphics.UI.Qtah.Generated.Core.QAbstractAnimation
+    , Graphics.UI.Qtah.Generated.Core.QAbstractItemModel
     , Graphics.UI.Qtah.Generated.Core.QAbstractListModel
     , Graphics.UI.Qtah.Generated.Core.QAbstractTableModel
+    , Graphics.UI.Qtah.Generated.Core.QAnimationGroup
+    , Graphics.UI.Qtah.Generated.Core.QBuffer
     , Graphics.UI.Qtah.Generated.Core.QByteArray
     , Graphics.UI.Qtah.Generated.Core.QChar
     , Graphics.UI.Qtah.Generated.Core.QChildEvent
     , Graphics.UI.Qtah.Generated.Core.QCoreApplication
+    , Graphics.UI.Qtah.Generated.Core.QCryptographicHash
     , Graphics.UI.Qtah.Generated.Core.QDate
+    , Graphics.UI.Qtah.Generated.Core.QDateTime
+    , Graphics.UI.Qtah.Generated.Core.QDebug
+    , Graphics.UI.Qtah.Generated.Core.QDebugStateSaver
     , Graphics.UI.Qtah.Generated.Core.QDir
+    , Graphics.UI.Qtah.Generated.Core.QDirIterator
     , Graphics.UI.Qtah.Generated.Core.QEvent
+    , Graphics.UI.Qtah.Generated.Core.QFile
+    , Graphics.UI.Qtah.Generated.Core.QFileDevice
+    , Graphics.UI.Qtah.Generated.Core.QFileInfo
+    , Graphics.UI.Qtah.Generated.Core.QFileSelector
+    , Graphics.UI.Qtah.Generated.Core.QFileSystemWatcher
+    , Graphics.UI.Qtah.Generated.Core.QIODevice
     , Graphics.UI.Qtah.Generated.Core.QItemSelection
     , Graphics.UI.Qtah.Generated.Core.QItemSelectionModel
     , Graphics.UI.Qtah.Generated.Core.QItemSelectionRange
+    , Graphics.UI.Qtah.Generated.Core.QLatin1Char
+    , Graphics.UI.Qtah.Generated.Core.QLatin1String
+    , Graphics.UI.Qtah.Generated.Core.QLibrary
+    , Graphics.UI.Qtah.Generated.Core.QLibraryInfo
     , Graphics.UI.Qtah.Generated.Core.QList.Int
     , Graphics.UI.Qtah.Generated.Core.QList.QAbstractButton
     , Graphics.UI.Qtah.Generated.Core.QList.QByteArray
@@ -230,40 +299,72 @@ library
     , Graphics.UI.Qtah.Generated.Core.QList.QSize
     , Graphics.UI.Qtah.Generated.Core.QList.QStandardItem
     , Graphics.UI.Qtah.Generated.Core.QList.QString
+    , Graphics.UI.Qtah.Generated.Core.QList.QTreeWidgetItem
     , Graphics.UI.Qtah.Generated.Core.QList.QVariant
     , Graphics.UI.Qtah.Generated.Core.QList.QWidget
+    , Graphics.UI.Qtah.Generated.Core.QLockFile
+    , Graphics.UI.Qtah.Generated.Core.QLoggingCategory
     , Graphics.UI.Qtah.Generated.Core.QMargins
     , Graphics.UI.Qtah.Generated.Core.QMarginsF
+    , Graphics.UI.Qtah.Generated.Core.QMessageAuthenticationCode
+    , Graphics.UI.Qtah.Generated.Core.QMessageLogContext
+    , Graphics.UI.Qtah.Generated.Core.QMessageLogger
     , Graphics.UI.Qtah.Generated.Core.QMetaClassInfo
     , Graphics.UI.Qtah.Generated.Core.QMetaEnum
     , Graphics.UI.Qtah.Generated.Core.QMetaMethod
     , Graphics.UI.Qtah.Generated.Core.QMetaObject
+    , Graphics.UI.Qtah.Generated.Core.QMetaObject.Connection
     , Graphics.UI.Qtah.Generated.Core.QMetaProperty
     , Graphics.UI.Qtah.Generated.Core.QModelIndex
     , Graphics.UI.Qtah.Generated.Core.QObject
+    , Graphics.UI.Qtah.Generated.Core.QOperatingSystemVersion
+    , Graphics.UI.Qtah.Generated.Core.QPair.IntInt
     , Graphics.UI.Qtah.Generated.Core.QPalette
+    , Graphics.UI.Qtah.Generated.Core.QParallelAnimationGroup
+    , Graphics.UI.Qtah.Generated.Core.QPauseAnimation
     , Graphics.UI.Qtah.Generated.Core.QPersistentModelIndex
+    , Graphics.UI.Qtah.Generated.Core.QPluginLoader
     , Graphics.UI.Qtah.Generated.Core.QPoint
     , Graphics.UI.Qtah.Generated.Core.QPointF
+    , Graphics.UI.Qtah.Generated.Core.QProcess
+    , Graphics.UI.Qtah.Generated.Core.QProcessEnvironment
+    , Graphics.UI.Qtah.Generated.Core.QPropertyAnimation
+    , Graphics.UI.Qtah.Generated.Core.QRandomGenerator
+    , Graphics.UI.Qtah.Generated.Core.QRandomGenerator64
     , Graphics.UI.Qtah.Generated.Core.QRect
     , Graphics.UI.Qtah.Generated.Core.QRectF
+    , Graphics.UI.Qtah.Generated.Core.QResource
+    , Graphics.UI.Qtah.Generated.Core.QSaveFile
+    , Graphics.UI.Qtah.Generated.Core.QSequentialAnimationGroup
     , Graphics.UI.Qtah.Generated.Core.QSettings
     , Graphics.UI.Qtah.Generated.Core.QSize
     , Graphics.UI.Qtah.Generated.Core.QSizeF
+    , Graphics.UI.Qtah.Generated.Core.QStandardPaths
+    , Graphics.UI.Qtah.Generated.Core.QStaticPlugin
     , Graphics.UI.Qtah.Generated.Core.QString
     , Graphics.UI.Qtah.Generated.Core.QStringList
     , Graphics.UI.Qtah.Generated.Core.QStringListModel
+    , Graphics.UI.Qtah.Generated.Core.QSysInfo
     , Graphics.UI.Qtah.Generated.Core.QTextCodec
+    , Graphics.UI.Qtah.Generated.Core.QTextDecoder
+    , Graphics.UI.Qtah.Generated.Core.QTextEncoder
     , Graphics.UI.Qtah.Generated.Core.QThread
+    , Graphics.UI.Qtah.Generated.Core.QTime
+    , Graphics.UI.Qtah.Generated.Core.QTimeZone
     , Graphics.UI.Qtah.Generated.Core.QTimer
     , Graphics.UI.Qtah.Generated.Core.QTimerEvent
+    , Graphics.UI.Qtah.Generated.Core.QTranslator
     , Graphics.UI.Qtah.Generated.Core.QVariant
+    , Graphics.UI.Qtah.Generated.Core.QVariantAnimation
     , Graphics.UI.Qtah.Generated.Core.QVector.Int
     , Graphics.UI.Qtah.Generated.Core.QVector.QPoint
     , Graphics.UI.Qtah.Generated.Core.QVector.QPointF
     , Graphics.UI.Qtah.Generated.Core.QVector.QRgb
+    , Graphics.UI.Qtah.Generated.Core.QVersionNumber
     , Graphics.UI.Qtah.Generated.Core.Types
     , Graphics.UI.Qtah.Generated.Gui.QActionEvent
+    , Graphics.UI.Qtah.Generated.Gui.QBackingStore
+    , Graphics.UI.Qtah.Generated.Gui.QBitmap
     , Graphics.UI.Qtah.Generated.Gui.QBrush
     , Graphics.UI.Qtah.Generated.Gui.QClipboard
     , Graphics.UI.Qtah.Generated.Gui.QCloseEvent
@@ -275,6 +376,7 @@ library
     , Graphics.UI.Qtah.Generated.Gui.QFocusEvent
     , Graphics.UI.Qtah.Generated.Gui.QFont
     , Graphics.UI.Qtah.Generated.Gui.QFontDatabase
+    , Graphics.UI.Qtah.Generated.Gui.QGradient
     , Graphics.UI.Qtah.Generated.Gui.QHideEvent
     , Graphics.UI.Qtah.Generated.Gui.QHoverEvent
     , Graphics.UI.Qtah.Generated.Gui.QIcon
@@ -386,7 +488,8 @@ library
     , Graphics.UI.Qtah.Internal.Listener
     , Graphics.UI.Qtah.Internal.SceneEventListener
   other-extensions:
-      FlexibleContexts
+      ExistentialQuantification
+    , FlexibleContexts
     , NoMonomorphismRestriction
   build-depends:
       base >=4 && <5
@@ -396,7 +499,7 @@ library
     , qtah-cpp >=0.6 && <0.7
     , qtah-generator >=0.6 && <0.7
   hs-source-dirs: src
-  ghc-options: -W -fwarn-incomplete-patterns -fwarn-unused-do-bind
+  ghc-options: -O2 -W -fwarn-incomplete-patterns -fwarn-unused-do-bind
   default-language: Haskell2010
   -- There would be an "extra-libraries: qtah" here, but we need to add it from
   -- Setup.hs instead.
@@ -412,7 +515,7 @@ test-suite test-qtah
     , HUnit >=1.2 && <1.7
     , qtah
   hs-source-dirs: tests
-  ghc-options: -W -fwarn-incomplete-patterns -fwarn-unused-do-bind -dynamic
+  ghc-options: -O2 -W -fwarn-incomplete-patterns -fwarn-unused-do-bind -dynamic
   default-language: Haskell2010
 
 custom-setup

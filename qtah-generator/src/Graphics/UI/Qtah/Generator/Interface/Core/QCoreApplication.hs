@@ -35,8 +35,9 @@ import Foreign.Hoppy.Generator.Spec (
   mkStaticMethod,
   mkStaticMethod',
   )
-import Foreign.Hoppy.Generator.Types (boolT, intT, objT, ptrT, voidT)
+import Foreign.Hoppy.Generator.Types (boolT, intT, objT, ptrT, voidT, enumT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
+import Graphics.UI.Qtah.Generator.Interface.Core.Types (qlonglong, e_ApplicationAttribute)
 import Graphics.UI.Qtah.Generator.Flags (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.QEvent (c_QEvent)
 import Graphics.UI.Qtah.Generator.Interface.Core.QObject (c_QObject)
@@ -61,25 +62,60 @@ c_QCoreApplication =
   collect
   [ just $ makeFnMethod (ident2 "qtah" "qcoreapplication" "create") "new" MStatic Nonpure
     [objT c_QStringList] $ ptrT $ objT c_QCoreApplication
+
+  , just $ mkStaticMethod "addLibraryPath" [objT c_QString] voidT
+  , just $ mkStaticMethod "applicationDirPath" [] $ objT c_QString
+  , just $ mkStaticMethod "applicationFilePath" [] $ objT c_QString
   , just $ mkStaticMethod "applicationName" [] $ objT c_QString
+  , test (qtVersion >= [4, 4]) $ mkStaticMethod "applicationPid" [] qlonglong
   , just $ mkStaticMethod "applicationVersion" [] $ objT c_QString
   , test (qtVersion >= [4, 1]) $ mkStaticMethod "arguments" [] $ objT c_QStringList
+  , just $ mkStaticMethod "closingDown" [] boolT
+  -- TODO QAbstractEventDispatcher * eventDispatcher()
   , just $ mkStaticMethod "exec" [] voidT
   , just $ mkStaticMethod "exit" [intT] voidT
+  -- TODO bool installTranslator(QTranslator *translationFile)
   , just $ mkStaticMethod' "instance" "getInstance" [] $ ptrT $ objT c_QCoreApplication
   , test (qtVersion >= [5, 0]) $ mkStaticMethod "isQuitLockEnabled" [] boolT
+  , test (qtVersion >= [5, 3]) $ mkStaticMethod "isSetuidAllowed" [] boolT
+  , just $ mkStaticMethod "libraryPaths" [] $ objT c_QStringList
   , just $ mkStaticMethod "organizationDomain" [] $ objT c_QString
   , just $ mkStaticMethod "organizationName" [] $ objT c_QString
   , test (qtVersion >= [4, 3]) $ mkStaticMethod' "postEvent" "postEvent"
     [ptrT $ objT c_QObject, ptrT $ objT c_QEvent] voidT
   , test (qtVersion >= [4, 3]) $ mkStaticMethod' "postEvent" "postEventWithPriority"
     [ptrT $ objT c_QObject, ptrT $ objT c_QEvent, intT] voidT
+  -- TODO void processEvents(QEventLoop::ProcessEventsFlags flags = QEventLoop::AllEvents)
+  -- TODO void processEvents(QEventLoop::ProcessEventsFlags flags, int maxtime)
   , just $ mkStaticMethod "quit" [] voidT
+  , just $ mkStaticMethod "removeLibraryPath" [objT c_QString] voidT
+  , just $ mkStaticMethod' "removePostedEvents" "removePostedEvents" [ptrT $ objT c_QObject] voidT
+  , just $ mkStaticMethod' "removePostedEvents" "removePostedEventsWithEventType" [ ptrT $ objT c_QObject, intT] voidT
+  -- TODO bool QCoreApplication::removeTranslator(QTranslator *translationFile)
   , just $ mkStaticMethod "sendEvent" [ptrT $ objT c_QObject, ptrT $ objT c_QEvent] boolT
+  , just $ mkStaticMethod' "sendPostedEvents" "sendPostedEvents" [] voidT
+  , just $ mkStaticMethod' "sendPostedEvents" "sendPostedEventsWithObject" [ptrT $ objT c_QObject] voidT
+  , just $ mkStaticMethod' "sendPostedEvents" "sendPostedEventsWithObjectAndEventType" [ ptrT $ objT c_QObject, intT] voidT
   , just $ mkStaticMethod "setApplicationName" [objT c_QString] voidT
   , just $ mkStaticMethod "setApplicationVersion" [objT c_QString] voidT
+  , just $ mkStaticMethod' "setAttribute" "setAttribute" [enumT e_ApplicationAttribute] voidT
+  , just $ mkStaticMethod' "setAttribute" "setAttributeWithBool" [enumT e_ApplicationAttribute, boolT] voidT
+  -- TODO void setEventDispatcher(QAbstractEventDispatcher *eventDispatcher)
+  , just $ mkStaticMethod "setLibraryPaths" [objT c_QStringList] voidT
   , just $ mkStaticMethod "setOrganizationDomain" [objT c_QString] voidT
   , just $ mkStaticMethod "setOrganizationName" [objT c_QString] voidT
   , test (qtVersion >= [5, 0]) $ mkStaticMethod "setQuitLockEnabled" [boolT] voidT
-    -- TODO Other methods.
+  , test (qtVersion >= [5, 3]) $ mkStaticMethod "setSetuidAllowed" [boolT] voidT
+  , just $ mkStaticMethod "startingUp" [] boolT
+  , just $ mkStaticMethod "testAttribute" [enumT e_ApplicationAttribute] boolT
+    -- TODO QString wrappers for these.
+  , just $ makeFnMethod (ident2 "qtah" "qcoreapplication" "translate")
+    "translate" MStatic Nonpure
+    [objT c_QString, objT c_QString] $ objT c_QString
+  , just $ makeFnMethod (ident2 "qtah" "qcoreapplication" "translate")
+    "translateWithDisambiguation" MStatic Nonpure
+    [objT c_QString, objT c_QString, objT c_QString] $ objT c_QString
+  , just $ makeFnMethod (ident2 "qtah" "qcoreapplication" "translate")
+    "translateWithDisambiguationAndNum" MStatic Nonpure
+    [objT c_QString, objT c_QString, objT c_QString, intT] $ objT c_QString
   ]

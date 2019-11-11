@@ -51,7 +51,7 @@ import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Assignable, Copyable, Comparable, Equatable),
   classAddFeatures,
   )
-import Foreign.Hoppy.Generator.Types (boolT, charT, intT, enumT, objT, refT, ucharT, ushortT)
+import Foreign.Hoppy.Generator.Types (boolT, charT, intT, enumT, objT, refT, ucharT, ushortT, uintT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
 import Graphics.UI.Qtah.Generator.Flags (qtVersion)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
@@ -75,6 +75,7 @@ aModule =
   , just $ QtExport $ ExportEnum e_Decomposition
   , test (qtVersion < [5, 3]) $ QtExport $ ExportEnum e_Joining
   , test (qtVersion >= [5, 3]) $ QtExport $ ExportEnum e_JoiningType
+  , test (qtVersion >= [5, 1]) $ QtExport $ ExportEnum e_Script
   , just $ QtExport $ ExportEnum e_Direction
   , just $ QtExport $ ExportEnum e_SpecialCharacter
   , just $ QtExport $ ExportEnum e_UnicodeVersion
@@ -105,11 +106,9 @@ c_QChar =
   , just $ mkCtor "newFromInt" [intT]
   , just $ mkCtor "newFromSpecialCharacter" [enumT e_SpecialCharacter]
   , test (qtVersion < [5]) $ mkStaticMethod' "fromAscii" "newFromAscii" [charT] $ objT c_QChar
-  , just $ mkStaticMethod' "fromLatin1" "newFromLatin1" [charT] $ objT c_QChar
   , just $ mkConstMethod "category" [] $ enumT e_Category
   , just $ mkConstMethod "cell" [] ucharT
   , just $ mkConstMethod "combiningClass" [] ucharT
-  , just $ mkStaticMethod "currentUnicodeVersion" [] $ enumT e_UnicodeVersion
   , just $ mkConstMethod "decomposition" [] $ objT c_QString
   , just $ mkConstMethod "decompositionTag" [] $ enumT e_Decomposition
   , just $ mkConstMethod "digitValue" [] intT
@@ -134,7 +133,7 @@ c_QChar =
   , test (qtVersion >= [5, 3]) $ mkConstMethod "joiningType" [] $ enumT e_JoiningType
   , just $ mkConstMethod "mirroredChar" [] $ objT c_QChar
   , just $ mkConstMethod "row" [] ucharT
-    -- TODO script (>=5.1)
+  , test (qtVersion >= [5, 1]) $ mkConstMethod "script" [] $ enumT e_Script
   , test (qtVersion < [5]) $ mkConstMethod "toAscii" [] charT
   , just $ mkConstMethod "toCaseFolded" [] $ objT c_QChar
   , just $ mkConstMethod "toLatin1" [] charT
@@ -144,6 +143,45 @@ c_QChar =
   , just $ mkConstMethod' "unicode" "unicode" [] ushortT
   , just $ mkMethod' "unicode" "unicodeRef" [] $ refT ushortT
   , just $ mkConstMethod "unicodeVersion" [] $ enumT e_UnicodeVersion
+
+  , just $ mkStaticMethod "fromLatin1" [charT] $ objT c_QChar
+  , just $ mkStaticMethod "currentUnicodeVersion" [] $ enumT e_UnicodeVersion
+  , just $ mkStaticMethod' "category" "categoryStatic" [uintT] $ enumT e_Category
+  , just $ mkStaticMethod' "combiningClass" "combiningClassStatic" [uintT] ucharT
+  , just $ mkStaticMethod' "decomposition" "decompositionStatic" [uintT] $ objT c_QString
+  , just $ mkStaticMethod' "decompositionTag" "decompositionTagStatic" [uintT] $ enumT e_Decomposition
+  , just $ mkStaticMethod' "digitValue" "digitValueStatic" [uintT] intT
+  , just $ mkStaticMethod' "direction" "directionStatic" [uintT] $ enumT e_Direction
+  , test (qtVersion >= [5]) $ mkStaticMethod' "hasMirrored" "hasMirroredStatic" [uintT] boolT
+  , just $ mkStaticMethod "highSurrogate" [uintT] boolT
+  , test (qtVersion >= [5]) $ mkStaticMethod' "isDigit" "isDigitStatic" [uintT] boolT
+  , just $ mkStaticMethod' "isHighSurrogate" "isHighSurrogateStatic" [uintT] boolT
+  , test (qtVersion >= [5]) $ mkStaticMethod' "isLetter" "isLetterStatic" [uintT] boolT
+  , test (qtVersion >= [5]) $ mkStaticMethod' "isLetterOrNumber" "isLetterOrNumberStatic" [uintT] boolT
+  , just $ mkStaticMethod' "isLowSurrogate" "isLowSurrogateStatic" [uintT] boolT
+  , test (qtVersion >= [5]) $ mkStaticMethod' "isLower" "isLowerStatic" [uintT] boolT
+  , test (qtVersion >= [5]) $ mkStaticMethod' "isMark" "isMarkStatic" [uintT] boolT
+  , test (qtVersion >= [5]) $ mkStaticMethod' "isNonCharacter" "isNonCharacterStatic" [uintT] boolT
+  , test (qtVersion >= [5]) $ mkStaticMethod' "isNumber" "isNumberStatic" [uintT] boolT
+  , test (qtVersion >= [5]) $ mkStaticMethod' "isPrint" "isPrintStatic" [uintT] boolT
+  , test (qtVersion >= [5]) $ mkStaticMethod' "isPunct" "isPunctStatic" [uintT] boolT
+  , test (qtVersion >= [5]) $ mkStaticMethod' "isSpace" "isSpaceStatic" [uintT] boolT
+  , test (qtVersion >= [5]) $ mkStaticMethod' "isSurrogate" "isSurrogateStatic" [uintT] boolT
+  , test (qtVersion >= [5]) $ mkStaticMethod' "isSymbol" "isSymbolStatic" [uintT] boolT
+  , test (qtVersion >= [5]) $ mkStaticMethod' "isTitleCase" "isTitleCaseStatic" [uintT] boolT
+  , test (qtVersion >= [5]) $ mkStaticMethod' "isUpper" "isUpperStatic" [uintT] boolT
+  , test (qtVersion >= [5, 3]) $ mkStaticMethod' "joiningType" "joiningTypeStatic" [uintT] $ enumT e_JoiningType
+  , just $ mkStaticMethod "lowSurrogate" [uintT] ushortT
+  , just $ mkStaticMethod' "mirroredChar" "mirroredCharStatic" [uintT] uintT
+  , just $ mkStaticMethod "requiresSurrogates" [uintT] boolT
+  , test (qtVersion >= [5, 1]) $ mkStaticMethod' "script" "scriptStatic" [uintT] $ enumT e_Script
+  , just $ mkStaticMethod' "surrogateToUcs4" "surrogateToUcs4" [ushortT, ushortT] uintT
+  , just $ mkStaticMethod' "surrogateToUcs4" "surrogateToUcs4WithQChar" [objT c_QChar, objT c_QChar] uintT
+  , just $ mkStaticMethod' "toCaseFolded" "toCaseFoldedStatic" [uintT] uintT
+  , just $ mkStaticMethod' "toLower" "toLowerStatic" [uintT] uintT
+  , just $ mkStaticMethod' "toTitleCase" "toTitleCaseStatic" [uintT] uintT
+  , just $ mkStaticMethod' "toUpper" "toUpperStatic" [uintT] uintT
+  , just $ mkStaticMethod' "unicodeVersion" "unicodeVersionStatic" [uintT] $ enumT e_UnicodeVersion
   ]
 
 e_Category =
@@ -273,3 +311,149 @@ e_UnicodeVersion =
   , (9, ["unicode", "5_0"])
   , (0, ["unicode", "unassigned"])
   ]
+
+e_Script =
+    makeQtEnum (ident1 "QChar" "Script") [includeStd "QChar"]
+    [ (0, ["script_", "unknown"])
+    , (1, ["script_", "inherited"])
+    , (2, ["script_", "common"])
+    , (3, ["script_", "latin"])
+    , (4, ["script_", "greek"])
+    , (5, ["script_", "cyrillic"])
+    , (6, ["script_", "armenian"])
+    , (7, ["script_", "hebrasshew"])
+    , (8, ["script_", "arabic"])
+    , (9, ["script_", "syriac"])
+    , (10, ["script_", "thaana"])
+    , (11, ["script_", "devanagari"])
+    , (12, ["script_", "bengali"])
+    , (13, ["script_", "gurmukhi"])
+    , (14, ["script_", "gujarati"])
+    , (15, ["script_", "oriya"])
+    , (16, ["script_", "tamil"])
+    , (17, ["script_", "telugu"])
+    , (18, ["script_", "kannada"])
+    , (19, ["script_", "malayalam"])
+    , (20, ["script_", "sinhala"])
+    , (21, ["script_", "thai"])
+    , (22, ["script_", "lao"])
+    , (23, ["script_", "tibetan"])
+    , (24, ["script_", "myanmar"])
+    , (25, ["script_", "georgian"])
+    , (26, ["script_", "hangul"])
+    , (27, ["script_", "ethiopic"])
+    , (28, ["script_", "cherokee"])
+    , (29, ["script_", "canadian", "aboriginal"])
+    , (30, ["script_", "ogham"])
+    , (31, ["script_", "runic"])
+    , (32, ["script_", "khmer"])
+    , (33, ["script_", "mongolian"])
+    , (34, ["script_", "hiragana"])
+    , (35, ["script_", "katakana"])
+    , (36, ["script_", "bopomofo"])
+    , (37, ["script_", "han"])
+    , (38, ["script_", "yi"])
+    , (39, ["script_", "old", "italic"])
+    , (40, ["script_", "gothic"])
+    , (41, ["script_", "deseret"])
+    , (42, ["script_", "tagalog"])
+    , (43, ["script_", "hanunoo"])
+    , (44, ["script_", "buhid"])
+    , (45, ["script_", "tagbanwa"])
+    , (46, ["script_", "coptic"])
+    , (47, ["script_", "limbu"])
+    , (48, ["script_", "tai", "le"])
+    , (49, ["script_", "linear", "b"])
+    , (50, ["script_", "ugaritic"])
+    , (51, ["script_", "shavian"])
+    , (52, ["script_", "osmanya"])
+    , (53, ["script_", "cypriot"])
+    , (54, ["script_", "braille"])
+    , (55, ["script_", "buginese"])
+    , (56, ["script_", "new", "tai", "lue"])
+    , (57, ["script_", "glagolitic"])
+    , (58, ["script_", "tifinagh"])
+    , (59, ["script_", "syloti", "nagri"])
+    , (60, ["script_", "old", "persian"])
+    , (61, ["script_", "kharoshthi"])
+    , (62, ["script_", "balinese"])
+    , (63, ["script_", "cuneiform"])
+    , (64, ["script_", "phoenician"])
+    , (65, ["script_", "phags", "pa"])
+    , (66, ["script_", "nko"])
+    , (67, ["script_", "sundanese"])
+    , (68, ["script_", "lepcha"])
+    , (69, ["script_", "ol", "chiki"])
+    , (70, ["script_", "vai"])
+    , (71, ["script_", "saurashtra"])
+    , (72, ["script_", "kayah", "li"])
+    , (73, ["script_", "rejang"])
+    , (74, ["script_", "lycian"])
+    , (75, ["script_", "carian"])
+    , (76, ["script_", "lydian"])
+    , (77, ["script_", "cham"])
+    , (78, ["script_", "tai", "tham"])
+    , (79, ["script_", "tai", "viet"])
+    , (80, ["script_", "avestan"])
+    , (81, ["script_", "egyptian", "hieroglyphs"])
+    , (82, ["script_", "samaritan"])
+    , (83, ["script_", "lisu"])
+    , (84, ["script_", "bamum"])
+    , (85, ["script_", "javanese"])
+    , (86, ["script_", "meetei", "mayek"])
+    , (87, ["script_", "imperial", "aramaic"])
+    , (88, ["script_", "old", "south", "arabian"])
+    , (89, ["script_", "inscriptional", "parthian"])
+    , (90, ["script_", "inscriptional", "pahlavi"])
+    , (91, ["script_", "old", "turkic"])
+    , (92, ["script_", "kaithi"])
+    , (93, ["script_", "batak"])
+    , (94, ["script_", "brahmi"])
+    , (95, ["script_", "mandaic"])
+    , (96, ["script_", "chakma"])
+    , (97, ["script_", "meroitic", "cursive"])
+    , (98, ["script_", "meroitic", "hieroglyphs"])
+    , (99, ["script_", "miao"])
+    , (100, ["script_", "sharada"])
+    , (101, ["script_", "sora", "sompeng"])
+    , (102, ["script_", "takri"])
+    , (103, ["script_", "caucasian", "albanian"])
+    , (104, ["script_", "bassa", "vah"])
+    , (105, ["script_", "duployan"])
+    , (106, ["script_", "elbasan"])
+    , (107, ["script_", "grantha"])
+    , (108, ["script_", "pahawh", "hmong"])
+    , (109, ["script_", "khojki"])
+    , (110, ["script_", "linear", "a"])
+    , (111, ["script_", "mahajani"])
+    , (112, ["script_", "manichaean"])
+    , (113, ["script_", "mende", "kikakui"])
+    , (114, ["script_", "modi"])
+    , (115, ["script_", "mro"])
+    , (116, ["script_", "old", "north", "arabian"])
+    , (117, ["script_", "nabataean"])
+    , (118, ["script_", "palmyrene"])
+    , (119, ["script_", "pau", "cin", "hau"])
+    , (120, ["script_", "old", "permic"])
+    , (121, ["script_", "psalter", "pahlavi"])
+    , (122, ["script_", "siddham"])
+    , (123, ["script_", "khudawadi"])
+    , (124, ["script_", "tirhuta"])
+    , (125, ["script_", "warang", "citi"])
+    , (126, ["script_", "ahom"])
+    , (127, ["script_", "anatolian", "hieroglyphs"])
+    , (128, ["script_", "hatran"])
+    , (129, ["script_", "multani"])
+    , (130, ["script_", "old", "hungarian"])
+    , (131, ["script_", "sign", "writing"])
+    , (132, ["script_", "adlam"])
+    , (133, ["script_", "bhaiksuki"])
+    , (134, ["script_", "marchen"])
+    , (135, ["script_", "newa"])
+    , (136, ["script_", "osage"])
+    , (137, ["script_", "tangut"])
+    , (138, ["script_", "masaram", "gondi"])
+    , (139, ["script_", "nushu"])
+    , (140, ["script_", "soyombo"])
+    , (141, ["script_", "zanabazar", "square"])
+    ]

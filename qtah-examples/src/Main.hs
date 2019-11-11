@@ -59,7 +59,6 @@ examples =
     , exDescription = "A notepad program for editing text files."
     , exMain = Notepad.run
     }
-
   ]
 
 examplesByTitle :: M.Map String Example

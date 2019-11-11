@@ -77,13 +77,19 @@ forEachListener() {
 
     # Keep the includes in the C++ section up-to-date with the types used here.
     $fn Bool "bool"
+    $fn Direction "QAbstractAnimation::Direction"
     $fn DockWidgetArea "Qt::DockWidgetArea"
     $fn DockWidgetAreas "Qt::DockWidgetAreas"
     $fn Double "double"
     $fn Int "int"
     $fn IntBool "int|bool"
+    $fn IntExitStatus "int|QProcess::ExitStatus"
     $fn IntInt "int|int"
+    $fn IntQlonglong "int|qlonglong"
     $fn Orientation "Qt::Orientation"
+    $fn OrientationIntInt "Qt::Orientation|int|int"
+    $fn ProcessError "QProcess::ProcessError"
+    $fn ProcessState "QProcess::ProcessState"
     $fn PtrQAbstractButton "QAbstractButton*"
     $fn PtrQAbstractButtonBool "QAbstractButton*|bool"
     $fn PtrQAbstractItemModel "QAbstractItemModel*"
@@ -93,6 +99,7 @@ forEachListener() {
     $fn PtrQTreeWidgetItemInt "QTreeWidgetItem*|int"
     $fn PtrQTreeWidgetItemPtrQTreeWidgetItem "QTreeWidgetItem*|QTreeWidgetItem*"
     $fn PtrQWidgetPtrQWidget "QWidget*|QWidget*"
+    $fn QAbstractAnimation "QAbstractAnimation*"
     $fn QAbstractSliderAction "QAbstractSlider::SliderAction"
     $fn QClipboardMode "QClipboard::Mode"
     $fn QDate "QDate"
@@ -103,14 +110,19 @@ forEachListener() {
     $fn QModelIndexQModelIndex "QModelIndex|QModelIndex"
     $fn QModelIndexQModelIndexQVectorInt "QModelIndex|QModelIndex|QVector<int>"
     $fn QPoint "QPoint"
-    $fn Qreal "qreal"
     $fn QSize "QSize"
     $fn QString "QString"
     $fn QSystemTrayIconActivationReason "QSystemTrayIcon::ActivationReason"
     $fn QWindowVisibility "QWindow::Visibility" 0x050000 '[5, 0]'
+    $fn Qlonglong "qlonglong"
+    $fn Qreal "qreal"
     $fn RefConstQIcon "const QIcon&"
     $fn RefConstQItemSelectionRefConstQItemSelection "const QItemSelection&|const QItemSelection&"
+    $fn RefConstQListQModelIndex "const QList<QModelIndex>&"
+    $fn RefConstQModelIndex "const QModelIndex&"
+    $fn RefConstQVariant "const QVariant&"
     $fn ScreenOrientation "Qt::ScreenOrientation" 0x050000 '[5, 0]'
+    $fn StateState "QAbstractAnimation::State|QAbstractAnimation::State"
     $fn ToolBarAreas "Qt::ToolBarAreas"
     $fn ToolButtonStyle "Qt::ToolButtonStyle"
     $fn WindowModality "Qt::WindowModality"
@@ -133,9 +145,7 @@ if [[ -n $cppDir ]]; then
     sayHpp '#ifndef QTAH_LISTENERS_HPP'
     sayHpp '#define QTAH_LISTENERS_HPP'
     sayHpp
-    sayHpp '#include <string>'
-    sayHpp '#include <Qt>'
-    sayHpp '#include <QtGlobal>'
+    sayHpp '#include <QAbstractAnimation>'
     sayHpp '#include <QAbstractButton>'
     sayHpp '#include <QAbstractSlider>'
     sayHpp '#include <QAction>'
@@ -143,14 +153,20 @@ if [[ -n $cppDir ]]; then
     sayHpp '#include <QDockWidget>'
     sayHpp '#include <QIcon>'
     sayHpp '#include <QItemSelection>'
+    sayHpp '#include <QMetaObject>'
     sayHpp '#include <QModelIndex>'
     sayHpp '#include <QObject>'
     sayHpp '#include <QPoint>'
+    sayHpp '#include <QProcess>'
     sayHpp '#include <QSize>'
     sayHpp '#include <QSystemTrayIcon>'
     sayHpp '#include <QTreeWidgetItem>'
+    sayHpp '#include <QVariant>'
     sayHpp '#include <QVector>'
     sayHpp '#include <QWidget>'
+    sayHpp '#include <Qt>'
+    sayHpp '#include <QtGlobal>'
+    sayHpp '#include <string>'
     sayHpp '#if QT_VERSION >= 0x050000'
     sayHpp '#include <QWindow>'
     sayHpp '#endif'
@@ -192,15 +208,17 @@ if [[ -n $cppDir ]]; then
         sayHpp
         sayHpp "public:"
         sayHpp "    typedef ${callbackClassName} callback;"
-        sayHpp "    ${className}(callback f, QObject* parent = 0);"
-        sayHpp "    bool connectListener(QObject* source, const std::string& signal);"
+        sayHpp
+        sayHpp "    ${className}(QObject* source, const std::string& signal, callback f);"
+        sayHpp "    ~${className}();"
+        sayHpp "    bool isValid() const;"
         sayHpp
         sayHpp "public slots:"
         sayHpp "    void invoke(${paramList});"
         sayHpp
         sayHpp "private:"
         sayHpp "    callback f_;"
-        sayHpp "    bool connected_;"
+        sayHpp "    QMetaObject::Connection connection_;"
         sayHpp "};"
         if [[ -n $minVersion ]]; then
             sayHpp
@@ -212,19 +230,17 @@ if [[ -n $cppDir ]]; then
             sayCpp "#if QT_VERSION >= ${minVersion}"
         fi
         sayCpp
-        sayCpp "${className}::${className}(${className}::callback f, QObject* parent) :"
-        sayCpp "    QObject(parent), f_(f), connected_(false) {}"
+        sayCpp "${className}::${className}(QObject* source, const std::string& signal, ${className}::callback f) :"
+        sayCpp "    QObject(source), f_(f) {"
+        sayCpp "    connection_ = connect(source, signal.c_str(), this, SLOT(invoke(${paramTypeList})));"
+        sayCpp "}"
         sayCpp
-        sayCpp "bool ${className}::connectListener(QObject* source, const std::string& signal) {"
-        sayCpp "    if (connected_) {"
-        sayCpp "        std::cerr <<"
-        sayCpp "            \"${className}::connectListener: Internal error, already connected.  \""
-        sayCpp "            \"Not connecting again.\\n\" << std::flush;"
-        sayCpp "        return false;"
-        sayCpp "    }"
-        sayCpp "    setParent(source);"
-        sayCpp "    connected_ = connect(source, signal.c_str(), SLOT(invoke(${paramTypeList})));"
-        sayCpp "    return connected_;"
+        sayCpp "${className}::~${className}() {"
+        sayCpp "    QObject::disconnect(connection_);"
+        sayCpp "}"
+        sayCpp
+        sayCpp "bool ${className}::isValid() const {"
+        sayCpp "    return static_cast<bool>(connection_);"
         sayCpp "}"
         sayCpp
         sayCpp "void ${className}::invoke(${paramList}) {"
@@ -256,14 +272,14 @@ if [[ -n $hsDir ]]; then
     say
     say 'module Graphics.UI.Qtah.Generator.Interface.Internal.Listener where'
     say
+    say 'import qualified Foreign.Hoppy.Generator.Spec as S'
+    say 'import qualified Foreign.Hoppy.Generator.Std.String as String'
+    say 'import qualified Foreign.Hoppy.Generator.Types as S'
     say 'import qualified Foreign.Hoppy.Generator.Version as V'
     say 'import qualified Graphics.UI.Qtah.Generator.Flags as F'
-    say 'import qualified Foreign.Hoppy.Generator.Spec as S'
-    say 'import qualified Foreign.Hoppy.Generator.Types as S'
-    say 'import qualified Foreign.Hoppy.Generator.Std.String as String'
-    say 'import qualified Graphics.UI.Qtah.Generator.Module as M'
     say 'import qualified Graphics.UI.Qtah.Generator.Interface.Core.QObject as QObject'
     say 'import qualified Graphics.UI.Qtah.Generator.Interface.Internal.Callback as C'
+    say 'import qualified Graphics.UI.Qtah.Generator.Module as M'
     say
     say '{-# ANN module "HLint: ignore Use camelCase" #-}'
 
@@ -276,11 +292,9 @@ if [[ -n $hsDir ]]; then
         say
         say "${classVar} ="
         say "  S.makeClass (S.ident \"${className}\") Nothing [QObject.c_QObject]"
-        say "  [ S.mkCtor \"new\" [S.callbackT C.${callbackVar}]"
-        say "  , S.mkCtor \"newWithParent\""
-        say "    [S.callbackT C.${callbackVar}, S.ptrT \$ S.objT QObject.c_QObject]"
-        say "  , S.mkMethod \"connectListener\""
-        say "    [S.ptrT \$ S.objT QObject.c_QObject, S.objT String.c_string] S.boolT"
+        say "  [ S.mkCtor \"new\""
+        say "    [S.ptrT \$ S.objT QObject.c_QObject, S.objT String.c_string, S.callbackT C.${callbackVar}]"
+        say "  , S.mkConstMethod \"isValid\" [] S.boolT"
         say "  ]"
     }
     forEachListener writeHs

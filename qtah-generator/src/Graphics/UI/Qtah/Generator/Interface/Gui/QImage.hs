@@ -18,6 +18,7 @@
 module Graphics.UI.Qtah.Generator.Interface.Gui.QImage (
   aModule,
   c_QImage,
+  e_Format,
   ) where
 
 import Foreign.Hoppy.Generator.Spec (

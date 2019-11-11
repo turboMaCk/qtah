@@ -25,7 +25,6 @@ import Foreign.Hoppy.Generator.Spec (
   MethodApplicability (MConst),
   Purity (Nonpure),
   addReqIncludes,
-  classSetConversionToGc,
   classSetEntityPrefix,
   ident,
   ident2,
@@ -35,17 +34,13 @@ import Foreign.Hoppy.Generator.Spec (
   makeFnMethod,
   mkConstMethod,
   )
-import Foreign.Hoppy.Generator.Spec.ClassFeature (
-  ClassFeature (Copyable),
-  classAddFeatures,
-  )
 import Foreign.Hoppy.Generator.Types (boolT, constT, intT, objT, ptrT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
 import Graphics.UI.Qtah.Generator.Flags (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.QMetaClassInfo (c_QMetaClassInfo)
 import Graphics.UI.Qtah.Generator.Interface.Core.QMetaEnum (c_QMetaEnum)
 import Graphics.UI.Qtah.Generator.Interface.Core.QMetaMethod (c_QMetaMethod)
-import Graphics.UI.Qtah.Generator.Interface.Core.QMetaProperty (c_QMetaProperty)
+import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Core.QMetaProperty (c_QMetaProperty)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
@@ -61,8 +56,6 @@ c_QMetaObject =
   addReqIncludes [ includeStd "QMetaObject"
                  , includeLocal "wrap_qmetaobject.hpp"
                  ] $
-  classSetConversionToGc $
-  classAddFeatures [Copyable] $
   classSetEntityPrefix "" $
   makeClass (ident "QMetaObject") Nothing [] $
   collect

@@ -64,7 +64,7 @@ import Graphics.UI.Qtah.Generator.Interface.Gui.QPaintDevice (c_QPaintDevice)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QPainter (c_QPainter)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QPixmap (c_QPixmap)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QRegion (c_QRegion)
-import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
+import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
   c_ListenerQPoint,
   c_ListenerQString,
   c_ListenerRefConstQIcon,

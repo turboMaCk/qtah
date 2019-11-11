@@ -68,6 +68,7 @@ import Graphics.UI.Qtah.Generator.Interface.Gui.QImage (c_QImage)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QPaintDevice (c_QPaintDevice)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QRegion (c_QRegion)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QTransform (c_QTransform)
+--import Graphics.UI.Qtah.Generator.Interface.Gui.QBitmap (c_QBitmap)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
 
@@ -78,6 +79,7 @@ aModule =
   makeQtModule ["Gui", "QPixmap"]
   [ QtExport $ ExportClass c_QPixmap
   ]
+
 
 c_QPixmap =
   addReqIncludes [includeStd "QPixmap"] $
@@ -90,6 +92,10 @@ c_QPixmap =
   , just $ mkCtor "newWithSize" [objT c_QSize]
   , just $ mkCtor "newWithSizeRaw" [intT, intT]
   , just $ mkCtor "newWithFile" [objT c_QString]
+  --, just $ mkConstMethod' "createHeuristicMask" "createHeuristicMask" [] $ objT c_QBitmap
+  --, just $ mkConstMethod' "createHeuristicMask" "createHeuristicMaskAll" [boolT] $ objT c_QBitmap
+  --, just $ mkConstMethod' "createMaskFromColor" "createMaskFromColor" [] $ objT c_QBitmap
+  --, just $ mkConstMethod' "createMaskFromColor" "createMaskFromColorAll" [boolT] $ objT c_QBitmap
     -- TODO QPixmap(const QString&, const char*, Qt::ImageConversionFlags)
     -- TODO QPixmap(const char* const[] xpm)  (Does this copy the data?)
   , just $ mkConstMethod "cacheKey" [] int64T

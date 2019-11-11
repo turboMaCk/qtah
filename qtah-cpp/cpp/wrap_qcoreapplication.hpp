@@ -19,12 +19,19 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <QCoreApplication>
+#include <QString>
 #include <QStringList>
 
 namespace qtah {
 namespace qcoreapplication {
 
 QCoreApplication* create(const QStringList&);
+
+QString translate(const QString&, const QString&);
+
+QString translate(const QString&, const QString&, const QString&);
+
+QString translate(const QString&, const QString&, const QString&, int);
 
 }  // namespace qcoreapplication
 }  // namespace qtah

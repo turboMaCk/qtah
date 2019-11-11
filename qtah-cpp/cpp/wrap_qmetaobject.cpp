@@ -48,5 +48,13 @@ int indexOfSlot(const QMetaObject& self, const QString& name) {
     return self.indexOfSlot(name.toStdString().c_str());
 }
 
+namespace connection {
+
+bool isValid(const QMetaObject::Connection& self) {
+    return static_cast<bool>(self);
+}
+
+}  // namespace connection
+
 }  // namespace qmetaobject
 }  // namespace qtah
