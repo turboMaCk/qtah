@@ -34,7 +34,6 @@ import Foreign.Hoppy.Generator.Spec (
   Type,
   addReqs,
   classSetEntityPrefix,
-  classSetMonomorphicSuperclass,
   identT,
   includeStd,
   makeClass,
@@ -59,8 +58,8 @@ import Graphics.UI.Qtah.Generator.Types
 newtype Options = Options
   { optPairClassFeatures :: [ClassFeature]
     -- ^ Additional features to add to the @QPair@ class.  QPairs are always
-    -- 'Assignable' and 'Copyable', but you may want to add 'Equatable' if your
-    -- value type supports it.
+    -- 'Assignable', and are 'Copyable' (>= Qt 5.2), but you may want to add
+    -- 'Equatable' if your value type supports it.
   }
 
 -- | The default options have no additional 'ClassFeature's.
@@ -84,19 +83,22 @@ instantiate' pairName t1 t2 tReqs opts =
   let reqs = mconcat [ tReqs
                      , reqInclude $ includeStd "QPair"
                      ]
-      features = Assignable : Copyable : optPairClassFeatures opts
+      features =
+        collect [ just Assignable
+                , test (qtVersion >= [5, 2]) Copyable
+                ] ++
+        optPairClassFeatures opts
 
       pair =
         addReqs reqs $
         classAddFeatures features $
-        classSetMonomorphicSuperclass $
         classSetEntityPrefix "" $
         makeClass (identT "QPair" [t1,t2]) (Just $ toExtName pairName) [] $
         collect
         [ just $ mkCtor "new" []
         , just $ mkCtor "newWithValues" [refT $ constT t1, refT $ constT t2]
-        , test (qtVersion >= [5, 2]) $ mkCtor "newCopyPair" [objT pair]
         , test (qtVersion >= [5, 5]) $ mkMethod "swap" [refT $ objT pair] voidT
+          -- TODO first, second
         ]
 
 

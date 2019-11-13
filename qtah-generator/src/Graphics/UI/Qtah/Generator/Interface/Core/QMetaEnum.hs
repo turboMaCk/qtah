@@ -56,16 +56,18 @@ c_QMetaEnum =
   classSetEntityPrefix "" $
   makeClass (ident "QMetaEnum") Nothing [] $
   collect
-  [ test (qtVersion >= [5, 12]) $ mkConstMethod "enumName" [] $ ptrT $ constT charT
+  [ -- TODO QStrings instead of const char*.
+    test (qtVersion >= [5, 12]) $ mkConstMethod "enumName" [] $ ptrT $ constT charT
   , just $ mkConstMethod "isFlag" [] boolT
   , test (qtVersion >= [5, 8]) $ mkConstMethod "isScoped" [] boolT
   , just $ mkConstMethod "isValid" [] boolT
   , just $ mkConstMethod "key" [intT] $ ptrT $ constT charT
   , just $ mkConstMethod "keyCount" [] intT
+    -- TODO Return Maybes here.
   , just $ mkConstMethod' "keyToValue" "keyToValue" [ptrT $ constT charT] intT
-  , just $ mkConstMethod' "keyToValue" "keyToValueWithBool" [ptrT $ constT charT, ptrT boolT] intT
+  , just $ mkConstMethod' "keyToValue" "keyToValueWithPtrBool" [ptrT $ constT charT, ptrT boolT] intT
   , just $ mkConstMethod' "keysToValue" "keysToValue" [ptrT $ constT charT] intT
-  , just $ mkConstMethod' "keysToValue" "keysToValueWithBool" [ptrT $ constT charT, ptrT boolT] intT
+  , just $ mkConstMethod' "keysToValue" "keysToValueWithPtrBool" [ptrT $ constT charT, ptrT boolT] intT
   , just $ mkConstMethod "name" [] $ ptrT $ constT charT
   , just $ mkConstMethod "scope" [] $ ptrT $ constT charT
   , just $ mkConstMethod "value" [intT] intT

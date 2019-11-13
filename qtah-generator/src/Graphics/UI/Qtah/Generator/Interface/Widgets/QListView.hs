@@ -68,7 +68,7 @@ c_QListView =
   makeClass (ident "QListView") Nothing [c_QAbstractItemView] $
   collect
   [ just $ mkCtor "new" []
-  , just $ mkCtor "newFromParent" [ptrT $ objT c_QWidget]
+  , just $ mkCtor "newWithParent" [ptrT $ objT c_QWidget]
   , test (qtVersion >= [4, 2]) $ mkProp "batchSize" intT
   , just $ mkMethod "clearPropertyFlags" [] voidT
   , just $ mkProp "flow" $ enumT e_Flow

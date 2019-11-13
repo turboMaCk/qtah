@@ -31,10 +31,9 @@ import Foreign.Hoppy.Generator.Spec (
   mkCtor,
   mkMethod,
   )
-import Foreign.Hoppy.Generator.Types (bitspaceT, ptrT, boolT, objT, voidT, constT)
+import Foreign.Hoppy.Generator.Types (ptrT, boolT, objT, voidT, constT)
 import Foreign.Hoppy.Generator.Version (collect, just)
 import Graphics.UI.Qtah.Generator.Interface.Core.QFileDevice (c_QFileDevice)
-import Graphics.UI.Qtah.Generator.Interface.Core.QIODevice (bs_OpenMode)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Graphics.UI.Qtah.Generator.Interface.Core.QObject (c_QObject)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModuleWithMinVersion)
@@ -52,15 +51,13 @@ c_QSaveFile =
   classSetEntityPrefix "" $
   makeClass (ident "QSaveFile") Nothing [c_QFileDevice] $
   collect
-  [ just $ mkCtor "newWithNameParent" [constT $ objT c_QString, ptrT $ objT c_QObject]
+  [ just $ mkCtor "newWithNameAndParent" [constT $ objT c_QString, ptrT $ objT c_QObject]
   , just $ mkCtor "new" []
   , just $ mkCtor "newWithParent" [ptrT $ objT c_QObject]
   , just $ mkCtor "newWithName" [constT $ objT c_QString]
   , just $ mkMethod "cancelWriting" [] voidT
   , just $ mkMethod "commit" [] boolT
   , just $ mkConstMethod "directWriteFallback" [] boolT
-  , just $ mkConstMethod "fileName" [] $ objT c_QString
-  , just $ mkMethod "open" [bitspaceT bs_OpenMode] boolT
   , just $ mkMethod "setDirectWriteFallback" [boolT] voidT
   , just $ mkMethod "setFileName" [constT $ objT c_QString] voidT
   ]

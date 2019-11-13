@@ -55,8 +55,8 @@ c_QFileSystemWatcher =
   collect
   [ just $ mkCtor "new" []
   , just $ mkCtor "newWithParent" [ptrT $ objT c_QObject]
-  , just $ mkCtor "newWithList" [refT $ constT $ objT c_QStringList]
-  , just $ mkCtor "newWithListParent" [refT $ constT $ objT c_QStringList, ptrT $ objT c_QObject]
+  , just $ mkCtor "newWithPaths" [refT $ constT $ objT c_QStringList]
+  , just $ mkCtor "newWithPathsAndParent" [refT $ constT $ objT c_QStringList, ptrT $ objT c_QObject]
   , just $ mkMethod "addPath" [refT $ constT $ objT c_QString] boolT
   , just $ mkMethod "addPaths" [refT $ constT $ objT c_QStringList] $ objT c_QStringList
   , just $ mkConstMethod "directories" [] $ objT c_QStringList

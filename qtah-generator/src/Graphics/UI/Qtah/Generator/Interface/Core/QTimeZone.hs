@@ -78,7 +78,7 @@ c_QTimeZone =
   --, just $ mkCtor "newFull2" [refT $ constT $ objT c_QByteArray, intT, refT $ constT $ objT c_QString, refT $ constT $ objT c_QString, enumT e_Country]
   --, just $ mkCtor "newFull3" [refT $ constT $ objT c_QByteArray, intT, refT $ constT $ objT c_QString, refT $ constT $ objT c_QString, enumT e_Country, refT $ constT $ objT c_QString]
   , just $ mkCtor "newWithOffset" [intT]
-  , just $ mkCtor "newWithQByteArray" [refT $ constT $ objT c_QByteArray]
+  , just $ mkCtor "newWithByteArray" [refT $ constT $ objT c_QByteArray]
   , just $ mkConstMethod "abbreviation" [refT $ constT $ objT c_QDateTime] $ objT c_QString
   , just $ mkStaticMethod' "availableTimeZoneIds" "availableTimeZoneIds" [] $ objT c_QListQByteArray
   -- just $ mkStaticMethod' "availableTimeZoneIds" "availableTimeZoneIdsWithCountry" [enumT e_Country] $ objT c_QListQByteArray
@@ -86,11 +86,11 @@ c_QTimeZone =
   , just $ mkConstMethod "comment" [] $ objT c_QString
   --, just $ mkConstMethod "country" [] $ enumT e_Country
   , just $ mkConstMethod "daylightTimeOffset" [refT $ constT $ objT c_QDateTime] intT
-  , just $ mkConstMethod' "displayName" "displayName" [refT $ constT $ objT c_QDateTime] $ objT c_QString
-  , just $ mkConstMethod' "displayName" "displayNameName" [refT $ constT $ objT c_QDateTime, enumT e_NameType] $ objT c_QString
+  , just $ mkConstMethod' "displayName" "displayNameWithDateTime" [refT $ constT $ objT c_QDateTime] $ objT c_QString
+  , just $ mkConstMethod' "displayName" "displayNameWithDateTimeAndNameType" [refT $ constT $ objT c_QDateTime, enumT e_NameType] $ objT c_QString
   -- just $ mkConstMethod' "displayName" "displayNameQLocale" [refT $ constT $ objT c_QDateTime, enumT e_NameType, refT $ constT $ objT c_QLocale] $ objT c_QString
-  , just $ mkConstMethod' "displayName" "displayNameTime" [enumT e_TimeType] $ objT c_QString
-  , just $ mkConstMethod' "displayName" "displayNameTimeName" [enumT e_TimeType, enumT e_NameType] $ objT c_QString
+  , just $ mkConstMethod' "displayName" "displayNameWithTimeType" [enumT e_TimeType] $ objT c_QString
+  , just $ mkConstMethod' "displayName" "displayNameWithTimeTypeAndNameType" [enumT e_TimeType, enumT e_NameType] $ objT c_QString
   -- just $ mkConstMethod' "displayName" "displayNameTimeNameQLocale" [enumT e_TimeType, enumT e_NameType, refT $ constT $ objT c_QLocale] $ objT c_QString
   --, test (qtVersion >= [5, 9]) $ mkStaticMethod "fromCFTimeZone" [objT c_CFTimeZoneRef] $ objT c_QTimeZone
   --, test (qtVersion >= [5, 9]) $ mkStaticMethod "fromNSTimeZone" [ptrT $ constT $ objT c_NSTimeZone] $ objT c_QTimeZone
@@ -111,7 +111,7 @@ c_QTimeZone =
   , just $ mkStaticMethod "systemTimeZoneId" [] $ objT c_QByteArray
   --, test (qtVersion >= [5, 9]) $ mkConstMethod "toCFTimeZone" [] $ objT c_CFTimeZoneRef
   --, test (qtVersion >= [5, 9]) $ mkConstMethod "toNSTimeZone" [] $ ptrT $ objT c_NSTimeZone
-  -- TODO QTimeZone::OffsetDataList QTimeZone::transitions(const QDateTime &fromDateTime, const QDateTime &toDateTime) const
+  -- TODO QTimeZone::OffsetDataList QTimeZone::transitions(const QDateTiacvme &fromDateTime, const QDateTime &toDateTime) const
   , test (qtVersion >= [5, 5]) $ mkStaticMethod "utc" [] $ objT c_QTimeZone
   , just $ mkStaticMethod "windowsIdToDefaultIanaId" [refT $ constT $ objT c_QByteArray] $ objT c_QByteArray
   --, just $ mkStaticMethod "windowsIdToDefaultIanaId" [refT $ constT $ objT c_QByteArray, enumT e_Country] $ objT c_QByteArray

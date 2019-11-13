@@ -66,11 +66,11 @@ c_QDateTime =
   makeClass (ident "QDateTime") Nothing [] $
   collect
   [ just $ mkCtor "new" []
-  , just $ mkCtor "newWithQDate" [refT $ constT $ objT c_QDate]
-  , just $ mkCtor "newWithQDateQTime" [refT $ constT $ objT c_QDate, refT $ constT $ objT c_QTime]
-  , just $ mkCtor "newWithQDateQTimeTimespec" [refT $ constT $ objT c_QDate, refT $ constT $ objT c_QTime, enumT e_TimeSpec]
-  , test (qtVersion >= [5, 2]) $ mkCtor "newWithQDateQTimeTimespecOffset" [refT $ constT $ objT c_QDate, refT $ constT $ objT c_QTime, enumT e_TimeSpec, intT]
-  , test (qtVersion >= [5, 2]) $ mkCtor "newWithQDateQTimeQTimezone" [refT $ constT $ objT c_QDate, refT $ constT $ objT c_QTime, refT $ constT $ objT c_QTimeZone]
+  , just $ mkCtor "newWithDate" [refT $ constT $ objT c_QDate]
+  , just $ mkCtor "newWithDateAndTime" [refT $ constT $ objT c_QDate, refT $ constT $ objT c_QTime]
+  , just $ mkCtor "newWithDateAndTimeAndTimeSpec" [refT $ constT $ objT c_QDate, refT $ constT $ objT c_QTime, enumT e_TimeSpec]
+  , test (qtVersion >= [5, 2]) $ mkCtor "newWithDateAndTimeAndTimeSpecAndOffset" [refT $ constT $ objT c_QDate, refT $ constT $ objT c_QTime, enumT e_TimeSpec, intT]
+  , test (qtVersion >= [5, 2]) $ mkCtor "newWithDateAndTimeAndTimeZone" [refT $ constT $ objT c_QDate, refT $ constT $ objT c_QTime, refT $ constT $ objT c_QTimeZone]
   , just $ mkConstMethod "addDays" [qint64] $ objT c_QDateTime
   , just $ mkConstMethod "addMSecs" [qint64] $ objT c_QDateTime
   , just $ mkConstMethod "addMonths" [intT] $ objT c_QDateTime
@@ -84,17 +84,17 @@ c_QDateTime =
   , just $ mkConstMethod "daysTo" [refT $ constT $ objT c_QDateTime] qint64
   --, test (qtVersion >= [5, 5]) $ mkStaticMethod "fromCFDate" [objT c_CFDateRef] $ objT c_QDateTime
   , test (qtVersion >= [4, 7]) $ mkStaticMethod' "fromMSecsSinceEpoch" "fromMSecsSinceEpoch" [qint64] $ objT c_QDateTime
-  , test (qtVersion >= [5, 2]) $ mkStaticMethod' "fromMSecsSinceEpoch" "fromMSecsSinceEpochWithTimespec" [qint64, enumT e_TimeSpec] $ objT c_QDateTime
-  , test (qtVersion >= [5, 2]) $ mkStaticMethod' "fromMSecsSinceEpoch" "fromMSecsSinceEpochWithTimespecOffset" [qint64, enumT e_TimeSpec, intT] $ objT c_QDateTime
-  , test (qtVersion >= [5, 2]) $ mkStaticMethod' "fromMSecsSinceEpoch" "fromMSecsSinceEpochWithTimezone" [qint64, refT $ constT $ objT c_QTimeZone] $ objT c_QDateTime
+  , test (qtVersion >= [5, 2]) $ mkStaticMethod' "fromMSecsSinceEpoch" "fromMSecsSinceEpochWithTimeSpec" [qint64, enumT e_TimeSpec] $ objT c_QDateTime
+  , test (qtVersion >= [5, 2]) $ mkStaticMethod' "fromMSecsSinceEpoch" "fromMSecsSinceEpochWithTimeSpecAndOffset" [qint64, enumT e_TimeSpec, intT] $ objT c_QDateTime
+  , test (qtVersion >= [5, 2]) $ mkStaticMethod' "fromMSecsSinceEpoch" "fromMSecsSinceEpochWithTimeZone" [qint64, refT $ constT $ objT c_QTimeZone] $ objT c_QDateTime
   --, test (qtVersion >= [5, 5]) $ mkStaticMethod "fromNSDate" [ptrT $ constT $ objT c_NSDate] $ objT c_QDateTime
   , test (qtVersion >= [5, 8]) $ mkStaticMethod' "fromSecsSinceEpoch" "fromSecsSinceEpoch" [qint64] $ objT c_QDateTime
-  , test (qtVersion >= [5, 8]) $ mkStaticMethod' "fromSecsSinceEpoch" "fromSecsSinceEpochWithTimespec" [qint64, enumT e_TimeSpec] $ objT c_QDateTime
-  , test (qtVersion >= [5, 8]) $ mkStaticMethod' "fromSecsSinceEpoch" "fromSecsSinceEpochWithTimespecOffset" [qint64, enumT e_TimeSpec, intT] $ objT c_QDateTime
-  , test (qtVersion >= [5, 8]) $ mkStaticMethod' "fromSecsSinceEpoch" "fromSecsSinceEpochWithQTimezone" [qint64, refT $ constT $ objT c_QTimeZone] $ objT c_QDateTime
+  , test (qtVersion >= [5, 8]) $ mkStaticMethod' "fromSecsSinceEpoch" "fromSecsSinceEpochWithTimeSpec" [qint64, enumT e_TimeSpec] $ objT c_QDateTime
+  , test (qtVersion >= [5, 8]) $ mkStaticMethod' "fromSecsSinceEpoch" "fromSecsSinceEpochWithTimeSpecAndOffset" [qint64, enumT e_TimeSpec, intT] $ objT c_QDateTime
+  , test (qtVersion >= [5, 8]) $ mkStaticMethod' "fromSecsSinceEpoch" "fromSecsSinceEpochWithTimeZone" [qint64, refT $ constT $ objT c_QTimeZone] $ objT c_QDateTime
   , just $ mkStaticMethod' "fromString" "fromString" [refT $ constT $ objT c_QString] $ objT c_QDateTime
   , just $ mkStaticMethod' "fromString" "fromStringWithDateFormat" [refT $ constT $ objT c_QString, enumT e_DateFormat] $ objT c_QDateTime
-  , just $ mkStaticMethod' "fromString" "fromStrings" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString] $ objT c_QDateTime
+  , just $ mkStaticMethod' "fromString" "fromStringWithStringFormat" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString] $ objT c_QDateTime
   , test (qtVersion >= [5, 2]) $ mkConstMethod "isDaylightTime" [] boolT
   , just $ mkConstMethod "isNull" [] boolT
   , just $ mkConstMethod "isValid" [] boolT
@@ -121,6 +121,8 @@ c_QDateTime =
   , test (qtVersion >= [5, 8]) $ mkConstMethod "toSecsSinceEpoch" [] qint64
   , just $ mkConstMethod' "toString" "toString" [] $ objT c_QString
   , just $ mkConstMethod' "toString" "toStringWithDateFormat" [enumT e_DateFormat] $ objT c_QString
+  , just $ mkConstMethod' "toString" "toStringWithStringFormat" [enumT e_DateFormat] $ objT c_QString
+    -- TODO QString toString(QStringView)
   , just $ mkConstMethod "toTimeSpec" [enumT e_TimeSpec] $ objT c_QDateTime
   , test (qtVersion >= [5, 2]) $ mkConstMethod "toTimeZone" [refT $ constT $ objT c_QTimeZone] $ objT c_QDateTime
   , just $ mkConstMethod "toUTC" [] $ objT c_QDateTime

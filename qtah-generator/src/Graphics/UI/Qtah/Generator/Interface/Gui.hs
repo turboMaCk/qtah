@@ -19,6 +19,7 @@ module Graphics.UI.Qtah.Generator.Interface.Gui (modules) where
 
 import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QActionEvent as QActionEvent
 import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QBackingStore as QBackingStore
+import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QBitmap as QBitmap
 import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QBrush as QBrush
 import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QClipboard as QClipboard
 import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QCloseEvent as QCloseEvent
@@ -46,7 +47,6 @@ import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QPaintEvent as QPaintE
 import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QPainter as QPainter
 import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QPainterPath as QPainterPath
 import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QPen as QPen
-import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QBitmap as QBitmap
 import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QPixmap as QPixmap
 import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QPolygon as QPolygon
 import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QPolygonF as QPolygonF
@@ -69,6 +69,7 @@ modules :: [AModule]
 modules =
   [ QActionEvent.aModule
   , QBackingStore.aModule
+  , QBitmap.aModule
   , QBrush.aModule
   , QClipboard.aModule
   , QCloseEvent.aModule
@@ -96,7 +97,6 @@ modules =
   , QPainter.aModule
   , QPainterPath.aModule
   , QPen.aModule
-  , QBitmap.aModule
   , QPixmap.aModule
   , QPolygon.aModule
   , QPolygonF.aModule

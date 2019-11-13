@@ -25,7 +25,6 @@ flag qt5
 library
   exposed-modules:
       Graphics.UI.Qtah.Core.HMargins
-    , Graphics.UI.Qtah.Core.Connection
     , Graphics.UI.Qtah.Core.HPoint
     , Graphics.UI.Qtah.Core.HPointF
     , Graphics.UI.Qtah.Core.HRect
@@ -84,6 +83,7 @@ library
     , Graphics.UI.Qtah.Core.QMetaEnum
     , Graphics.UI.Qtah.Core.QMetaMethod
     , Graphics.UI.Qtah.Core.QMetaObject
+    , Graphics.UI.Qtah.Core.QMetaObject.Connection
     , Graphics.UI.Qtah.Core.QMetaProperty
     , Graphics.UI.Qtah.Core.QModelIndex
     , Graphics.UI.Qtah.Core.QObject
@@ -259,8 +259,7 @@ library
     , Graphics.UI.Qtah.Widgets.QVBoxLayout
     , Graphics.UI.Qtah.Widgets.QWidget
   other-modules:
-      Graphics.UI.Qtah.Generated.Core.Connection
-    , Graphics.UI.Qtah.Generated.Core.QAbstractAnimation
+      Graphics.UI.Qtah.Generated.Core.QAbstractAnimation
     , Graphics.UI.Qtah.Generated.Core.QAbstractItemModel
     , Graphics.UI.Qtah.Generated.Core.QAbstractListModel
     , Graphics.UI.Qtah.Generated.Core.QAbstractTableModel
@@ -314,6 +313,7 @@ library
     , Graphics.UI.Qtah.Generated.Core.QMetaEnum
     , Graphics.UI.Qtah.Generated.Core.QMetaMethod
     , Graphics.UI.Qtah.Generated.Core.QMetaObject
+    , Graphics.UI.Qtah.Generated.Core.QMetaObject.Connection
     , Graphics.UI.Qtah.Generated.Core.QMetaProperty
     , Graphics.UI.Qtah.Generated.Core.QModelIndex
     , Graphics.UI.Qtah.Generated.Core.QObject
@@ -488,7 +488,8 @@ library
     , Graphics.UI.Qtah.Internal.Listener
     , Graphics.UI.Qtah.Internal.SceneEventListener
   other-extensions:
-      FlexibleContexts
+      ExistentialQuantification
+    , FlexibleContexts
     , NoMonomorphismRestriction
   build-depends:
       base >=4 && <5

@@ -60,14 +60,14 @@ c_QDirIterator =
   makeClass (ident "QDirIterator") Nothing [] $
   collect
   [ just $ mkCtor "new" [refT $ constT $ objT c_QDir]
-  , just $ mkCtor "newWithDirFlags" [refT $ constT $ objT c_QDir, bitspaceT bs_IteratorFlags]
-  , just $ mkCtor "newWithStr" [refT $ constT $ objT c_QString]
-  , just $ mkCtor "newWithStrFlags" [refT $ constT $ objT c_QString, bitspaceT bs_IteratorFlags]
-  , just $ mkCtor "newWithStrFiltres" [refT $ constT $ objT c_QString, bitspaceT bs_Filters]
-  , just $ mkCtor "newWithStrFiltersFlags" [refT $ constT $ objT c_QString, bitspaceT bs_Filters, bitspaceT bs_IteratorFlags]
-  , just $ mkCtor "newWithStrStrList" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QStringList]
-  , just $ mkCtor "newWithStrStrListFilters" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QStringList, bitspaceT bs_Filters]
-  , just $ mkCtor "newWithStrStrListFiltersFlags" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QStringList, bitspaceT bs_Filters, bitspaceT bs_IteratorFlags]
+  , just $ mkCtor "newWithDirAndFlags" [refT $ constT $ objT c_QDir, bitspaceT bs_IteratorFlags]
+  , just $ mkCtor "newWithString" [refT $ constT $ objT c_QString]
+  , just $ mkCtor "newWithStringAndFlags" [refT $ constT $ objT c_QString, bitspaceT bs_IteratorFlags]
+  , just $ mkCtor "newWithStringAndFilters" [refT $ constT $ objT c_QString, bitspaceT bs_Filters]
+  , just $ mkCtor "newWithStringAndFiltersAndFlags" [refT $ constT $ objT c_QString, bitspaceT bs_Filters, bitspaceT bs_IteratorFlags]
+  , just $ mkCtor "newWithStringAndStringList" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QStringList]
+  , just $ mkCtor "newWithStringAndStringListAndFilters" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QStringList, bitspaceT bs_Filters]
+  , just $ mkCtor "newWithStringAndStringListAndFiltersAndFlags" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QStringList, bitspaceT bs_Filters, bitspaceT bs_IteratorFlags]
   --, just $ mkConstMethod "fileInfo" [] $ objT c_QFileInfo
   , just $ mkConstMethod "fileName" [] $ objT c_QString
   , just $ mkConstMethod "filePath" [] $ objT c_QString

@@ -66,9 +66,9 @@ c_QFileInfo =
   makeClass (ident "QFileInfo") Nothing [] $
   collect
   [ just $ mkCtor "new" []
-  , just $ mkCtor "newWithStr" [refT $ constT $ objT c_QString]
+  , just $ mkCtor "newWithString" [refT $ constT $ objT c_QString]
   , just $ mkCtor "newWithFile" [refT $ constT $ objT c_QFile]
-  , just $ mkCtor "newWithDirStr" [refT $ constT $ objT c_QDir, refT $ constT $ objT c_QString]
+  , just $ mkCtor "newWithDirAndString" [refT $ constT $ objT c_QDir, refT $ constT $ objT c_QString]
   , just $ mkConstMethod "absoluteDir" [] $ objT c_QDir
   , just $ mkConstMethod "absoluteFilePath" [] $ objT c_QString
   , just $ mkConstMethod "absolutePath" [] $ objT c_QString
@@ -82,7 +82,7 @@ c_QFileInfo =
   , just $ mkConstMethod "completeSuffix" [] $ objT c_QString
   , just $ mkConstMethod "dir" [] $ objT c_QDir
   , just $ mkConstMethod' "exists" "exists" [] boolT
-  , test (qtVersion >= [5, 2]) $ mkStaticMethod' "exists" "existsWithFile" [refT $ constT $ objT c_QString] boolT
+  , test (qtVersion >= [5, 2]) $ mkStaticMethod' "exists" "existsStatic" [refT $ constT $ objT c_QString] boolT
   , just $ mkConstMethod "fileName" [] $ objT c_QString
   , just $ mkConstMethod "filePath" [] $ objT c_QString
   , test (qtVersion >= [5, 10]) $ mkConstMethod "fileTime" [enumT e_FileTime] $ objT c_QDateTime
@@ -111,9 +111,9 @@ c_QFileInfo =
   , just $ mkConstMethod "permissions" [] $ bitspaceT bs_Permissions
   , just $ mkMethod "refresh" [] voidT
   , just $ mkMethod "setCaching" [boolT] voidT
-  , just $ mkMethod' "setFile" "setFileWithStr" [refT $ constT $ objT c_QString] voidT
+  , just $ mkMethod' "setFile" "setFileString" [refT $ constT $ objT c_QString] voidT
   , just $ mkMethod' "setFile" "setFile" [refT $ constT $ objT c_QFile] voidT
-  , just $ mkMethod' "setFile" "setFileWithDirStr" [refT $ constT $ objT c_QDir, refT $ constT $ objT c_QString] voidT
+  , just $ mkMethod' "setFile" "setFileDirAndString" [refT $ constT $ objT c_QDir, refT $ constT $ objT c_QString] voidT
   , just $ mkConstMethod "size" [] $ qint64
   , just $ mkConstMethod "suffix" [] $ objT c_QString
   , test (qtVersion >= [5, 10]) $ mkMethod "swap" [refT $ objT c_QFileInfo] voidT

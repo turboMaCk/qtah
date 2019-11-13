@@ -15,16 +15,7 @@
 -- You should have received a copy of the GNU Lesser General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-{-# LANGUAGE MultiParamTypeClasses
-            ,FlexibleInstances
-            ,FlexibleContexts
-            ,TypeSynonymInstances
-            ,UndecidableInstances
-            ,ScopedTypeVariables
-            ,TemplateHaskell
-            ,ExistentialQuantification
-            ,RankNTypes
-            ,OverloadedStrings #-}
+{-# LANGUAGE ExistentialQuantification, FlexibleContexts #-}
 
 -- | General routines for managing Qt signals.
 module Graphics.UI.Qtah.Signal (

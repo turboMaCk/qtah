@@ -32,7 +32,8 @@ import Foreign.Hoppy.Generator.Spec (
   mkConstMethod,
   mkConstMethod',
   mkCtor,
-  mkMethod
+  mkMethod,
+  operatorPreferredExtName',
   )
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Equatable, Comparable, Copyable),
@@ -65,10 +66,10 @@ c_QLatin1String =
   makeClass (ident "QLatin1String") Nothing [] $
   collect
   [ test (qtVersion >= [5, 6]) $ mkCtor "new" []
-  , just $ mkCtor "newStr" [ptrT $ constT charT]
-  , test (qtVersion >= [5, 10]) $ mkCtor "newFirstLast" [ptrT $ constT charT, ptrT $ constT charT]
-  , just $ mkCtor "newStrSize" [ptrT $ constT charT, intT]
-  , just $ mkCtor "newStrbyte" [refT $ constT $ objT c_QByteArray]
+  , just $ mkCtor "newWithCharPtr" [ptrT $ constT charT]
+  , test (qtVersion >= [5, 10]) $ mkCtor "newWithCharPtrRange" [ptrT $ constT charT, ptrT $ constT charT]
+  , just $ mkCtor "newWithCharPtrAndSize" [ptrT $ constT charT, intT]
+  , just $ mkCtor "newWithByteArray" [refT $ constT $ objT c_QByteArray]
   , test (qtVersion >= [5, 8]) $ mkConstMethod' "at" "at" [intT] $ toGcT $ objT c_QLatin1Char
   , test (qtVersion >= [5, 10]) $ mkConstMethod "back" [] $ toGcT $ objT c_QLatin1Char
   , test (qtVersion >= [5, 10]) $ mkMethod "chop" [intT] voidT
@@ -80,40 +81,58 @@ c_QLatin1String =
   , just $ mkConstMethod "latin1" [] $ ptrT $ constT charT
   , test (qtVersion >= [5, 8]) $ mkConstMethod "left" [intT] $ objT c_QLatin1String
   , test (qtVersion >= [5, 8]) $ mkConstMethod' "mid" "mid" [intT] $ objT c_QLatin1String
-  , test (qtVersion >= [5, 8]) $ mkConstMethod' "mid" "midStartLength" [intT, intT] $ objT c_QLatin1String
+  , test (qtVersion >= [5, 8]) $ mkConstMethod' "mid" "midWithLength" [intT, intT] $ objT c_QLatin1String
   , test (qtVersion >= [5, 8]) $ mkConstMethod "right" [intT] $ objT c_QLatin1String
   , just $ mkConstMethod "size" [] intT
   , test (qtVersion >= [5, 10]) $ mkConstMethod "trimmed" [] $ objT c_QLatin1String
   , test (qtVersion >= [5, 10]) $ mkMethod "truncate" [intT] voidT
-  --, test (qtVersion >= [5, 10]) $ mkConstMethod' "endsWith" "endsWith" [objT c_QStringView] boolT
-  --, test (qtVersion >= [5, 10]) $ mkConstMethod' "endsWith" "endsWithCase" [objT c_QStringView, enumT e_CaseSensitivity] boolT
-  , test (qtVersion >= [5, 10]) $ mkConstMethod' "endsWith" "endsWithQLatin" [objT c_QLatin1String] boolT
-  , test (qtVersion >= [5, 10]) $ mkConstMethod' "endsWith" "endsWithWithQLatinCase" [objT c_QLatin1String, enumT e_CaseSensitivity] boolT
-  , test (qtVersion >= [5, 10]) $ mkConstMethod' "endsWith" "endsWithQChar" [objT c_QChar] boolT
-  , test (qtVersion >= [5, 10]) $ mkConstMethod' "endsWith" "endsWithQCharCase" [objT c_QChar, enumT e_CaseSensitivity] boolT
-  --, test (qtVersion >= [5, 10]) $ mkConstMethod' "startsWith" "startsWith" [objT c_QStringView] boolT
-  --, test (qtVersion >= [5, 10]) $ mkConstMethod' "startsWith" "startsWithCase" [objT c_QStringView, enumT e_CaseSensitivity] boolT
-  , test (qtVersion >= [5, 10]) $ mkConstMethod' "startsWith" "startsWithQLatin" [objT c_QLatin1String] boolT
-  , test (qtVersion >= [5, 10]) $ mkConstMethod' "startsWith" "startsWithQLatinCase" [objT c_QLatin1String, enumT e_CaseSensitivity] boolT
-  , test (qtVersion >= [5, 10]) $ mkConstMethod' "startsWith" "startsWithQChar" [objT c_QChar] boolT
-  , test (qtVersion >= [5, 10]) $ mkConstMethod' "startsWith" "startsWithQCharCase" [objT c_QChar, enumT e_CaseSensitivity] boolT
-  , just $ mkConstMethod' OpNe "notEqToQString" [refT $ constT $ objT c_QString] boolT
-  , test (qtVersion >= [4, 3]) $ mkConstMethod' OpNe "notEqToChar" [ptrT $ constT charT] boolT
-  , test (qtVersion >= [5, 0]) $ mkConstMethod' OpNe "notEqToQBytearray" [refT $ constT $ objT c_QByteArray] boolT
-  , just $ mkConstMethod' OpLt "lessThanQString" [refT $ constT $ objT c_QString] boolT
-  , test (qtVersion >= [4, 3]) $ mkConstMethod' OpLt "lessThanChar" [ptrT $ constT charT] boolT
-  , test (qtVersion >= [5, 0]) $ mkConstMethod' OpLt "lessThanQBytearray" [refT $ constT $ objT c_QByteArray] boolT
-  , just $ mkConstMethod' OpLe "lessOrEqThanQString" [refT $ constT $ objT c_QString] boolT
-  , test (qtVersion >= [4, 3]) $ mkConstMethod' OpLe "lessOrEqThanChar" [ptrT $ constT charT] boolT
-  , test (qtVersion >= [5, 0]) $ mkConstMethod' OpLe "lessOrEqThanQBytearray" [refT $ constT $ objT c_QByteArray] boolT
-  , just $ mkConstMethod' OpEq "equalToQString" [refT $ constT $ objT c_QString] boolT
-  , test (qtVersion >= [4, 3]) $ mkConstMethod' OpEq "equalToChar" [ptrT $ constT charT] boolT
-  , test (qtVersion >= [5, 0]) $ mkConstMethod' OpEq "equalToQBytearray" [refT $ constT $ objT c_QByteArray] boolT
-  , just $ mkConstMethod' OpGt "greaterThanQString" [refT $ constT $ objT c_QString] boolT
-  , test (qtVersion >= [4, 3]) $ mkConstMethod' OpGt "greaterThanChar" [ptrT $ constT charT] boolT
-  , test (qtVersion >= [5, 0]) $ mkConstMethod' OpGt "greaterThanQBytearray" [refT $ constT $ objT c_QByteArray] boolT
-  , just $ mkConstMethod' OpGe "greaterOrEqThanQString" [refT $ constT $ objT c_QString] boolT
-  , test (qtVersion >= [4, 3]) $ mkConstMethod' OpGe "greaterOrEqThanChar" [ptrT $ constT charT] boolT
-  , test (qtVersion >= [5, 0]) $ mkConstMethod' OpGe "greaterOrEqThanQBytearray" [refT $ constT $ objT c_QByteArray] boolT
+  --, test (qtVersion >= [5, 10]) $ mkConstMethod' "endsWith" "endsWithStringView" [objT c_QStringView] boolT
+  --, test (qtVersion >= [5, 10]) $ mkConstMethod' "endsWith" "endsWithStringViewWithCase" [objT c_QStringView, enumT e_CaseSensitivity] boolT
+  , test (qtVersion >= [5, 10]) $ mkConstMethod' "endsWith" "endsWithLatin1String" [objT c_QLatin1String] boolT
+  , test (qtVersion >= [5, 10]) $ mkConstMethod' "endsWith" "endsWithLatin1StringWithCase" [objT c_QLatin1String, enumT e_CaseSensitivity] boolT
+  , test (qtVersion >= [5, 10]) $ mkConstMethod' "endsWith" "endsWithChar" [objT c_QChar] boolT
+  , test (qtVersion >= [5, 10]) $ mkConstMethod' "endsWith" "endsWithCharWithCase" [objT c_QChar, enumT e_CaseSensitivity] boolT
+  --, test (qtVersion >= [5, 10]) $ mkConstMethod' "startsWith" "startsWithStringView" [objT c_QStringView] boolT
+  --, test (qtVersion >= [5, 10]) $ mkConstMethod' "startsWith" "startsWithStringViewWithCase" [objT c_QStringView, enumT e_CaseSensitivity] boolT
+  , test (qtVersion >= [5, 10]) $ mkConstMethod' "startsWith" "startsWithLatin1String" [objT c_QLatin1String] boolT
+  , test (qtVersion >= [5, 10]) $ mkConstMethod' "startsWith" "startsWithLatin1StringWithCase" [objT c_QLatin1String, enumT e_CaseSensitivity] boolT
+  , test (qtVersion >= [5, 10]) $ mkConstMethod' "startsWith" "startsWithCharWith" [objT c_QChar] boolT
+  , test (qtVersion >= [5, 10]) $ mkConstMethod' "startsWith" "startsWithCharWithCase" [objT c_QChar, enumT e_CaseSensitivity] boolT
+  , just $ mkConstMethod' OpNe (operatorPreferredExtName' OpNe ++ "String")
+    [refT $ constT $ objT c_QString] boolT
+  , test (qtVersion >= [4, 3]) $ mkConstMethod' OpNe (operatorPreferredExtName' OpNe ++ "PtrConstChar")
+    [ptrT $ constT charT] boolT
+  , test (qtVersion >= [5, 0]) $ mkConstMethod' OpNe (operatorPreferredExtName' OpNe ++ "ByteArray")
+    [refT $ constT $ objT c_QByteArray] boolT
+  , just $ mkConstMethod' OpLt (operatorPreferredExtName' OpLt ++ "String")
+    [refT $ constT $ objT c_QString] boolT
+  , test (qtVersion >= [4, 3]) $ mkConstMethod' OpLt (operatorPreferredExtName' OpLt ++ "PtrConstChar")
+    [ptrT $ constT charT] boolT
+  , test (qtVersion >= [5, 0]) $ mkConstMethod' OpLt (operatorPreferredExtName' OpLt ++ "ByteArray")
+    [refT $ constT $ objT c_QByteArray] boolT
+  , just $ mkConstMethod' OpLe (operatorPreferredExtName' OpLe ++ "String")
+    [refT $ constT $ objT c_QString] boolT
+  , test (qtVersion >= [4, 3]) $ mkConstMethod' OpLe (operatorPreferredExtName' OpLe ++ "PtrConstChar")
+    [ptrT $ constT charT] boolT
+  , test (qtVersion >= [5, 0]) $ mkConstMethod' OpLe (operatorPreferredExtName' OpLe ++ "ByteArray")
+    [refT $ constT $ objT c_QByteArray] boolT
+  , just $ mkConstMethod' OpEq (operatorPreferredExtName' OpEq ++ "String")
+    [refT $ constT $ objT c_QString] boolT
+  , test (qtVersion >= [4, 3]) $ mkConstMethod' OpEq (operatorPreferredExtName' OpEq ++ "PtrConstChar")
+    [ptrT $ constT charT] boolT
+  , test (qtVersion >= [5, 0]) $ mkConstMethod' OpEq (operatorPreferredExtName' OpEq ++ "ByteArray")
+    [refT $ constT $ objT c_QByteArray] boolT
+  , just $ mkConstMethod' OpGt (operatorPreferredExtName' OpGt ++ "String")
+    [refT $ constT $ objT c_QString] boolT
+  , test (qtVersion >= [4, 3]) $ mkConstMethod' OpGt (operatorPreferredExtName' OpGt ++ "PtrConstChar")
+    [ptrT $ constT charT] boolT
+  , test (qtVersion >= [5, 0]) $ mkConstMethod' OpGt (operatorPreferredExtName' OpGt ++ "ByteArray")
+    [refT $ constT $ objT c_QByteArray] boolT
+  , just $ mkConstMethod' OpGe (operatorPreferredExtName' OpGe ++ "String")
+    [refT $ constT $ objT c_QString] boolT
+  , test (qtVersion >= [4, 3]) $ mkConstMethod' OpGe (operatorPreferredExtName' OpGe ++ "PtrConstChar")
+    [ptrT $ constT charT] boolT
+  , test (qtVersion >= [5, 0]) $ mkConstMethod' OpGe (operatorPreferredExtName' OpGe ++ "ByteArray")
+    [refT $ constT $ objT c_QByteArray] boolT
   , test (qtVersion >= [5, 8]) $ mkConstMethod' OpArray "get" [intT] $ toGcT $ objT c_QLatin1Char
   ]

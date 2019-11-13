@@ -38,6 +38,12 @@ int indexOfSignal(const QMetaObject& self, const QString& name);
 
 int indexOfSlot(const QMetaObject& self, const QString& name);
 
+namespace connection {
+
+bool isValid(const QMetaObject::Connection& self);
+
+}  // namespace connection
+
 }  // namespace qmetaobject
 }  // namespace qtah
 

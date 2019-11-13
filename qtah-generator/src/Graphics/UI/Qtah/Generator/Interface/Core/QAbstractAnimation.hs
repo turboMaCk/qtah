@@ -36,7 +36,7 @@ import Foreign.Hoppy.Generator.Spec (
   mkMethod
   )
 import Graphics.UI.Qtah.Generator.Interface.Core.QObject (c_QObject)
-import Foreign.Hoppy.Generator.Types (boolT, intT, voidT, enumT)
+import Foreign.Hoppy.Generator.Types (boolT, enumT, intT, voidT)
 import Foreign.Hoppy.Generator.Version (collect, just)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
   c_ListenerInt,
@@ -65,25 +65,26 @@ c_QAbstractAnimation =
   classSetEntityPrefix "" $
   makeClass (ident "QAbstractAnimation") Nothing [c_QObject] $
   collect
-  [ --just $ mkCtor "new" []
-  --, just $ mkCtor "newWithParent" [ptrT $ objT c_QObject]
-    just $ mkMethod "pause" [] voidT
+  [ just $ mkConstMethod "currentLoopTime" [] intT
+  , just $ mkConstMethod "duration" [] intT
+  --, just $ mkConstMethod "group" [] $ ptrT $ objT c_QAnimationGroup
+  , just $ mkMethod "pause" [] voidT
   , just $ mkMethod "resume" [] voidT
   , just $ mkMethod "setPaused" [boolT] voidT
   , just $ mkMethod' "start" "start" [] voidT
-  , just $ mkMethod' "start" "startWithDelPol" [enumT e_DeletionPolicy] voidT
+  , just $ mkMethod' "start" "startWithDeletionPolicy" [enumT e_DeletionPolicy] voidT
   , just $ mkMethod "stop" [] voidT
-  , just $ mkConstMethod "currentLoopTime" [] intT
-  --, just $ mkConstMethod "group" [] $ ptrT $ objT c_QAnimationGroup
   , just $ mkConstMethod "totalDuration" [] intT
+
+    -- TODO
   ]
 
 signals :: [Signal]
 signals =
   collect
   [ just $ makeSignal c_QAbstractAnimation "currentLoopChanged" c_ListenerInt
-  , just $ makeSignal c_QAbstractAnimation "finished" c_Listener
   , just $ makeSignal c_QAbstractAnimation "directionChanged" c_ListenerDirection
+  , just $ makeSignal c_QAbstractAnimation "finished" c_Listener
   , just $ makeSignal c_QAbstractAnimation "stateChanged" c_ListenerStateState
   ]
 

@@ -78,7 +78,8 @@ c_QBitmap =
   , just $ mkCtor "newWithSize" [objT c_QSize]
   , just $ mkCtor "newWithSizeRaw" [intT, intT]
   , just $ mkCtor "newWithFile" [objT c_QString]
-  , just $ mkCtor "newWithFileFormat" [objT c_QString, ptrT $ constT charT ]
+    -- TODO QString wrapper:
+  , just $ mkCtor "newWithFileAndFormat" [objT c_QString, ptrT $ constT charT ]
   , just $ mkMethod "clear" [] voidT
   , just $ mkMethod "swap" [refT $ objT c_QBitmap] voidT
   , just $ mkConstMethod "transformed" [objT c_QTransform] $ objT c_QBitmap

@@ -54,7 +54,6 @@ c_QSequentialAnimationGroup =
   collect
   [ just $ mkMethod "addPause" [intT] $ ptrT $ objT c_QPauseAnimation
   , just $ mkMethod "insertPause" [intT, intT] $ ptrT $ objT c_QPauseAnimation
-  , just $ mkConstMethod "duration" [] intT
   , just $ mkConstMethod "currentAnimation" [] $ ptrT $ objT c_QAbstractAnimation
   ]
 

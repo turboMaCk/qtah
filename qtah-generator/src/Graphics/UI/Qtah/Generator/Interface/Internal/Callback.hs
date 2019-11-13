@@ -150,7 +150,7 @@ aModule =
       , just $ ExportCallback cb_ProcessStateVoid
       , just $ ExportCallback cb_StateStateVoid
       , just $ ExportCallback cb_DirectionVoid
-      , just $ ExportCallback cb_QVariantVoid
+      , just $ ExportCallback cb_RefConstQVariantVoid
       , just $ ExportCallback cb_QAbstractAnimationVoid
       , just $ ExportCallback cb_Void
       ]
@@ -375,8 +375,8 @@ cb_StateStateVoid =
   [enumT e_State, enumT e_State] voidT
 
 
-cb_QVariantVoid =
-  makeCallback (toExtName "CallbackQVariantVoid")
+cb_RefConstQVariantVoid =
+  makeCallback (toExtName "CallbackRefConstQVariantVoid")
   [refT $ constT $ objT c_QVariant] voidT
 
 

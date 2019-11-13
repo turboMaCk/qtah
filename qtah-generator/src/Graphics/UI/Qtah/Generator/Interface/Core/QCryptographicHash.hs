@@ -59,9 +59,9 @@ c_QCryptographicHash =
   makeClass (ident "QCryptographicHash") Nothing [] $
   collect
   [ just $ mkCtor "new" [enumT e_Algorithm]
-  , just $ mkMethod' "addData" "addData" [ptrT $ constT charT, intT] voidT
-  , just $ mkMethod' "addData" "addDataWithQBytearray" [refT $ constT $ objT c_QByteArray] voidT
-  , test (qtVersion >= [5, 0]) $ mkMethod' "addData" "addDataWithIODevice" [ptrT $ objT c_QIODevice] boolT
+  , just $ mkMethod' "addData" "addDataRaw" [ptrT $ constT charT, intT] voidT
+  , just $ mkMethod' "addData" "addDataByteArray" [refT $ constT $ objT c_QByteArray] voidT
+  , test (qtVersion >= [5, 0]) $ mkMethod' "addData" "addDataIODevice" [ptrT $ objT c_QIODevice] boolT
   , just $ mkStaticMethod "hash" [refT $ constT $ objT c_QByteArray, enumT e_Algorithm] $ objT c_QByteArray
   , test (qtVersion >= [5, 12]) $ mkStaticMethod "hashLength" [enumT e_Algorithm] intT
   , just $ mkMethod "reset" [] $ voidT

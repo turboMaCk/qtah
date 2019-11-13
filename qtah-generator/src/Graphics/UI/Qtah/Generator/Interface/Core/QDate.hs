@@ -40,9 +40,7 @@ import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Assignable, Copyable, Equatable, Comparable),
   classAddFeatures,
   )
-import Foreign.Hoppy.Generator.Types (
-  boolT, intT, int64T, objT, ptrT, enumT, voidT
-  )
+import Foreign.Hoppy.Generator.Types (boolT, intT, int64T, objT, enumT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
 import Graphics.UI.Qtah.Generator.Flags (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
@@ -80,7 +78,8 @@ c_QDate =
   , just $ mkConstMethod "daysInMonth" [] intT
   , just $ mkConstMethod "daysInYear" [] intT
   , just $ mkConstMethod "daysTo" [objT c_QDate] int64T
-  , test (qtVersion >= [4, 5]) $ mkConstMethod "getDate" [ptrT $ intT, ptrT $ intT, ptrT $ intT] voidT
+  -- TODO test (qtVersion >= [4, 5]) $ mkConstMethod "getDate"
+  --      (intT *year, intT *month, intT *day) voidT
   , just $ mkConstMethod "isNull" [] boolT
   , just $ mkConstMethod "isValid" [] boolT
   , just $ mkConstMethod "month" [] intT
@@ -92,7 +91,8 @@ c_QDate =
   -- TODO just $ mkConstMethod' "toString" "toStringWithStringViewFormat"
   --      [objT c_QStringView] (objT c_QString)
   , just $ mkConstMethod "weekNumber" [] intT
-  , just $ mkConstMethod' "weekNumber" "weekNumberWithYearNumber" [ptrT $ intT] intT
+  -- TODO just $ mkConstMethod' "weekNumber" "weekNumberWithYearNumber"
+  --      (intT *yearNumber = Q_NULLPTR) intT
   , just $ mkConstMethod "year" [] intT
 
   -- Static Public Members

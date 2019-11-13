@@ -24,6 +24,7 @@ import Foreign.Hoppy.Generator.Spec (
   Export (ExportClass),
   Operator (OpCall),
   classSetConversionToGc,
+  classSetMonomorphicSuperclass,
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -55,6 +56,7 @@ c_QRandomGenerator =
   addReqIncludes [ includeStd "QRandomGenerator" ] $
   classSetConversionToGc $
   classAddFeatures [Assignable, Copyable, Equatable] $
+  classSetMonomorphicSuperclass $
   classSetEntityPrefix "" $
   makeClass (ident "QRandomGenerator") Nothing [] $
   collect

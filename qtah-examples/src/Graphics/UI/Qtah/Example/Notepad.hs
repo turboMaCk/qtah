@@ -27,7 +27,7 @@ import Data.IORef (IORef, newIORef, readIORef, writeIORef)
 import qualified Graphics.UI.Qtah.Core.QCoreApplication as QCoreApplication
 import Graphics.UI.Qtah.Event
 import Graphics.UI.Qtah.Gui.QCloseEvent (QCloseEvent)
-import Graphics.UI.Qtah.Signal (connect, connect_, disconnect)
+import Graphics.UI.Qtah.Signal (connect_)
 import qualified Graphics.UI.Qtah.Core.QEvent as QEvent
 import qualified Graphics.UI.Qtah.Widgets.QAction as QAction
 import Graphics.UI.Qtah.Widgets.QAction (triggeredSignal)
@@ -38,7 +38,6 @@ import qualified Graphics.UI.Qtah.Widgets.QMenu as QMenu
 import qualified Graphics.UI.Qtah.Widgets.QMenuBar as QMenuBar
 import qualified Graphics.UI.Qtah.Widgets.QMessageBox as QMessageBox
 import qualified Graphics.UI.Qtah.Widgets.QTextEdit as QTextEdit
-import qualified Graphics.UI.Qtah.Core.QObject as QObject
 import Graphics.UI.Qtah.Widgets.QTextEdit (
   QTextEdit,
   copyAvailableSignal,
@@ -109,14 +108,7 @@ makeMainWindow = do
     unless continue $ QEvent.ignore event
     return $ not continue
 
-  textEditConn <- QObject.connectStatic text "textChanged()" window "showMinimized()"
-
-  Just metabobj <- connect menuFileNew triggeredSignal $ \_ -> fileNew me
-  print =<< disconnect metabobj
-  print =<< disconnect metabobj
-  --print =<< QObject.disconnectStatic text "textChanged()" window "showMinimized()"
-  --print =<< QObject.disconnectWithMetaobject textEditConn
-
+  connect_ menuFileNew triggeredSignal $ \_ -> fileNew me
   connect_ menuFileOpen triggeredSignal $ \_ -> fileOpen me
   connect_ menuFileSave triggeredSignal $ \_ -> void $ fileSave me
   connect_ menuFileSaveAs triggeredSignal $ \_ -> void $ fileSaveAs me

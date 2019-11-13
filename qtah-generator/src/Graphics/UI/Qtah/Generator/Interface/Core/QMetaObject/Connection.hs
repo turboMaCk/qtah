@@ -15,26 +15,31 @@
 -- You should have received a copy of the GNU Lesser General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-module Graphics.UI.Qtah.Generator.Interface.Core.Connection (
+module Graphics.UI.Qtah.Generator.Interface.Core.QMetaObject.Connection (
   aModule,
   c_Connection,
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
   Export (ExportClass),
+  MethodApplicability (MConst),
+  Purity (Nonpure),
   addReqIncludes,
   classSetConversionToGc,
   classSetEntityPrefix,
   ident1,
+  ident3,
   includeLocal,
   includeStd,
   makeClass,
+  makeFnMethod,
   mkCtor,
   )
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Assignable, Copyable),
   classAddFeatures,
   )
+import Foreign.Hoppy.Generator.Types (boolT, objT)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
 
@@ -42,7 +47,7 @@ import Graphics.UI.Qtah.Generator.Types
 
 aModule =
   AQtModule $
-  makeQtModule ["Core", "Connection"]
+  makeQtModule ["Core", "QMetaObject", "Connection"]
   [ QtExport $ ExportClass c_Connection ]
 
 c_Connection =
@@ -53,6 +58,7 @@ c_Connection =
   classSetEntityPrefix "" $
   classAddFeatures [Assignable, Copyable] $
   makeClass (ident1 "QMetaObject" "Connection") Nothing [] $
-  [
-    mkCtor "new" []
+  [ mkCtor "new" []
+  , makeFnMethod (ident3 "qtah" "qmetaobject" "connection" "isValid") "isValid"
+    MConst Nonpure [objT c_Connection] boolT
   ]

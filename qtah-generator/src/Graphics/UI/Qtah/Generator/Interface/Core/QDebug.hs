@@ -36,6 +36,7 @@ import Foreign.Hoppy.Generator.Spec (
   mkCtor,
   mkMethod,
   mkMethod',
+  operatorPreferredExtName',
   )
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Assignable, Copyable),
@@ -64,6 +65,7 @@ import Graphics.UI.Qtah.Generator.Flags (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Graphics.UI.Qtah.Generator.Interface.Core.QChar (c_QChar)
 import Graphics.UI.Qtah.Generator.Interface.Core.QByteArray (c_QByteArray)
+import Graphics.UI.Qtah.Generator.Interface.Core.QIODevice (c_QIODevice)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (e_QtMsgType, qlonglong, qulonglong)
 import Graphics.UI.Qtah.Generator.Types
@@ -88,7 +90,7 @@ c_QDebug =
   [
     just $ mkCtor "newWithMsgType" [enumT e_QtMsgType]
   , just $ mkCtor "newWithString" [ptrT $ objT c_QString]
-  -- TODO QDebug(QIODevice *device)
+  , just $ mkCtor "newWithIODevice" [ptrT $ objT c_QIODevice]
   , test (qtVersion >= [5, 0]) $ mkConstMethod "autoInsertSpaces" [] boolT
   , test (qtVersion >= [5, 4]) $ mkMethod' "maybeQuote" "maybeQuote" [] $ refT $ objT c_QDebug
   , test (qtVersion >= [5, 4]) $ mkMethod' "maybeQuote" "maybeQuoteWithChar" [charT] $ refT $ objT c_QDebug
@@ -104,28 +106,45 @@ c_QDebug =
   , test (qtVersion >= [5, 13]) $ mkMethod' "verbosity" "verbosityWithLevel" [intT] $ refT $ objT c_QDebug
   , test (qtVersion >= [5, 6]) $ mkConstMethod' "verbosity" "verbosity" [] intT
 
-  , just $ mkMethod' OpShl "qcharToStream" [objT c_QChar] $ refT $ objT c_QDebug
-  , just $ mkMethod' OpShl "boolToStream" [boolT] $ refT $ objT c_QDebug
-  , just $ mkMethod' OpShl "charToStream" [charT] $ refT $ objT c_QDebug
-  , just $ mkMethod' OpShl "shortToStream" [shortT] $ refT $ objT c_QDebug
-  , just $ mkMethod' OpShl "ushortToStream" [ushortT] $ refT $ objT c_QDebug
+  , just $ mkMethod' OpShl (operatorPreferredExtName' OpShl ++ "QChar")
+    [objT c_QChar] $ refT $ objT c_QDebug
+  , just $ mkMethod' OpShl (operatorPreferredExtName' OpShl ++ "Bool")
+    [boolT] $ refT $ objT c_QDebug
+  , just $ mkMethod' OpShl (operatorPreferredExtName' OpShl ++ "Char")
+    [charT] $ refT $ objT c_QDebug
+  , just $ mkMethod' OpShl (operatorPreferredExtName' OpShl ++ "Short")
+    [shortT] $ refT $ objT c_QDebug
+  , just $ mkMethod' OpShl (operatorPreferredExtName' OpShl ++ "Ushort")
+    [ushortT] $ refT $ objT c_QDebug
   --, just $ mkMethod OpShl [char16_t t] $ refT $ objT c_QDebug
   --, just $ mkMethod OpShl [char32_t t] $ refT $ objT c_QDebug
-  , just $ mkMethod' OpShl "intToStream" [intT] $ refT $ objT c_QDebug
-  , just $ mkMethod' OpShl "uintToStream" [uintT] $ refT $ objT c_QDebug
-  , just $ mkMethod' OpShl "longToStream" [longT] $ refT $ objT c_QDebug
-  , just $ mkMethod' OpShl "ulongToStream" [ulongT] $ refT $ objT c_QDebug
-  , just $ mkMethod' OpShl "qlonglongToStream" [qlonglong] $ refT $ objT c_QDebug
-  , just $ mkMethod' OpShl "qulonglongToStream" [qulonglong] $ refT $ objT c_QDebug
-  , just $ mkMethod' OpShl "floatToStream" [floatT] $ refT $ objT c_QDebug
-  , just $ mkMethod' OpShl "doubleToStream" [doubleT] $ refT $ objT c_QDebug
-  , just $ mkMethod' OpShl "constCharToStream" [ptrT $ constT charT] $ refT $ objT c_QDebug
-  , just $ mkMethod' OpShl "qstringToStream" [refT $ constT $ objT c_QString] $ refT $ objT c_QDebug
+  , just $ mkMethod' OpShl (operatorPreferredExtName' OpShl ++ "Int")
+    [intT] $ refT $ objT c_QDebug
+  , just $ mkMethod' OpShl (operatorPreferredExtName' OpShl ++ "Uint")
+    [uintT] $ refT $ objT c_QDebug
+  , just $ mkMethod' OpShl (operatorPreferredExtName' OpShl ++ "Long")
+    [longT] $ refT $ objT c_QDebug
+  , just $ mkMethod' OpShl (operatorPreferredExtName' OpShl ++ "Ulong")
+    [ulongT] $ refT $ objT c_QDebug
+  , just $ mkMethod' OpShl (operatorPreferredExtName' OpShl ++ "Qlonglong")
+    [qlonglong] $ refT $ objT c_QDebug
+  , just $ mkMethod' OpShl (operatorPreferredExtName' OpShl ++ "Qulonglong")
+    [qulonglong] $ refT $ objT c_QDebug
+  , just $ mkMethod' OpShl (operatorPreferredExtName' OpShl ++ "Float")
+    [floatT] $ refT $ objT c_QDebug
+  , just $ mkMethod' OpShl (operatorPreferredExtName' OpShl ++ "Double")
+    [doubleT] $ refT $ objT c_QDebug
+  , just $ mkMethod' OpShl (operatorPreferredExtName' OpShl ++ "PtrConstChar")
+    [ptrT $ constT charT] $ refT $ objT c_QDebug
+  , just $ mkMethod' OpShl (operatorPreferredExtName' OpShl ++ "String")
+    [objT c_QString] $ refT $ objT c_QDebug
   --, just $ mkMethod OpShl [refT $ constT $ objT c_QStringRef] $ refT $ objT c_QDebug
   --, test (qtVersion >= [5, 10]) $ mkMethod OpShl [refT $ constT $ objT c_QStringView] $ refT $ objT c_QDebug
   --, just $ mkMethod OpShl [refT $ constT $ objT c_QLatin1String] $ refT $ objT c_QDebug
-  , just $ mkMethod' OpShl "qbyteArrayToStream" [refT $ constT $ objT c_QByteArray] $ refT $ objT c_QDebug
-  , just $ mkMethod' OpShl "voidToStream" [ptrT $ constT voidT] $ refT $ objT c_QDebug
+  , just $ mkMethod' OpShl (operatorPreferredExtName' OpShl ++ "ByteArray")
+    [refT $ constT $ objT c_QByteArray] $ refT $ objT c_QDebug
+  , just $ mkMethod' OpShl (operatorPreferredExtName' OpShl ++ "PtrVoid")
+    [ptrT $ constT voidT] $ refT $ objT c_QDebug
   ]
 
 e_VerbosityLevel =

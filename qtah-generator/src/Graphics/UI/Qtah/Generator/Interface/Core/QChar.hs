@@ -25,12 +25,12 @@ import Foreign.Hoppy.Generator.Language.Haskell (
   sayLn,
   )
 import Foreign.Hoppy.Generator.Spec (
-    ClassHaskellConversion (
-      ClassHaskellConversion,
-      classHaskellConversionFromCppFn,
-      classHaskellConversionToCppFn,
-      classHaskellConversionType
-    ),
+  ClassHaskellConversion (
+    ClassHaskellConversion,
+    classHaskellConversionFromCppFn,
+    classHaskellConversionToCppFn,
+    classHaskellConversionType
+  ),
   Export (ExportClass, ExportEnum),
   addReqIncludes,
   classSetEntityPrefix,
@@ -44,7 +44,6 @@ import Foreign.Hoppy.Generator.Spec (
   mkConstMethod',
   mkCtor,
   mkMethod',
-  mkMethod,
   mkStaticMethod,
   mkStaticMethod',
   )
@@ -134,7 +133,7 @@ c_QChar =
   , test (qtVersion >= [5, 3]) $ mkConstMethod "joiningType" [] $ enumT e_JoiningType
   , just $ mkConstMethod "mirroredChar" [] $ objT c_QChar
   , just $ mkConstMethod "row" [] ucharT
-  , test (qtVersion >= [5, 1]) $ mkMethod "script" [uintT] $ enumT e_Script
+  , test (qtVersion >= [5, 1]) $ mkConstMethod "script" [] $ enumT e_Script
   , test (qtVersion < [5]) $ mkConstMethod "toAscii" [] charT
   , just $ mkConstMethod "toCaseFolded" [] $ objT c_QChar
   , just $ mkConstMethod "toLatin1" [] charT
@@ -145,7 +144,7 @@ c_QChar =
   , just $ mkMethod' "unicode" "unicodeRef" [] $ refT ushortT
   , just $ mkConstMethod "unicodeVersion" [] $ enumT e_UnicodeVersion
 
-  , just $ mkStaticMethod' "fromLatin1" "newFromLatin1" [charT] $ objT c_QChar
+  , just $ mkStaticMethod "fromLatin1" [charT] $ objT c_QChar
   , just $ mkStaticMethod "currentUnicodeVersion" [] $ enumT e_UnicodeVersion
   , just $ mkStaticMethod' "category" "categoryStatic" [uintT] $ enumT e_Category
   , just $ mkStaticMethod' "combiningClass" "combiningClassStatic" [uintT] ucharT
@@ -162,12 +161,12 @@ c_QChar =
   , just $ mkStaticMethod' "isLowSurrogate" "isLowSurrogateStatic" [uintT] boolT
   , test (qtVersion >= [5]) $ mkStaticMethod' "isLower" "isLowerStatic" [uintT] boolT
   , test (qtVersion >= [5]) $ mkStaticMethod' "isMark" "isMarkStatic" [uintT] boolT
-  , test (qtVersion >= [5]) $ mkStaticMethod "isNonCharacter" [uintT] boolT
+  , test (qtVersion >= [5]) $ mkStaticMethod' "isNonCharacter" "isNonCharacterStatic" [uintT] boolT
   , test (qtVersion >= [5]) $ mkStaticMethod' "isNumber" "isNumberStatic" [uintT] boolT
   , test (qtVersion >= [5]) $ mkStaticMethod' "isPrint" "isPrintStatic" [uintT] boolT
   , test (qtVersion >= [5]) $ mkStaticMethod' "isPunct" "isPunctStatic" [uintT] boolT
   , test (qtVersion >= [5]) $ mkStaticMethod' "isSpace" "isSpaceStatic" [uintT] boolT
-  , test (qtVersion >= [5]) $ mkStaticMethod "isSurrogate" [uintT] boolT
+  , test (qtVersion >= [5]) $ mkStaticMethod' "isSurrogate" "isSurrogateStatic" [uintT] boolT
   , test (qtVersion >= [5]) $ mkStaticMethod' "isSymbol" "isSymbolStatic" [uintT] boolT
   , test (qtVersion >= [5]) $ mkStaticMethod' "isTitleCase" "isTitleCaseStatic" [uintT] boolT
   , test (qtVersion >= [5]) $ mkStaticMethod' "isUpper" "isUpperStatic" [uintT] boolT

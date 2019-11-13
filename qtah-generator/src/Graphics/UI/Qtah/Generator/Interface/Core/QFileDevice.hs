@@ -42,6 +42,7 @@ import Foreign.Hoppy.Generator.Spec (
 import Foreign.Hoppy.Generator.Types (bitspaceT, ucharT, boolT, intT, objT, voidT, enumT, ptrT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
 import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Interface.Core.QDateTime (c_QDateTime)
 import Graphics.UI.Qtah.Generator.Interface.Core.QIODevice (c_QIODevice)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModuleWithMinVersion)
@@ -69,79 +70,73 @@ c_QFileDevice =
   classSetEntityPrefix "" $
   makeClass (ident "QFileDevice") Nothing [c_QIODevice] $
   collect
-  [ just $ mkConstMethod "atEnd" [] boolT
-  , just $ mkMethod "close" [] voidT
-  , just $ mkConstMethod "error" [] $ enumT e_FileError
+  [ just $ mkConstMethod "error" [] $ enumT e_FileError
   , just $ mkConstMethod "fileName" [] $ objT c_QString
-  -- TODO , test (qtVersion >= [5, 10]) $ mkConstMethod "fileName" [enumT e_FileTime] $ objT c_QDateTime
+  , test (qtVersion >= [5, 10]) $ mkConstMethod "fileTime" [enumT e_FileTime] $ objT c_QDateTime
   , just $ mkMethod "flush" [] boolT
   , just $ mkConstMethod "handle" [] intT
-  , just $ mkConstMethod "isSequential" [] boolT
   , just $ mkMethod' "map" "map" [qlonglong, qlonglong] $ ptrT ucharT
-  , just $ mkMethod' "map" "mapWithMemFlags" [qlonglong, qlonglong, enumT e_MemoryMapFlags] $ ptrT ucharT
+  , just $ mkMethod' "map" "mapWithFlags" [qlonglong, qlonglong, enumT e_MemoryMapFlags] $ ptrT ucharT
   , just $ mkConstMethod "permissions" [] $ bitspaceT bs_Permissions
-  , just $ mkConstMethod "pos" [] qlonglong
   , just $ mkMethod "resize" [qlonglong] boolT
-  , just $ mkMethod "seek" [qlonglong] boolT
-  -- TODO bool QFileDevice::setFileTime(const QDateTime &newDate, QFileDevice::FileTime fileTime)
+  , just $ mkMethod "setFileTime" [objT c_QDateTime, enumT e_FileTime] boolT
   , just $ mkMethod "setPermissions" [bitspaceT bs_Permissions] boolT
-  , just $ mkConstMethod "size" [] qlonglong
   , just $ mkMethod "unmap" [ptrT ucharT] boolT
   , just $ mkMethod "unsetError" [] voidT
   ]
 
 e_FileError =
-    makeQtEnum (ident1 "QFileDevice" "FileError") [includeStd "QFileDevice"]
-    [ (0, ["no", "error"])
-    , (1, ["read", "error"])
-    , (2, ["write", "error"])
-    , (3, ["fatal", "error"])
-    , (4, ["resource", "error"])
-    , (5, ["open", "error"])
-    , (6, ["abort", "error"])
-    , (7, ["time", "out", "error"])
-    , (8, ["unspecified", "error"])
-    , (9, ["remove", "error"])
-    , (10, ["rename", "error"])
-    , (11, ["position", "error"])
-    , (12, ["resize", "error"])
-    , (13, ["permissions", "error"])
-    , (14, ["copy", "error"])
-    ]
+  makeQtEnum (ident1 "QFileDevice" "FileError") [includeStd "QFileDevice"]
+  [ (0, ["no", "error"])
+  , (1, ["read", "error"])
+  , (2, ["write", "error"])
+  , (3, ["fatal", "error"])
+  , (4, ["resource", "error"])
+  , (5, ["open", "error"])
+  , (6, ["abort", "error"])
+  , (7, ["time", "out", "error"])
+  , (8, ["unspecified", "error"])
+  , (9, ["remove", "error"])
+  , (10, ["rename", "error"])
+  , (11, ["position", "error"])
+  , (12, ["resize", "error"])
+  , (13, ["permissions", "error"])
+  , (14, ["copy", "error"])
+  ]
 
 (e_FileHandleFlag, bs_FileHandleFlags) =
-    makeQtEnumBitspace (ident1 "QFileDevice" "FileHandleFlag") "FileHandleFlags" [includeStd "QFileDevice"]
-    [ (0, ["dont", "close", "handle"])
-    , (0x0001, ["auto", "close", "handle"])
-    ]
+  makeQtEnumBitspace (ident1 "QFileDevice" "FileHandleFlag") "FileHandleFlags" [includeStd "QFileDevice"]
+  [ (0, ["dont", "close", "handle"])
+  , (0x0001, ["auto", "close", "handle"])
+  ]
 
 e_FileTime =
-    makeQtEnum (ident1 "QFileDevice" "FileTime") [includeStd "QFileDevice"]
-    [ (0, ["file", "access", "time"])
-    , (1, ["file", "birth", "time"])
-    , (2, ["file", "metadata", "change", "time"])
-    , (3, ["file", "modification", "time"])
-    ]
+  makeQtEnum (ident1 "QFileDevice" "FileTime") [includeStd "QFileDevice"]
+  [ (0, ["file", "access", "time"])
+  , (1, ["file", "birth", "time"])
+  , (2, ["file", "metadata", "change", "time"])
+  , (3, ["file", "modification", "time"])
+  ]
 
 e_MemoryMapFlags =
-    makeQtEnum (ident1 "QFileDevice" "MemoryMapFlags") [includeStd "QFileDevice"] $
-    collect $
-    [ just $ (0, ["no", "options"])
-    , test (qtVersion >= [5, 4]) $ (0x0001, ["standard", "error"])
-    ]
+  makeQtEnum (ident1 "QFileDevice" "MemoryMapFlags") [includeStd "QFileDevice"] $
+  collect $
+  [ just $ (0, ["no", "options"])
+  , test (qtVersion >= [5, 4]) $ (0x0001, ["standard", "error"])
+  ]
 
 (e_Permission, bs_Permissions) =
-    makeQtEnumBitspace (ident1 "QFileDevice" "Permission") "Permissions" [includeStd "QFileDevice"]
-    [ (0x4000, ["read", "owner"])
-    , (0x2000, ["write", "owner"])
-    , (0x1000, ["exe", "owner"])
-    , (0x0400, ["read", "user"])
-    , (0x0200, ["write", "user"])
-    , (0x0100, ["exe", "user"])
-    , (0x0040, ["read", "group"])
-    , (0x0020, ["write", "group"])
-    , (0x0010, ["exe", "group"])
-    , (0x0004, ["read", "other"])
-    , (0x0002, ["write", "other"])
-    , (0x0001, ["exe", "other"])
-    ]
+  makeQtEnumBitspace (ident1 "QFileDevice" "Permission") "Permissions" [includeStd "QFileDevice"]
+  [ (0x4000, ["read", "owner"])
+  , (0x2000, ["write", "owner"])
+  , (0x1000, ["exe", "owner"])
+  , (0x0400, ["read", "user"])
+  , (0x0200, ["write", "user"])
+  , (0x0100, ["exe", "user"])
+  , (0x0040, ["read", "group"])
+  , (0x0020, ["write", "group"])
+  , (0x0010, ["exe", "group"])
+  , (0x0004, ["read", "other"])
+  , (0x0002, ["write", "other"])
+  , (0x0001, ["exe", "other"])
+  ]

@@ -108,79 +108,78 @@ c_QString =
   [ just $ mkCtor "new" []
   , just $ mkCtor "newFromByteArray" [objT c_QByteArray]
   , just $ mkCtor "newFromCString" [ptrT $ constT charT]
-  , just $ mkCtor "newFromSizeChar" [intT, objT c_QChar]
-  , just $ mkCtor "newFromChar" [ptrT $ objT c_QChar]
-  --, just $ mkCtor "newFromCharSize" [ptrT $ objT c_QChar, intT]
-  --, test (qtVersion >= [5, 2]) $ mkCtor "newFromRef" [refT $ objT c_QString]
+  , just $ mkCtor "newFromSizeQChar" [intT, objT c_QChar]
+  , just $ mkCtor "newFromQChar" [ptrT $ objT c_QChar]
+  --, just $ mkCtor "newFromQCharSize" [ptrT $ objT c_QChar, intT]
 
   , just $ makeFnMethod (ident2 "qtah" "qstring" "set") "set" MNormal Nonpure
     [refT $ objT c_QString, intT, objT c_QChar] voidT
 
     , just $ mkMethod' "append" "append" [objT c_QString] $ refT $ objT c_QString
 --, test (qtVersion >= [5, 0]) $ mkMethod' "append" "appendWithCharInt" [ptrT $ constT charT, intT] $ refT $ objT c_QString
-  , just $ mkMethod' "append" "appendWithQChar" [objT c_QChar] $ refT $ objT c_QString
+  , just $ mkMethod' "append" "appendQChar" [objT c_QChar] $ refT $ objT c_QString
   -- TODO QString &QString::append(const QStringRef &reference)
   -- TODO QString &QString::append(QLatin1String str)
-  , just $ mkMethod' "append" "appendWithChar" [ptrT $ constT charT] $ refT $ objT c_QString
-  , just $ mkMethod' "append" "appendWithQByteArray" [objT c_QByteArray] $ refT $ objT c_QString
+  , just $ mkMethod' "append" "appendPtrConstChar" [ptrT $ constT charT] $ refT $ objT c_QString
+  , just $ mkMethod' "append" "appendByteArray" [objT c_QByteArray] $ refT $ objT c_QString
 
   , just $ mkConstMethod' "arg" "arg" [objT c_QString] $ objT c_QString
-  , just $ mkConstMethod' "arg" "argWithStringSize" [objT c_QString, intT] $ objT c_QString
-  , just $ mkConstMethod' "arg" "argWithStringSizeFill" [objT c_QString, intT, objT c_QChar] $ objT c_QString
+  , just $ mkConstMethod' "arg" "argWithSize" [objT c_QString, intT] $ objT c_QString
+  , just $ mkConstMethod' "arg" "argWithSizeAndFill" [objT c_QString, intT, objT c_QChar] $ objT c_QString
 
-  , just $ mkConstMethod' "arg" "argWithULongLong" [qulonglong] $ objT c_QString
-  , just $ mkConstMethod' "arg" "argWithULongLongField" [qulonglong, intT] $ objT c_QString
-  , just $ mkConstMethod' "arg" "argWithULongLongFieldBase" [qulonglong, intT, intT] $ objT c_QString
-  , just $ mkConstMethod' "arg" "argWithULongLongFieldBaseFill" [qulonglong, intT, intT, objT c_QChar] $ objT c_QString
+  , just $ mkConstMethod' "arg" "argUlonglong" [qulonglong] $ objT c_QString
+  , just $ mkConstMethod' "arg" "argUlonglongWithField" [qulonglong, intT] $ objT c_QString
+  , just $ mkConstMethod' "arg" "argUlonglongWithFieldAndBase" [qulonglong, intT, intT] $ objT c_QString
+  , just $ mkConstMethod' "arg" "argUlonglongWithFieldAndBaseAndFill" [qulonglong, intT, intT, objT c_QChar] $ objT c_QString
 
-  , just $ mkConstMethod' "arg" "argWithLongLong" [qlonglong] $ objT c_QString
-  , just $ mkConstMethod' "arg" "argWithLongLongField" [qlonglong, intT] $ objT c_QString
-  , just $ mkConstMethod' "arg" "argWithLongLongFieldBase" [qlonglong, intT, intT] $ objT c_QString
-  , just $ mkConstMethod' "arg" "argWithLongLongFieldBaseFill" [qlonglong, intT, intT, objT c_QChar] $ objT c_QString
+  , just $ mkConstMethod' "arg" "argLonglong" [qlonglong] $ objT c_QString
+  , just $ mkConstMethod' "arg" "argLonglongWithField" [qlonglong, intT] $ objT c_QString
+  , just $ mkConstMethod' "arg" "argLonglongWithFieldAndBase" [qlonglong, intT, intT] $ objT c_QString
+  , just $ mkConstMethod' "arg" "argLonglongWithFieldAndBaseAndFill" [qlonglong, intT, intT, objT c_QChar] $ objT c_QString
 
-  , just $ mkConstMethod' "arg" "argWithLong" [longT] $ objT c_QString
-  , just $ mkConstMethod' "arg" "argWithLongField" [longT, intT] $ objT c_QString
-  , just $ mkConstMethod' "arg" "argWithLongFieldBase" [longT, intT, intT] $ objT c_QString
-  , just $ mkConstMethod' "arg" "argWithLongFieldBaseFill" [longT, intT, intT, objT c_QChar] $ objT c_QString
+  , just $ mkConstMethod' "arg" "argLong" [longT] $ objT c_QString
+  , just $ mkConstMethod' "arg" "argLongWithField" [longT, intT] $ objT c_QString
+  , just $ mkConstMethod' "arg" "argLongWithFieldAndBase" [longT, intT, intT] $ objT c_QString
+  , just $ mkConstMethod' "arg" "argLongWithFieldAndBaseAndFill" [longT, intT, intT, objT c_QChar] $ objT c_QString
 
-  , just $ mkConstMethod' "arg" "argWithULong" [ulongT] $ objT c_QString
-  , just $ mkConstMethod' "arg" "argWithULongField" [ulongT, intT] $ objT c_QString
-  , just $ mkConstMethod' "arg" "argWithULongFieldBase" [ulongT, intT, intT] $ objT c_QString
-  , just $ mkConstMethod' "arg" "argWithULongFieldBaseFill" [ulongT, intT, intT, objT c_QChar] $ objT c_QString
+  , just $ mkConstMethod' "arg" "argUlong" [ulongT] $ objT c_QString
+  , just $ mkConstMethod' "arg" "argUlongWithField" [ulongT, intT] $ objT c_QString
+  , just $ mkConstMethod' "arg" "argUlongWithFieldAndBase" [ulongT, intT, intT] $ objT c_QString
+  , just $ mkConstMethod' "arg" "argUlongWithFieldAndBaseAndFill" [ulongT, intT, intT, objT c_QChar] $ objT c_QString
 
-  , just $ mkConstMethod' "arg" "argWithInt" [intT] $ objT c_QString
-  , just $ mkConstMethod' "arg" "argWithIntField" [intT, intT] $ objT c_QString
-  , just $ mkConstMethod' "arg" "argWithIntFieldBase" [intT, intT, intT] $ objT c_QString
-  , just $ mkConstMethod' "arg" "argWithIntFieldBaseFill" [intT, intT, intT, objT c_QChar] $ objT c_QString
+  , just $ mkConstMethod' "arg" "argInt" [intT] $ objT c_QString
+  , just $ mkConstMethod' "arg" "argIntWithField" [intT, intT] $ objT c_QString
+  , just $ mkConstMethod' "arg" "argIntWithFieldAndBase" [intT, intT, intT] $ objT c_QString
+  , just $ mkConstMethod' "arg" "argIntWithFieldAndBaseAndFill" [intT, intT, intT, objT c_QChar] $ objT c_QString
 
-  , just $ mkConstMethod' "arg" "argWithUInt" [uintT] $ objT c_QString
-  , just $ mkConstMethod' "arg" "argWithUIntField" [uintT, intT] $ objT c_QString
-  , just $ mkConstMethod' "arg" "argWithUIntFieldBase" [uintT, intT, intT] $ objT c_QString
-  , just $ mkConstMethod' "arg" "argWithUIntFieldBaseFill" [uintT, intT, intT, objT c_QChar] $ objT c_QString
+  , just $ mkConstMethod' "arg" "argUintWith" [uintT] $ objT c_QString
+  , just $ mkConstMethod' "arg" "argUintWithField" [uintT, intT] $ objT c_QString
+  , just $ mkConstMethod' "arg" "argUintWithFieldAndBase" [uintT, intT, intT] $ objT c_QString
+  , just $ mkConstMethod' "arg" "argUintWithFieldAndBaseAndFill" [uintT, intT, intT, objT c_QChar] $ objT c_QString
 
-  , just $ mkConstMethod' "arg" "argWithShort" [shortT] $ objT c_QString
-  , just $ mkConstMethod' "arg" "argWithShortField" [shortT, intT] $ objT c_QString
-  , just $ mkConstMethod' "arg" "argWithShortFieldBase" [shortT, intT, intT] $ objT c_QString
-  , just $ mkConstMethod' "arg" "argWithShortFieldBaseFill" [shortT, intT, intT, objT c_QChar] $ objT c_QString
+  , just $ mkConstMethod' "arg" "argShortWith" [shortT] $ objT c_QString
+  , just $ mkConstMethod' "arg" "argShortWithField" [shortT, intT] $ objT c_QString
+  , just $ mkConstMethod' "arg" "argShortWithFieldAndBase" [shortT, intT, intT] $ objT c_QString
+  , just $ mkConstMethod' "arg" "argShortWithFieldAndBaseAndFill" [shortT, intT, intT, objT c_QChar] $ objT c_QString
 
-  , just $ mkConstMethod' "arg" "argWithUShort" [ushortT] $ objT c_QString
-  , just $ mkConstMethod' "arg" "argWithUShortField" [ushortT, intT] $ objT c_QString
-  , just $ mkConstMethod' "arg" "argWithUShortFieldBase" [ushortT, intT, intT] $ objT c_QString
-  , just $ mkConstMethod' "arg" "argWithUShortFieldBaseFill" [ushortT, intT, intT, objT c_QChar] $ objT c_QString
+  , just $ mkConstMethod' "arg" "argUshortWith" [ushortT] $ objT c_QString
+  , just $ mkConstMethod' "arg" "argUshortWithField" [ushortT, intT] $ objT c_QString
+  , just $ mkConstMethod' "arg" "argUshortWithFieldAndBase" [ushortT, intT, intT] $ objT c_QString
+  , just $ mkConstMethod' "arg" "argUshortWithFieldAndBaseAndFill" [ushortT, intT, intT, objT c_QChar] $ objT c_QString
 
-  , just $ mkConstMethod' "arg" "argWithDouble" [doubleT] $ objT c_QString
-  , just $ mkConstMethod' "arg" "argWithDoubleField" [doubleT, intT] $ objT c_QString
-  , just $ mkConstMethod' "arg" "argWithDoubleFieldFormat" [doubleT, intT, charT] $ objT c_QString
-  , just $ mkConstMethod' "arg" "argWithDoubleFieldFormatPrecision" [doubleT, intT, charT, intT] $ objT c_QString
-  , just $ mkConstMethod' "arg" "argWithDoubleFieldFormatPrecisionFill" [doubleT, intT, charT, intT, objT c_QChar] $ objT c_QString
+  , just $ mkConstMethod' "arg" "argDoubleWith" [doubleT] $ objT c_QString
+  , just $ mkConstMethod' "arg" "argDoubleWithField" [doubleT, intT] $ objT c_QString
+  , just $ mkConstMethod' "arg" "argDoubleWithFieldFormat" [doubleT, intT, charT] $ objT c_QString
+  , just $ mkConstMethod' "arg" "argDoubleWithFieldFormatPrecision" [doubleT, intT, charT, intT] $ objT c_QString
+  , just $ mkConstMethod' "arg" "argDoubleWithFieldFormatPrecisionFill" [doubleT, intT, charT, intT, objT c_QChar] $ objT c_QString
 
-  , just $ mkConstMethod' "arg" "argWithChar" [charT] $ objT c_QString
-  , just $ mkConstMethod' "arg" "argWithCharField" [charT, intT] $ objT c_QString
-  , just $ mkConstMethod' "arg" "argWithCharFieldFill" [charT, intT, objT c_QChar] $ objT c_QString
+  , just $ mkConstMethod' "arg" "argCharWith" [charT] $ objT c_QString
+  , just $ mkConstMethod' "arg" "argCharWithField" [charT, intT] $ objT c_QString
+  , just $ mkConstMethod' "arg" "argCharWithFieldFill" [charT, intT, objT c_QChar] $ objT c_QString
 
-  , just $ mkConstMethod' "arg" "argWithQChar" [objT c_QChar] $ objT c_QString
-  , just $ mkConstMethod' "arg" "argWithQCharField" [objT c_QChar, intT] $ objT c_QString
-  , just $ mkConstMethod' "arg" "argWithQCharFieldFill" [objT c_QChar, intT, objT c_QChar] $ objT c_QString
+  , just $ mkConstMethod' "arg" "argQCharWith" [objT c_QChar] $ objT c_QString
+  , just $ mkConstMethod' "arg" "argQCharWithField" [objT c_QChar, intT] $ objT c_QString
+  , just $ mkConstMethod' "arg" "argQCharWithFieldFill" [objT c_QChar, intT, objT c_QChar] $ objT c_QString
 
   -- TODO QString QString::arg(QStringView a, int fieldWidth = 0, QChar fillChar = QLatin1Char(' ')) const
   -- TODO QString QString::arg(QLatin1String a, int fieldWidth = 0, QChar fillChar = QLatin1Char(' ')) const
@@ -223,45 +222,45 @@ c_QString =
   , just $ mkConstMethod "toCaseFolded" [] $ objT c_QString
 
   , just $ mkConstMethod' "toDouble" "toDouble" [] doubleT
-  , just $ mkConstMethod' "toDouble" "toDoubleOk" [ptrT boolT] doubleT
+  , just $ mkConstMethod' "toDouble" "toDoubleWithOk" [ptrT boolT] doubleT
 
   , just $ mkConstMethod' "toFloat" "toFloat" [] floatT
-  , just $ mkConstMethod' "toFloat" "toFloatOk" [ptrT boolT] floatT
+  , just $ mkConstMethod' "toFloat" "toFloatWithOk" [ptrT boolT] floatT
 
   , just $ mkConstMethod' "toInt" "toInt" [] intT
-  , just $ mkConstMethod' "toInt" "toIntOk" [ptrT boolT] intT
-  , just $ mkConstMethod' "toInt" "toIntOkBase" [ptrT boolT, intT] intT
+  , just $ mkConstMethod' "toInt" "toIntWithOk" [ptrT boolT] intT
+  , just $ mkConstMethod' "toInt" "toIntWithOkAndBase" [ptrT boolT, intT] intT
 
   , just $ mkConstMethod' "toLong" "toLong" [] longT
-  , just $ mkConstMethod' "toLong" "toLongOk" [ptrT boolT] longT
-  , just $ mkConstMethod' "toLong" "toLongOkBase" [ptrT boolT, intT] longT
+  , just $ mkConstMethod' "toLong" "toLongWithOk" [ptrT boolT] longT
+  , just $ mkConstMethod' "toLong" "toLongWithOkAndBase" [ptrT boolT, intT] longT
 
-  , just $ mkConstMethod' "toLongLong" "toLongLong" [] qlonglong
-  , just $ mkConstMethod' "toLongLong" "toLongLongOk" [ptrT boolT] qlonglong
-  , just $ mkConstMethod' "toLongLong" "toLongLongOkBase" [ptrT boolT, intT] qlonglong
+  , just $ mkConstMethod' "toLongLong" "toLonglong" [] qlonglong
+  , just $ mkConstMethod' "toLongLong" "toLonglongWithOk" [ptrT boolT] qlonglong
+  , just $ mkConstMethod' "toLongLong" "toLonglongWithOkAndBase" [ptrT boolT, intT] qlonglong
 
   , just $ mkConstMethod "toLower" [] $ objT c_QString
   -- TODO NSString *QString::toNSString() const
 
   , just $ mkConstMethod' "toShort" "toShort" [] shortT
-  , just $ mkConstMethod' "toShort" "toShortOk" [ptrT boolT] shortT
-  , just $ mkConstMethod' "toShort" "toShortOkBase" [ptrT boolT, intT] shortT
+  , just $ mkConstMethod' "toShort" "toShortWithOk" [ptrT boolT] shortT
+  , just $ mkConstMethod' "toShort" "toShortWithOkAndBase" [ptrT boolT, intT] shortT
 
   , just $ mkConstMethod' "toUInt" "toUInt" [] uintT
-  , just $ mkConstMethod' "toUInt" "toUIntOk" [ptrT boolT] uintT
-  , just $ mkConstMethod' "toUInt" "toUIntOkBase" [ptrT boolT, intT] uintT
+  , just $ mkConstMethod' "toUInt" "toUIntWithOk" [ptrT boolT] uintT
+  , just $ mkConstMethod' "toUInt" "toUIntWithOkAndBase" [ptrT boolT, intT] uintT
 
   , just $ mkConstMethod' "toULong" "toULong" [] ulongT
-  , just $ mkConstMethod' "toULong" "toULongOk" [ptrT boolT] ulongT
-  , just $ mkConstMethod' "toULong" "toULongOkBase" [ptrT boolT, intT] ulongT
+  , just $ mkConstMethod' "toULong" "toULongWithOk" [ptrT boolT] ulongT
+  , just $ mkConstMethod' "toULong" "toULongWithOkAndBase" [ptrT boolT, intT] ulongT
 
-  , just $ mkConstMethod' "toULongLong" "toULongLong" [] qulonglong
-  , just $ mkConstMethod' "toULongLong" "toULongLongOk" [ptrT boolT] qulonglong
-  , just $ mkConstMethod' "toULongLong" "toULongLongOkBase" [ptrT boolT, intT] qulonglong
+  , just $ mkConstMethod' "toULongLong" "toUlonglong" [] qulonglong
+  , just $ mkConstMethod' "toULongLong" "toUlonglongWithOk" [ptrT boolT] qulonglong
+  , just $ mkConstMethod' "toULongLong" "toUlonglongWithOkAndBase" [ptrT boolT, intT] qulonglong
 
-  , just $ mkConstMethod' "toUShort" "toUShort" [] ushortT
-  , just $ mkConstMethod' "toUShort" "toUShortOk" [ptrT boolT] ushortT
-  , just $ mkConstMethod' "toUShort" "toUShortOkBase" [ptrT boolT, intT] ushortT
+  , just $ mkConstMethod' "toUShort" "toUshort" [] ushortT
+  , just $ mkConstMethod' "toUShort" "toUshortWithOk" [ptrT boolT] ushortT
+  , just $ mkConstMethod' "toUShort" "toUshortWithOkAndBase" [ptrT boolT, intT] ushortT
 
   --, test (qtVersion >= [4, 2]) $ mkConstMethod "toUcs4" [] $ toGcT $ objT c_QVectorUInt
 
