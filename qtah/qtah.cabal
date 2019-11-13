@@ -127,10 +127,24 @@ library
     , Graphics.UI.Qtah.Core.QVariant
     , Graphics.UI.Qtah.Core.QVariantAnimation
     , Graphics.UI.Qtah.Core.QVector.Int
+    , Graphics.UI.Qtah.Core.QVector.QLatin1String
     , Graphics.UI.Qtah.Core.QVector.QPoint
     , Graphics.UI.Qtah.Core.QVector.QPointF
     , Graphics.UI.Qtah.Core.QVector.QRgb
+    , Graphics.UI.Qtah.Core.QVector.QString
+    , Graphics.UI.Qtah.Core.QVector.QXmlStreamAttribute
+    , Graphics.UI.Qtah.Core.QVector.QXmlStreamEntityDeclaration
+    , Graphics.UI.Qtah.Core.QVector.QXmlStreamNamespaceDeclaration
+    , Graphics.UI.Qtah.Core.QVector.QXmlStreamNotationDeclaration
     , Graphics.UI.Qtah.Core.QVersionNumber
+    , Graphics.UI.Qtah.Core.QXmlStreamAttribute
+    , Graphics.UI.Qtah.Core.QXmlStreamAttributes
+    , Graphics.UI.Qtah.Core.QXmlStreamEntityDeclaration
+    , Graphics.UI.Qtah.Core.QXmlStreamEntityResolver
+    , Graphics.UI.Qtah.Core.QXmlStreamNamespaceDeclaration
+    , Graphics.UI.Qtah.Core.QXmlStreamNotationDeclaration
+    , Graphics.UI.Qtah.Core.QXmlStreamReader
+    , Graphics.UI.Qtah.Core.QXmlStreamWriter
     , Graphics.UI.Qtah.Core.Types
     , Graphics.UI.Qtah.Event
     , Graphics.UI.Qtah.Gui.HColor
@@ -357,10 +371,24 @@ library
     , Graphics.UI.Qtah.Generated.Core.QVariant
     , Graphics.UI.Qtah.Generated.Core.QVariantAnimation
     , Graphics.UI.Qtah.Generated.Core.QVector.Int
+    , Graphics.UI.Qtah.Generated.Core.QVector.QLatin1String
     , Graphics.UI.Qtah.Generated.Core.QVector.QPoint
     , Graphics.UI.Qtah.Generated.Core.QVector.QPointF
     , Graphics.UI.Qtah.Generated.Core.QVector.QRgb
+    , Graphics.UI.Qtah.Generated.Core.QVector.QString
+    , Graphics.UI.Qtah.Generated.Core.QVector.QXmlStreamAttribute
+    , Graphics.UI.Qtah.Generated.Core.QVector.QXmlStreamEntityDeclaration
+    , Graphics.UI.Qtah.Generated.Core.QVector.QXmlStreamNamespaceDeclaration
+    , Graphics.UI.Qtah.Generated.Core.QVector.QXmlStreamNotationDeclaration
     , Graphics.UI.Qtah.Generated.Core.QVersionNumber
+    , Graphics.UI.Qtah.Generated.Core.QXmlStreamAttribute
+    , Graphics.UI.Qtah.Generated.Core.QXmlStreamAttributes
+    , Graphics.UI.Qtah.Generated.Core.QXmlStreamEntityDeclaration
+    , Graphics.UI.Qtah.Generated.Core.QXmlStreamEntityResolver
+    , Graphics.UI.Qtah.Generated.Core.QXmlStreamNamespaceDeclaration
+    , Graphics.UI.Qtah.Generated.Core.QXmlStreamNotationDeclaration
+    , Graphics.UI.Qtah.Generated.Core.QXmlStreamReader 
+    , Graphics.UI.Qtah.Generated.Core.QXmlStreamWriter
     , Graphics.UI.Qtah.Generated.Core.Types
     , Graphics.UI.Qtah.Generated.Gui.QActionEvent
     , Graphics.UI.Qtah.Generated.Gui.QBackingStore
@@ -488,8 +516,7 @@ library
     , Graphics.UI.Qtah.Internal.Listener
     , Graphics.UI.Qtah.Internal.SceneEventListener
   other-extensions:
-      ExistentialQuantification
-    , FlexibleContexts
+      FlexibleContexts
     , NoMonomorphismRestriction
   build-depends:
       base >=4 && <5
