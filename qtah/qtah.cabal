@@ -516,7 +516,8 @@ library
     , Graphics.UI.Qtah.Internal.Listener
     , Graphics.UI.Qtah.Internal.SceneEventListener
   other-extensions:
-      FlexibleContexts
+      ExistentialQuantification
+    , FlexibleContexts
     , NoMonomorphismRestriction
   build-depends:
       base >=4 && <5

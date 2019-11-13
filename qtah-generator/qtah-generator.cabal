@@ -278,7 +278,7 @@ executable qtah-generator
     , Graphics.UI.Qtah.Generator.Interface.Widgets.QWidget
     , Graphics.UI.Qtah.Generator.Module
     , Graphics.UI.Qtah.Generator.Types
-  ghc-options: -O2 -W -fwarn-incomplete-patterns -fwarn-unused-do-bind
+  ghc-options: -W -fwarn-incomplete-patterns -fwarn-unused-do-bind
   default-language: Haskell2010
 
 custom-setup
