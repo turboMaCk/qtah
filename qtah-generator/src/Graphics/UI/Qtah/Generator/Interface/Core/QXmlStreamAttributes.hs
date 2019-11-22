@@ -45,7 +45,7 @@ import Graphics.UI.Qtah.Generator.Types
 
 aModule =
   AQtModule $
-  makeQtModuleWithMinVersion ["Core", "QXmlStreamAttributes"] [4, 3] $
+  makeQtModule ["Core", "QXmlStreamAttributes"]
   [QtExport $ ExportClass c_QXmlStreamAttributes]
 
 c_QXmlStreamAttributes =
@@ -54,14 +54,14 @@ c_QXmlStreamAttributes =
   makeClass (ident "QXmlStreamAttributes") Nothing [c_QVectorQXmlStreamAttribute] $
   collect
   [ just $ mkCtor "new" []
-  , just $ mkMethod' "append" "appendWithURI" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString, refT $ constT $ objT c_QString] voidT
-  , just $ mkMethod' "append" "append" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString] voidT
-  , test (qtVersion >= [4, 5]) $ mkConstMethod' "hasAttribute" "hasAttributeWithURI" [refT $ constT $ objT c_QString] boolT
-  , test (qtVersion >= [4, 5]) $ mkConstMethod' "hasAttribute" "hasAttribute" [objT c_QLatin1String] boolT
-  , test (qtVersion >= [4, 5]) $ mkConstMethod' "hasAttribute" "hasAttributeWithURIName" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString] boolT
-  --, just $ mkConstMethod' "value" "valueWithStrings" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString] $ objT c_QStringRef
-  --, just $ mkConstMethod' "value" "valueWithStringLatin" [refT $ constT $ objT c_QString, objT c_QLatin1String] $ objT c_QStringRef
-  --, just $ mkConstMethod' "value" "valueWithLatins" [objT c_QLatin1String, objT c_QLatin1String] $ objT c_QStringRef
-  --, just $ mkConstMethod' "value" "valueWithQualname" [refT $ constT $ objT c_QString] $ objT c_QStringRef
-  --, just $ mkConstMethod' "value" "valueWithLatinQualname" [objT c_QLatin1String] $ objT c_QStringRef
+  , just $ mkMethod' "append" "appendWithNamespaceUriAndNameAndValue" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString, refT $ constT $ objT c_QString] voidT
+  , just $ mkMethod' "append" "appendWithQualifiedNameAndValue" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString] voidT
+  , just $ mkConstMethod' "hasAttribute" "hasAttribute" [refT $ constT $ objT c_QString] boolT
+  , just $ mkConstMethod' "hasAttribute" "hasAttributeWithLatin1String" [objT c_QLatin1String] boolT
+  , just $ mkConstMethod' "hasAttribute" "hasAttributeWithNamespaceUriAndName" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString] boolT
+  --, just $ mkConstMethod' "value" "valueWithNamespaceUriAndName" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString] $ objT c_QStringRef
+  --, just $ mkConstMethod' "value" "valueWithNamespaceUriAndLatin1StringName" [refT $ constT $ objT c_QString, objT c_QLatin1String] $ objT c_QStringRef
+  --, just $ mkConstMethod' "value" "valueWithLatin1Strings" [objT c_QLatin1String, objT c_QLatin1String] $ objT c_QStringRef
+  --, just $ mkConstMethod' "value" "valueWithQualifiedName)" [refT $ constT $ objT c_QString] $ objT c_QStringRef
+  --, just $ mkConstMethod' "value" "valueWithLatin1String" [objT c_QLatin1String] $ objT c_QStringRef
   ]
