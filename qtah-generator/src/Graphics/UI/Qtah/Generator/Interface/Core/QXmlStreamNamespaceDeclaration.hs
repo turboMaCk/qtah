@@ -48,7 +48,7 @@ import Graphics.UI.Qtah.Generator.Types
 
 aModule =
   AQtModule $
-  makeQtModuleWithMinVersion ["Core", "QXmlStreamNamespaceDeclaration"] [4, 3] $
+  makeQtModule ["Core", "QXmlStreamNamespaceDeclaration"]
   [QtExport $ ExportClass c_QXmlStreamNamespaceDeclaration]
 
 c_QXmlStreamNamespaceDeclaration =
@@ -59,7 +59,7 @@ c_QXmlStreamNamespaceDeclaration =
   makeClass (ident "QXmlStreamNamespaceDeclaration") Nothing [] $
   collect
   [ just $ mkCtor "new" []
-  , test (qtVersion >= [4, 4]) $ mkCtor "newWithPrefURI" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString]
+  , just $ mkCtor "newWithPrefixAndNamespaceUri" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString]
   --, just $ mkConstMethod "namespaceUri" [] $ objT c_QStringRef
   --, just $ mkConstMethod "prefix" [] $ objT c_QStringRef
   ]
