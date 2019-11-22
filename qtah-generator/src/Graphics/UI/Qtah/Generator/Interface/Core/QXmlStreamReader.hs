@@ -57,12 +57,11 @@ import Graphics.UI.Qtah.Generator.Interface.Core.Types (qint64)
 
 aModule =
   AQtModule $
-  makeQtModuleWithMinVersion ["Core", "QXmlStreamReader"] [4, 3] $
-  collect
-  [ just $ QtExport $ ExportClass c_QXmlStreamReader
-  , just $ QtExport $ ExportEnum e_Error
-  , test (qtVersion >= [4, 6]) $ QtExport $ ExportEnum e_ReadElementTextBehaviour
-  , just $ QtExport $ ExportEnum e_TokenType
+  makeQtModule ["Core", "QXmlStreamReader"]
+  [ QtExport $ ExportClass c_QXmlStreamReader
+  , QtExport $ ExportEnum e_Error
+  , QtExport $ ExportEnum e_ReadElementTextBehaviour
+  , QtExport $ ExportEnum e_TokenType
   ]
 
 c_QXmlStreamReader =
@@ -72,28 +71,28 @@ c_QXmlStreamReader =
   collect
   [ just $ mkCtor "new" []
   , just $ mkCtor "newWithPtrChar" [ptrT $ constT charT]
-  , just $ mkCtor "newWithQString" [refT $ constT $ objT c_QString]
-  , just $ mkCtor "newWithBytearray" [refT $ constT $ objT c_QByteArray]
+  , just $ mkCtor "newWithString" [refT $ constT $ objT c_QString]
+  , just $ mkCtor "newWithByteArray" [refT $ constT $ objT c_QByteArray]
   , just $ mkCtor "newWithIODevice" [ptrT $ objT c_QIODevice]
   , just $ mkProp "namespaceProcessing" boolT
-  , just $ mkMethod' "addData" "addDataBytearray" [refT $ constT $ objT c_QByteArray] voidT
-  , just $ mkMethod' "addData" "addDataQString" [refT $ constT $ objT c_QString] voidT
-  , just $ mkMethod' "addData" "addDataPtrchar" [ptrT $ constT charT] voidT
-  , test (qtVersion >= [4, 4]) $ mkMethod "addExtraNamespaceDeclaration" [refT $ constT $ objT c_QXmlStreamNamespaceDeclaration] voidT
-  , test (qtVersion >= [4, 4]) $ mkMethod "addExtraNamespaceDeclarations" [refT $ constT $ objT qXmlStreamNamespaceDeclarations] voidT
+  , just $ mkMethod' "addData" "addDataWithByteArray" [refT $ constT $ objT c_QByteArray] voidT
+  , just $ mkMethod' "addData" "addDataWithString" [refT $ constT $ objT c_QString] voidT
+  , just $ mkMethod' "addData" "addDataWithPtrChar" [ptrT $ constT charT] voidT
+  , just $ mkMethod "addExtraNamespaceDeclaration" [refT $ constT $ objT c_QXmlStreamNamespaceDeclaration] voidT
+  , just $ mkMethod "addExtraNamespaceDeclarations" [refT $ constT $ objT qXmlStreamNamespaceDeclarations] voidT
   , just $ mkConstMethod "atEnd" [] boolT
   , just $ mkConstMethod "attributes" [] $ toGcT $ objT c_QXmlStreamAttributes
   , just $ mkConstMethod "characterOffset" [] qint64
   , just $ mkMethod "clear" [] voidT
   , just $ mkConstMethod "columnNumber" [] qint64
-  , just $ mkConstMethod "device" [] $ ptrT $ objT c_QIODevice
-  --, test (qtVersion >= [4, 4]) $ mkConstMethod "documentEncoding" [] $ objT c_QStringRef
-  --, test (qtVersion >= [4, 4]) $ mkConstMethod "documentVersion" [] $ objT c_QStringRef
-  --, test (qtVersion >= [4, 4]) $ mkConstMethod "dtdName" [] $ objT c_QStringRef
-  --, test (qtVersion >= [4, 4]) $ mkConstMethod "dtdPublicId" [] $ objT c_QStringRef
-  --, test (qtVersion >= [4, 4]) $ mkConstMethod "dtdSystemId" [] $ objT c_QStringRef
+  , just $ mkProp "device" $ ptrT $ objT c_QIODevice
+  --, just $ mkConstMethod "documentEncoding" [] $ objT c_QStringRef
+  --, just $ mkConstMethod "documentVersion" [] $ objT c_QStringRef
+  --, just $ mkConstMethod "dtdName" [] $ objT c_QStringRef
+  --, just $ mkConstMethod "dtdPublicId" [] $ objT c_QStringRef
+  --, just $ mkConstMethod "dtdSystemId" [] $ objT c_QStringRef
   , just $ mkConstMethod "entityDeclarations" [] $ toGcT $ objT qXmlStreamEntityDeclarations
-  , test (qtVersion >= [4, 4]) $ mkConstMethod "entityResolver" [] $ ptrT $ objT c_QXmlStreamEntityResolver
+  , just $ mkProp "entityResolver" $ ptrT $ objT c_QXmlStreamEntityResolver
   , just $ mkConstMethod "error" [] $ enumT e_Error
   , just $ mkConstMethod "errorString" [] $ objT c_QString
   , just $ mkConstMethod "hasError" [] boolT
@@ -114,19 +113,17 @@ c_QXmlStreamReader =
   , just $ mkConstMethod "namespaceDeclarations" [] $ toGcT $ objT qXmlStreamNamespaceDeclarations
   --, just $ mkConstMethod "namespaceUri" [] $ objT c_QStringRef
   , just $ mkConstMethod "notationDeclarations" [] $ toGcT $ objT qXmlStreamNotationDeclarations
-  --, test (qtVersion >= [4, 4]) $ mkConstMethod "prefix" [] $ objT c_QStringRef
+  --, just $ mkConstMethod "prefix" [] $ objT c_QStringRef
   --, just $ mkConstMethod "processingInstructionData" [] $ objT c_QStringRef
   --, just $ mkConstMethod "processingInstructionTarget" [] $ objT c_QStringRef
   --, just $ mkConstMethod "qualifiedName" [] $ objT c_QStringRef
   , just $ mkMethod' "raiseError" "raiseError" [] voidT
   , just $ mkMethod' "raiseError" "raiseErrorWithMessage" [refT $ constT $ objT c_QString] voidT
-  , test (qtVersion >= [4, 6]) $ mkMethod' "readElementText" "readElementText" [] $ objT c_QString
-  , test (qtVersion >= [4, 6]) $ mkMethod' "readElementText" "readElementTextWithBehav" [enumT e_ReadElementTextBehaviour] $ objT c_QString
+  , just $ mkMethod' "readElementText" "readElementText" [] $ objT c_QString
+  , just $ mkMethod' "readElementText" "readElementTextWithBehaviour" [enumT e_ReadElementTextBehaviour] $ objT c_QString
   , just $ mkMethod "readNext" [] $ enumT e_TokenType
-  , test (qtVersion >= [4, 6]) $ mkMethod "readNextStartElement" [] boolT
-  , just $ mkMethod "setDevice" [ptrT $ objT c_QIODevice] voidT
-  , test (qtVersion >= [4, 4]) $ mkMethod "setEntityResolver" [ptrT $ objT c_QXmlStreamEntityResolver] voidT
-  , test (qtVersion >= [4, 6]) $ mkMethod "skipCurrentElement" [] voidT
+  , just $ mkMethod "readNextStartElement" [] boolT
+  , just $ mkMethod "skipCurrentElement" [] voidT
   --, just $ mkConstMethod "text" [] $ objT c_QStringRef
   , just $ mkConstMethod "tokenString" [] $ objT c_QString
   , just $ mkConstMethod "tokenType" [] $ enumT e_TokenType
