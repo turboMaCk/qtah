@@ -46,7 +46,7 @@ import Graphics.UI.Qtah.Generator.Types
 
 aModule =
   AQtModule $
-  makeQtModuleWithMinVersion ["Core", "QXmlStreamAttribute"] [4, 3] $
+  makeQtModule ["Core", "QXmlStreamAttribute"] $
   [QtExport $ ExportClass c_QXmlStreamAttribute]
 
 c_QXmlStreamAttribute =
@@ -57,12 +57,12 @@ c_QXmlStreamAttribute =
   makeClass (ident "QXmlStreamAttribute") Nothing [] $
   collect
   [ just $ mkCtor "new" []
-  , just $ mkCtor "newWithQualnameValue" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString]
-  , just $ mkCtor "newWithNameURINameValue" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString, refT $ constT $ objT c_QString]
+  , just $ mkCtor "newWithQualifiedNameAndValue" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString]
+  , just $ mkCtor "newWithNamespaceUriAndNameAndValue" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString, refT $ constT $ objT c_QString]
   , just $ mkConstMethod "isDefault" [] boolT
   --, just $ mkConstMethod "name" [] $ objT c_QStringRef
   --, just $ mkConstMethod "namespaceUri" [] $ objT c_QStringRef
-  --, test (qtVersion >= [4, 4]) $ mkConstMethod "prefix" [] $ objT c_QStringRef
+  --, just $ mkConstMethod "prefix" [] $ objT c_QStringRef
   --, just $ mkConstMethod "qualifiedName" [] $ objT c_QStringRef
   --, just $ mkConstMethod "value" [] $ objT c_QStringRef
   ]
