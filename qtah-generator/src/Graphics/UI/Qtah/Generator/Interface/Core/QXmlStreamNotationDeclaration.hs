@@ -45,7 +45,7 @@ import Graphics.UI.Qtah.Generator.Types
 
 aModule =
   AQtModule $
-  makeQtModuleWithMinVersion ["Core", "QXmlStreamNotationDeclaration"] [4, 3] $
+  makeQtModule ["Core", "QXmlStreamNotationDeclaration"]
   [QtExport $ ExportClass c_QXmlStreamNotationDeclaration]
 
 c_QXmlStreamNotationDeclaration =
