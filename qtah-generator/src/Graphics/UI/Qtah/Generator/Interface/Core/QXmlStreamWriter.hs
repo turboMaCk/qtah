@@ -50,7 +50,7 @@ import Graphics.UI.Qtah.Generator.Types
 
 aModule =
   AQtModule $
-  makeQtModuleWithMinVersion ["Core", "QXmlStreamWriter"] [4, 3] $
+  makeQtModule ["Core", "QXmlStreamWriter"]
   [QtExport $ ExportClass c_QXmlStreamWriter]
 
 c_QXmlStreamWriter =
@@ -59,19 +59,18 @@ c_QXmlStreamWriter =
   makeClass (ident "QXmlStreamWriter") Nothing [] $
   collect
   [ just $ mkCtor "new" []
-  , just $ mkCtor "newWithQString" [ptrT $ objT c_QString]
-  , just $ mkCtor "newWithBytearray" [ptrT $ objT c_QByteArray]
+  , just $ mkCtor "newWithString" [ptrT $ objT c_QString]
+  , just $ mkCtor "newWithByteArray" [ptrT $ objT c_QByteArray]
   , just $ mkCtor "newWithIODevice" [ptrT $ objT c_QIODevice]
-  , test (qtVersion >= [4, 4]) $ mkProp "autoFormatting" boolT
-  , test (qtVersion >= [4, 4]) $ mkProp "autoFormattingIndent" intT
+  , just $ mkProp "autoFormatting" boolT
+  , just $ mkProp "autoFormattingIndent" intT
   , just $ mkConstMethod "codec" [] $ ptrT $ objT c_QTextCodec
-  , just $ mkConstMethod "device" [] $ ptrT $ objT c_QIODevice
+  , just $ mkProp "device" $ ptrT $ objT c_QIODevice
   , just $ mkConstMethod "hasError" [] boolT
-  , just $ mkMethod' "setCodec" "setCodecQText" [ptrT $ objT c_QTextCodec] voidT 
-  , just $ mkMethod' "setCodec" "setCodecPtrchar" [ptrT $ constT charT] voidT
-  , just $ mkMethod "setDevice" [ptrT $ objT c_QIODevice] voidT
-  , just $ mkMethod' "writeAttribute" "writeAttributeUriNameValue" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString, refT $ constT $ objT c_QString] voidT
-  , just $ mkMethod' "writeAttribute" "writeAttributeQualValue" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString] voidT
+  , just $ mkMethod' "setCodec" "setCodec" [ptrT $ objT c_QTextCodec] voidT 
+  , just $ mkMethod' "setCodec" "setCodecWithPtrChar" [ptrT $ constT charT] voidT
+  , just $ mkMethod' "writeAttribute" "writeAttributeWithNamespaceUriAndNameAndValue" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString, refT $ constT $ objT c_QString] voidT
+  , just $ mkMethod' "writeAttribute" "writeAttributeWithQualifiedNameAndValue" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString] voidT
   , just $ mkMethod' "writeAttribute" "writeAttribute" [refT $ constT $ objT c_QXmlStreamAttribute] voidT
   , just $ mkMethod "writeAttributes" [refT $ constT $ objT c_QXmlStreamAttributes] voidT
   , just $ mkMethod "writeCDATA" [refT $ constT $ objT c_QString] voidT
@@ -80,20 +79,20 @@ c_QXmlStreamWriter =
   , just $ mkMethod "writeCurrentToken" [refT $ constT $ objT c_QXmlStreamReader] voidT
   , just $ mkMethod "writeDTD" [refT $ constT $ objT c_QString] voidT
   , just $ mkMethod "writeDefaultNamespace" [refT $ constT $ objT c_QString] voidT
-  , just $ mkMethod' "writeEmptyElement" "writeEmptyElementUriName" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString] voidT
+  , just $ mkMethod' "writeEmptyElement" "writeEmptyElementWithNamespaceUriAndName" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString] voidT
   , just $ mkMethod' "writeEmptyElement" "writeEmptyElement" [refT $ constT $ objT c_QString] voidT
   , just $ mkMethod "writeEndDocument" [] voidT
   , just $ mkMethod "writeEndElement" [] voidT
   , just $ mkMethod "writeEntityReference" [refT $ constT $ objT c_QString] voidT
   , just $ mkMethod' "writeNamespace" "writeNamespace" [refT $ constT $ objT c_QString ] voidT
-  , just $ mkMethod' "writeNamespace" "writeNamespaceWithPref" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString] voidT
+  , just $ mkMethod' "writeNamespace" "writeNamespaceWithNamespaceUriAndPrefix" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString] voidT
   , just $ mkMethod' "writeProcessingInstruction" "writeProcessingInstruction" [refT $ constT $ objT c_QString ] voidT
-  , just $ mkMethod' "writeProcessingInstruction" "writeProcessingInstructionWithData" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString] voidT
-  , just $ mkMethod' "writeStartDocument" "writeStartDocumentWithVer" [refT $ constT $ objT c_QString] voidT
-  , test (qtVersion >= [4, 5]) $ mkMethod' "writeStartDocument" "writeStartDocument" [] voidT
-  , test (qtVersion >= [4, 5]) $ mkMethod' "writeStartDocument" "writeStartDocumentWithVerStand" [refT $ constT $ objT c_QString, boolT] voidT
-  , just $ mkMethod' "writeStartElement" "writeStartElementUriName" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString] voidT
-  , just $ mkMethod' "writeStartElement" "writeStartElementQual" [refT $ constT $ objT c_QString] voidT
-  , just $ mkMethod' "writeTextElement" "writeTextElementUriNameText" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString, refT $ constT $ objT c_QString] voidT
-  , just $ mkMethod' "writeTextElement" "writeTextElementQualText" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString] voidT
+  , just $ mkMethod' "writeProcessingInstruction" "writeProcessingInstructionWithTargetAndData" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString] voidT
+  , just $ mkMethod' "writeStartDocument" "writeStartDocumentWithVersion" [refT $ constT $ objT c_QString] voidT
+  , just $ mkMethod' "writeStartDocument" "writeStartDocument" [] voidT
+  , just $ mkMethod' "writeStartDocument" "writeStartDocumentWithVersionAndStandalone" [refT $ constT $ objT c_QString, boolT] voidT
+  , just $ mkMethod' "writeStartElement" "writeStartElementWithNamespaceUriAndName" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString] voidT
+  , just $ mkMethod' "writeStartElement" "writeStartElement" [refT $ constT $ objT c_QString] voidT
+  , just $ mkMethod' "writeTextElement" "writeTextElementWithNamespaceUriAndNameAndText" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString, refT $ constT $ objT c_QString] voidT
+  , just $ mkMethod' "writeTextElement" "writeTextElementWithQualifiedNameAndText" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString] voidT
   ]
