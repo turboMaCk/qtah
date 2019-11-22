@@ -46,7 +46,7 @@ import Graphics.UI.Qtah.Generator.Types
 
 aModule =
   AQtModule $
-  makeQtModuleWithMinVersion ["Core", "QXmlStreamEntityDeclaration"] [4, 3] $
+  makeQtModule ["Core", "QXmlStreamEntityDeclaration"]
   [QtExport $ ExportClass c_QXmlStreamEntityDeclaration]
 
 c_QXmlStreamEntityDeclaration =
