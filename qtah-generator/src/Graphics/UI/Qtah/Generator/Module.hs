@@ -382,8 +382,6 @@ sayExportClass cls = do
 -- scratch in this module, rather than reexporting it from somewhere else.
 sayExportSignal :: Signal -> Generator ()
 sayExportSignal signal = inFunction "sayExportSignal" $ do
-  addImports importForSignal
-
   let name = signalCName signal
       cls = signalClass signal
       ptrClassName = toHsPtrClassName' Nonconst cls
@@ -392,6 +390,7 @@ sayExportSignal signal = inFunction "sayExportSignal" $ do
 
   let listenerClass = signalListenerClass signal
   importWholeModuleForExtName $ classExtName listenerClass
+
   -- Find the listener constructor that only takes a callback.
   listenerCtor <-
     fromMaybeM (throwError $ concat
@@ -402,12 +401,12 @@ sayExportSignal signal = inFunction "sayExportSignal" $ do
   let callback = signalCallback signal
       paramTypes = map parameterType $ callbackParams callback
 
-  -- Also find the 'connectListener' method.
-  listenerConnectMethod <-
+  -- Also find the 'isValid' method.
+  isValidMethod <-
     fromMaybeM (throwError $ concat
-                ["Couldn't find the connectListener method in ",
+                ["Couldn't find the isValid method in ",
                  show listenerClass, " for signal ", show name]) $
-    find ((RealMethod (FnName "connectListener") ==) . methodImpl) $ classMethods listenerClass
+    find ((RealMethod (FnName "isValid") ==) . methodImpl) $ classMethods listenerClass
 
   callbackHsType <- cppTypeToHsTypeAndUse HsHsSide $ callbackT callback
 
@@ -423,6 +422,11 @@ sayExportSignal signal = inFunction "sayExportSignal" $ do
                      , fromExtName $ classExtName listenerClass
                      , ")"
                      ]
+
+  addImports $ mconcat [hsImports "Prelude" ["($)", "(>>)"],
+                        importForPrelude,
+                        importForRuntime,
+                        importForSignal]
   ln
   saysLn [varName, " :: ", prettyPrint varType]
   saysLn [varName, " = QtahSignal.Signal"]
@@ -430,9 +434,17 @@ sayExportSignal signal = inFunction "sayExportSignal" $ do
     sayLn "{ QtahSignal.internalConnectSignal = \\object' fn' -> do"
     indent $ do
       saysLn ["listener' <- ",
-              toHsFnName' $ classEntityForeignName listenerClass listenerCtor, " fn'"]
-      saysLn [toHsFnName' $ classEntityForeignName listenerClass listenerConnectMethod,
-              " listener' object' ", show (toSignalConnectName signal paramTypes)]
+              toHsFnName' $ classEntityForeignName listenerClass listenerCtor,
+              " object' ",
+              show (toSignalConnectName signal paramTypes),
+              " fn'"]
+      saysLn ["valid' <- ",
+              toHsFnName' $ classEntityForeignName listenerClass isValidMethod,
+              " listener'"]
+      sayLn "if valid'"
+      indent $ do
+        sayLn "then QtahP.fmap QtahP.Just $ QtahSignal.internalMakeConnection listener'"
+        sayLn "else QtahFHR.delete listener' >> QtahP.return QtahP.Nothing"
     saysLn [", QtahSignal.internalName = ", show internalName]
     sayLn "}"
 

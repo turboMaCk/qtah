@@ -17,6 +17,11 @@
 
 module Graphics.UI.Qtah.Generator.Interface.Widgets.QDialogButtonBox (
   aModule,
+  c_QDialogButtonBox,
+  e_ButtonLayout,
+  e_ButtonRole,
+  e_StandardButton,
+  fl_StandardButtons,
   ) where
 
 import Foreign.Hoppy.Generator.Spec (

@@ -50,10 +50,15 @@ import Graphics.UI.Qtah.Generator.Interface.Core.QDate (c_QDate)
 import Graphics.UI.Qtah.Generator.Interface.Core.QEvent (c_QEvent)
 import Graphics.UI.Qtah.Generator.Interface.Core.QItemSelection (c_QItemSelection)
 import Graphics.UI.Qtah.Generator.Interface.Core.QModelIndex (c_QModelIndex)
+import Graphics.UI.Qtah.Generator.Interface.Core.QList (c_QListQModelIndex)
 import Graphics.UI.Qtah.Generator.Interface.Core.QObject (c_QObject)
 import Graphics.UI.Qtah.Generator.Interface.Core.QPoint (c_QPoint)
 import Graphics.UI.Qtah.Generator.Interface.Core.QSize (c_QSize)
+import Graphics.UI.Qtah.Generator.Interface.Core.QVariant (c_QVariant)
+import Graphics.UI.Qtah.Generator.Interface.Core.QAbstractAnimation (c_QAbstractAnimation)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
+import Graphics.UI.Qtah.Generator.Interface.Core.QAbstractAnimation (e_Direction, e_State)
+import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Core.QProcess (e_ProcessError, e_ExitStatus, e_ProcessState)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Core.QVector (c_QVectorInt)
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (
   e_DockWidgetArea,
@@ -66,6 +71,7 @@ import Graphics.UI.Qtah.Generator.Interface.Core.Types (
   e_WindowModality,
   e_WindowState,
   qreal,
+  qlonglong,
   )
 import {-# SOURCE #-} qualified Graphics.UI.Qtah.Generator.Interface.Gui.QClipboard as QClipboard
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Gui.QIcon (c_QIcon)
@@ -82,7 +88,7 @@ import Graphics.UI.Qtah.Generator.Interface.Widgets.QGraphicsItem (c_QGraphicsIt
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Widgets.QSystemTrayIcon (
   e_ActivationReason,
   )
-import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Widgets.QTreeWidget (c_QTreeWidgetItem)
+import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Widgets.QTreeWidgetItem (c_QTreeWidgetItem)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Widgets.QWidget (c_QWidget)
 import Graphics.UI.Qtah.Generator.Module (AModule (AHoppyModule))
 
@@ -101,6 +107,7 @@ aModule =
       , just $ Export cb_IntBoolVoid
       , just $ Export cb_IntIntVoid
       , just $ Export cb_OrientationVoid
+      , just $ Export cb_OrientationIntIntVoid
       , just $ Export cb_PtrQAbstractButtonVoid
       , just $ Export cb_PtrQAbstractButtonBoolVoid
       , just $ Export cb_PtrQAbstractItemModelVoid
@@ -109,6 +116,8 @@ aModule =
       , just $ Export cb_PtrQObjectPtrQEventBool
       , just $ Export cb_PtrQObjectVoid
       , just $ Export cb_PtrQPaintEventVoid
+      , just $ Export cb_RefConstQModelIndexVoid
+      , just $ Export cb_RefConstQListQModelIndexVoid
       , just $ Export cb_PtrQTreeWidgetItemVoid
       , just $ Export cb_PtrQTreeWidgetItemIntVoid
       , just $ Export cb_PtrQTreeWidgetItemPtrQTreeWidgetItemVoid
@@ -135,6 +144,15 @@ aModule =
       , just $ Export cb_ToolButtonStyleVoid
       , just $ Export cb_WindowModalityVoid
       , just $ Export cb_WindowStateVoid
+      , just $ Export cb_QlonglongVoid
+      , just $ Export cb_IntQlonglongVoid
+      , just $ Export cb_ProcessErrorVoid
+      , just $ Export cb_IntExitStatusVoid
+      , just $ Export cb_ProcessStateVoid
+      , just $ Export cb_StateStateVoid
+      , just $ Export cb_DirectionVoid
+      , just $ Export cb_RefConstQVariantVoid
+      , just $ Export cb_QAbstractAnimationVoid
       , just $ Export cb_Void
       ]
 
@@ -170,6 +188,10 @@ cb_OrientationVoid =
   makeCallback (toExtName "CallbackOrientationVoid")
   [enumT e_Orientation] voidT
 
+cb_OrientationIntIntVoid =
+  makeCallback (toExtName "CallbackOrientationIntIntVoid")
+  [enumT e_Orientation, intT, intT] voidT
+
 cb_PtrQAbstractButtonVoid =
   makeCallback (toExtName "CallbackPtrQAbstractButtonVoid")
   [ptrT $ objT c_QAbstractButton] voidT
@@ -201,6 +223,16 @@ cb_PtrQObjectVoid =
 cb_PtrQPaintEventVoid =
   makeCallback (toExtName "CallbackPtrQPaintEventVoid")
   [ptrT $ objT c_QPaintEvent] voidT
+
+cb_RefConstQModelIndexVoid :: Callback
+cb_RefConstQModelIndexVoid =
+  makeCallback (toExtName "CallbackRefConstQModelIndexVoid")
+  [refT $ constT $ objT c_QModelIndex] voidT
+
+cb_RefConstQListQModelIndexVoid :: Callback
+cb_RefConstQListQModelIndexVoid =
+  makeCallback (toExtName "CallbackRefConstQListQModelIndexVoid")
+  [refT $ constT $ objT c_QListQModelIndex] voidT
 
 cb_PtrQTreeWidgetItemVoid :: Callback
 cb_PtrQTreeWidgetItemVoid =
@@ -309,6 +341,50 @@ cb_WindowModalityVoid =
 cb_WindowStateVoid =
   makeCallback (toExtName "CallbackWindowStateVoid")
   [enumT e_WindowState] voidT
+
+cb_QlonglongVoid =
+  makeCallback (toExtName "CallbackQlonglongVoid")
+  [qlonglong] voidT
+
+cb_IntQlonglongVoid =
+  makeCallback (toExtName "CallbackIntQlonglongVoid")
+  [intT, qlonglong] voidT
+
+
+cb_ProcessErrorVoid =
+  makeCallback (toExtName "CallbackProcessErrorVoid")
+  [enumT e_ProcessError] voidT
+
+
+cb_IntExitStatusVoid =
+  makeCallback (toExtName "CallbackIntExitStatusVoid")
+  [intT, enumT e_ExitStatus] voidT
+
+
+cb_ProcessStateVoid =
+  makeCallback (toExtName "CallbackProcessStateVoid")
+  [enumT e_ProcessState] voidT
+
+
+cb_DirectionVoid =
+  makeCallback (toExtName "CallbackDirectionVoid")
+  [enumT e_Direction] voidT
+
+
+cb_StateStateVoid =
+  makeCallback (toExtName "CallbackStateStateVoid")
+  [enumT e_State, enumT e_State] voidT
+
+
+cb_RefConstQVariantVoid =
+  makeCallback (toExtName "CallbackRefConstQVariantVoid")
+  [refT $ constT $ objT c_QVariant] voidT
+
+
+cb_QAbstractAnimationVoid =
+  makeCallback (toExtName "CallbackQAbstractAnimationVoid")
+  [ptrT $ objT c_QAbstractAnimation] voidT
+
 
 cb_Void =
   makeCallback (toExtName "CallbackVoid")

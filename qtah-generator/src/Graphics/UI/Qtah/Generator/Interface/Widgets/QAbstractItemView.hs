@@ -18,6 +18,13 @@
 module Graphics.UI.Qtah.Generator.Interface.Widgets.QAbstractItemView (
   aModule,
   c_QAbstractItemView,
+  e_ScrollHint,
+  e_SelectionMode,
+  e_ScrollMode,
+  e_DragDropMode,
+  e_EditTrigger,
+  fl_EditTriggers,
+  e_SelectionBehavior,
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
@@ -55,14 +62,14 @@ import Graphics.UI.Qtah.Generator.Interface.Core.Types (
   e_DropAction,
   e_TextElideMode,
   )
-import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
+import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
   listener,
   listenerQModelIndex,
   listenerQSize,
   )
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QAbstractItemDelegate (c_QAbstractItemDelegate)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QAbstractScrollArea (c_QAbstractScrollArea)
-import Graphics.UI.Qtah.Generator.Interface.Widgets.QWidget (c_QWidget)
+import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Widgets.QWidget (c_QWidget)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
 

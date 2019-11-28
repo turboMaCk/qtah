@@ -40,13 +40,13 @@ import Foreign.Hoppy.Generator.Spec (
   )
 import Foreign.Hoppy.Generator.Types (boolT, enumT, intT, objT, ptrT, voidT)
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (e_Orientation)
-import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
+import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
   listener,
   listenerInt,
   listenerIntInt,
   listenerQAbstractSliderAction,
   )
-import Graphics.UI.Qtah.Generator.Interface.Widgets.QWidget (c_QWidget)
+import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Widgets.QWidget (c_QWidget)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
 

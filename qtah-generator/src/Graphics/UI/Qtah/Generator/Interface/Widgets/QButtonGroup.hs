@@ -38,7 +38,7 @@ import Foreign.Hoppy.Generator.Version (collect, just, test)
 import Graphics.UI.Qtah.Generator.Config (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.QList (c_QListQAbstractButton)
 import Graphics.UI.Qtah.Generator.Interface.Core.QObject (c_QObject)
-import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
+import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
   listenerInt,
   listenerIntBool,
   listenerPtrQAbstractButton,

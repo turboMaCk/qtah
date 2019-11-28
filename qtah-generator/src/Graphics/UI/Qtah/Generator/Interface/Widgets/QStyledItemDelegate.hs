@@ -38,7 +38,7 @@ import Graphics.UI.Qtah.Generator.Types
 
 {-# ANN module "HLint: ignore Use camelCase" #-}
 
-minVersion = [4, 4]
+minVersion = [4, 2]
 
 aModule =
   AQtModule $

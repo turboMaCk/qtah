@@ -17,10 +17,8 @@
 
 module Graphics.UI.Qtah.Generator.Interface.Widgets.QTreeWidget (
   c_QTreeWidget,
-  c_QTreeWidgetItem,
   ) where
 
 import Foreign.Hoppy.Generator.Spec (Class)
 
 c_QTreeWidget :: Class
-c_QTreeWidgetItem :: Class

@@ -25,6 +25,7 @@ import Foreign.Hoppy.Generator.Spec (
   classSetConversionToGc,
   classSetEntityPrefix,
   ident,
+  ident1,
   includeStd,
   makeClass,
   mkConstMethod,
@@ -36,30 +37,31 @@ import Foreign.Hoppy.Generator.Spec (
   np,
   )
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
-  ClassFeature (Assignable, Copyable, Equatable),
+  ClassFeature (Assignable, Copyable, Equatable, Comparable),
   classAddFeatures,
   )
-import Foreign.Hoppy.Generator.Types (
-  boolT, intT, int64T, objT,
-  )
+import Foreign.Hoppy.Generator.Types (boolT, intT, int64T, objT, enumT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
 import Graphics.UI.Qtah.Generator.Config (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
+import Graphics.UI.Qtah.Generator.Interface.Core.Types (e_DateFormat)
 import Graphics.UI.Qtah.Generator.Types
 
 {-# ANN module "HLint: ignore Use camelCase" #-}
 
 aModule =
   AQtModule $
-  makeQtModule ["Core", "QDate"]
-  [ qtExport c_QDate
+  makeQtModule ["Core", "QDate"] $
+  collect
+  [ just $ qtExport c_QDate
+  , test (qtVersion >= [4, 5]) $ qtExport e_MonthNameType
   ]
 
 c_QDate =
   addReqIncludes [includeStd "QDate"] $
   classSetConversionToGc $
-  classAddFeatures [Assignable, Copyable, Equatable] $
+  classAddFeatures [Assignable, Copyable, Equatable, Comparable] $
   classSetEntityPrefix "" $
   makeClass (ident "QDate") Nothing [] $
   collect
@@ -83,11 +85,9 @@ c_QDate =
   , just $ mkConstMethod "month" np intT
   , test (qtVersion >= [4, 2]) $ mkMethod "setDate" [intT, intT, intT] boolT
   , just $ mkConstMethod "toJulianDay" np int64T
-  , just $ mkConstMethod'
-      "toString" "toStringWithStringFormat" [objT c_QString] (objT c_QString)
+  , just $ mkConstMethod' "toString" "toStringWithStringFormat" [objT c_QString] (objT c_QString)
+  , just $ mkConstMethod' "toString" "toStringWithDateFormat" [enumT e_DateFormat] (objT c_QString)
   , just $ mkConstMethod "toString" np (objT c_QString)
-  -- TODO just $ mkConstMethod' "toString" "toStringWithDateFormat"
-  --      [DateFormat] (objT c_QString)
   -- TODO just $ mkConstMethod' "toString" "toStringWithStringViewFormat"
   --      [objT c_QStringView] (objT c_QString)
   , just $ mkConstMethod "weekNumber" np intT
@@ -99,10 +99,15 @@ c_QDate =
   , just $ mkStaticMethod "currentDate" np (objT c_QDate)
   , just $ mkStaticMethod "fromJulianDay" [int64T] (objT c_QDate)
   , just $ mkStaticMethod "fromString" [objT c_QString] (objT c_QDate)
-  -- TODO just $ mkStaticMethod' "fromString" "fromStringWithDateFormat"
-  --      [objT c_QString, Qt::DateFormat] (objT c_QDate)
+  , just $ mkStaticMethod' "fromString" "fromStringWithDateFormat" [objT c_QString, enumT e_DateFormat] (objT c_QDate)
   , just $ mkStaticMethod' "fromString" "fromStringWithStringFormat"
     [objT c_QString, objT c_QString] (objT c_QDate)
   , just $ mkStaticMethod "isLeapYear" [intT] boolT
   , just $ mkStaticMethod' "isValid" "isValidYmd" [intT, intT, intT] boolT
+  ]
+
+e_MonthNameType =
+  makeQtEnum (ident1 "QDate" "MonthNameType") [includeStd "QDate"]
+  [ "DateFormat"
+  , "StandaloneFormat"
   ]

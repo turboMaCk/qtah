@@ -51,7 +51,7 @@ import Graphics.UI.Qtah.Generator.Interface.Core.QItemSelection (c_QItemSelectio
 import Graphics.UI.Qtah.Generator.Interface.Core.QList (c_QListQModelIndex)
 import Graphics.UI.Qtah.Generator.Interface.Core.QModelIndex (c_QModelIndex)
 import Graphics.UI.Qtah.Generator.Interface.Core.QObject (c_QObject)
-import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
+import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
   listenerPtrQAbstractItemModel,
   listenerRefConstQItemSelectionRefConstQItemSelection,
   listenerQModelIndexQModelIndex,
@@ -124,7 +124,7 @@ signals =
   ]
 
 (e_SelectionFlag, fl_SelectionFlags) =
-  makeQtEnumAndFlags' (ident1 "QItemSelectionModel" "SelectionFlag") "SelectionFlags"
+  makeQtEnumAndFlagsWithOverrides (ident1 "QItemSelectionModel" "SelectionFlag") "SelectionFlags"
   [includeStd "QItemSelectionModel"]
   [ "NoUpdate"
   , "Clear"

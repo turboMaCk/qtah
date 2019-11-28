@@ -24,6 +24,6 @@ packages:
 - qtah-generator
 
 extra-deps:
-- hoppy-generator
-- hoppy-runtime
-- hoppy-std
+- hoppy-generator-0.5.2
+- hoppy-runtime-0.5.1
+- hoppy-std-0.5.0

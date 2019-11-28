@@ -30,16 +30,23 @@ import Foreign.Hoppy.Generator.Spec (
   mkBoolIsProp,
   mkCtor,
   mkMethod,
+  mkMethod',
+  mkConstMethod,
   mkProp,
   np,
   )
-import Foreign.Hoppy.Generator.Types (boolT, intT, objT, voidT)
+import Foreign.Hoppy.Generator.Types (boolT, intT, objT, voidT, constT, refT, enumT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
 import Graphics.UI.Qtah.Generator.Config (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.QModelIndex (c_QModelIndex)
+import Graphics.UI.Qtah.Generator.Interface.Core.QVector (c_QVectorInt)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QAbstractItemView (c_QAbstractItemView)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
+import Graphics.UI.Qtah.Generator.Interface.Core.Types (e_SortOrder)
+import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
+  listenerRefConstQModelIndex,
+  )
 
 {-# ANN module "HLint: ignore Use camelCase" #-}
 
@@ -71,19 +78,42 @@ c_QTreeView =
   , test (qtVersion >= [4, 3]) $ mkProp "wordWrap" boolT
   -- Public Functions
   , just $ mkCtor "new" np
+  , just $ mkConstMethod "columnAt" [intT] intT
+  , just $ mkConstMethod "columnViewportPosition" [intT] intT
+  , just $ mkConstMethod "columnWidth" [intT] intT
+  , just $ mkMethod' "dataChanged" "dataChanged" [refT $ constT $ objT c_QModelIndex, refT $ constT $ objT c_QModelIndex] voidT
+  , just $ mkMethod' "dataChanged" "dataChangedWithRoles" [refT $ constT $ objT c_QModelIndex, refT $ constT $ objT c_QModelIndex, refT $ constT $ objT c_QVectorInt] voidT
+  -- QHeaderView *QTreeView::header() const
+  , just $ mkConstMethod "indexAbove" [refT $ constT $ objT c_QModelIndex] $ objT c_QModelIndex
+  , just $ mkConstMethod "indexBelow" [refT $ constT $ objT c_QModelIndex] $ objT c_QModelIndex
+  , just $ mkConstMethod "isColumnHidden" [intT] boolT
+  , just $ mkConstMethod "isExpanded" [refT $ constT $ objT c_QModelIndex] boolT
+  , test (qtVersion >= [4, 3]) $ mkConstMethod "isFirstColumnSpanned" [intT, refT $ constT $ objT c_QModelIndex] boolT
+  , just $ mkConstMethod "isRowHidden" [intT, refT $ constT $ objT c_QModelIndex] boolT
+  , just $ mkMethod "setColumnHidden" [intT, boolT] voidT
+  , test (qtVersion >= [4, 2]) $ mkMethod "setColumnWidth" [intT, intT] voidT
+  , just $ mkMethod "setExpanded" [refT $ constT $ objT c_QModelIndex, boolT] voidT
+  , test (qtVersion >= [4, 3]) $ mkMethod "setFirstColumnSpanned" [intT, refT $ constT $ objT c_QModelIndex, boolT] voidT
+  -- TODO void QTreeView::setHeader(QHeaderView *header)
+  , just $ mkMethod "setRowHidden" [intT, refT $ constT $ objT c_QModelIndex, boolT] voidT
+  , test (qtVersion >= [5, 2]) $ mkMethod "setTreePosition" [intT] voidT
+  , just $ mkMethod "selectAll" np voidT
   -- Public Slots
   , just $ mkMethod "collapse" [objT c_QModelIndex] voidT
   , test (qtVersion >= [4, 2]) $ mkMethod "collapseAll" np voidT
   , just $ mkMethod "expand" [objT c_QModelIndex] voidT
   , test (qtVersion >= [4, 2]) $ mkMethod "expandAll" np voidT
+  , test (qtVersion >= [5, 13]) $ mkMethod' "expandRecursively" "expandRecursively" [refT $ constT $ objT c_QModelIndex] voidT
+  , test (qtVersion >= [5, 13]) $ mkMethod' "expandRecursively" "expandRecursivelyWithDepth" [refT $ constT $ objT c_QModelIndex, intT] voidT
   , test (qtVersion >= [4, 3]) $ mkMethod "expandToDepth" [intT] voidT
   , just $ mkMethod "hideColumn" [intT] voidT
   , just $ mkMethod "resizeColumnToContents" [intT] voidT
   , just $ mkMethod "showColumn" [intT] voidT
-  -- TODO Other methods.
+  , test (qtVersion >= [4, 2]) $ mkMethod "sortByColumn" [intT, enumT e_SortOrder] voidT
   ]
 
 signals :: [Signal]
 signals =
-  [ -- TODO add signals
+  [ makeSignal c_QTreeView "collapsed" listenerRefConstQModelIndex
+  , makeSignal c_QTreeView "expanded" listenerRefConstQModelIndex
   ]

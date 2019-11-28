@@ -23,26 +23,111 @@ import Foreign.Hoppy.Generator.Spec (
   addReqIncludes,
   classSetEntityPrefix,
   ident,
+  ident1,
   includeStd,
   makeClass,
+  mkBoolIsProp,
   mkCtor,
+  mkProp,
+  mkConstMethod,
+  mkMethod,
+  mkMethod',
   np,
   )
-import Graphics.UI.Qtah.Generator.Interface.Widgets.QAbstractItemView (c_QAbstractItemView)
+import Foreign.Hoppy.Generator.Types (boolT, intT, objT, ptrT, refT, voidT, enumT, constT)
+import Foreign.Hoppy.Generator.Version (collect, just, test)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
+import Graphics.UI.Qtah.Generator.Flags (flagsT)
+import Graphics.UI.Qtah.Generator.Interface.Widgets.QWidget (c_QWidget)
+import Graphics.UI.Qtah.Generator.Interface.Core.QSize (c_QSize)
+import Graphics.UI.Qtah.Generator.Interface.Core.QPoint (c_QPoint)
+import Graphics.UI.Qtah.Generator.Interface.Core.QRect (c_QRect)
+import Graphics.UI.Qtah.Generator.Interface.Core.QModelIndex (c_QModelIndex)
+import Graphics.UI.Qtah.Generator.Interface.Widgets.QAbstractItemView (c_QAbstractItemView, e_ScrollHint)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
+import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (listenerRefConstQListQModelIndex)
 import Graphics.UI.Qtah.Generator.Types
+import Graphics.UI.Qtah.Generator.Interface.Core.Types (fl_Alignment)
 
 {-# ANN module "HLint: ignore Use camelCase" #-}
 
 aModule =
   AQtModule $
-  makeQtModule ["Widgets", "QListView"]
-  [ qtExport c_QListView ]
+  makeQtModule ["Widgets", "QListView"] $
+  qtExport c_QListView :
+  map QtExportSignal signals ++
+  [ qtExport e_Flow
+  , qtExport e_LayoutMode
+  , qtExport e_Movement
+  , qtExport e_ResizeMode
+  , qtExport e_ViewMode
+  ]
 
 c_QListView =
   addReqIncludes [includeStd "QListView"] $
   classSetEntityPrefix "" $
-  makeClass (ident "QListView") Nothing [c_QAbstractItemView]
-  [ mkCtor "new" np
-    -- TODO
+  makeClass (ident "QListView") Nothing [c_QAbstractItemView] $
+  collect
+  [ just $ mkCtor "new" np
+  , just $ mkCtor "newWithParent" [ptrT $ objT c_QWidget]
+  , test (qtVersion >= [4, 2]) $ mkProp "batchSize" intT
+  , just $ mkMethod "clearPropertyFlags" np voidT
+  , just $ mkProp "flow" $ enumT e_Flow
+  , just $ mkProp "gridSize" $ objT c_QSize
+  , just $ mkBoolIsProp "wrapping"
+  , test (qtVersion >= [5, 12]) $ mkProp "itemAlignment" $ flagsT fl_Alignment
+  , just $ mkProp "layoutMode" $ enumT e_LayoutMode
+  , just $ mkProp "modelColumn" intT
+  , just $ mkProp "movement" $ enumT e_Movement
+  , just $ mkProp "resizeMode" $ enumT e_ResizeMode
+  , test (qtVersion >= [4, 3]) $ mkBoolIsProp "selectionRectVisible"
+  , just $ mkProp "spacing" intT
+  , test (qtVersion >= [4, 1]) $ mkProp "uniformItemSizes" boolT
+  , just $ mkProp "viewMode" $ enumT e_ViewMode
+  , test (qtVersion >= [4, 2]) $ mkProp "wordWrap" boolT
+
+  , just $ mkConstMethod "indexAt" [refT $ constT $ objT c_QPoint] $ objT c_QModelIndex
+  , just $ mkConstMethod "isRowHidden" [intT] boolT
+  , just $ mkMethod' "scrollTo" "scrollTo" [refT $ constT $ objT c_QModelIndex] voidT
+  , just $ mkMethod' "scrollTo" "scrollToWithHint" [refT $ constT $ objT c_QModelIndex, enumT e_ScrollHint] voidT
+  , just $ mkMethod "setRowHidden" [intT, boolT] voidT
+  , just $ mkMethod "visualRect" [refT $ constT $ objT c_QModelIndex] $ objT c_QRect
   ]
+
+signals =
+  collect
+  [ test (qtVersion >= [4, 2]) $ makeSignal c_QListView "indexesMoved" listenerRefConstQListQModelIndex
+  ]
+
+e_Flow =
+  makeQtEnum (ident1 "QListView" "Flow") [includeStd "QListView"]
+  [ "LeftToRight"
+  , "TopToBottom"
+  ]
+
+e_LayoutMode =
+  makeQtEnum (ident1 "QListView" "LayoutMode") [includeStd "QListView"]
+  [ "SinglePass"
+  , "Batched"
+  ]
+
+e_Movement =
+  makeQtEnum (ident1 "QListView" "Movement") [includeStd "QListView"]
+  [ "Static"
+  , "Free"
+  , "Snap"
+  ]
+
+e_ResizeMode =
+  makeQtEnum (ident1 "QListView" "ResizeMode") [includeStd "QListView"]
+  [ "Fixed"
+  , "Adjust"
+  ]
+
+e_ViewMode =
+  makeQtEnum (ident1 "QListView" "ViewMode") [includeStd "QListView"]
+  [ "ListMode"
+  , "IconMode"
+  ]
+
+

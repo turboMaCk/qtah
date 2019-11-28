@@ -27,6 +27,7 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QVector (
   c_QVectorQPoint,
   c_QVectorQPointF,
   c_QVectorQRgb,
+  c_QVectorUInt,
   ) where
 
 import Control.Monad (forM_, when)
@@ -72,7 +73,7 @@ import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Assignable, Copyable),
   classAddFeatures,
   )
-import Foreign.Hoppy.Generator.Types (boolT, constT, intT, objT, ptrT, refT, toGcT, voidT)
+import Foreign.Hoppy.Generator.Types (boolT, constT, intT, objT, ptrT, refT, toGcT, voidT, uintT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
 import Graphics.UI.Qtah.Generator.Config (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.QPoint (c_QPoint)
@@ -255,6 +256,7 @@ allModules =
   , qmod_QPoint
   , qmod_QPointF
   , qmod_QRgb
+  , qmod_UInt
   ]
 
 qmod_Int :: QtModule
@@ -292,3 +294,12 @@ contents_QRgb = instantiate "QVectorQRgb" qrgb mempty
 
 c_QVectorQRgb :: Class
 c_QVectorQRgb = c_QVector contents_QRgb
+
+qmod_UInt :: QtModule
+qmod_UInt = createModule "UInt" contents_UInt
+
+contents_UInt :: Contents
+contents_UInt= instantiate "QVectorUInt" uintT mempty
+
+c_QVectorUInt :: Class
+c_QVectorUInt = c_QVector contents_UInt

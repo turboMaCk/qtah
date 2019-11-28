@@ -18,6 +18,9 @@
 module Graphics.UI.Qtah.Generator.Interface.Core.QAbstractItemModel (
   aModule,
   c_QAbstractItemModel,
+  e_LayoutChangeHint,
+  e_CheckIndexOption,
+  fl_CheckIndexOptions,
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
@@ -39,6 +42,8 @@ import Foreign.Hoppy.Generator.Types (
   intT,
   objT,
   voidT,
+  refT,
+  constT,
   )
 import Foreign.Hoppy.Generator.Version (collect, just, test)
 import Graphics.UI.Qtah.Generator.Config (qtVersion)
@@ -46,18 +51,21 @@ import Graphics.UI.Qtah.Generator.Flags (flagsT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QModelIndex (c_QModelIndex)
 import Graphics.UI.Qtah.Generator.Interface.Core.QObject (c_QObject)
 import Graphics.UI.Qtah.Generator.Interface.Core.QSize (c_QSize)
+import Graphics.UI.Qtah.Generator.Interface.Core.QStringList (c_QStringList)
 import Graphics.UI.Qtah.Generator.Interface.Core.QVariant (c_QVariant)
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (
   e_ItemDataRole,
   fl_ItemFlags,
   e_Orientation,
   e_SortOrder,
+  fl_DropActions,
   )
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
   listener,
   listenerQModelIndexIntInt,
   listenerQModelIndexIntIntQModelIndexInt,
   listenerQModelIndexQModelIndexQVectorInt,
+  listenerOrientationIntInt
   )
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
@@ -69,7 +77,12 @@ aModule =
   makeQtModule ["Core", "QAbstractItemModel"] $
   qtExport c_QAbstractItemModel :
   map QtExportSignal signals ++
-  [ qtExport e_LayoutChangeHint ]
+  collect
+  [ just $ qtExport e_LayoutChangeHint
+  , test (qtVersion >= [5, 11]) $ qtExport e_CheckIndexOption
+  , test (qtVersion >= [5, 11]) $ qtExport fl_CheckIndexOptions
+  ]
+
 
 c_QAbstractItemModel =
   addReqIncludes [includeStd "QAbstractItemModel"] $
@@ -79,6 +92,8 @@ c_QAbstractItemModel =
   [ just $ mkConstMethod "buddy" [objT c_QModelIndex] $ objT c_QModelIndex
     -- TODO canDropMimeData
   , just $ mkConstMethod "canFetchMore" [objT c_QModelIndex] boolT
+  , test (qtVersion >= [5, 11]) $ mkConstMethod' "checkIndex" "checkIndex" [refT $ constT $ objT c_QModelIndex] boolT
+  , test (qtVersion >= [5, 11]) $ mkConstMethod' "checkIndex" "checkIndexWithOptions" [refT $ constT $ objT c_QModelIndex, flagsT fl_CheckIndexOptions] boolT
   , just $ mkConstMethod' "columnCount" "columnCount" np intT
   , just $ mkConstMethod' "columnCount" "columnCountAt" [objT c_QModelIndex] intT
   , just $ mkConstMethod' "data" "getData" [objT c_QModelIndex] $ objT c_QVariant
@@ -107,7 +122,7 @@ c_QAbstractItemModel =
     -- TODO itemData
     -- TODO match
     -- TODO mimeData
-    -- TODO mimeTypes
+  , just $ mkConstMethod "mimeTypes" np $ objT c_QStringList
   , test (qtVersion >= [5, 0]) $ mkMethod "moveColumn"
     [objT c_QModelIndex, intT, objT c_QModelIndex, intT] boolT
   , test (qtVersion >= [5, 0]) $ mkMethod "moveColumns"
@@ -142,8 +157,8 @@ c_QAbstractItemModel =
   , just $ mkMethod' "sort" "sortWithOrder" [intT, enumT e_SortOrder] voidT
   , just $ mkConstMethod "span" [objT c_QModelIndex] $ objT c_QSize
   , just $ mkMethod "submit" np boolT
-    -- TODO suportedDragActions
-    -- TODO supportedDropActions (>=4.2)
+  , just $ mkConstMethod "supportedDragActions" np $ flagsT fl_DropActions
+  , test (qtVersion >= [4, 2]) $ mkConstMethod "supportedDropActions" np $ flagsT fl_DropActions
   ]
 
 signals =
@@ -157,6 +172,7 @@ signals =
     listenerQModelIndexIntIntQModelIndexInt
   , just $ makeSignal c_QAbstractItemModel "columnsRemoved" listenerQModelIndexIntInt
   , just $ makeSignal c_QAbstractItemModel "dataChanged" listenerQModelIndexQModelIndexQVectorInt
+  , just $ makeSignal c_QAbstractItemModel "headerDataChanged" listenerOrientationIntInt
     -- TODO layoutAboutToBeChanged (>=5.0)
     -- TODO layoutChanged (>=5.0)
   , test (qtVersion >= [4, 2]) $ makeSignal c_QAbstractItemModel "modelAboutToBeReset" listener
@@ -176,4 +192,13 @@ e_LayoutChangeHint =
   [ "NoLayoutChangeHint"
   , "VerticalSortHint"
   , "HorizontalSortHint"
+  ]
+
+(e_CheckIndexOption, fl_CheckIndexOptions) =
+  makeQtEnumAndFlags' (ident1 "QAbstractItemModel" "CheckIndexOption") "CheckIndexOptions" True
+  [ includeStd "QAbstractItemModel" ]
+  [ "NoOption"
+  , "IndexIsValid"
+  , "DoNotUseParent"
+  , "ParentIsInvalid"
   ]

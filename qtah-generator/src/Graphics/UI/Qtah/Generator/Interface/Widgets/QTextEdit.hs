@@ -60,7 +60,10 @@ aModule =
   makeQtModule ["Widgets", "QTextEdit"] $
   qtExport c_QTextEdit :
   map QtExportSignal signals ++
-  [ qtExport e_LineWrapMode ]
+  [ qtExport e_LineWrapMode
+  , qtExport e_AutoFormattingFlag
+  , qtExport fl_AutoFormatting
+  ]
 
 c_QTextEdit =
   addReqIncludes [includeStd "QTextEdit"] $
@@ -74,7 +77,7 @@ c_QTextEdit =
   , mkProp "alignment" $ flagsT fl_Alignment
   , mkConstMethod "anchorAt" [objT c_QPoint] $ objT c_QString
   , mkMethod "append" [objT c_QString] voidT
-    -- TODO autoFormatting
+  , mkProp "autoFormatting" $ flagsT fl_AutoFormatting
   , mkConstMethod "canPaste" np boolT
   , mkMethod "clear" np voidT
   , mkMethod "copy" np voidT
@@ -149,4 +152,11 @@ e_LineWrapMode =
   , "WidgetWidth"
   , "FixedPixelWidth"
   , "FixedColumnWidth"
+  ]
+
+(e_AutoFormattingFlag, fl_AutoFormatting) =
+  makeQtEnumAndFlags (ident1 "QTextEdit" "AutoFormattingFlag") "AutoFormatting" [includeStd "QTextEdit"]
+  [ "AutoNone"
+  , "AutoBulletList"
+  , "AutoAll"
   ]

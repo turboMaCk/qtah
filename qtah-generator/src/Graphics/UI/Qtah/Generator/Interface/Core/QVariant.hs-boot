@@ -17,8 +17,11 @@
 
 module Graphics.UI.Qtah.Generator.Interface.Core.QVariant (
   c_QVariant,
+  e_Type,
   ) where
 
-import Foreign.Hoppy.Generator.Spec (Class)
+import Foreign.Hoppy.Generator.Spec (Class, CppEnum)
 
 c_QVariant :: Class
+
+e_Type :: CppEnum

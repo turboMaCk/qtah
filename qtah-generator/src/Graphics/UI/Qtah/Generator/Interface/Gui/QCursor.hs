@@ -30,15 +30,19 @@ import Foreign.Hoppy.Generator.Spec (
   mkCtor,
   mkStaticMethod,
   mkStaticMethod',
+  mkConstMethod,
+  mkMethod,
   np,
   )
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Assignable, Copyable, Equatable),
   classAddFeatures,
   )
-import Foreign.Hoppy.Generator.Types (enumT, intT, objT, voidT)
+import Foreign.Hoppy.Generator.Types (enumT, intT, objT, voidT, refT, constT, ptrT, enumT)
 import Foreign.Hoppy.Generator.Version (collect, just)
 import Graphics.UI.Qtah.Generator.Config (qtVersion)
+import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Gui.QPixmap (c_QPixmap)
+import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Gui.QBitmap (c_QBitmap)
 import Graphics.UI.Qtah.Generator.Interface.Core.QPoint (c_QPoint)
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (e_CursorShape)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
@@ -54,7 +58,7 @@ aModule =
 c_QCursor =
   addReqIncludes [includeStd "QCursor"] $
   classSetConversionToGc $
-  classAddFeatures (if qtVersion >= [5, 11]
+  classAddFeatures (if qtVersion >= [5, 10]
                     then [Assignable, Copyable, Equatable]
                     else [Assignable, Copyable]) $
   classSetEntityPrefix "" $
@@ -62,7 +66,17 @@ c_QCursor =
   collect
   [ just $ mkCtor "new" np
   , just $ mkCtor "newWithCursorShape" [enumT e_CursorShape]
-    -- TODO Methods.
+  , just $ mkCtor "newWithPixmap" [refT $ constT $ objT c_QPixmap]
+  , just $ mkCtor "newWithPixmapAndHotSpot" [refT $ constT $ objT c_QPixmap, intT, intT]
+  , just $ mkCtor "newWithBitmap" [refT $ constT $ objT c_QBitmap, refT $ constT $ objT c_QBitmap]
+  , just $ mkCtor "newWithBitmapAndHotSpot" [refT $ constT $ objT c_QBitmap, refT $ constT $ objT c_QBitmap, intT, intT]
+  , just $ mkConstMethod "bitmap" np $ ptrT $ constT $ objT c_QBitmap
+  , just $ mkConstMethod "hotSpot" np $ objT c_QPoint
+  , just $ mkConstMethod "mask" np $ ptrT $ constT $ objT c_QBitmap
+  , just $ mkConstMethod "pixmap" np $ objT c_QPixmap
+  , just $ mkMethod "setShape" [enumT e_CursorShape] voidT
+  , just $ mkConstMethod "shape" np $ enumT e_CursorShape
+  , just $ mkMethod "swap" [refT $ objT c_QCursor] voidT
 
     -- Static methods.
   , just $ mkStaticMethod "pos" np $ objT c_QPoint

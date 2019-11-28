@@ -17,6 +17,7 @@
 
 module Graphics.UI.Qtah.Generator.Interface.Widgets.QInputDialog (
   aModule,
+  c_QInputDialog,
   ) where
 
 import Foreign.Hoppy.Generator.Spec (

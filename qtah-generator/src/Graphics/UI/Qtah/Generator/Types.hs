@@ -20,8 +20,10 @@ module Graphics.UI.Qtah.Generator.Types (
   qtExport,
   qtExportToExports,
   makeQtEnum,
+  makeQtEnum',
   makeQtEnumAndFlags,
   makeQtEnumAndFlags',
+  makeQtEnumAndFlagsWithOverrides,
   ListenerInfo (ListenerInfo),
   Signal, makeSignal, makeSignal',
   signalCName, signalHaskellName, signalClass, signalListenerClass, signalCallback,
@@ -77,6 +79,15 @@ qtExportToExports qtExport = case qtExport of
 -- 'Identifier'.  This should be used for all Qt enums.
 makeQtEnum :: Identifier -> [Include] -> [String] -> CppEnum
 makeQtEnum identifier includes names =
+  makeQtEnum' identifier
+              False  -- Most Qt enums are unscoped.
+              includes
+              names
+
+-- | Creates a 'CppEnum' like 'makeQtEnum' does, but also takes a boolean
+-- parameter indicating whether the enum is scoped.
+makeQtEnum' :: Identifier -> Bool -> [Include] -> [String] -> CppEnum
+makeQtEnum' identifier scoped includes names =
   addReqIncludes includes $
   enumSetValuePrefix "" $
   enumSetUnknownValueEntry ("Unknown" ++ niceName) $
@@ -84,7 +95,7 @@ makeQtEnum identifier includes names =
   addEntryOverrides $
   makeAutoEnum identifier
                (Just $ toExtName niceName)
-               False  -- Qt enums are unscoped.
+               scoped
                names
   where niceName = concatMap idPartBase $ identifierParts identifier
         addEntryOverrides = enumAddEntryNameOverrides Haskell applicableOverrides
@@ -99,12 +110,20 @@ makeQtEnumAndFlags enumIdentifier flagsName includes names =
       flags = makeFlags enum flagsName
   in (enum, flags)
 
+-- | Creates a 'CppEnum' and 'Flags' pair like 'makeQtEnumAndFlags' does, but
+-- also takes a boolean parameter indicating whether the enum is scoped.
+makeQtEnumAndFlags' :: Identifier -> String -> Bool -> [Include] -> [String] -> (CppEnum, Flags)
+makeQtEnumAndFlags' enumIdentifier flagsName scoped includes names =
+  let enum = makeQtEnum' enumIdentifier scoped includes names
+      flags = makeFlags enum flagsName
+  in (enum, flags)
+
 -- | This version of 'makeQtEnumAndFlags' accepts entry name overrides, which is
 -- useful because flag bindings can conflict with method names (they're both
 -- Haskell identifiers starting with lower-case letters).
-makeQtEnumAndFlags' ::
+makeQtEnumAndFlagsWithOverrides ::
   Identifier -> String -> [Include] -> [String] -> [(String, String)] -> (CppEnum, Flags)
-makeQtEnumAndFlags' enumIdentifier flagsName includes names nameOverrides =
+makeQtEnumAndFlagsWithOverrides enumIdentifier flagsName includes names nameOverrides =
   let enum = enumAddEntryNameOverrides Haskell nameOverrides $
              makeQtEnum enumIdentifier includes names
       flags = makeFlags enum flagsName

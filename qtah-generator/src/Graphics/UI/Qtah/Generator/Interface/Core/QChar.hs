@@ -51,7 +51,7 @@ import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Assignable, Copyable, Comparable, Equatable),
   classAddFeatures,
   )
-import Foreign.Hoppy.Generator.Types (boolT, charT, intT, enumT, objT, refT, ucharT, ushortT)
+import Foreign.Hoppy.Generator.Types (boolT, charT, intT, enumT, objT, refT, ucharT, ushortT, uintT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
 import Graphics.UI.Qtah.Generator.Config (qtVersion)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
@@ -75,6 +75,7 @@ aModule =
   , just $ qtExport e_Decomposition
   , test (qtVersion < [5, 3]) $ qtExport e_Joining
   , test (qtVersion >= [5, 3]) $ qtExport e_JoiningType
+  , test (qtVersion >= [5, 1]) $ qtExport e_Script
   , just $ qtExport e_Direction
   , just $ qtExport e_SpecialCharacter
   , just $ qtExport e_UnicodeVersion
@@ -105,11 +106,9 @@ c_QChar =
   , just $ mkCtor "newFromInt" [intT]
   , just $ mkCtor "newFromSpecialCharacter" [enumT e_SpecialCharacter]
   , test (qtVersion < [5]) $ mkStaticMethod' "fromAscii" "newFromAscii" [charT] $ objT c_QChar
-  , just $ mkStaticMethod' "fromLatin1" "newFromLatin1" [charT] $ objT c_QChar
   , just $ mkConstMethod "category" np $ enumT e_Category
   , just $ mkConstMethod "cell" np ucharT
   , just $ mkConstMethod "combiningClass" np ucharT
-  , just $ mkStaticMethod "currentUnicodeVersion" np $ enumT e_UnicodeVersion
   , just $ mkConstMethod "decomposition" np $ objT c_QString
   , just $ mkConstMethod "decompositionTag" np $ enumT e_Decomposition
   , just $ mkConstMethod "digitValue" np intT
@@ -134,7 +133,7 @@ c_QChar =
   , test (qtVersion >= [5, 3]) $ mkConstMethod "joiningType" np $ enumT e_JoiningType
   , just $ mkConstMethod "mirroredChar" np $ objT c_QChar
   , just $ mkConstMethod "row" np ucharT
-    -- TODO script (>=5.1)
+  , test (qtVersion >= [5, 1]) $ mkConstMethod "script" np $ enumT e_Script
   , test (qtVersion < [5]) $ mkConstMethod "toAscii" np charT
   , just $ mkConstMethod "toCaseFolded" np $ objT c_QChar
   , just $ mkConstMethod "toLatin1" np charT
@@ -144,6 +143,45 @@ c_QChar =
   , just $ mkConstMethod' "unicode" "unicode" np ushortT
   , just $ mkMethod' "unicode" "unicodeRef" np $ refT ushortT
   , just $ mkConstMethod "unicodeVersion" np $ enumT e_UnicodeVersion
+
+  , just $ mkStaticMethod "fromLatin1" [charT] $ objT c_QChar
+  , just $ mkStaticMethod "currentUnicodeVersion" np $ enumT e_UnicodeVersion
+  , just $ mkStaticMethod' "category" "categoryStatic" [uintT] $ enumT e_Category
+  , just $ mkStaticMethod' "combiningClass" "combiningClassStatic" [uintT] ucharT
+  , just $ mkStaticMethod' "decomposition" "decompositionStatic" [uintT] $ objT c_QString
+  , just $ mkStaticMethod' "decompositionTag" "decompositionTagStatic" [uintT] $ enumT e_Decomposition
+  , just $ mkStaticMethod' "digitValue" "digitValueStatic" [uintT] intT
+  , just $ mkStaticMethod' "direction" "directionStatic" [uintT] $ enumT e_Direction
+  , test (qtVersion >= [5]) $ mkStaticMethod' "hasMirrored" "hasMirroredStatic" [uintT] boolT
+  , just $ mkStaticMethod "highSurrogate" [uintT] boolT
+  , test (qtVersion >= [5]) $ mkStaticMethod' "isDigit" "isDigitStatic" [uintT] boolT
+  , just $ mkStaticMethod' "isHighSurrogate" "isHighSurrogateStatic" [uintT] boolT
+  , test (qtVersion >= [5]) $ mkStaticMethod' "isLetter" "isLetterStatic" [uintT] boolT
+  , test (qtVersion >= [5]) $ mkStaticMethod' "isLetterOrNumber" "isLetterOrNumberStatic" [uintT] boolT
+  , just $ mkStaticMethod' "isLowSurrogate" "isLowSurrogateStatic" [uintT] boolT
+  , test (qtVersion >= [5]) $ mkStaticMethod' "isLower" "isLowerStatic" [uintT] boolT
+  , test (qtVersion >= [5]) $ mkStaticMethod' "isMark" "isMarkStatic" [uintT] boolT
+  , test (qtVersion >= [5]) $ mkStaticMethod' "isNonCharacter" "isNonCharacterStatic" [uintT] boolT
+  , test (qtVersion >= [5]) $ mkStaticMethod' "isNumber" "isNumberStatic" [uintT] boolT
+  , test (qtVersion >= [5]) $ mkStaticMethod' "isPrint" "isPrintStatic" [uintT] boolT
+  , test (qtVersion >= [5]) $ mkStaticMethod' "isPunct" "isPunctStatic" [uintT] boolT
+  , test (qtVersion >= [5]) $ mkStaticMethod' "isSpace" "isSpaceStatic" [uintT] boolT
+  , test (qtVersion >= [5]) $ mkStaticMethod' "isSurrogate" "isSurrogateStatic" [uintT] boolT
+  , test (qtVersion >= [5]) $ mkStaticMethod' "isSymbol" "isSymbolStatic" [uintT] boolT
+  , test (qtVersion >= [5]) $ mkStaticMethod' "isTitleCase" "isTitleCaseStatic" [uintT] boolT
+  , test (qtVersion >= [5]) $ mkStaticMethod' "isUpper" "isUpperStatic" [uintT] boolT
+  , test (qtVersion >= [5, 3]) $ mkStaticMethod' "joiningType" "joiningTypeStatic" [uintT] $ enumT e_JoiningType
+  , just $ mkStaticMethod "lowSurrogate" [uintT] ushortT
+  , just $ mkStaticMethod' "mirroredChar" "mirroredCharStatic" [uintT] uintT
+  , just $ mkStaticMethod "requiresSurrogates" [uintT] boolT
+  , test (qtVersion >= [5, 1]) $ mkStaticMethod' "script" "scriptStatic" [uintT] $ enumT e_Script
+  , just $ mkStaticMethod' "surrogateToUcs4" "surrogateToUcs4" [ushortT, ushortT] uintT
+  , just $ mkStaticMethod' "surrogateToUcs4" "surrogateToUcs4WithQChar" [objT c_QChar, objT c_QChar] uintT
+  , just $ mkStaticMethod' "toCaseFolded" "toCaseFoldedStatic" [uintT] uintT
+  , just $ mkStaticMethod' "toLower" "toLowerStatic" [uintT] uintT
+  , just $ mkStaticMethod' "toTitleCase" "toTitleCaseStatic" [uintT] uintT
+  , just $ mkStaticMethod' "toUpper" "toUpperStatic" [uintT] uintT
+  , just $ mkStaticMethod' "unicodeVersion" "unicodeVersionStatic" [uintT] $ enumT e_UnicodeVersion
   ]
 
 e_Category =
@@ -292,3 +330,149 @@ e_UnicodeVersion =
   , test (qtVersion >= [5, 11]) "Unicode_10_0"
   , just "Unicode_Unassigned"
   ]
+
+e_Script =
+    makeQtEnum (ident1 "QChar" "Script") [includeStd "QChar"]
+    [ "Script_Unknown"
+    , "Script_Inherited"
+    , "Script_Common"
+    , "Script_Latin"
+    , "Script_Greek"
+    , "Script_Cyrillic"
+    , "Script_Armenian"
+    , "Script_Hebrew"
+    , "Script_Arabic"
+    , "Script_Syriac"
+    , "Script_Thaana"
+    , "Script_Devanagari"
+    , "Script_Bengali"
+    , "Script_Gurmukhi"
+    , "Script_Gujarati"
+    , "Script_Oriya"
+    , "Script_Tamil"
+    , "Script_Telugu"
+    , "Script_Kannada"
+    , "Script_Malayalam"
+    , "Script_Sinhala"
+    , "Script_Thai"
+    , "Script_Lao"
+    , "Script_Tibetan"
+    , "Script_Myanmar"
+    , "Script_Georgian"
+    , "Script_Hangul"
+    , "Script_Ethiopic"
+    , "Script_Cherokee"
+    , "Script_CanadianAboriginal"
+    , "Script_Ogham"
+    , "Script_Runic"
+    , "Script_Khmer"
+    , "Script_Mongolian"
+    , "Script_Hiragana"
+    , "Script_Katakana"
+    , "Script_Bopomofo"
+    , "Script_Han"
+    , "Script_Yi"
+    , "Script_OldItalic"
+    , "Script_Gothic"
+    , "Script_Deseret"
+    , "Script_Tagalog"
+    , "Script_Hanunoo"
+    , "Script_Buhid"
+    , "Script_Tagbanwa"
+    , "Script_Coptic"
+    , "Script_Limbu"
+    , "Script_TaiLe"
+    , "Script_LinearB"
+    , "Script_Ugaritic"
+    , "Script_Shavian"
+    , "Script_Osmanya"
+    , "Script_Cypriot"
+    , "Script_Braille"
+    , "Script_Buginese"
+    , "Script_NewTaiLue"
+    , "Script_Glagolitic"
+    , "Script_Tifinagh"
+    , "Script_SylotiNagri"
+    , "Script_OldPersian"
+    , "Script_Kharoshthi"
+    , "Script_Balinese"
+    , "Script_Cuneiform"
+    , "Script_Phoenician"
+    , "Script_PhagsPa"
+    , "Script_Nko"
+    , "Script_Sundanese"
+    , "Script_Lepcha"
+    , "Script_OlChiki"
+    , "Script_Vai"
+    , "Script_Saurashtra"
+    , "Script_KayahLi"
+    , "Script_Rejang"
+    , "Script_Lycian"
+    , "Script_Carian"
+    , "Script_Lydian"
+    , "Script_Cham"
+    , "Script_TaiTham"
+    , "Script_TaiViet"
+    , "Script_Avestan"
+    , "Script_EgyptianHieroglyphs"
+    , "Script_Samaritan"
+    , "Script_Lisu"
+    , "Script_Bamum"
+    , "Script_Javanese"
+    , "Script_MeeteiMayek"
+    , "Script_ImperialAramaic"
+    , "Script_OldSouthArabian"
+    , "Script_InscriptionalParthian"
+    , "Script_InscriptionalPahlavi"
+    , "Script_OldTurkic"
+    , "Script_Kaithi"
+    , "Script_Batak"
+    , "Script_Brahmi"
+    , "Script_Mandaic"
+    , "Script_Chakma"
+    , "Script_MeroiticCursive"
+    , "Script_MeroiticHieroglyphs"
+    , "Script_Miao"
+    , "Script_Sharada"
+    , "Script_SoraSompeng"
+    , "Script_Takri"
+    , "Script_CaucasianAlbanian"
+    , "Script_BassaVah"
+    , "Script_Duployan"
+    , "Script_Elbasan"
+    , "Script_Grantha"
+    , "Script_PahawhHmong"
+    , "Script_Khojki"
+    , "Script_LinearA"
+    , "Script_Mahajani"
+    , "Script_Manichaean"
+    , "Script_MendeKikakui"
+    , "Script_Modi"
+    , "Script_Mro"
+    , "Script_OldNorthArabian"
+    , "Script_Nabataean"
+    , "Script_Palmyrene"
+    , "Script_PauCinHau"
+    , "Script_OldPermic"
+    , "Script_PsalterPahlavi"
+    , "Script_Siddham"
+    , "Script_Khudawadi"
+    , "Script_Tirhuta"
+    , "Script_WarangCiti"
+    , "Script_Ahom"
+    , "Script_AnatolianHieroglyphs"
+    , "Script_Hatran"
+    , "Script_Multani"
+    , "Script_OldHungarian"
+    , "Script_SignWriting"
+    , "Script_Adlam"
+    , "Script_Bhaiksuki"
+    , "Script_Marchen"
+    , "Script_Newa"
+    , "Script_Osage"
+    , "Script_Tangut"
+    , "Script_MasaramGondi"
+    , "Script_Nushu"
+    , "Script_Soyombo"
+    , "Script_ZanabazarSquare"
+    ]

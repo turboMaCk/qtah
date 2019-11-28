@@ -29,3 +29,4 @@ c_QListQByteArray :: Class
 c_QListQModelIndex :: Class
 
 c_QListQObject :: Class
+

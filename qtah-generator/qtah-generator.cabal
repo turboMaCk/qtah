@@ -56,50 +56,99 @@ executable qtah-generator
     , Graphics.UI.Qtah.Generator.Enum
     , Graphics.UI.Qtah.Generator.Flags
     , Graphics.UI.Qtah.Generator.Interface.Core
+    , Graphics.UI.Qtah.Generator.Interface.Core.QAbstractAnimation
     , Graphics.UI.Qtah.Generator.Interface.Core.QAbstractItemModel
     , Graphics.UI.Qtah.Generator.Interface.Core.QAbstractListModel
     , Graphics.UI.Qtah.Generator.Interface.Core.QAbstractTableModel
+    , Graphics.UI.Qtah.Generator.Interface.Core.QAnimationGroup
+    , Graphics.UI.Qtah.Generator.Interface.Core.QBuffer
     , Graphics.UI.Qtah.Generator.Interface.Core.QByteArray
     , Graphics.UI.Qtah.Generator.Interface.Core.QChar
     , Graphics.UI.Qtah.Generator.Interface.Core.QChildEvent
     , Graphics.UI.Qtah.Generator.Interface.Core.QCoreApplication
+    , Graphics.UI.Qtah.Generator.Interface.Core.QCryptographicHash
     , Graphics.UI.Qtah.Generator.Interface.Core.QDate
+    , Graphics.UI.Qtah.Generator.Interface.Core.QDateTime
+    , Graphics.UI.Qtah.Generator.Interface.Core.QDebug
+    , Graphics.UI.Qtah.Generator.Interface.Core.QDebugStateSaver
     , Graphics.UI.Qtah.Generator.Interface.Core.QDir
+    , Graphics.UI.Qtah.Generator.Interface.Core.QDirIterator
     , Graphics.UI.Qtah.Generator.Interface.Core.QEvent
+    , Graphics.UI.Qtah.Generator.Interface.Core.QFile
+    , Graphics.UI.Qtah.Generator.Interface.Core.QFileDevice
+    , Graphics.UI.Qtah.Generator.Interface.Core.QFileInfo
+    , Graphics.UI.Qtah.Generator.Interface.Core.QFileSelector
+    , Graphics.UI.Qtah.Generator.Interface.Core.QFileSystemWatcher
+    , Graphics.UI.Qtah.Generator.Interface.Core.QIODevice
     , Graphics.UI.Qtah.Generator.Interface.Core.QItemSelection
     , Graphics.UI.Qtah.Generator.Interface.Core.QItemSelectionModel
     , Graphics.UI.Qtah.Generator.Interface.Core.QItemSelectionRange
+    , Graphics.UI.Qtah.Generator.Interface.Core.QLatin1Char
+    , Graphics.UI.Qtah.Generator.Interface.Core.QLatin1String
+    , Graphics.UI.Qtah.Generator.Interface.Core.QLibrary
+    , Graphics.UI.Qtah.Generator.Interface.Core.QLibraryInfo
     , Graphics.UI.Qtah.Generator.Interface.Core.QList
+    , Graphics.UI.Qtah.Generator.Interface.Core.QLockFile
+    , Graphics.UI.Qtah.Generator.Interface.Core.QLoggingCategory
     , Graphics.UI.Qtah.Generator.Interface.Core.QMargins
     , Graphics.UI.Qtah.Generator.Interface.Core.QMarginsF
+    , Graphics.UI.Qtah.Generator.Interface.Core.QMessageAuthenticationCode
+    , Graphics.UI.Qtah.Generator.Interface.Core.QMessageLogContext
+    , Graphics.UI.Qtah.Generator.Interface.Core.QMessageLogger
     , Graphics.UI.Qtah.Generator.Interface.Core.QMetaClassInfo
     , Graphics.UI.Qtah.Generator.Interface.Core.QMetaEnum
     , Graphics.UI.Qtah.Generator.Interface.Core.QMetaMethod
     , Graphics.UI.Qtah.Generator.Interface.Core.QMetaObject
+    , Graphics.UI.Qtah.Generator.Interface.Core.QMetaObject.Connection
     , Graphics.UI.Qtah.Generator.Interface.Core.QMetaProperty
     , Graphics.UI.Qtah.Generator.Interface.Core.QModelIndex
     , Graphics.UI.Qtah.Generator.Interface.Core.QObject
+    , Graphics.UI.Qtah.Generator.Interface.Core.QOperatingSystemVersion
+    , Graphics.UI.Qtah.Generator.Interface.Core.QPair
+    , Graphics.UI.Qtah.Generator.Interface.Core.QPalette
+    , Graphics.UI.Qtah.Generator.Interface.Core.QParallelAnimationGroup
+    , Graphics.UI.Qtah.Generator.Interface.Core.QPauseAnimation
     , Graphics.UI.Qtah.Generator.Interface.Core.QPersistentModelIndex
+    , Graphics.UI.Qtah.Generator.Interface.Core.QPluginLoader
     , Graphics.UI.Qtah.Generator.Interface.Core.QPoint
     , Graphics.UI.Qtah.Generator.Interface.Core.QPointF
+    , Graphics.UI.Qtah.Generator.Interface.Core.QProcess
+    , Graphics.UI.Qtah.Generator.Interface.Core.QProcessEnvironment
+    , Graphics.UI.Qtah.Generator.Interface.Core.QPropertyAnimation
+    , Graphics.UI.Qtah.Generator.Interface.Core.QRandomGenerator
+    , Graphics.UI.Qtah.Generator.Interface.Core.QRandomGenerator64
     , Graphics.UI.Qtah.Generator.Interface.Core.QRect
     , Graphics.UI.Qtah.Generator.Interface.Core.QRectF
+    , Graphics.UI.Qtah.Generator.Interface.Core.QResource
+    , Graphics.UI.Qtah.Generator.Interface.Core.QSaveFile
+    , Graphics.UI.Qtah.Generator.Interface.Core.QSequentialAnimationGroup
     , Graphics.UI.Qtah.Generator.Interface.Core.QSettings
     , Graphics.UI.Qtah.Generator.Interface.Core.QSize
     , Graphics.UI.Qtah.Generator.Interface.Core.QSizeF
+    , Graphics.UI.Qtah.Generator.Interface.Core.QStandardPaths
+    , Graphics.UI.Qtah.Generator.Interface.Core.QStaticPlugin
     , Graphics.UI.Qtah.Generator.Interface.Core.QString
     , Graphics.UI.Qtah.Generator.Interface.Core.QStringList
     , Graphics.UI.Qtah.Generator.Interface.Core.QStringListModel
+    , Graphics.UI.Qtah.Generator.Interface.Core.QSysInfo
     , Graphics.UI.Qtah.Generator.Interface.Core.QTextCodec
+    , Graphics.UI.Qtah.Generator.Interface.Core.QTextDecoder
+    , Graphics.UI.Qtah.Generator.Interface.Core.QTextEncoder
     , Graphics.UI.Qtah.Generator.Interface.Core.QThread
+    , Graphics.UI.Qtah.Generator.Interface.Core.QTime
+    , Graphics.UI.Qtah.Generator.Interface.Core.QTimeZone
     , Graphics.UI.Qtah.Generator.Interface.Core.QTimer
     , Graphics.UI.Qtah.Generator.Interface.Core.QTimerEvent
+    , Graphics.UI.Qtah.Generator.Interface.Core.QTranslator
     , Graphics.UI.Qtah.Generator.Interface.Core.QVariant
+    , Graphics.UI.Qtah.Generator.Interface.Core.QVariantAnimation
     , Graphics.UI.Qtah.Generator.Interface.Core.QVector
-    , Graphics.UI.Qtah.Generator.Interface.Core.QPalette
+    , Graphics.UI.Qtah.Generator.Interface.Core.QVersionNumber
     , Graphics.UI.Qtah.Generator.Interface.Core.Types
     , Graphics.UI.Qtah.Generator.Interface.Gui
     , Graphics.UI.Qtah.Generator.Interface.Gui.QActionEvent
+    , Graphics.UI.Qtah.Generator.Interface.Gui.QBackingStore
+    , Graphics.UI.Qtah.Generator.Interface.Gui.QBitmap
     , Graphics.UI.Qtah.Generator.Interface.Gui.QBrush
     , Graphics.UI.Qtah.Generator.Interface.Gui.QClipboard
     , Graphics.UI.Qtah.Generator.Interface.Gui.QCloseEvent
@@ -111,6 +160,7 @@ executable qtah-generator
     , Graphics.UI.Qtah.Generator.Interface.Gui.QFocusEvent
     , Graphics.UI.Qtah.Generator.Interface.Gui.QFont
     , Graphics.UI.Qtah.Generator.Interface.Gui.QFontDatabase
+    , Graphics.UI.Qtah.Generator.Interface.Gui.QGradient
     , Graphics.UI.Qtah.Generator.Interface.Gui.QHideEvent
     , Graphics.UI.Qtah.Generator.Interface.Gui.QHoverEvent
     , Graphics.UI.Qtah.Generator.Interface.Gui.QIcon
@@ -218,6 +268,7 @@ executable qtah-generator
     , Graphics.UI.Qtah.Generator.Interface.Widgets.QToolButton
     , Graphics.UI.Qtah.Generator.Interface.Widgets.QTreeView
     , Graphics.UI.Qtah.Generator.Interface.Widgets.QTreeWidget
+    , Graphics.UI.Qtah.Generator.Interface.Widgets.QTreeWidgetItem
     , Graphics.UI.Qtah.Generator.Interface.Widgets.QVBoxLayout
     , Graphics.UI.Qtah.Generator.Interface.Widgets.QWidget
     , Graphics.UI.Qtah.Generator.Module

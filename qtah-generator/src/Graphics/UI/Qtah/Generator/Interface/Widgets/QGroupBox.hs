@@ -17,6 +17,7 @@
 
 module Graphics.UI.Qtah.Generator.Interface.Widgets.QGroupBox (
   aModule,
+  c_QGroupBox,
   ) where
 
 import Foreign.Hoppy.Generator.Spec (

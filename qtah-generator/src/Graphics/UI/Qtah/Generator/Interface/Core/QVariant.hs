@@ -18,6 +18,7 @@
 module Graphics.UI.Qtah.Generator.Interface.Core.QVariant (
   aModule,
   c_QVariant,
+  e_Type,
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
