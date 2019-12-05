@@ -43,7 +43,7 @@ import Graphics.UI.Qtah.Generator.Interface.Core.QXmlStreamAttribute (c_QXmlStre
 import Foreign.Hoppy.Generator.Types (intT, boolT, charT, voidT, constT, objT, ptrT, refT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
 import Graphics.UI.Qtah.Generator.Flags (qtVersion)
-import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModuleWithMinVersion)
+import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
 
 {-# ANN module "HLint: ignore Use camelCase" #-}
