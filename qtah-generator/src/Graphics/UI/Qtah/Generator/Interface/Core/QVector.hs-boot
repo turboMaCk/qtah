@@ -17,8 +17,38 @@
 
 module Graphics.UI.Qtah.Generator.Interface.Core.QVector (
   c_QVectorInt,
+  c_QVectorQLatin1String,
+  c_QVectorQPoint,
+  c_QVectorQPointF,
+  c_QVectorQRgb,
+  c_QVectorQString,
+  c_QVectorUInt,
+  c_QVectorQXmlStreamAttribute,
+  c_QVectorQXmlStreamEntityDeclaration,
+  c_QVectorQXmlStreamNamespaceDeclaration,
+  c_QVectorQXmlStreamNotationDeclaration,
   ) where
 
 import Foreign.Hoppy.Generator.Spec (Class)
 
 c_QVectorInt :: Class
+
+c_QVectorQLatin1String :: Class
+
+c_QVectorQPoint :: Class
+
+c_QVectorQPointF :: Class
+
+c_QVectorQRgb :: Class
+
+c_QVectorQString :: Class
+
+c_QVectorUInt :: Class
+
+c_QVectorQXmlStreamAttribute :: Class
+
+c_QVectorQXmlStreamEntityDeclaration :: Class
+
+c_QVectorQXmlStreamNamespaceDeclaration :: Class
+
+c_QVectorQXmlStreamNotationDeclaration :: Class

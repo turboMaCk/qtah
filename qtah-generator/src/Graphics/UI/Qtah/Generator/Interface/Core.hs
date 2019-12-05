@@ -105,6 +105,14 @@ import qualified Graphics.UI.Qtah.Generator.Interface.Core.QVariant as QVariant
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QVariantAnimation as QVariantAnimation
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QVector as QVector
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QVersionNumber as QVersionNumber
+import qualified Graphics.UI.Qtah.Generator.Interface.Core.QXmlStreamAttribute as QXmlStreamAttribute
+import qualified Graphics.UI.Qtah.Generator.Interface.Core.QXmlStreamAttributes as QXmlStreamAttributes
+import qualified Graphics.UI.Qtah.Generator.Interface.Core.QXmlStreamEntityDeclaration as QXmlStreamEntityDeclaration
+import qualified Graphics.UI.Qtah.Generator.Interface.Core.QXmlStreamEntityResolver as QXmlStreamEntityResolver
+import qualified Graphics.UI.Qtah.Generator.Interface.Core.QXmlStreamNamespaceDeclaration as QXmlStreamNamespaceDeclaration
+import qualified Graphics.UI.Qtah.Generator.Interface.Core.QXmlStreamNotationDeclaration as QXmlStreamNotationDeclaration
+import qualified Graphics.UI.Qtah.Generator.Interface.Core.QXmlStreamReader as QXmlStreamReader
+import qualified Graphics.UI.Qtah.Generator.Interface.Core.QXmlStreamWriter as QXmlStreamWriter
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.Types as Types
 import Graphics.UI.Qtah.Generator.Module (AModule)
 
@@ -198,6 +206,14 @@ modules =
     , QVariant.aModule
     , QVariantAnimation.aModule
     , QVersionNumber.aModule
+    , QXmlStreamAttribute.aModule
+    , QXmlStreamAttributes.aModule
+    , QXmlStreamEntityDeclaration.aModule
+    , QXmlStreamEntityResolver.aModule
+    , QXmlStreamNamespaceDeclaration.aModule
+    , QXmlStreamNotationDeclaration.aModule
+    , QXmlStreamReader.aModule
+    , QXmlStreamWriter.aModule
     , Types.aModule
     ]
   , QList.allModules

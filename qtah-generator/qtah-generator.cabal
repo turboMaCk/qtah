@@ -141,6 +141,14 @@ executable qtah-generator
     , Graphics.UI.Qtah.Generator.Interface.Core.QVariantAnimation
     , Graphics.UI.Qtah.Generator.Interface.Core.QVector
     , Graphics.UI.Qtah.Generator.Interface.Core.QVersionNumber
+    , Graphics.UI.Qtah.Generator.Interface.Core.QXmlStreamAttribute
+    , Graphics.UI.Qtah.Generator.Interface.Core.QXmlStreamAttributes
+    , Graphics.UI.Qtah.Generator.Interface.Core.QXmlStreamEntityDeclaration
+    , Graphics.UI.Qtah.Generator.Interface.Core.QXmlStreamEntityResolver
+    , Graphics.UI.Qtah.Generator.Interface.Core.QXmlStreamNamespaceDeclaration
+    , Graphics.UI.Qtah.Generator.Interface.Core.QXmlStreamNotationDeclaration
+    , Graphics.UI.Qtah.Generator.Interface.Core.QXmlStreamReader
+    , Graphics.UI.Qtah.Generator.Interface.Core.QXmlStreamWriter
     , Graphics.UI.Qtah.Generator.Interface.Core.Types
     , Graphics.UI.Qtah.Generator.Interface.Gui
     , Graphics.UI.Qtah.Generator.Interface.Gui.QActionEvent
