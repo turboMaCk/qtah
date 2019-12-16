@@ -41,8 +41,7 @@ import Graphics.UI.Qtah.Generator.Interface.Core.QXmlStreamReader (c_QXmlStreamR
 import Graphics.UI.Qtah.Generator.Interface.Core.QXmlStreamAttributes (c_QXmlStreamAttributes)
 import Graphics.UI.Qtah.Generator.Interface.Core.QXmlStreamAttribute (c_QXmlStreamAttribute)
 import Foreign.Hoppy.Generator.Types (intT, boolT, charT, voidT, constT, objT, ptrT, refT)
-import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Foreign.Hoppy.Generator.Version (collect, just)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
 

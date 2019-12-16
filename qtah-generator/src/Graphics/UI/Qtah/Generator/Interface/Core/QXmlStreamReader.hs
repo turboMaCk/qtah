@@ -47,8 +47,7 @@ import Graphics.UI.Qtah.Generator.Interface.Core.QXmlStreamEntityResolver (c_QXm
 import Graphics.UI.Qtah.Generator.Interface.Core.QXmlStreamNotationDeclaration (qXmlStreamNotationDeclarations)
 import Graphics.UI.Qtah.Generator.Interface.Core.QXmlStreamAttributes (c_QXmlStreamAttributes)
 import Foreign.Hoppy.Generator.Types (boolT, charT, voidT, enumT, constT, objT, ptrT, refT, toGcT)
-import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Foreign.Hoppy.Generator.Version (collect, just)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (qint64)

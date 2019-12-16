@@ -36,8 +36,7 @@ import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Graphics.UI.Qtah.Generator.Interface.Core.QLatin1String (c_QLatin1String)
 import Graphics.UI.Qtah.Generator.Interface.Core.QVector (c_QVectorQXmlStreamAttribute)
 import Foreign.Hoppy.Generator.Types (boolT, voidT, constT, objT, refT)
-import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Foreign.Hoppy.Generator.Version (collect, just)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
 
