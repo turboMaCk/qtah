@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Thanks to Maxim Koltsov and especially to Jagoda Górska for a huge number of
+  additions in this release: 62 new classes, many others fleshed out with new
+  methods, and lots of new enums as well.
+
 - Removed uses of CPP from qtah-generator, except for Setup.hs.  This bumps
   minimum version requirements to base >= 4.8.0 (GHC 8.0) and mtl >= 2.2.1, both
   of which have been available for over two years.
