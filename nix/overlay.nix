@@ -26,7 +26,8 @@ let
 
   haskellOverrides = super: hself: hsuper:
     let qtbase = super.${qtName}.qtbase;
-    in {
+        buildStrictly = import ./build-strictly.nix super.haskell.lib;
+    in builtins.mapAttrs (name: pkg: buildStrictly pkg) {
       qtah-generator = hsuper.callPackage ../qtah-generator haskellOptions;
       qtah-cpp = hsuper.callPackage ../qtah-cpp (haskellOptions // { qt = qtbase; });
       qtah = hsuper.callPackage ../qtah (haskellOptions // { qt = qtbase; });

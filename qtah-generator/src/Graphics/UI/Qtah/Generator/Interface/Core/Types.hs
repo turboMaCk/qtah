@@ -128,6 +128,7 @@ module Graphics.UI.Qtah.Generator.Interface.Core.Types (
 
 import Data.Bits (finiteBitSize)
 import Foreign.Hoppy.Generator.Spec (
+  ForeignLanguage (Haskell),
   Include,
   Purity (Nonpure),
   Type,
@@ -138,7 +139,7 @@ import Foreign.Hoppy.Generator.Spec (
   makeFn,
   )
 import System.Info (os)
-import Foreign.Hoppy.Generator.Spec.Enum (CppEnum)
+import Foreign.Hoppy.Generator.Spec.Enum (CppEnum, enumAddEntryNameOverrides)
 import Foreign.Hoppy.Generator.Types (doubleT, floatT, objT, int8T, int16T, int32T, int64T, ssizeT, word8T, word16T, word32T, word64T, ptrT, refT, fnT, voidT, enumT, constT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
 import Graphics.UI.Qtah.Generator.Config (qrealFloat, qtVersion)
@@ -835,6 +836,18 @@ e_ItemSelectionOperation =
   ]
 
 e_Key =
+  enumAddEntryNameOverrides Haskell
+    [ ("Key_Dead_a", "KeyDeadALower")
+    , ("Key_Dead_A", "KeyDeadAUpper")
+    , ("Key_Dead_e", "KeyDeadELower")
+    , ("Key_Dead_E", "KeyDeadEUpper")
+    , ("Key_Dead_i", "KeyDeadILower")
+    , ("Key_Dead_I", "KeyDeadIUpper")
+    , ("Key_Dead_o", "KeyDeadOLower")
+    , ("Key_Dead_O", "KeyDeadOUpper")
+    , ("Key_Dead_u", "KeyDeadULower")
+    , ("Key_Dead_U", "KeyDeadUUpper")
+    ] $
   makeQtEnum (ident1 "Qt" "Key") qtInclude
   [ "Key_Escape"
   , "Key_Tab"

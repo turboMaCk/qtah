@@ -20,7 +20,7 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QTimeZone (
   c_QTimeZone,
   e_NameType,
   e_TimeType,
-  e_anonymous,
+  --e_anonymous,
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
@@ -63,7 +63,7 @@ aModule =
   [ just $ qtExport c_QTimeZone
   , just $ qtExport e_NameType
   , just $ qtExport e_TimeType
-  , just $ qtExport e_anonymous
+  --, just $ qtExport e_anonymous
   ]
 
 c_QTimeZone =
@@ -134,8 +134,9 @@ e_TimeType =
   , "GenericTime"
   ]
 
-e_anonymous =
-  makeQtEnum (ident1 "QTimeZone" "anonymous") [includeStd "QTimeZone"]
-  [ "MinUtcOffsetSecs"
-  , "MaxUtcOffsetSecs"
-  ]
+-- TODO Enum autodetection doesn't like this enum.
+--e_anonymous =
+--  makeQtEnum (ident1 "QTimeZone" "anonymous") [includeStd "QTimeZone"]
+--  [ "MinUtcOffsetSecs"
+--  , "MaxUtcOffsetSecs"
+--  ]
