@@ -79,7 +79,7 @@ import Foreign.Hoppy.Generator.Spec.ClassFeature (
   )
 import Foreign.Hoppy.Generator.Types (boolT, constT, intT, objT, ptrT, refT, toGcT, voidT, uintT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Flags (Version, qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.QPoint (c_QPoint)
 import Graphics.UI.Qtah.Generator.Interface.Core.QPointF (c_QPointF)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
@@ -90,7 +90,9 @@ import Graphics.UI.Qtah.Generator.Interface.Core.QXmlStreamNamespaceDeclaration 
 import Graphics.UI.Qtah.Generator.Interface.Core.QXmlStreamNotationDeclaration (c_QXmlStreamNotationDeclaration)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QColor (qrgb)
 import Graphics.UI.Qtah.Generator.Interface.Imports
-import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), QtModule, makeQtModule)
+import Graphics.UI.Qtah.Generator.Module (
+  AModule (AQtModule), QtModule, makeQtModule, makeQtModuleWithMinVersion,
+  )
 import Graphics.UI.Qtah.Generator.Types
 
 -- | Options for instantiating the vector classes.
@@ -257,7 +259,13 @@ toExports :: Contents -> [QtExport]
 toExports m = [QtExport $ ExportClass $ c_QVector m]
 
 createModule :: String -> Contents -> QtModule
-createModule name contents = makeQtModule ["Core", "QVector", name] $ toExports contents
+createModule name contents =
+  makeQtModule ["Core", "QVector", name] $ toExports contents
+
+createModuleWithMinVersion :: String -> Version -> Contents -> QtModule
+createModuleWithMinVersion name version contents =
+  makeQtModuleWithMinVersion ["Core", "QVector", name] version $
+  toExports contents
 
 allModules :: [AModule]
 allModules =
@@ -285,11 +293,16 @@ c_QVectorInt :: Class
 c_QVectorInt = c_QVector contents_Int
 
 qmod_QLatin1String :: QtModule
-qmod_QLatin1String = createModule "QLatin1String" contents_QLatin1String
+qmod_QLatin1String =
+  -- QVector requires value_type to be default-constructible, but QLatin1String
+  -- is default-constructible since 5.6 only
+  createModuleWithMinVersion "QLatin1String" [5, 6] contents_QLatin1String
 
 contents_QLatin1String :: Contents
 contents_QLatin1String = instantiate "QVectorQLatin1String" (objT c_QLatin1String) mempty
 
+-- | QVector requires value_type to be default-constructible, but QLatin1String
+-- is default-constructible since 5.6 only
 c_QVectorQLatin1String :: Class
 c_QVectorQLatin1String = c_QVector contents_QLatin1String
 
