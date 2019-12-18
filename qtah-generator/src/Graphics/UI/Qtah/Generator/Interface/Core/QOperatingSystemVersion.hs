@@ -40,7 +40,8 @@ import Foreign.Hoppy.Generator.Spec.ClassFeature (
     classAddFeatures,
     )
 import Foreign.Hoppy.Generator.Types (intT, enumT, objT)
-import Foreign.Hoppy.Generator.Version (collect, just)
+import Foreign.Hoppy.Generator.Version (collect, just, test)
+import Graphics.UI.Qtah.Generator.Flags (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModuleWithMinVersion)
 import Graphics.UI.Qtah.Generator.Types
@@ -66,7 +67,8 @@ c_QOperatingSystemVersion =
   , just $ mkCtor "newWithMinor" [enumT e_OSType, intT, intT]
   , just $ mkCtor "newWithMinorAndMicro" [enumT e_OSType, intT, intT, intT]
   , just $ mkStaticMethod "current" [] $ objT c_QOperatingSystemVersion
-  , just $ mkStaticMethod "currentType" [] $ enumT e_OSType
+  , test (qtVersion >= [5, 10]) $
+    mkStaticMethod "currentType" [] $ enumT e_OSType
   -- TODO bool QOperatingSystemVersion::isAnyOfType(std::initializer_list<OSType> types) const
   , just $ mkConstMethod "majorVersion" [] intT
   , just $ mkConstMethod "microVersion" [] intT
