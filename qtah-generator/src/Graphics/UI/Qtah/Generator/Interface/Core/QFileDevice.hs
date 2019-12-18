@@ -79,7 +79,8 @@ c_QFileDevice =
   , just $ mkMethod' "map" "mapWithFlags" [qlonglong, qlonglong, enumT e_MemoryMapFlags] $ ptrT ucharT
   , just $ mkConstMethod "permissions" [] $ bitspaceT bs_Permissions
   , just $ mkMethod "resize" [qlonglong] boolT
-  , just $ mkMethod "setFileTime" [objT c_QDateTime, enumT e_FileTime] boolT
+  , test (qtVersion >= [5, 10]) $
+    mkMethod "setFileTime" [objT c_QDateTime, enumT e_FileTime] boolT
   , just $ mkMethod "setPermissions" [bitspaceT bs_Permissions] boolT
   , just $ mkMethod "unmap" [ptrT ucharT] boolT
   , just $ mkMethod "unsetError" [] voidT
@@ -120,9 +121,9 @@ e_FileTime =
 
 e_MemoryMapFlags =
   makeQtEnum (ident1 "QFileDevice" "MemoryMapFlags") [includeStd "QFileDevice"] $
-  collect $
-  [ just $ (0, ["no", "options"])
-  , test (qtVersion >= [5, 4]) $ (0x0001, ["standard", "error"])
+  collect
+  [ just (0, ["no", "options"])
+  , test (qtVersion >= [5, 4]) (0x0001, ["standard", "error"])
   ]
 
 (e_Permission, bs_Permissions) =
