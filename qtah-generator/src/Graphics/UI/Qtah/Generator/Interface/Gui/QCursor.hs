@@ -39,7 +39,7 @@ import Foreign.Hoppy.Generator.Spec.ClassFeature (
   classAddFeatures,
   )
 import Foreign.Hoppy.Generator.Types (enumT, intT, objT, voidT, refT, constT, ptrT, enumT)
-import Foreign.Hoppy.Generator.Version (collect, just)
+import Foreign.Hoppy.Generator.Version (collect, just, test)
 import Graphics.UI.Qtah.Generator.Config (qtVersion)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Gui.QPixmap (c_QPixmap)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Gui.QBitmap (c_QBitmap)
@@ -76,7 +76,7 @@ c_QCursor =
   , just $ mkConstMethod "pixmap" np $ objT c_QPixmap
   , just $ mkMethod "setShape" [enumT e_CursorShape] voidT
   , just $ mkConstMethod "shape" np $ enumT e_CursorShape
-  , just $ mkMethod "swap" [refT $ objT c_QCursor] voidT
+  , test (qtVersion >= [5, 7]) $ mkMethod "swap" [refT $ objT c_QCursor] voidT
 
     -- Static methods.
   , just $ mkStaticMethod "pos" np $ objT c_QPoint

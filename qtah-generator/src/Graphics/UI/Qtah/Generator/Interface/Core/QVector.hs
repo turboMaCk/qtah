@@ -24,10 +24,16 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QVector (
   -- * Instantiations
   allModules,
   c_QVectorInt,
+  c_QVectorQLatin1String,
   c_QVectorQPoint,
   c_QVectorQPointF,
   c_QVectorQRgb,
+  c_QVectorQString,
   c_QVectorUInt,
+  c_QVectorQXmlStreamAttribute,
+  c_QVectorQXmlStreamEntityDeclaration,
+  c_QVectorQXmlStreamNamespaceDeclaration,
+  c_QVectorQXmlStreamNotationDeclaration,
   ) where
 
 import Control.Monad (forM_, when)
@@ -78,6 +84,12 @@ import Foreign.Hoppy.Generator.Version (collect, just, test)
 import Graphics.UI.Qtah.Generator.Config (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.QPoint (c_QPoint)
 import Graphics.UI.Qtah.Generator.Interface.Core.QPointF (c_QPointF)
+import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
+import Graphics.UI.Qtah.Generator.Interface.Core.QLatin1String (c_QLatin1String)
+import Graphics.UI.Qtah.Generator.Interface.Core.QXmlStreamAttribute (c_QXmlStreamAttribute)
+import Graphics.UI.Qtah.Generator.Interface.Core.QXmlStreamEntityDeclaration (c_QXmlStreamEntityDeclaration)
+import Graphics.UI.Qtah.Generator.Interface.Core.QXmlStreamNamespaceDeclaration (c_QXmlStreamNamespaceDeclaration)
+import Graphics.UI.Qtah.Generator.Interface.Core.QXmlStreamNotationDeclaration (c_QXmlStreamNotationDeclaration)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QColor (qrgb)
 import Graphics.UI.Qtah.Generator.Interface.Imports
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), QtModule, makeQtModule)
@@ -253,10 +265,16 @@ allModules :: [AModule]
 allModules =
   map AQtModule
   [ qmod_Int
+  , qmod_QLatin1String
   , qmod_QPoint
   , qmod_QPointF
   , qmod_QRgb
+  , qmod_QString
   , qmod_UInt
+  , qmod_QXmlStreamAttribute
+  , qmod_QXmlStreamEntityDeclaration
+  , qmod_QXmlStreamNamespaceDeclaration
+  , qmod_QXmlStreamNotationDeclaration
   ]
 
 qmod_Int :: QtModule
@@ -267,6 +285,15 @@ contents_Int = instantiate "QVectorInt" intT mempty
 
 c_QVectorInt :: Class
 c_QVectorInt = c_QVector contents_Int
+
+qmod_QLatin1String :: QtModule
+qmod_QLatin1String = createModule "QLatin1String" contents_QLatin1String
+
+contents_QLatin1String :: Contents
+contents_QLatin1String = instantiate "QVectorQLatin1String" (objT c_QLatin1String) mempty
+
+c_QVectorQLatin1String :: Class
+c_QVectorQLatin1String = c_QVector contents_QLatin1String
 
 qmod_QPoint :: QtModule
 qmod_QPoint = createModule "QPoint" contents_QPoint
@@ -295,11 +322,56 @@ contents_QRgb = instantiate "QVectorQRgb" qrgb mempty
 c_QVectorQRgb :: Class
 c_QVectorQRgb = c_QVector contents_QRgb
 
+qmod_QString :: QtModule
+qmod_QString = createModule "QString" contents_QString
+
+contents_QString :: Contents
+contents_QString = instantiate "QVectorQString" (objT c_QString) mempty
+
+c_QVectorQString :: Class
+c_QVectorQString = c_QVector contents_QString
+
 qmod_UInt :: QtModule
 qmod_UInt = createModule "UInt" contents_UInt
 
 contents_UInt :: Contents
-contents_UInt= instantiate "QVectorUInt" uintT mempty
+contents_UInt = instantiate "QVectorUInt" uintT mempty
 
 c_QVectorUInt :: Class
 c_QVectorUInt = c_QVector contents_UInt
+
+qmod_QXmlStreamAttribute :: QtModule
+qmod_QXmlStreamAttribute = createModule "QXmlStreamAttribute" contents_QXmlStreamAttribute
+
+contents_QXmlStreamAttribute :: Contents
+contents_QXmlStreamAttribute = instantiate "QVectorQXmlStreamAttribute" (objT c_QXmlStreamAttribute) mempty
+
+c_QVectorQXmlStreamAttribute :: Class
+c_QVectorQXmlStreamAttribute = c_QVector contents_QXmlStreamAttribute
+
+qmod_QXmlStreamEntityDeclaration :: QtModule
+qmod_QXmlStreamEntityDeclaration = createModule "QXmlStreamEntityDeclaration" contents_QXmlStreamEntityDeclaration
+
+contents_QXmlStreamEntityDeclaration :: Contents
+contents_QXmlStreamEntityDeclaration = instantiate "QVectorQXmlStreamEntityDeclaration" (objT c_QXmlStreamEntityDeclaration) mempty
+
+c_QVectorQXmlStreamEntityDeclaration :: Class
+c_QVectorQXmlStreamEntityDeclaration = c_QVector contents_QXmlStreamEntityDeclaration
+
+qmod_QXmlStreamNamespaceDeclaration :: QtModule
+qmod_QXmlStreamNamespaceDeclaration = createModule "QXmlStreamNamespaceDeclaration" contents_QXmlStreamNamespaceDeclaration
+
+contents_QXmlStreamNamespaceDeclaration :: Contents
+contents_QXmlStreamNamespaceDeclaration = instantiate "QVectorQQXmlStreamNamespaceDeclaration" (objT c_QXmlStreamNamespaceDeclaration) mempty
+
+c_QVectorQXmlStreamNamespaceDeclaration :: Class
+c_QVectorQXmlStreamNamespaceDeclaration = c_QVector contents_QXmlStreamNamespaceDeclaration
+
+qmod_QXmlStreamNotationDeclaration :: QtModule
+qmod_QXmlStreamNotationDeclaration = createModule "QXmlStreamNotationDeclaration" contents_QXmlStreamNotationDeclaration
+
+contents_QXmlStreamNotationDeclaration :: Contents
+contents_QXmlStreamNotationDeclaration = instantiate "QVectorQXmlStreamNotationDeclaration" (objT c_QXmlStreamNotationDeclaration) mempty
+
+c_QVectorQXmlStreamNotationDeclaration :: Class
+c_QVectorQXmlStreamNotationDeclaration = c_QVector contents_QXmlStreamNotationDeclaration

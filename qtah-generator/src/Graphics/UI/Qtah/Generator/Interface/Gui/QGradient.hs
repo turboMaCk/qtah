@@ -44,7 +44,8 @@ import Foreign.Hoppy.Generator.Types (
   objT,
   voidT,
   )
-import Foreign.Hoppy.Generator.Version (collect, just)
+import Foreign.Hoppy.Generator.Version (collect, just, test)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (qreal)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QColor (c_QColor)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
@@ -54,12 +55,13 @@ import Graphics.UI.Qtah.Generator.Types
 
 aModule =
   AQtModule $
-  makeQtModule ["Gui", "QGradient"]
-  [ qtExport c_QGradient
-  , qtExport e_CoordinateMode
-  , qtExport e_Preset
-  , qtExport e_Spread
-  , qtExport e_Type
+  makeQtModule ["Gui", "QGradient"] $
+  collect
+  [ just $ qtExport c_QGradient
+  , test (qtVersion >= [4, 4]) $ qtExport e_CoordinateMode
+  , test (qtVersion >= [5, 12]) $ qtExport e_Preset
+  , just $ qtExport e_Spread
+  , just $ qtExport e_Type
   ]
 
 c_QGradient =
@@ -69,8 +71,9 @@ c_QGradient =
   classSetEntityPrefix "" $
   makeClass (ident "QGradient") Nothing [] $
   collect
-  [ just $ mkCtor "new" [enumT e_Preset]
-  , just $ mkProp "coordinateMode" $ enumT e_CoordinateMode
+  [ test (qtVersion >= [5, 12]) $ mkCtor "new" [enumT e_Preset]
+  , test (qtVersion >= [4, 4]) $
+    mkProp "coordinateMode" $ enumT e_CoordinateMode
   , just $ mkMethod "setColorAt" [qreal, constT $ objT c_QColor] voidT
   , just $ mkProp "spread" $ enumT e_Spread
   -- TODO void setStops(const QGradientStops &stopPoints)

@@ -69,7 +69,7 @@ c_QResource =
   , just $ mkConstMethod "fileName" np $ objT c_QString
   , just $ mkConstMethod "isCompressed" np boolT
   , just $ mkConstMethod "isValid" np boolT
-  , just $ mkConstMethod "lastModified" np $ objT c_QDateTime
+  , test (qtVersion >= [5, 8]) $ mkConstMethod "lastModified" np $ objT c_QDateTime
   --, just $ mkConstMethod "locale" np $ objT c_QLocale
   , just $ mkStaticMethod' "registerResource" "registerResourcePath" [refT $ constT $ objT c_QString ] boolT
   , just $ mkStaticMethod' "registerResource" "registerResourcePathAndTree" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString] boolT
