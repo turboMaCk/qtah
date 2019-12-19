@@ -34,6 +34,7 @@ import Foreign.Hoppy.Generator.Spec (
   Callback,
   Class,
   CppEnum,
+  Scoped (Unscoped),
   Export (Export),
   Exportable,
   ForeignLanguage (Haskell),
@@ -80,13 +81,13 @@ qtExportToExports qtExport = case qtExport of
 makeQtEnum :: Identifier -> [Include] -> [String] -> CppEnum
 makeQtEnum identifier includes names =
   makeQtEnum' identifier
-              False  -- Most Qt enums are unscoped.
+              Unscoped  -- Most Qt enums are unscoped.
               includes
               names
 
 -- | Creates a 'CppEnum' like 'makeQtEnum' does, but also takes a boolean
 -- parameter indicating whether the enum is scoped.
-makeQtEnum' :: Identifier -> Bool -> [Include] -> [String] -> CppEnum
+makeQtEnum' :: Identifier -> Scoped -> [Include] -> [String] -> CppEnum
 makeQtEnum' identifier scoped includes names =
   addReqIncludes includes $
   enumSetValuePrefix "" $
@@ -112,7 +113,7 @@ makeQtEnumAndFlags enumIdentifier flagsName includes names =
 
 -- | Creates a 'CppEnum' and 'Flags' pair like 'makeQtEnumAndFlags' does, but
 -- also takes a boolean parameter indicating whether the enum is scoped.
-makeQtEnumAndFlags' :: Identifier -> String -> Bool -> [Include] -> [String] -> (CppEnum, Flags)
+makeQtEnumAndFlags' :: Identifier -> String -> Scoped -> [Include] -> [String] -> (CppEnum, Flags)
 makeQtEnumAndFlags' enumIdentifier flagsName scoped includes names =
   let enum = makeQtEnum' enumIdentifier scoped includes names
       flags = makeFlags enum flagsName

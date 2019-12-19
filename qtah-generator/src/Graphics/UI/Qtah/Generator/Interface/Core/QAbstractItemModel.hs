@@ -24,6 +24,7 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QAbstractItemModel (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
+  Scoped (Scoped),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -195,7 +196,7 @@ e_LayoutChangeHint =
   ]
 
 (e_CheckIndexOption, fl_CheckIndexOptions) =
-  makeQtEnumAndFlags' (ident1 "QAbstractItemModel" "CheckIndexOption") "CheckIndexOptions" True
+  makeQtEnumAndFlags' (ident1 "QAbstractItemModel" "CheckIndexOption") "CheckIndexOptions" Scoped
   [ includeStd "QAbstractItemModel" ]
   [ "NoOption"
   , "IndexIsValid"
