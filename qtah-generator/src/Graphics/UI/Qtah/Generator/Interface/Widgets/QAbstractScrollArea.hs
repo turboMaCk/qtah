@@ -34,6 +34,7 @@ import Foreign.Hoppy.Generator.Spec (
 import Foreign.Hoppy.Generator.Types (bitspaceT, enumT, objT, ptrT, voidT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QSize (c_QSize)
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (bs_Alignment, e_ScrollBarPolicy)
+import Graphics.UI.Qtah.Generator.Interface.Widgets.QFrame (c_QFrame)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Widgets.QWidget (c_QWidget)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QScrollBar (c_QScrollBar)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
@@ -49,7 +50,7 @@ aModule =
 c_QAbstractScrollArea =
   addReqIncludes [includeStd "QAbstractScrollArea"] $
   classSetEntityPrefix "" $
-  makeClass (ident "QAbstractScrollArea") Nothing [c_QWidget]
+  makeClass (ident "QAbstractScrollArea") Nothing [c_QFrame]
   [ mkCtor "new" []
   , mkCtor "newWithParent" [ptrT $ objT c_QWidget]
   , mkMethod "addScrollBarWidget" [ptrT $ objT c_QWidget, bitspaceT bs_Alignment] voidT
