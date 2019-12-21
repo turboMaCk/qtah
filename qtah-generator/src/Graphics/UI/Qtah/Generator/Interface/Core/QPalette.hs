@@ -18,7 +18,8 @@
 -- | Top-level bindings and bindings in the @Qt::@ namespace.
 module Graphics.UI.Qtah.Generator.Interface.Core.QPalette (
   aModule,
-  e_ColorRole
+  c_QPalette,
+  e_ColorRole,
   ) where
 
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
