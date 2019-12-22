@@ -32,7 +32,6 @@ import Foreign.Hoppy.Generator.Spec (
   mkStaticMethod',
   mkCtor,
   np,
-  
   )
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Assignable, Comparable, Copyable, Equatable),

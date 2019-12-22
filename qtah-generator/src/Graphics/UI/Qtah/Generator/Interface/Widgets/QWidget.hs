@@ -56,7 +56,8 @@ import Graphics.UI.Qtah.Generator.Interface.Core.Types (
   qreal,
   )
 import Graphics.UI.Qtah.Generator.Interface.Core.QPalette (
-  e_ColorRole
+  c_QPalette,
+  e_ColorRole,
   )
 import Graphics.UI.Qtah.Generator.Interface.Gui.QCursor (c_QCursor)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QFont (c_QFont)
@@ -185,7 +186,7 @@ c_QWidget =
   , just $ mkConstMethod "nextInFocusChain" np $ ptrT $ objT c_QWidget
   , just $ mkConstMethod "normalGeometry" np $ objT c_QRect
     -- TODO overrideWindowFlags
-    -- TODO palette
+  , just $ mkProp "palette" $ objT c_QPalette
   , just $ mkConstMethod "parentWidget" np $ ptrT $ objT c_QWidget
     -- TODO platformWindow
     -- TODO platformWindowFormat
