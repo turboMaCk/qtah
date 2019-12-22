@@ -66,7 +66,7 @@ c_QXmlStreamWriter =
   , just $ mkConstMethod "codec" [] $ ptrT $ objT c_QTextCodec
   , just $ mkProp "device" $ ptrT $ objT c_QIODevice
   , just $ mkConstMethod "hasError" [] boolT
-  , just $ mkMethod' "setCodec" "setCodec" [ptrT $ objT c_QTextCodec] voidT 
+  , just $ mkMethod' "setCodec" "setCodec" [ptrT $ objT c_QTextCodec] voidT
   , just $ mkMethod' "setCodec" "setCodecWithPtrChar" [ptrT $ constT charT] voidT
   , just $ mkMethod' "writeAttribute" "writeAttributeWithNamespaceUriAndNameAndValue" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString, refT $ constT $ objT c_QString] voidT
   , just $ mkMethod' "writeAttribute" "writeAttributeWithQualifiedNameAndValue" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString] voidT

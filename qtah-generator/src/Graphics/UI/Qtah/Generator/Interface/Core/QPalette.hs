@@ -36,6 +36,7 @@ import Foreign.Hoppy.Generator.Spec (
   Include,
   includeStd,
   addReqIncludes,
+  classSetConversionToGc,
   classSetEntityPrefix,
   ident,
   ident1,
@@ -66,6 +67,7 @@ aModule =
 
 c_QPalette =
   addReqIncludes [includeStd "QPalette"] $
+  classSetConversionToGc $
   classAddFeatures [Assignable, Copyable, Equatable] $
   classSetEntityPrefix "" $
   makeClass (ident "QPalette") Nothing [] $
