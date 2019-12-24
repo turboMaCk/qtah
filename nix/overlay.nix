@@ -27,11 +27,15 @@ let
   haskellOverrides = super: hself: hsuper:
     let qt = super.${qtName};
         buildStrictly = import ./build-strictly.nix super.haskell.lib;
+        # Disable profiling for these qtah derivations by default; qtah builds
+        # *really* slowly with them.
+        mkDerivation = args: hsuper.mkDerivation ({ enableLibraryProfiling = false; } // args);
+        opts = haskellOptions // { inherit mkDerivation; };
     in builtins.mapAttrs (name: pkg: buildStrictly pkg) {
-      qtah-generator = hsuper.callPackage ../qtah-generator haskellOptions;
-      qtah-cpp = hsuper.callPackage ../qtah-cpp (haskellOptions // { inherit qt; });
-      qtah = hsuper.callPackage ../qtah (haskellOptions // { inherit qt; });
-      qtah-examples = hsuper.callPackage ../qtah-examples (haskellOptions // { inherit qt; });
+      qtah-generator = hsuper.callPackage ../qtah-generator opts;
+      qtah-cpp = hsuper.callPackage ../qtah-cpp (opts // { inherit qt; });
+      qtah = hsuper.callPackage ../qtah (opts // { inherit qt; });
+      qtah-examples = hsuper.callPackage ../qtah-examples (opts // { inherit qt; });
     };
 
 in self: super: {
