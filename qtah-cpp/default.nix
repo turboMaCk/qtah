@@ -23,7 +23,7 @@ mkDerivation {
   version = "0.6.0";
   src = ./.;
   libraryHaskellDepends = [ base Cabal qtah-generator ];
-  librarySystemDepends = [ qt ];
+  librarySystemDepends = [ qt.qtbase ];
   homepage = "http://khumba.net/projects/qtah";
   description = "Qt bindings for Haskell - C++ library";
   license = stdenv.lib.licenses.lgpl3Plus;

@@ -26,7 +26,7 @@ mkDerivation {
   libraryHaskellDepends = [
     base binary bytestring hoppy-runtime qtah-cpp qtah-generator
   ];
-  libraryToolDepends = [ qt ];
+  libraryToolDepends = [ qt.qtbase ];
   testHaskellDepends = [ base hoppy-runtime HUnit ];
   homepage = "http://khumba.net/projects/qtah";
   description = "Qt bindings for Haskell";

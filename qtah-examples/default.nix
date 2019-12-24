@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-{ mkDerivation, base, binary, bytestring, hoppy-runtime
+{ mkDerivation, base, binary, bytestring, hoppy-runtime, qt
 # Keep qtah on a line by itself, scripts/set-qt-version looks for it:
 , qtah
 , stdenv, lib
@@ -27,6 +27,11 @@ mkDerivation {
   src = ./.;
   isLibrary = false;
   isExecutable = true;
+
+  # We need to apply this hook to wrap the binary, so that it has access to the
+  # Qt plugins directory.  Otherwise, it will fail to launch.
+  buildDepends = [ qt.wrapQtAppsHook ];
+
   executableHaskellDepends = [
     base binary bytestring hoppy-runtime
     # Keep qtah on a line by itself, scripts/set-qt-version looks for it:

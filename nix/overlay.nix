@@ -25,13 +25,13 @@ let
     else {};
 
   haskellOverrides = super: hself: hsuper:
-    let qtbase = super.${qtName}.qtbase;
+    let qt = super.${qtName};
         buildStrictly = import ./build-strictly.nix super.haskell.lib;
     in builtins.mapAttrs (name: pkg: buildStrictly pkg) {
       qtah-generator = hsuper.callPackage ../qtah-generator haskellOptions;
-      qtah-cpp = hsuper.callPackage ../qtah-cpp (haskellOptions // { qt = qtbase; });
-      qtah = hsuper.callPackage ../qtah (haskellOptions // { qt = qtbase; });
-      qtah-examples = hsuper.callPackage ../qtah-examples haskellOptions;
+      qtah-cpp = hsuper.callPackage ../qtah-cpp (haskellOptions // { inherit qt; });
+      qtah = hsuper.callPackage ../qtah (haskellOptions // { inherit qt; });
+      qtah-examples = hsuper.callPackage ../qtah-examples (haskellOptions // { inherit qt; });
     };
 
 in self: super: {
