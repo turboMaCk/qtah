@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QMetaMethod (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass, ExportEnum),
   Operator (OpNe, OpEq),
   addReqIncludes,
   classSetConversionToGc,
@@ -32,6 +31,7 @@ import Foreign.Hoppy.Generator.Spec (
   makeClass,
   mkConstMethod,
   mkMethod,
+  np,
   )
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Copyable),
@@ -39,7 +39,7 @@ import Foreign.Hoppy.Generator.Spec.ClassFeature (
   )
 import Foreign.Hoppy.Generator.Types (boolT, intT, objT, ptrT, refT, enumT, constT, charT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.QByteArray (c_QByteArray)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Core.QList (c_QListQByteArray)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
@@ -50,9 +50,10 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Core", "QMetaMethod"]
-  [ QtExport $ ExportClass c_QMetaMethod
-  , QtExport $ ExportEnum e_Access
-  , QtExport $ ExportEnum e_MethodType ]
+  [ qtExport c_QMetaMethod
+  , qtExport e_Access
+  , qtExport e_MethodType
+  ]
 
 c_QMetaMethod =
   addReqIncludes [includeStd "QMetaMethod"] $
@@ -61,21 +62,21 @@ c_QMetaMethod =
   classSetEntityPrefix "" $
   makeClass (ident "QMetaMethod") Nothing [] $
   collect
-  [ just $ mkConstMethod "access" [] $ enumT e_Access
-  , test (qtVersion >= [5, 0]) $ mkConstMethod "isValid" [] boolT
-  , test (qtVersion >= [4, 6]) $ mkConstMethod "methodIndex" [] intT
-  , test (qtVersion >= [5, 0]) $ mkConstMethod "methodSignature" [] $ objT c_QByteArray
-  , just $ mkConstMethod "methodType" [] $ enumT e_MethodType
-  , test (qtVersion >= [5, 0]) $ mkConstMethod "name" [] $ objT c_QByteArray
-  , test (qtVersion >= [5, 0]) $ mkConstMethod "parameterCount" [] intT
-  , just $ mkConstMethod "parameterNames" [] $ objT c_QListQByteArray
+  [ just $ mkConstMethod "access" np $ enumT e_Access
+  , test (qtVersion >= [5, 0]) $ mkConstMethod "isValid" np boolT
+  , test (qtVersion >= [4, 6]) $ mkConstMethod "methodIndex" np intT
+  , test (qtVersion >= [5, 0]) $ mkConstMethod "methodSignature" np $ objT c_QByteArray
+  , just $ mkConstMethod "methodType" np $ enumT e_MethodType
+  , test (qtVersion >= [5, 0]) $ mkConstMethod "name" np $ objT c_QByteArray
+  , test (qtVersion >= [5, 0]) $ mkConstMethod "parameterCount" np intT
+  , just $ mkConstMethod "parameterNames" np $ objT c_QListQByteArray
   , test (qtVersion >= [5, 0]) $ mkConstMethod "parameterType" [intT] intT
-  , just $ mkConstMethod "parameterTypes" [] $ objT c_QListQByteArray
-  , test (qtVersion >= [5, 0]) $ mkConstMethod "returnType" [] intT
-  , test (qtVersion >= [5, 1]) $ mkConstMethod "revision" [] intT
+  , just $ mkConstMethod "parameterTypes" np $ objT c_QListQByteArray
+  , test (qtVersion >= [5, 0]) $ mkConstMethod "returnType" np intT
+  , test (qtVersion >= [5, 1]) $ mkConstMethod "revision" np intT
     -- TODO QStrings instead of const char*.
-  , just $ mkConstMethod "tag" [] $ ptrT $ constT charT
-  , just $ mkConstMethod "typeName" [] $ ptrT $ constT charT
+  , just $ mkConstMethod "tag" np $ ptrT $ constT charT
+  , just $ mkConstMethod "typeName" np $ ptrT $ constT charT
   , test (qtVersion >= [5, 0]) $ mkMethod OpNe [refT $ constT $ objT c_QMetaMethod] boolT
   , test (qtVersion >= [5, 0]) $ mkMethod OpEq [refT $ constT $ objT c_QMetaMethod] boolT
 
@@ -84,15 +85,15 @@ c_QMetaMethod =
 
 e_Access =
   makeQtEnum (ident1 "QMetaMethod" "Access") [includeStd "QMetaMethod"]
-  [ (0, ["private"])
-  , (1, ["protected"])
-  , (2, ["public"])
+  [ "Private"
+  , "Protected"
+  , "Public"
   ]
 
 e_MethodType =
   makeQtEnum (ident1 "QMetaMethod" "MethodType") [includeStd "QMetaMethod"]
-  [ (0, ["method"])
-  , (1, ["signal"])
-  , (2, ["slot"])
-  , (3, ["constructor"])
+  [ "Method"
+  , "Signal"
+  , "Slot"
+  , "Constructor"
   ]

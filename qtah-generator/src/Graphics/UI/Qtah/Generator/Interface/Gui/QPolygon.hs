@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Gui.QPolygon (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetConversionToGc,
   classSetEntityPrefix,
@@ -33,6 +32,7 @@ import Foreign.Hoppy.Generator.Spec (
   mkCtor,
   mkMethod,
   mkMethod',
+  np,
   )
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Assignable, Copyable, Equatable),
@@ -40,7 +40,7 @@ import Foreign.Hoppy.Generator.Spec.ClassFeature (
   )
 import Foreign.Hoppy.Generator.Types (boolT, enumT, intT, objT, refT, voidT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.QPoint (c_QPoint)
 import Graphics.UI.Qtah.Generator.Interface.Core.QRect (c_QRect)
 import Graphics.UI.Qtah.Generator.Interface.Core.QVector (c_QVectorQPoint)
@@ -53,7 +53,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Gui", "QPolygon"]
-  [ QtExport $ ExportClass c_QPolygon ]
+  [ qtExport c_QPolygon ]
 
 c_QPolygon =
   addReqIncludes [includeStd "QPolygon"] $
@@ -62,11 +62,11 @@ c_QPolygon =
   classSetEntityPrefix "" $
   makeClass (ident "QPolygon") Nothing [c_QVectorQPoint] $
   collect
-  [ just $ mkCtor "new" []
+  [ just $ mkCtor "new" np
   , just $ mkCtor "newWithSize" [intT]
   , just $ mkCtor "newWithPoints" [objT c_QVectorQPoint]
   , just $ mkCtor "newWithRectangle" [objT c_QRect, boolT]
-  , just $ mkConstMethod "boundingRect" [] $ objT c_QRect
+  , just $ mkConstMethod "boundingRect" np $ objT c_QRect
   , test (qtVersion >= [4, 3]) $ mkConstMethod "containsPoint"
     [objT c_QPoint, enumT e_FillRule] boolT
   , test (qtVersion >= [4, 3]) $ mkConstMethod "intersected" [objT c_QPolygon] $ objT c_QPolygon

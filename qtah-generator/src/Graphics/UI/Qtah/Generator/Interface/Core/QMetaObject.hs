@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QMetaObject (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   MethodApplicability (MConst),
   Purity (Nonpure),
   addReqIncludes,
@@ -33,10 +32,11 @@ import Foreign.Hoppy.Generator.Spec (
   makeClass,
   makeFnMethod,
   mkConstMethod,
+  np,
   )
 import Foreign.Hoppy.Generator.Types (boolT, constT, intT, objT, ptrT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.QMetaClassInfo (c_QMetaClassInfo)
 import Graphics.UI.Qtah.Generator.Interface.Core.QMetaEnum (c_QMetaEnum)
 import Graphics.UI.Qtah.Generator.Interface.Core.QMetaMethod (c_QMetaMethod)
@@ -50,7 +50,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Core", "QMetaObject"]
-  [ QtExport $ ExportClass c_QMetaObject ]
+  [ qtExport c_QMetaObject ]
 
 c_QMetaObject =
   addReqIncludes [ includeStd "QMetaObject"
@@ -60,13 +60,13 @@ c_QMetaObject =
   makeClass (ident "QMetaObject") Nothing [] $
   collect
   [ just $ mkConstMethod "classInfo" [intT] $ objT c_QMetaClassInfo
-  , just $ mkConstMethod "classInfoCount" [] intT
-  , just $ mkConstMethod "classInfoOffset" [] intT
+  , just $ mkConstMethod "classInfoCount" np intT
+  , just $ mkConstMethod "classInfoOffset" np intT
   , just $ mkConstMethod "constructor" [intT] $ objT c_QMetaMethod
-  , just $ mkConstMethod "constructorCount" [] intT
+  , just $ mkConstMethod "constructorCount" np intT
   , just $ mkConstMethod "enumerator" [intT] $ objT c_QMetaEnum
-  , just $ mkConstMethod "enumeratorCount" [] intT
-  , just $ mkConstMethod "enumeratorOffset" [] intT
+  , just $ mkConstMethod "enumeratorCount" np intT
+  , just $ mkConstMethod "enumeratorOffset" np intT
   , just $
     makeFnMethod (ident2 "qtah" "qmetaobject" "indexOfClassInfo") "indexOfClassInfo"
     MConst Nonpure [objT c_QMetaObject, objT c_QString] intT
@@ -91,14 +91,14 @@ c_QMetaObject =
   , test (qtVersion >= [5, 7]) $
     mkConstMethod "inherits" [ptrT $ constT $ objT c_QMetaObject] boolT
   , just $ mkConstMethod "method" [intT] $ objT c_QMetaMethod
-  , just $ mkConstMethod "methodCount" [] intT
-  , just $ mkConstMethod "methodOffset" [] intT
+  , just $ mkConstMethod "methodCount" np intT
+  , just $ mkConstMethod "methodOffset" np intT
     -- TODO newInstance
   , just $ mkConstMethod "property" [intT] $ objT c_QMetaProperty
-  , just $ mkConstMethod "propertyCount" [] intT
-  , just $ mkConstMethod "propertyOffset" [] intT
-  , just $ mkConstMethod "superClass" [] $ ptrT $ constT $ objT c_QMetaObject
-  , just $ mkConstMethod "userProperty" [] $ objT c_QMetaProperty
+  , just $ mkConstMethod "propertyCount" np intT
+  , just $ mkConstMethod "propertyOffset" np intT
+  , just $ mkConstMethod "superClass" np $ ptrT $ constT $ objT c_QMetaObject
+  , just $ mkConstMethod "userProperty" np $ objT c_QMetaProperty
 
     -- TODO Static methods
   ]

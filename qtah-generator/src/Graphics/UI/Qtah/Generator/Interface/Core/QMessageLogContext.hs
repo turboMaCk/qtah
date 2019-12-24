@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QMessageLogContext (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -37,7 +36,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModuleWithMinVersion ["Core", "QMessageLogContext"] [5, 0] $
-  [QtExport $ ExportClass c_QMessageLogContext]
+  [qtExport c_QMessageLogContext]
 
 c_QMessageLogContext =
   addReqIncludes [ includeStd "QMessageLogContext" ] $

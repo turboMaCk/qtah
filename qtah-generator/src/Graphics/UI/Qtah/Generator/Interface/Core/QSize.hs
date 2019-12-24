@@ -31,7 +31,6 @@ import Foreign.Hoppy.Generator.Spec (
     classHaskellConversionToCppFn,
     classHaskellConversionType
   ),
-  Export (ExportClass),
   Operator (OpAddAssign, OpDivideAssign, OpMultiplyAssign, OpSubtractAssign),
   addReqIncludes,
   classSetEntityPrefix,
@@ -45,6 +44,7 @@ import Foreign.Hoppy.Generator.Spec (
   mkCtor,
   mkMethod,
   mkProp,
+  np,
   )
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Assignable, Copyable, Equatable),
@@ -52,7 +52,7 @@ import Foreign.Hoppy.Generator.Spec.ClassFeature (
   )
 import Foreign.Hoppy.Generator.Types (boolT, enumT, intT, objT, refT, voidT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (e_AspectRatioMode, qreal)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
@@ -67,7 +67,7 @@ import Language.Haskell.Syntax (
 aModule =
   AQtModule $
   makeQtModule ["Core", "QSize"]
-  [ QtExport $ ExportClass c_QSize ]
+  [ qtExport c_QSize ]
 
 c_QSize =
   addReqIncludes [includeStd "QSize"] $
@@ -89,19 +89,19 @@ c_QSize =
   classSetEntityPrefix "" $
   makeClass (ident "QSize") Nothing [] $
   collect
-  [ just $ mkCtor "newNull" []
+  [ just $ mkCtor "newNull" np
   , just $ mkCtor "new" [intT, intT]
   , just $ mkConstMethod "boundedTo" [objT c_QSize] $ objT c_QSize
   , just $ mkConstMethod "expandedTo" [objT c_QSize] $ objT c_QSize
   , just $ mkProp "height" intT
-  , just $ mkConstMethod "isEmpty" [] boolT
-  , just $ mkConstMethod "isNull" [] boolT
-  , just $ mkConstMethod "isValid" [] boolT
+  , just $ mkConstMethod "isEmpty" np boolT
+  , just $ mkConstMethod "isNull" np boolT
+  , just $ mkConstMethod "isValid" np boolT
   , just $ mkMethod "scale" [objT c_QSize, enumT e_AspectRatioMode] voidT
   , test (qtVersion >= [5, 0]) $
     mkConstMethod "scaled" [objT c_QSize, enumT e_AspectRatioMode] $ objT c_QSize
-  , just $ mkMethod "transpose" [] voidT
-  , test (qtVersion >= [5, 0]) $ mkConstMethod "transposed" [] $ objT c_QSize
+  , just $ mkMethod "transpose" np voidT
+  , test (qtVersion >= [5, 0]) $ mkConstMethod "transposed" np $ objT c_QSize
   , just $ mkProp "width" intT
   , just $ mkMethod OpAddAssign [objT c_QSize] $ refT $ objT c_QSize
   , just $ mkMethod OpSubtractAssign [objT c_QSize] $ refT $ objT c_QSize

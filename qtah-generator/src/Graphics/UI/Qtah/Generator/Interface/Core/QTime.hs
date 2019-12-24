@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QTime (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   classSetConversionToGc,
   addReqIncludes,
   classSetEntityPrefix,
@@ -34,7 +33,8 @@ import Foreign.Hoppy.Generator.Spec (
   mkStaticMethod',
   mkCtor,
   mkMethod',
-  mkMethod
+  mkMethod,
+  np,
   )
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Comparable, Equatable, Copyable),
@@ -52,7 +52,7 @@ import Graphics.UI.Qtah.Generator.Interface.Core.Types (e_DateFormat)
 aModule =
   AQtModule $
   makeQtModule ["Core", "QTime"] $
-  [QtExport $ ExportClass c_QTime]
+  [qtExport c_QTime]
 
 c_QTime =
   addReqIncludes [ includeStd "QTime" ] $
@@ -61,34 +61,34 @@ c_QTime =
   classSetEntityPrefix "" $
   makeClass (ident "QTime") Nothing [] $
   collect
-  [ just $ mkCtor "new" []
+  [ just $ mkCtor "new" np
   , just $ mkCtor "newWithHM" [intT, intT]
   , just $ mkCtor "newWithHMS" [intT, intT, intT]
   , just $ mkCtor "newWithHMSMs" [intT, intT, intT, intT]
   , just $ mkConstMethod "addMSecs" [intT] $ objT c_QTime
   , just $ mkConstMethod "addSecs" [intT] $ objT c_QTime
-  , just $ mkStaticMethod "currentTime" [] $ objT c_QTime
-  , just $ mkConstMethod "elapsed" [] intT
+  , just $ mkStaticMethod "currentTime" np $ objT c_QTime
+  , just $ mkConstMethod "elapsed" np intT
   , just $ mkStaticMethod "fromMSecsSinceStartOfDay" [intT] $ objT c_QTime
   , just $ mkStaticMethod' "fromString" "fromString" [refT $ constT $ objT c_QString] $ objT c_QTime
   , just $ mkStaticMethod' "fromString" "fromStringWithDateFormat" [refT $ constT $ objT c_QString, enumT e_DateFormat] $ objT c_QTime
   , just $ mkStaticMethod' "fromString" "fromStringWithStringFormat" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString] $ objT c_QTime
-  , just $ mkConstMethod "hour" [] intT
-  , just $ mkConstMethod "isNull" [] boolT
-  , just $ mkConstMethod' "isValid" "isValid" [] boolT
+  , just $ mkConstMethod "hour" np intT
+  , just $ mkConstMethod "isNull" np boolT
+  , just $ mkConstMethod' "isValid" "isValid" np boolT
   , just $ mkMethod' "isValid" "isValidStatic" [intT, intT, intT] boolT
   , just $ mkMethod' "isValid" "isValidStaticWithMs" [intT, intT, intT, intT] boolT
-  , just $ mkConstMethod "minute" [] intT
-  , just $ mkConstMethod "msec" [] intT
-  , just $ mkConstMethod "msecsSinceStartOfDay" [] intT
+  , just $ mkConstMethod "minute" np intT
+  , just $ mkConstMethod "msec" np intT
+  , just $ mkConstMethod "msecsSinceStartOfDay" np intT
   , just $ mkConstMethod "msecsTo" [refT $ constT $ objT c_QTime] intT
-  , just $ mkMethod "restart" [] intT
-  , just $ mkConstMethod "second" [] intT
+  , just $ mkMethod "restart" np intT
+  , just $ mkConstMethod "second" np intT
   , just $ mkConstMethod "secsTo" [refT $ constT $ objT c_QTime] intT
   , just $ mkMethod' "setHMS" "setHMS" [intT, intT, intT ] boolT
   , just $ mkMethod' "setHMS" "setHMSWithMs" [intT, intT, intT, intT] boolT
-  , just $ mkMethod "start" [] voidT
-  , just $ mkConstMethod' "toString" "toString" [] $ objT c_QString
+  , just $ mkMethod "start" np voidT
+  , just $ mkConstMethod' "toString" "toString" np $ objT c_QString
   , just $ mkConstMethod' "toString" "toStringWithDateFormat" [enumT e_DateFormat] $ objT c_QString
   , just $ mkConstMethod' "toString" "toStringWithStringFormat" [objT c_QString] $ objT c_QString
   --, just $ mkMethod OpShl [refT $ objT c_QDataStream, refT $ objT c_QTime] $ refT $ objT c_QDataStream

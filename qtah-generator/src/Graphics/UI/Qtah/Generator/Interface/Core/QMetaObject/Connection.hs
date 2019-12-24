@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QMetaObject.Connection (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   MethodApplicability (MConst),
   Purity (Nonpure),
   addReqIncludes,
@@ -34,6 +33,7 @@ import Foreign.Hoppy.Generator.Spec (
   makeClass,
   makeFnMethod,
   mkCtor,
+  np,
   )
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Assignable, Copyable),
@@ -48,7 +48,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Core", "QMetaObject", "Connection"]
-  [ QtExport $ ExportClass c_Connection ]
+  [ qtExport c_Connection ]
 
 c_Connection =
   addReqIncludes [ includeStd "QMetaObject"
@@ -58,7 +58,7 @@ c_Connection =
   classSetEntityPrefix "" $
   classAddFeatures [Assignable, Copyable] $
   makeClass (ident1 "QMetaObject" "Connection") Nothing [] $
-  [ mkCtor "new" []
+  [ mkCtor "new" np
   , makeFnMethod (ident3 "qtah" "qmetaobject" "connection" "isValid") "isValid"
     MConst Nonpure [objT c_Connection] boolT
   ]

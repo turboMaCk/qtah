@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Gui.QBackingStore (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -30,7 +29,8 @@ import Foreign.Hoppy.Generator.Spec (
   mkConstMethod,
   mkCtor,
   mkMethod,
-  mkMethod'
+  mkMethod',
+  np,
   )
 import Foreign.Hoppy.Generator.Types (
   boolT,
@@ -53,7 +53,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Gui", "QBackingStore"]
-  [ QtExport $ ExportClass c_QBackingStore
+  [ qtExport c_QBackingStore
   ]
 
 c_QBackingStore =
@@ -63,17 +63,17 @@ c_QBackingStore =
   collect
   [ just $ mkCtor "new" [ptrT $ objT c_QWindow]
   , just $ mkMethod "beginPaint" [objT c_QRegion] voidT
-  , just $ mkMethod "endPaint" [] voidT
+  , just $ mkMethod "endPaint" np voidT
   , just $ mkMethod' "flush" "flush" [objT c_QRegion] voidT
   , just $ mkMethod' "flush" "flushWithWindow" [objT c_QRegion, ptrT $ objT c_QWindow] voidT
   , just $ mkMethod' "flush" "flushAll" [objT c_QRegion, ptrT $ objT c_QWindow, objT c_QPoint] voidT
   -- TODO QPlatformBackingStore* handle() const
-  , just $ mkConstMethod "hasStaticContents" [] boolT
-  , just $ mkMethod "paintDevice" [] $ ptrT $ objT c_QPaintDevice
+  , just $ mkConstMethod "hasStaticContents" np boolT
+  , just $ mkMethod "paintDevice" np $ ptrT $ objT c_QPaintDevice
   , just $ mkMethod "resize" [objT c_QSize] voidT
   , just $ mkMethod "scroll" [objT c_QRegion, intT, intT] boolT
   , just $ mkMethod "setStaticContents" [objT c_QRegion] voidT
-  , just $ mkConstMethod "size" [] $ objT c_QSize
-  , just $ mkConstMethod "staticContents" [] $ objT c_QRegion
-  , just $ mkConstMethod "window" [] $ ptrT $ objT c_QWindow
+  , just $ mkConstMethod "size" np $ objT c_QSize
+  , just $ mkConstMethod "staticContents" np $ objT c_QRegion
+  , just $ mkConstMethod "window" np $ ptrT $ objT c_QWindow
   ]

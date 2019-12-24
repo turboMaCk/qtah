@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QMessageAuthenticationCode (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -31,7 +30,8 @@ import Foreign.Hoppy.Generator.Spec (
   mkConstMethod,
   mkCtor,
   mkMethod',
-  mkMethod
+  mkMethod,
+  np,
   )
 import Foreign.Hoppy.Generator.Types (charT, intT, boolT, voidT, enumT, constT, objT, ptrT, refT)
 import Foreign.Hoppy.Generator.Version (collect, just)
@@ -46,7 +46,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModuleWithMinVersion ["Core", "QMessageAuthenticationCode"] [5, 1] $
-  [QtExport $ ExportClass c_QMessageAuthenticationCode]
+  [qtExport c_QMessageAuthenticationCode]
 
 c_QMessageAuthenticationCode =
   addReqIncludes [ includeStd "QMessageAuthenticationCode" ] $
@@ -59,7 +59,7 @@ c_QMessageAuthenticationCode =
   , just $ mkMethod' "addData" "addDataByteArray" [refT $ constT $ objT c_QByteArray] voidT
   , just $ mkMethod' "addData" "addDataDevice" [ptrT $ objT c_QIODevice] boolT
   , just $ mkStaticMethod "hash" [refT $ constT $ objT c_QByteArray, refT $ constT $ objT c_QByteArray, enumT e_Algorithm] $ objT c_QByteArray
-  , just $ mkMethod "reset" [] voidT
-  , just $ mkConstMethod "result" [] $ objT c_QByteArray
+  , just $ mkMethod "reset" np voidT
+  , just $ mkConstMethod "result" np $ objT c_QByteArray
   , just $ mkMethod "setKey" [refT $ constT $ objT c_QByteArray] voidT
   ]

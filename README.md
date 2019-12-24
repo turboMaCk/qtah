@@ -237,8 +237,11 @@ have to manage objects you didn't create explicitly with a constructor call.
 
 ## Developing
 
-Patches welcome!  Please enable the pre-commit hook at `scripts/git-pre-commit`
-which checks lint and copyright/license issues:
+The Qtah `master` branch tracks the latest Hoppy release.  There may also be a
+`next` branch which tracks unreleased Hoppy `master`.
+
+Patches are welcome!  Please enable the pre-commit hook at
+`scripts/git-pre-commit` which checks lint and copyright/license issues:
 
     $ ln -s ../../scripts/git-pre-commit .git/hooks/pre-commit
 
@@ -254,7 +257,7 @@ following prefixes for naming C++ bindings in the generator:
 
 - `c_MyClass` for classes.
 - `e_MyEnum` for enums.
-- `bs_MyBitspace` for bitspaces.
+- `fl_MyBitspace` for bitspaces.
 - `f_MyFunction` for functions.
 - `cb_MyCallback` for callbacks.
 
@@ -334,7 +337,7 @@ class files always live under `Widgets` in Qtah.
 #### To add an enum or bitspace
 
 These are generally associated with a class.  Use `makeQtEnum` or
-`makeQtEnumBitspace` and include it in the associated class's module.  See
+`makeQtEnumAndFlags` and include it in the associated class's module.  See
 [QMessageBox](qtah-generator/src/Graphics/UI/Qtah/Generator/Interface/Widgets/QMessageBox.hs)
 as an example.
 

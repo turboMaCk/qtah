@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Gui.QtahRasterWindow (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident2,
@@ -29,6 +28,7 @@ import Foreign.Hoppy.Generator.Spec (
   makeClass,
   mkCtor,
   mkMethod,
+  np,
   )
 import Foreign.Hoppy.Generator.Types (callbackT, objT, ptrT, voidT)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QRasterWindow (c_QRasterWindow, minVersion)
@@ -42,13 +42,13 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModuleWithMinVersion ["Gui", "QtahRasterWindow"] minVersion
-  [ QtExport $ ExportClass c_QtahRasterWindow ]
+  [ qtExport c_QtahRasterWindow ]
 
 c_QtahRasterWindow =
   addReqIncludes [includeLocal "qtahrasterwindow.hpp"] $
   classSetEntityPrefix "" $
   makeClass (ident2 "qtah" "qtahrasterwindow" "QtahRasterWindow") Nothing [c_QRasterWindow]
-  [ mkCtor "new" []
+  [ mkCtor "new" np
   , mkCtor "newWithParent" [ptrT $ objT c_QWindow]
   , mkMethod "onPaintEvent" [callbackT cb_PtrQPaintEventVoid] voidT
   ]

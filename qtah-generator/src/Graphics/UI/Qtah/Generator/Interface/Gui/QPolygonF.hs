@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Gui.QPolygonF (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetConversionToGc,
   classSetEntityPrefix,
@@ -33,6 +32,7 @@ import Foreign.Hoppy.Generator.Spec (
   mkCtor,
   mkMethod,
   mkMethod',
+  np,
   )
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Assignable, Copyable, Equatable),
@@ -40,7 +40,7 @@ import Foreign.Hoppy.Generator.Spec.ClassFeature (
   )
 import Foreign.Hoppy.Generator.Types (boolT, enumT, intT, objT, refT, voidT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.QPointF (c_QPointF)
 import Graphics.UI.Qtah.Generator.Interface.Core.QRectF (c_QRectF)
 import Graphics.UI.Qtah.Generator.Interface.Core.QVector (c_QVectorQPointF)
@@ -54,7 +54,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Gui", "QPolygonF"]
-  [ QtExport $ ExportClass c_QPolygonF ]
+  [ qtExport c_QPolygonF ]
 
 c_QPolygonF =
   addReqIncludes [includeStd "QPolygonF"] $
@@ -63,19 +63,19 @@ c_QPolygonF =
   classSetEntityPrefix "" $
   makeClass (ident "QPolygonF") Nothing [c_QVectorQPointF] $
   collect
-  [ just $ mkCtor "new" []
+  [ just $ mkCtor "new" np
   , just $ mkCtor "newWithSize" [intT]
   , just $ mkCtor "newWithPoints" [objT c_QVectorQPointF]
   , just $ mkCtor "newWithPolygon" [objT c_QPolygon]
   , just $ mkCtor "newWithRectangle" [objT c_QRectF]
-  , just $ mkConstMethod "boundingRect" [] $ objT c_QRectF
+  , just $ mkConstMethod "boundingRect" np $ objT c_QRectF
   , test (qtVersion >= [4, 3]) $ mkConstMethod "containsPoint"
     [objT c_QPointF, enumT e_FillRule] boolT
   , test (qtVersion >= [4, 3]) $ mkConstMethod "intersected" [objT c_QPolygonF] $ objT c_QPolygonF
-  , just $ mkConstMethod "isClosed" [] boolT
+  , just $ mkConstMethod "isClosed" np boolT
   , test (qtVersion >= [4, 3]) $ mkConstMethod "subtracted" [objT c_QPolygonF] $ objT c_QPolygonF
   , test (qtVersion >= [4, 8]) $ mkMethod "swap" [refT $ objT c_QPolygonF] voidT
-  , just $ mkConstMethod "toPolygon" [] $ objT c_QPolygon
+  , just $ mkConstMethod "toPolygon" np $ objT c_QPolygon
   , just $ mkMethod' "translate" "translateByRaw" [intT, intT] voidT
   , just $ mkMethod' "translate" "translateByPoint" [objT c_QPointF] voidT
   , test (qtVersion >= [4, 6]) $ mkConstMethod' "translated" "translatedByRaw"

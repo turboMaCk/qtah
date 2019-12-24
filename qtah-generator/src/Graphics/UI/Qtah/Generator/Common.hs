@@ -18,19 +18,18 @@
 -- | General routines.
 module Graphics.UI.Qtah.Generator.Common (
   splitOn,
+  butLast,
+  replaceLast,
   fromMaybeM,
   maybeFail,
   firstM,
-  writeFileIfDifferent,
+  lowerFirst,
   ) where
 
-import Control.Exception (evaluate)
-import Control.Monad (when)
 import Control.Monad.Trans.Maybe (MaybeT (MaybeT), runMaybeT)
+import Data.Char (toLower)
 import Data.Foldable (asum)
 import Data.List (findIndex)
-import System.Directory (doesFileExist)
-import System.IO (IOMode (ReadMode), hGetContents, withFile)
 
 -- | Splits a list at elements for which a predicate returns true.  The matching
 -- elements themselves are dropped.
@@ -45,6 +44,18 @@ splitWhen f xs = case findIndex f xs of
 splitOn :: Eq a => a -> [a] -> [[a]]
 splitOn x = splitWhen (== x)
 
+-- | Drops the last item from the list, if non-empty.
+butLast :: [a] -> [a]
+butLast [] = []
+butLast xs = take (length xs - 1) xs
+
+-- | Replaces the last element in a list, if the list is non-empty.  Returns the
+-- empty list when given it.
+replaceLast :: a -> [a] -> [a]
+replaceLast _ [] = []
+replaceLast y [_] = [y]
+replaceLast y (x:xs) = x:replaceLast y xs
+
 -- | @fromMaybeM m x = maybe m return x@
 fromMaybeM :: Monad m => m a -> Maybe a -> m a
 fromMaybeM = flip maybe return
@@ -58,18 +69,7 @@ maybeFail = fromMaybeM . fail
 firstM :: (Functor m, Monad m) => [m (Maybe a)] -> m (Maybe a)
 firstM = runMaybeT . asum . map MaybeT
 
--- | If the file specified does not exist or its contents does not match the
--- given string, then this writes the string to the file.
-writeFileIfDifferent :: FilePath -> String -> IO ()
-writeFileIfDifferent path newContents = do
-  exists <- doesFileExist path
-  -- We need to read the file strictly, otherwise lazy IO might try to write the
-  -- file while it's still open and locked for reading.
-  doWrite <- if exists
-             then (newContents /=) <$> readStrictly
-             else return True
-  when doWrite $ writeFile path newContents
-  where readStrictly = withFile path ReadMode $ \handle -> do
-            contents <- hGetContents handle
-            _ <- evaluate $ length contents
-            return contents
+-- | Lower cases the first character of a string, if nonempty.
+lowerFirst :: String -> String
+lowerFirst "" = ""
+lowerFirst (c:cs) = toLower c : cs

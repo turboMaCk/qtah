@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QRectF (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   classSetConversionToGc,
@@ -33,6 +32,7 @@ import Foreign.Hoppy.Generator.Spec (
   mkCtor,
   mkMethod,
   mkProp,
+  np,
   )
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Assignable, Copyable, Equatable),
@@ -40,7 +40,7 @@ import Foreign.Hoppy.Generator.Spec.ClassFeature (
   )
 import Foreign.Hoppy.Generator.Types (boolT, objT, voidT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.QMarginsF (c_QMarginsF)
 import Graphics.UI.Qtah.Generator.Interface.Core.QPointF (c_QPointF)
 import Graphics.UI.Qtah.Generator.Interface.Core.QRect (c_QRect)
@@ -54,7 +54,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Core", "QRectF"]
-  [ QtExport $ ExportClass c_QRectF ]
+  [ qtExport c_QRectF ]
 
 c_QRectF =
   addReqIncludes [includeStd "QRectF"] $
@@ -63,7 +63,7 @@ c_QRectF =
   classSetEntityPrefix "" $
   makeClass (ident "QRectF") Nothing [] $
   collect
-  [ just $ mkCtor "newNull" []
+  [ just $ mkCtor "newNull" np
   , test (qtVersion >= [4, 3]) $ mkCtor "newFromPoints" [objT c_QPointF, objT c_QPointF]
   , just $ mkCtor "newWithPointAndSize" [objT c_QPointF, objT c_QSizeF]
   , just $ mkCtor "newWithRect" [objT c_QRect]
@@ -73,15 +73,15 @@ c_QRectF =
   , just $ mkProp "bottom" qreal
   , just $ mkProp "bottomLeft" $ objT c_QPointF
   , just $ mkProp "bottomRight" $ objT c_QPointF
-  , just $ mkConstMethod "center" [] $ objT c_QPointF
+  , just $ mkConstMethod "center" np $ objT c_QPointF
   , just $ mkConstMethod' "contains" "containsPoint" [objT c_QPointF] boolT
   , just $ mkConstMethod' "contains" "containsRect" [objT c_QRectF] boolT
   , just $ mkProp "height" qreal
   , test (qtVersion >= [4, 2]) $ mkConstMethod "intersected" [objT c_QRectF] $ objT c_QRectF
   , just $ mkConstMethod "intersects" [objT c_QRectF] boolT
-  , just $ mkConstMethod "isEmpty" [] boolT
-  , just $ mkConstMethod "isNull" [] boolT
-  , just $ mkConstMethod "isValid" [] boolT
+  , just $ mkConstMethod "isEmpty" np boolT
+  , just $ mkConstMethod "isNull" np boolT
+  , just $ mkConstMethod "isValid" np boolT
   , just $ mkProp "left" qreal
   , test (qtVersion >= [5, 3]) $ mkConstMethod "marginsAdded" [objT c_QMarginsF] $ objT c_QRectF
   , test (qtVersion >= [5, 3]) $ mkConstMethod "marginsRemoved" [objT c_QMarginsF] $ objT c_QRectF
@@ -95,12 +95,12 @@ c_QRectF =
   , just $ mkMethod "moveTop" [qreal] voidT
   , just $ mkMethod "moveTopLeft" [objT c_QPointF] voidT
   , just $ mkMethod "moveTopRight" [objT c_QPointF] voidT
-  , just $ mkConstMethod "normalized" [] $ objT c_QRectF
+  , just $ mkConstMethod "normalized" np $ objT c_QRectF
   , just $ mkProp "right" qreal
   , just $ mkMethod "setCoords" [qreal, qreal, qreal, qreal] voidT
   , just $ mkMethod "setRect" [qreal, qreal, qreal, qreal] voidT
   , just $ mkProp "size" $ objT c_QSizeF
-  , just $ mkConstMethod "toAlignedRect" [] $ objT c_QRect
+  , just $ mkConstMethod "toAlignedRect" np $ objT c_QRect
   , just $ mkProp "top" qreal
   , just $ mkProp "topLeft" $ objT c_QPointF
   , just $ mkProp "topRight" $ objT c_QPointF

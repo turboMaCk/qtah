@@ -16,9 +16,9 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 module Graphics.UI.Qtah.Generator.Interface.Core.QItemSelectionModel (
-  bs_SelectionFlags,
+  fl_SelectionFlags,
   ) where
 
-import Foreign.Hoppy.Generator.Spec (Bitspace)
+import Graphics.UI.Qtah.Generator.Flags (Flags)
 
-bs_SelectionFlags :: Bitspace
+fl_SelectionFlags :: Flags

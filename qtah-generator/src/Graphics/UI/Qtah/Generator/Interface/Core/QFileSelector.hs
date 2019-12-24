@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QFileSelector (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -29,7 +28,8 @@ import Foreign.Hoppy.Generator.Spec (
   makeClass,
   mkConstMethod,
   mkCtor,
-  mkMethod
+  mkMethod,
+  np,
   )
 import Graphics.UI.Qtah.Generator.Interface.Core.QObject (c_QObject)
 import Foreign.Hoppy.Generator.Types (voidT, constT, objT, ptrT, refT)
@@ -44,17 +44,17 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModuleWithMinVersion ["Core", "QFileSelector"] [5, 2] $
-  [QtExport $ ExportClass c_QFileSelector]
+  [qtExport c_QFileSelector]
 
 c_QFileSelector =
   addReqIncludes [ includeStd "QFileSelector" ] $
   classSetEntityPrefix "" $
   makeClass (ident "QFileSelector") Nothing [c_QObject] $
   collect
-  [ just $ mkCtor "new" []
+  [ just $ mkCtor "new" np
   , just $ mkCtor "newWithParent" [ptrT $ objT c_QObject]
-  , just $ mkConstMethod "allSelectors" [] $ objT c_QStringList
-  , just $ mkConstMethod "extraSelectors" [] $ objT c_QStringList
+  , just $ mkConstMethod "allSelectors" np $ objT c_QStringList
+  , just $ mkConstMethod "extraSelectors" np $ objT c_QStringList
   , just $ mkConstMethod "select" [refT $ constT $ objT c_QString] $ objT c_QString
   -- TODO QUrl QFileSelector::select(const QUrl &filePath) const
   , just $ mkMethod "setExtraSelectors" [refT $ constT $ objT c_QStringList] voidT

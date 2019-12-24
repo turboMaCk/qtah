@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QVersionNumber (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   classSetConversionToGc,
   addReqIncludes,
   classSetEntityPrefix,
@@ -32,6 +31,7 @@ import Foreign.Hoppy.Generator.Spec (
   mkStaticMethod,
   mkStaticMethod',
   mkCtor,
+  np,
   )
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Assignable, Comparable, Copyable, Equatable),
@@ -49,7 +49,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModuleWithMinVersion ["Core", "QVersionNumber"] [5, 6] $
-  [QtExport $ ExportClass c_QVersionNumber]
+  [qtExport c_QVersionNumber]
 
 c_QVersionNumber =
   addReqIncludes [ includeStd "QVersionNumber" ] $
@@ -58,7 +58,7 @@ c_QVersionNumber =
   classSetEntityPrefix "" $
   makeClass (ident "QVersionNumber") Nothing [] $
   collect
-  [ just $ mkCtor "new" []
+  [ just $ mkCtor "new" np
   , just $ mkCtor "newWithVector" [refT $ objT c_QVectorInt]
   , just $ mkCtor "newWithMajor" [intT]
   , just $ mkCtor "newWithMajorMinor" [intT, intT]
@@ -72,15 +72,15 @@ c_QVersionNumber =
   --, test (qtVersion >= [5, 10]) $ mkStaticMethod' "fromString" "fromStringWithQLatinSuffIndex" [objT c_QLatin1String, ptrT intT] $ objT c_QVersionNumber
   --, test (qtVersion >= [5, 10]) $ mkStaticMethod' "fromString" "fromStringWithQStringView" [objT c_QStringView] $ objT c_QVersionNumber
   --, test (qtVersion >= [5, 10]) $ mkStaticMethod' "fromString" "fromStringWithQStringViewSuffIndex" [objT c_QStringView, ptrT intT] $ objT c_QVersionNumber
-  , just $ mkConstMethod "isNormalized" [] boolT
-  , just $ mkConstMethod "isNull" [] boolT
+  , just $ mkConstMethod "isNormalized" np boolT
+  , just $ mkConstMethod "isNull" np boolT
   , just $ mkConstMethod "isPrefixOf" [refT $ constT $ objT c_QVersionNumber] boolT
-  , just $ mkConstMethod "majorVersion" [] intT
-  , just $ mkConstMethod "microVersion" [] intT
-  , just $ mkConstMethod "minorVersion" [] intT
-  , just $ mkConstMethod "normalized" [] $ objT c_QVersionNumber
+  , just $ mkConstMethod "majorVersion" np intT
+  , just $ mkConstMethod "microVersion" np intT
+  , just $ mkConstMethod "minorVersion" np intT
+  , just $ mkConstMethod "normalized" np $ objT c_QVersionNumber
   , just $ mkConstMethod "segmentAt" [intT] intT
-  , just $ mkConstMethod "segmentCount" [] intT
-  , just $ mkConstMethod "segments" [] $ toGcT $ objT c_QVectorInt
-  , just $ mkConstMethod "toString" [] $ objT c_QString
+  , just $ mkConstMethod "segmentCount" np intT
+  , just $ mkConstMethod "segments" np $ toGcT $ objT c_QVectorInt
+  , just $ mkConstMethod "toString" np $ objT c_QString
   ]

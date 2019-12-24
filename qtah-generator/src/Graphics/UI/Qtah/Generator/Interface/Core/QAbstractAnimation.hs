@@ -24,7 +24,6 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QAbstractAnimation (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass, ExportEnum),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -33,16 +32,17 @@ import Foreign.Hoppy.Generator.Spec (
   makeClass,
   mkConstMethod,
   mkMethod',
-  mkMethod
+  mkMethod,
+  np,
   )
 import Graphics.UI.Qtah.Generator.Interface.Core.QObject (c_QObject)
 import Foreign.Hoppy.Generator.Types (boolT, enumT, intT, voidT)
 import Foreign.Hoppy.Generator.Version (collect, just)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
-  c_ListenerInt,
-  c_Listener,
-  c_ListenerStateState,
-  c_ListenerDirection,
+  listener,
+  listenerDirection,
+  listenerInt,
+  listenerStateState,
   )
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModuleWithMinVersion)
 import Graphics.UI.Qtah.Generator.Types
@@ -52,12 +52,12 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModuleWithMinVersion ["Core", "QAbstractAnimation"] [4, 6] $
-  QtExport (ExportClass c_QAbstractAnimation) :
+  qtExport c_QAbstractAnimation :
   map QtExportSignal signals ++
   collect
-  [ just $ QtExport $ ExportEnum e_DeletionPolicy
-  , just $ QtExport $ ExportEnum e_Direction
-  , just $ QtExport $ ExportEnum e_State
+  [ just $ qtExport e_DeletionPolicy
+  , just $ qtExport e_Direction
+  , just $ qtExport e_State
   ]
 
 c_QAbstractAnimation =
@@ -65,16 +65,16 @@ c_QAbstractAnimation =
   classSetEntityPrefix "" $
   makeClass (ident "QAbstractAnimation") Nothing [c_QObject] $
   collect
-  [ just $ mkConstMethod "currentLoopTime" [] intT
-  , just $ mkConstMethod "duration" [] intT
-  --, just $ mkConstMethod "group" [] $ ptrT $ objT c_QAnimationGroup
-  , just $ mkMethod "pause" [] voidT
-  , just $ mkMethod "resume" [] voidT
+  [ just $ mkConstMethod "currentLoopTime" np intT
+  , just $ mkConstMethod "duration" np intT
+  --, just $ mkConstMethod "group" np $ ptrT $ objT c_QAnimationGroup
+  , just $ mkMethod "pause" np voidT
+  , just $ mkMethod "resume" np voidT
   , just $ mkMethod "setPaused" [boolT] voidT
-  , just $ mkMethod' "start" "start" [] voidT
+  , just $ mkMethod' "start" "start" np voidT
   , just $ mkMethod' "start" "startWithDeletionPolicy" [enumT e_DeletionPolicy] voidT
-  , just $ mkMethod "stop" [] voidT
-  , just $ mkConstMethod "totalDuration" [] intT
+  , just $ mkMethod "stop" np voidT
+  , just $ mkConstMethod "totalDuration" np intT
 
     -- TODO
   ]
@@ -82,27 +82,27 @@ c_QAbstractAnimation =
 signals :: [Signal]
 signals =
   collect
-  [ just $ makeSignal c_QAbstractAnimation "currentLoopChanged" c_ListenerInt
-  , just $ makeSignal c_QAbstractAnimation "directionChanged" c_ListenerDirection
-  , just $ makeSignal c_QAbstractAnimation "finished" c_Listener
-  , just $ makeSignal c_QAbstractAnimation "stateChanged" c_ListenerStateState
+  [ just $ makeSignal c_QAbstractAnimation "currentLoopChanged" listenerInt
+  , just $ makeSignal c_QAbstractAnimation "directionChanged" listenerDirection
+  , just $ makeSignal c_QAbstractAnimation "finished" listener
+  , just $ makeSignal c_QAbstractAnimation "stateChanged" listenerStateState
   ]
 
 e_DeletionPolicy =
   makeQtEnum (ident1 "QAbstractAnimation" "DeletionPolicy") [includeStd "QAbstractAnimation"]
-  [ (0, ["keep", "when", "stopped"])
-  , (1, ["delete", "when", "stopped"])
+  [ "KeepWhenStopped"
+  , "DeleteWhenStopped"
   ]
 
 e_Direction =
   makeQtEnum (ident1 "QAbstractAnimation" "Direction") [includeStd "QAbstractAnimation"]
-  [ (0, ["forward"])
-  , (1, ["backward"])
+  [ "Forward"
+  , "Backward"
   ]
 
 e_State =
   makeQtEnum (ident1 "QAbstractAnimation" "State") [includeStd "QAbstractAnimation"]
-  [ (0, ["stopped"])
-  , (1, ["paused"])
-  , (2, ["running"])
+  [ "Stopped"
+  , "Paused"
+  , "Running"
   ]

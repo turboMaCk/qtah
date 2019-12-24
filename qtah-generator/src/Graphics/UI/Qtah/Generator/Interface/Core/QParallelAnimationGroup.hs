@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QParallelAnimationGroup (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -30,7 +29,7 @@ import Foreign.Hoppy.Generator.Spec (
   )
 import Graphics.UI.Qtah.Generator.Interface.Core.QAnimationGroup (c_QAnimationGroup)
 --import Graphics.UI.Qtah.Generator.Interface.Core.QObject (c_QObject)
---import Foreign.Hoppy.Generator.Types (voidT, enumT, bitspaceT, constT, objT, ptrT, refT)
+--import Foreign.Hoppy.Generator.Types (voidT, enumT, flagsT, constT, objT, ptrT, refT)
 import Foreign.Hoppy.Generator.Version (collect)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModuleWithMinVersion)
 import Graphics.UI.Qtah.Generator.Types
@@ -40,7 +39,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModuleWithMinVersion ["Core", "QParallelAnimationGroup"] [4, 6] $
-  [QtExport $ ExportClass c_QParallelAnimationGroup]
+  [qtExport c_QParallelAnimationGroup]
 
 c_QParallelAnimationGroup =
   addReqIncludes [ includeStd "QParallelAnimationGroup" ] $

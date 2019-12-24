@@ -21,11 +21,10 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QAbstractSpinBox (
   e_ButtonSymbols,
   e_CorrectionMode,
   e_StepEnabledFlag,
-  bs_StepEnabled,
+  fl_StepEnabled,
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportBitspace, ExportClass, ExportEnum),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -38,13 +37,15 @@ import Foreign.Hoppy.Generator.Spec (
   mkCtor,
   mkMethod,
   mkProp,
+  np,
   )
-import Foreign.Hoppy.Generator.Types (bitspaceT, boolT, enumT, intT, objT, ptrT, refT, voidT)
+import Foreign.Hoppy.Generator.Types (boolT, enumT, intT, objT, ptrT, refT, voidT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
+import Graphics.UI.Qtah.Generator.Flags (flagsT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
-import Graphics.UI.Qtah.Generator.Interface.Core.Types (bs_Alignment)
-import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (c_Listener)
+import Graphics.UI.Qtah.Generator.Interface.Core.Types (fl_Alignment)
+import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (listener)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QWidget (c_QWidget)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
@@ -54,13 +55,13 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QAbstractSpinBox"] $
-  QtExport (ExportClass c_QAbstractSpinBox) :
+  qtExport c_QAbstractSpinBox :
   map QtExportSignal signals ++
-  (map QtExport . collect)
-  [ test (qtVersion >= [4, 2]) $ ExportEnum e_ButtonSymbols
-  , just $ ExportEnum e_CorrectionMode
-  , just $ ExportEnum e_StepEnabledFlag
-  , just $ ExportBitspace bs_StepEnabled
+  collect
+  [ test (qtVersion >= [4, 2]) $ qtExport e_ButtonSymbols
+  , just $ qtExport e_CorrectionMode
+  , just $ qtExport e_StepEnabledFlag
+  , just $ qtExport fl_StepEnabled
   ]
 
 c_QAbstractSpinBox =
@@ -68,52 +69,52 @@ c_QAbstractSpinBox =
   classSetEntityPrefix "" $
   makeClass (ident "QAbstractSpinBox") Nothing [c_QWidget] $
   collect
-  [ just $ mkCtor "new" []
+  [ just $ mkCtor "new" np
   , just $ mkCtor "newWithParent" [ptrT $ objT c_QWidget]
   , test (qtVersion >= [4, 2]) $ mkBoolIsProp "accelerated"
-  , just $ mkProp "alignment" $ bitspaceT bs_Alignment
+  , just $ mkProp "alignment" $ flagsT fl_Alignment
   , test (qtVersion >= [4, 2]) $ mkProp "buttonSymbols" $ enumT e_ButtonSymbols
-  , just $ mkMethod "clear" [] voidT
+  , just $ mkMethod "clear" np voidT
   , just $ mkProp "correctionMode" $ enumT e_CorrectionMode
-  , test (qtVersion >= [4, 2]) $ mkConstMethod "hasAcceptableInput" [] boolT
+  , test (qtVersion >= [4, 2]) $ mkConstMethod "hasAcceptableInput" np boolT
   , just $ mkConstMethod "fixup" [refT $ objT c_QString] voidT
   , test (qtVersion >= [4, 3]) $ mkBoolHasProp "frame"
   , test (qtVersion >= [5, 3]) $ mkBoolIsProp "groupSeparatorShown"
-  , just $ mkMethod "interpretText" [] voidT
+  , just $ mkMethod "interpretText" np voidT
   , just $ mkProp "keyboardTracking" boolT
   , just $ mkBoolIsProp "readOnly"
-  , just $ mkMethod "selectAll" [] voidT
+  , just $ mkMethod "selectAll" np voidT
   , just $ mkProp "specialValueText" $ objT c_QString
   , just $ mkMethod "stepBy" [intT] voidT
-  , just $ mkMethod "stepDown" [] voidT
-  , just $ mkMethod "stepUp" [] voidT
-  , just $ mkConstMethod "text" [] $ objT c_QString
+  , just $ mkMethod "stepDown" np voidT
+  , just $ mkMethod "stepUp" np voidT
+  , just $ mkConstMethod "text" np $ objT c_QString
     -- TODO validate
   , just $ mkProp "wrapping" boolT
   ]
 
 signals =
-  [ makeSignal c_QAbstractSpinBox "editingFinished" c_Listener
+  [ makeSignal c_QAbstractSpinBox "editingFinished" listener
   ]
 
 e_ButtonSymbols =
   addReqIncludes [includeStd "QAbstractSpinBox"] $
   makeQtEnum (ident1 "QAbstractSpinBox" "ButtonSymbols") [includeStd "QAbstractSpinBox"]
-  [ (0, ["up", "down", "arrows"])
-  , (1, ["plus", "minus"])
-  , (2, ["no", "buttons"])
+  [ "UpDownArrows"
+  , "PlusMinus"
+  , "NoButtons"
   ]
 
 e_CorrectionMode =
   makeQtEnum (ident1 "QAbstractSpinBox" "CorrectionMode") [includeStd "QAbstractSpinBox"]
-  [ (0, ["correct", "to", "previous", "value"])
-  , (1, ["correct", "to", "nearest", "value"])
+  [ "CorrectToPreviousValue"
+  , "CorrectToNearestValue"
   ]
 
-(e_StepEnabledFlag, bs_StepEnabled) =
-  makeQtEnumBitspace (ident1 "QAbstractSpinBox" "StepEnabledFlag") "StepEnabled"
+(e_StepEnabledFlag, fl_StepEnabled) =
+  makeQtEnumAndFlags (ident1 "QAbstractSpinBox" "StepEnabledFlag") "StepEnabled"
   [includeStd "QAbstractSpinBox"]
-  [ (0x0, ["step", "none"])
-  , (0x1, ["step", "up", "enabled"])
-  , (0x2, ["step", "down", "enabled"])
+  [ "StepNone"
+  , "StepUpEnabled"
+  , "StepDownEnabled"
   ]

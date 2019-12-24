@@ -21,14 +21,14 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QStaticPlugin (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
   includeStd,
   makeClass,
   mkMethod',
-  mkMethod
+  mkMethod,
+  np,
   )
 import Foreign.Hoppy.Generator.Types (charT, constT, objT, ptrT)
 import Foreign.Hoppy.Generator.Version (collect, just)
@@ -42,14 +42,14 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModuleWithMinVersion ["Core", "QStaticPlugin"] [5, 2] $
-  [QtExport $ ExportClass c_QStaticPlugin]
+  [qtExport c_QStaticPlugin]
 
 c_QStaticPlugin =
   addReqIncludes [ includeStd "QStaticPlugin" ] $
   classSetEntityPrefix "" $
   makeClass (ident "QStaticPlugin") Nothing [] $
   collect
-  [ just $ mkMethod' "instance" "getInstance" [] $ ptrT $ objT c_QObject
-  --, just $ mkConstMethod "metaData" [] $ objT c_QJsonObject
-  , just $ mkMethod "rawMetaData" [] $ ptrT $ constT charT
+  [ just $ mkMethod' "instance" "getInstance" np $ ptrT $ objT c_QObject
+  --, just $ mkConstMethod "metaData" np $ objT c_QJsonObject
+  , just $ mkMethod "rawMetaData" np $ ptrT $ constT charT
   ]

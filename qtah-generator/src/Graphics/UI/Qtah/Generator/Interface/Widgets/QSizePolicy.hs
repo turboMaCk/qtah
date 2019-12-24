@@ -22,7 +22,6 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QSizePolicy (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportBitspace, ExportClass, ExportEnum),
   addReqIncludes,
   classSetConversionToGc,
   classSetEntityPrefix,
@@ -35,15 +34,17 @@ import Foreign.Hoppy.Generator.Spec (
   mkCtor,
   mkMethod,
   mkProp,
+  np,
   )
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Copyable, Equatable),
   classAddFeatures,
   )
-import Foreign.Hoppy.Generator.Types (bitspaceT, boolT, enumT, intT, voidT)
+import Foreign.Hoppy.Generator.Types (boolT, enumT, intT, voidT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
-import Graphics.UI.Qtah.Generator.Interface.Core.Types (bs_Orientations)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
+import Graphics.UI.Qtah.Generator.Flags (flagsT)
+import Graphics.UI.Qtah.Generator.Interface.Core.Types (fl_Orientations)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
 
@@ -53,11 +54,11 @@ aModule =
   AQtModule $
   makeQtModule ["Widgets", "QSizePolicy"] $
   collect
-  [ just $ QtExport $ ExportClass c_QSizePolicy
-  , test (qtVersion >= [4, 3]) $ QtExport $ ExportEnum e_ControlType
-  , test (qtVersion >= [4, 3]) $ QtExport $ ExportBitspace bs_ControlTypes
-  , just $ QtExport $ ExportEnum e_Policy
-  , just $ QtExport $ ExportEnum e_PolicyFlag
+  [ just $ qtExport c_QSizePolicy
+  , test (qtVersion >= [4, 3]) $ qtExport e_ControlType
+  , test (qtVersion >= [4, 3]) $ qtExport fl_ControlTypes
+  , just $ qtExport e_Policy
+  , just $ qtExport e_PolicyFlag
   ]
 
 c_QSizePolicy =
@@ -67,11 +68,11 @@ c_QSizePolicy =
   classSetEntityPrefix "" $
   makeClass (ident "QSizePolicy") Nothing [] $
   collect
-  [ just $ mkCtor "new" []
+  [ just $ mkCtor "new" np
   , test (qtVersion >= [4, 3]) $ mkCtor "newWithOptions"
     [enumT e_Policy, enumT e_Policy, enumT e_ControlType]
   , test (qtVersion >= [4, 3]) $ mkProp "controlType" $ enumT e_ControlType
-  , just $ mkConstMethod "expandingDirections" [] $ bitspaceT bs_Orientations
+  , just $ mkConstMethod "expandingDirections" np $ flagsT fl_Orientations
   , just $ mkBoolHasProp "heightForWidth"
   , just $ mkBoolHasProp "widthForHeight"
   , just $ mkProp "horizontalPolicy" $ enumT e_Policy
@@ -79,44 +80,44 @@ c_QSizePolicy =
   , just $ mkProp "verticalPolicy" $ enumT e_Policy
   , just $ mkProp "verticalStretch" intT
   , test (qtVersion >= [5, 2]) $ mkProp "retainSizeWhenHidden" boolT
-  , just $ mkMethod "transpose" [] voidT
+  , just $ mkMethod "transpose" np voidT
   ]
 
-(e_ControlType, bs_ControlTypes) =
-  makeQtEnumBitspace (ident1 "QSizePolicy" "ControlType") "ControlTypes"
+(e_ControlType, fl_ControlTypes) =
+  makeQtEnumAndFlags (ident1 "QSizePolicy" "ControlType") "ControlTypes"
   [includeStd "QSizePolicy"]
-  [ (0x00000001, ["default", "type"])
-  , (0x00000002, ["button", "box"])
-  , (0x00000004, ["check", "box"])
-  , (0x00000008, ["combo", "box"])
-  , (0x00000010, ["frame"])
-  , (0x00000020, ["group", "box"])
-  , (0x00000040, ["label"])
-  , (0x00000080, ["line"])
-  , (0x00000100, ["line", "edit"])
-  , (0x00000200, ["push", "button"])
-  , (0x00000400, ["radio", "button"])
-  , (0x00000800, ["slider"])
-  , (0x00001000, ["spin", "box"])
-  , (0x00002000, ["tab", "widget"])
-  , (0x00004000, ["tool", "button"])
+  [ "DefaultType"
+  , "ButtonBox"
+  , "CheckBox"
+  , "ComboBox"
+  , "Frame"
+  , "GroupBox"
+  , "Label"
+  , "Line"
+  , "LineEdit"
+  , "PushButton"
+  , "RadioButton"
+  , "Slider"
+  , "SpinBox"
+  , "TabWidget"
+  , "ToolButton"
   ]
 
 e_Policy =
   makeQtEnum (ident1 "QSizePolicy" "Policy") [includeStd "QSizePolicy"]
-  [ (0x0, ["fixed"])
-  , (0x1, ["minimum"])  -- GrowFlag
-  , (0x4, ["maximum"])  -- ShrinkFlag
-  , (0x5, ["preferred"])  -- GrowFlag | ShrinkFlag
-  , (0x7, ["expanding"])  -- GrowFlag | ShrinkFlag | ExpandFlag
-  , (0x3, ["minimum", "expanding"])  -- GrowFlag | ExpandFlag
-  , (0xd, ["ignored"])  -- ShrinkFlag | GrowFlag | IgnoreFlag
+  [ "Fixed"
+  , "Minimum"  -- GrowFlag
+  , "Maximum"  -- ShrinkFlag
+  , "Preferred"  -- GrowFlag | ShrinkFlag
+  , "Expanding"  -- GrowFlag | ShrinkFlag | ExpandFlag
+  , "MinimumExpanding"  -- GrowFlag | ExpandFlag
+  , "Ignored"  -- ShrinkFlag | GrowFlag | IgnoreFlag
   ]
 
 e_PolicyFlag =
   makeQtEnum (ident1 "QSizePolicy" "PolicyFlag") [includeStd "QSizePolicy"]
-  [ (0x1, ["grow", "flag"])
-  , (0x2, ["expand", "flag"])
-  , (0x4, ["shrink", "flag"])
-  , (0x8, ["ignore", "flag"])
+  [ "GrowFlag"
+  , "ExpandFlag"
+  , "ShrinkFlag"
+  , "IgnoreFlag"
   ]

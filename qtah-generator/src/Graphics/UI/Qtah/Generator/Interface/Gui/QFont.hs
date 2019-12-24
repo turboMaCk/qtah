@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Gui.QFont (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetConversionToGc,
   classSetEntityPrefix,
@@ -31,6 +30,7 @@ import Foreign.Hoppy.Generator.Spec (
   mkCtor,
   mkConstMethod,
   mkMethod,
+  np,
   )
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Assignable, Copyable, Equatable),
@@ -46,7 +46,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Gui", "QFont"]
-  [ QtExport $ ExportClass c_QFont
+  [ qtExport c_QFont
   ]
 
 c_QFont =
@@ -56,13 +56,13 @@ c_QFont =
   classSetEntityPrefix "" $
   makeClass (ident "QFont") Nothing [] $
   collect
-  [ just $ mkCtor "new" []
-  , just $ mkConstMethod "bold" [] boolT
+  [ just $ mkCtor "new" np
+  , just $ mkConstMethod "bold" np boolT
   , just $ mkMethod "setBold" [boolT] voidT
   , just $ mkMethod "setPixelSize" [intT] voidT
   , just $ mkMethod "setPointSize" [intT] voidT
   , just $ mkMethod "setWeight" [intT] voidT
-  , just $ mkConstMethod "weight" [] intT
+  , just $ mkConstMethod "weight" np intT
   ]
 
 -- TODO The rest of QFont.

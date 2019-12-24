@@ -20,7 +20,6 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QSplitter (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -30,11 +29,12 @@ import Foreign.Hoppy.Generator.Spec (
   mkCtor,
   mkMethod,
   mkProp,
+  np,
   )
 import Foreign.Hoppy.Generator.Types (boolT, enumT, intT, objT, ptrT, voidT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QList (c_QListInt)
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (e_Orientation)
-import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (c_ListenerIntInt)
+import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (listenerIntInt)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QFrame (c_QFrame)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QWidget (c_QWidget)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
@@ -45,20 +45,20 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QSplitter"] $
-  (QtExport $ ExportClass c_QSplitter) :
+  (qtExport c_QSplitter) :
   map QtExportSignal signals
 
 c_QSplitter =
   addReqIncludes [includeStd "QSplitter"] $
   classSetEntityPrefix "" $
   makeClass (ident "QSplitter") Nothing [c_QFrame]
-  [ mkCtor "new" []
+  [ mkCtor "new" np
   , mkCtor "newWithParent" [ptrT $ objT c_QWidget]
   , mkCtor "newWithOrientation" [enumT e_Orientation]
   , mkCtor "newWithOrientationAndParent" [enumT e_Orientation, ptrT $ objT c_QWidget]
   , mkMethod "addWidget" [ptrT $ objT c_QWidget] voidT
   , mkProp "childrenCollapsible" boolT
-  , mkConstMethod "count" [] intT
+  , mkConstMethod "count" np intT
     -- TODO getRange
     -- TODO handle
   , mkProp "handleWidth" intT
@@ -67,15 +67,15 @@ c_QSplitter =
   , mkConstMethod "isCollapsible" [intT] boolT
   , mkProp "opaqueResize" boolT
   , mkProp "orientation" $ enumT e_Orientation
-  , mkMethod "refresh" [] voidT
+  , mkMethod "refresh" np voidT
     -- TODO restoreState
     -- TODO saveState
   , mkMethod "setCollapsible" [intT, boolT] voidT
   , mkMethod "setSizes" [objT c_QListInt] voidT
   , mkMethod "setStretchFactor" [intT, intT] voidT
-  , mkMethod "sizes" [] $ objT c_QListInt
+  , mkMethod "sizes" np $ objT c_QListInt
   , mkConstMethod "widget" [intT] $ ptrT $ objT c_QWidget
   ]
 
 signals =
-  [ makeSignal c_QSplitter "splitterMoved" c_ListenerIntInt ]
+  [ makeSignal c_QSplitter "splitterMoved" listenerIntInt ]

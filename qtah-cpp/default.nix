@@ -16,15 +16,14 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 { mkDerivation, base, Cabal, qt, qtah-generator, stdenv, lib
-, enableSplitObjs ? null
 , forceParallelBuilding ? false
 }:
-mkDerivation ({
+mkDerivation {
   pname = "qtah-cpp";
   version = "0.6.0";
   src = ./.;
   libraryHaskellDepends = [ base Cabal qtah-generator ];
-  librarySystemDepends = [ qt ];
+  librarySystemDepends = [ qt.qtbase ];
   homepage = "http://khumba.net/projects/qtah";
   description = "Qt bindings for Haskell - C++ library";
   license = stdenv.lib.licenses.lgpl3Plus;
@@ -34,4 +33,4 @@ mkDerivation ({
     if forceParallelBuilding then ''
       configureFlags+=" --ghc-option=-j$NIX_BUILD_CORES"
     '' else null;
-} // lib.filterAttrs (k: v: v != null) { inherit enableSplitObjs; })
+}

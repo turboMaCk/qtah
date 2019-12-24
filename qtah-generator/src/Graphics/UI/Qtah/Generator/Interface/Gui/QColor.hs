@@ -35,7 +35,6 @@ import Foreign.Hoppy.Generator.Spec (
     classHaskellConversionToCppFn,
     classHaskellConversionType
   ),
-  Export (ExportEnum, ExportFn, ExportClass),
   Purity (Pure),
   addReqIncludes,
   classSetEntityPrefix,
@@ -54,6 +53,7 @@ import Foreign.Hoppy.Generator.Spec (
   mkMethod',
   mkProp,
   mkStaticMethod,
+  np,
   toExtName,
   )
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
@@ -62,7 +62,7 @@ import Foreign.Hoppy.Generator.Spec.ClassFeature (
   )
 import Foreign.Hoppy.Generator.Types (boolT, enumT, intT, objT, uintT, voidT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Graphics.UI.Qtah.Generator.Interface.Core.QStringList (c_QStringList)
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (e_GlobalColor, qreal)
@@ -81,19 +81,19 @@ aModule =
   AQtModule $
   makeQtModule ["Gui", "QColor"] $
   collect
-  [ just $ QtExport $ ExportClass c_QColor
-  , test (qtVersion >= [5, 2]) $ QtExport $ ExportEnum e_NameFormat
-  , just $ QtExport $ ExportEnum e_Spec
-  , just $ QtExport $ ExportFn f_qAlpha
-  , just $ QtExport $ ExportFn f_qBlue
-  , just $ QtExport $ ExportFn f_qGray
-  , just $ QtExport $ ExportFn f_qGrayFromRgb
-  , just $ QtExport $ ExportFn f_qGreen
-  , test (qtVersion >= [5, 3]) $ QtExport $ ExportFn f_qPremultiply
-  , just $ QtExport $ ExportFn f_qRed
-  , just $ QtExport $ ExportFn f_qRgb
-  , just $ QtExport $ ExportFn f_qRgba
-  , test (qtVersion >= [5, 3]) $ QtExport $ ExportFn f_qUnpremultiply
+  [ just $ qtExport c_QColor
+  , test (qtVersion >= [5, 2]) $ qtExport e_NameFormat
+  , just $ qtExport e_Spec
+  , just $ qtExport f_qAlpha
+  , just $ qtExport f_qBlue
+  , just $ qtExport f_qGray
+  , just $ qtExport f_qGrayFromRgb
+  , just $ qtExport f_qGreen
+  , test (qtVersion >= [5, 3]) $ qtExport f_qPremultiply
+  , just $ qtExport f_qRed
+  , just $ qtExport f_qRgb
+  , just $ qtExport f_qRgba
+  , test (qtVersion >= [5, 3]) $ qtExport f_qUnpremultiply
   ]
 
 c_QColor =
@@ -103,7 +103,7 @@ c_QColor =
   classSetEntityPrefix "" $
   makeClass (ident "QColor") Nothing [] $
   collect
-  [ just $ mkCtor "new" []
+  [ just $ mkCtor "new" np
   , just $ mkCtor "newQRgb" [qrgb]
   , just $ mkCtor "newRgb" [intT, intT, intT]
   , just $ mkCtor "newRgba" [intT, intT, intT, intT]
@@ -111,45 +111,45 @@ c_QColor =
   , just $ mkCtor "newGlobalColor" [enumT e_GlobalColor]
   , just $ mkProp "alpha" intT
   , just $ mkProp "alphaF" qreal
-  , just $ mkConstMethod "black" [] intT
-  , just $ mkConstMethod "blackF" [] qreal
+  , just $ mkConstMethod "black" np intT
+  , just $ mkConstMethod "blackF" np qreal
   , just $ mkProp "blue" intT
   , just $ mkProp "blueF" qreal
-  , just $ mkStaticMethod "colorNames" [] $ objT c_QStringList
+  , just $ mkStaticMethod "colorNames" np $ objT c_QStringList
   , just $ mkConstMethod "convertTo" [enumT e_Spec] $ objT c_QColor
-  , just $ mkConstMethod "cyan" [] intT
-  , just $ mkConstMethod "cyanF" [] qreal
-  , test (qtVersion >= [4, 3]) $ mkConstMethod' "darker" "darker" [] $ objT c_QColor
+  , just $ mkConstMethod "cyan" np intT
+  , just $ mkConstMethod "cyanF" np qreal
+  , test (qtVersion >= [4, 3]) $ mkConstMethod' "darker" "darker" np $ objT c_QColor
   , test (qtVersion >= [4, 3]) $ mkConstMethod' "darker" "darkerBy" [intT] $ objT c_QColor
   , just $ mkProp "green" intT
   , just $ mkProp "greenF" qreal
-  , test (qtVersion >= [4, 6]) $ mkConstMethod "hslHue" [] intT
-  , test (qtVersion >= [4, 6]) $ mkConstMethod "hslHueF" [] qreal
-  , test (qtVersion >= [4, 6]) $ mkConstMethod "hslSaturation" [] intT
-  , test (qtVersion >= [4, 6]) $ mkConstMethod "hslSaturationF" [] qreal
-  , just $ mkConstMethod "hsvHue" [] intT
-  , just $ mkConstMethod "hsvHueF" [] qreal
-  , just $ mkConstMethod "hsvSaturation" [] intT
-  , just $ mkConstMethod "hsvSaturationF" [] qreal
-  , just $ mkConstMethod "hue" [] intT
-  , just $ mkConstMethod "hueF" [] qreal
-  , just $ mkConstMethod "isValid" [] boolT
+  , test (qtVersion >= [4, 6]) $ mkConstMethod "hslHue" np intT
+  , test (qtVersion >= [4, 6]) $ mkConstMethod "hslHueF" np qreal
+  , test (qtVersion >= [4, 6]) $ mkConstMethod "hslSaturation" np intT
+  , test (qtVersion >= [4, 6]) $ mkConstMethod "hslSaturationF" np qreal
+  , just $ mkConstMethod "hsvHue" np intT
+  , just $ mkConstMethod "hsvHueF" np qreal
+  , just $ mkConstMethod "hsvSaturation" np intT
+  , just $ mkConstMethod "hsvSaturationF" np qreal
+  , just $ mkConstMethod "hue" np intT
+  , just $ mkConstMethod "hueF" np qreal
+  , just $ mkConstMethod "isValid" np boolT
   , test (qtVersion >= [4, 7]) $ mkStaticMethod "isValidColor" [objT c_QString] boolT
-  , test (qtVersion >= [4, 3]) $ mkConstMethod' "lighter" "lighter" [] $ objT c_QColor
+  , test (qtVersion >= [4, 3]) $ mkConstMethod' "lighter" "lighter" np $ objT c_QColor
   , test (qtVersion >= [4, 3]) $ mkConstMethod' "lighter" "lighterBy" [intT] $ objT c_QColor
-  , test (qtVersion >= [4, 6]) $ mkConstMethod "lightness" [] intT
-  , test (qtVersion >= [4, 6]) $ mkConstMethod "lightnessF" [] qreal
-  , just $ mkConstMethod "magenta" [] intT
-  , just $ mkConstMethod "magentaF" [] qreal
-  , just $ mkConstMethod' "name" "name" [] $ objT c_QString
+  , test (qtVersion >= [4, 6]) $ mkConstMethod "lightness" np intT
+  , test (qtVersion >= [4, 6]) $ mkConstMethod "lightnessF" np qreal
+  , just $ mkConstMethod "magenta" np intT
+  , just $ mkConstMethod "magentaF" np qreal
+  , just $ mkConstMethod' "name" "name" np $ objT c_QString
   , test (qtVersion >= [5, 2]) $
     mkConstMethod' "name" "nameWithFormat" [enumT e_NameFormat] $ objT c_QString
   , just $ mkProp "red" intT
   , just $ mkProp "redF" qreal
-  , just $ mkConstMethod "rgb" [] qrgb
-  , just $ mkConstMethod "rgba" [] qrgb
-  , just $ mkConstMethod "saturation" [] intT
-  , just $ mkConstMethod "saturationF" [] qreal
+  , just $ mkConstMethod "rgb" np qrgb
+  , just $ mkConstMethod "rgba" np qrgb
+  , just $ mkConstMethod "saturation" np intT
+  , just $ mkConstMethod "saturationF" np qreal
   , just $ mkMethod' "setCmyk" "setCmyk" [intT, intT, intT, intT] voidT
   , just $ mkMethod' "setCmyk" "setCmyka" [intT, intT, intT, intT, intT] voidT
   , just $ mkMethod' "setCmykF" "setCmykF" [qreal, qreal, qreal, qreal] voidT
@@ -169,15 +169,15 @@ c_QColor =
   , just $ mkMethod' "setRgb" "setRgba" [intT, intT, intT, intT] voidT
   , just $ mkMethod' "setRgbF" "setRgbF" [qreal, qreal, qreal] voidT
   , just $ mkMethod' "setRgbF" "setRgbaF" [qreal, qreal, qreal, qreal] voidT
-  , just $ mkConstMethod "spec" [] $ enumT e_Spec
-  , just $ mkConstMethod "toCmyk" [] $ objT c_QColor
-  , just $ mkConstMethod "toHsl" [] $ objT c_QColor
-  , just $ mkConstMethod "toHsv" [] $ objT c_QColor
-  , just $ mkConstMethod "toRgb" [] $ objT c_QColor
-  , just $ mkConstMethod "value" [] intT
-  , just $ mkConstMethod "valueF" [] qreal
-  , just $ mkConstMethod "yellow" [] intT
-  , just $ mkConstMethod "yellowF" [] qreal
+  , just $ mkConstMethod "spec" np $ enumT e_Spec
+  , just $ mkConstMethod "toCmyk" np $ objT c_QColor
+  , just $ mkConstMethod "toHsl" np $ objT c_QColor
+  , just $ mkConstMethod "toHsv" np $ objT c_QColor
+  , just $ mkConstMethod "toRgb" np $ objT c_QColor
+  , just $ mkConstMethod "value" np intT
+  , just $ mkConstMethod "valueF" np qreal
+  , just $ mkConstMethod "yellow" np intT
+  , just $ mkConstMethod "yellowF" np qreal
   ]
 
   where
@@ -217,33 +217,36 @@ c_QColor =
           sayLn "QtahP.return this'"
 
       , classHaskellConversionFromCppFn = Just $ do
-        addImports $ mconcat [hsImports "Prelude" ["($)", "(>>=)"],
+        addImports $ mconcat [hsImports "Prelude" ["($)", "(++)", "(>>=)"],
                               importForPrelude,
                               importForRuntime,
                               hColorImport]
         sayLn "\\this' -> spec this' >>= \\spec' -> case spec' of"
-        indent $ forM_ components $ \(spec, letters, getters) -> do
-          saysLn [spec, " -> do"]
-          indent $ do
-            forM_ (zip letters getters) $ \(var, get) ->
-              saysLn [[var], "' <- QtahP.fmap QtahFHR.coerceIntegral $ ", get, " this'"]
-            saysLn $ ["QtahP.return $ HColor.", spec] ++ map (\var -> [' ', var, '\'']) letters
+        indent $ do
+          forM_ components $ \(spec, letters, getters) -> do
+            saysLn [spec, " -> do"]
+            indent $ do
+              forM_ (zip letters getters) $ \(var, get) ->
+                saysLn [[var], "' <- QtahP.fmap QtahFHR.coerceIntegral $ ", get, " this'"]
+              saysLn $ ["QtahP.return $ HColor.", spec] ++ map (\var -> [' ', var, '\'']) letters
+          saysLn ["_ -> QtahP.error $ \"HColor's Decodable instance doesn't understand ",
+                  "QColor::Spec \" ++ QtahP.show spec' ++ \".\""]
       }
 
 -- Introduced in Qt 5.2.
 e_NameFormat =
   makeQtEnum (ident1 "QColor" "NameFormat") [includeStd "QColor"]
-  [ (0, ["hex", "rgb"])
-  , (1, ["hex", "argb"])
+  [ "HexRgb"
+  , "HexArgb"
   ]
 
 e_Spec =
   makeQtEnum (ident1 "QColor" "Spec") [includeStd "QColor"]
-  [ (0, ["invalid"])
-  , (1, ["rgb"])
-  , (2, ["hsv"])
-  , (3, ["cmyk"])
-  , (4, ["hsl"])
+  [ "Invalid"
+  , "Rgb"
+  , "Hsv"
+  , "Cmyk"
+  , "Hsl"
   ]
 
 -- | This is a typedef QRgb that holds a AARRGGBB value and is

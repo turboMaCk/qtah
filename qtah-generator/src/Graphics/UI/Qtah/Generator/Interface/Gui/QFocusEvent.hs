@@ -28,6 +28,7 @@ import Foreign.Hoppy.Generator.Spec (
   makeClass,
   mkConstMethod,
   mkCtor,
+  np,
   )
 import Foreign.Hoppy.Generator.Types (boolT, enumT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QEvent (c_QEvent, e_Type)
@@ -48,7 +49,7 @@ c_QFocusEvent =
   classSetEntityPrefix "" $
   makeClass (ident "QFocusEvent") Nothing [c_QEvent]
   [ mkCtor "new" [enumT e_Type, enumT e_FocusReason]
-  , mkConstMethod "gotFocus" [] boolT
-  , mkConstMethod "lostFocus" [] boolT
-  , mkConstMethod "reason" [] $ enumT e_FocusReason
+  , mkConstMethod "gotFocus" np boolT
+  , mkConstMethod "lostFocus" np boolT
+  , mkConstMethod "reason" np $ enumT e_FocusReason
   ]

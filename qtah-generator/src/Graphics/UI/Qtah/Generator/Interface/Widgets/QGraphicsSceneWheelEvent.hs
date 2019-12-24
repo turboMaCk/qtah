@@ -27,13 +27,15 @@ import Foreign.Hoppy.Generator.Spec (
   includeStd,
   makeClass,
   mkConstMethod,
+  np,
   )
-import Foreign.Hoppy.Generator.Types (bitspaceT, enumT, intT, objT)
+import Foreign.Hoppy.Generator.Types (enumT, intT, objT)
+import Graphics.UI.Qtah.Generator.Flags (flagsT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QPoint (c_QPoint)
 import Graphics.UI.Qtah.Generator.Interface.Core.QPointF (c_QPointF)
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (
-  bs_KeyboardModifiers,
-  bs_MouseButtons,
+  fl_KeyboardModifiers,
+  fl_MouseButtons,
   e_Orientation,
   )
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QGraphicsSceneEvent (c_QGraphicsSceneEvent)
@@ -52,11 +54,11 @@ c_QGraphicsSceneWheelEvent =
   addReqIncludes [includeStd "QGraphicsSceneWheelEvent"] $
   classSetEntityPrefix "" $
   makeClass (ident "QGraphicsSceneWheelEvent") Nothing [c_QGraphicsSceneEvent]
-  [ mkConstMethod "buttons" [] $ bitspaceT bs_MouseButtons
-  , mkConstMethod "delta" [] intT
-  , mkConstMethod "modifiers" [] $ bitspaceT bs_KeyboardModifiers
-  , mkConstMethod "orientation" [] $ enumT e_Orientation
-  , mkConstMethod "pos" [] $ objT c_QPointF
-  , mkConstMethod "scenePos" [] $ objT c_QPointF
-  , mkConstMethod "screenPos" [] $ objT c_QPoint
+  [ mkConstMethod "buttons" np $ flagsT fl_MouseButtons
+  , mkConstMethod "delta" np intT
+  , mkConstMethod "modifiers" np $ flagsT fl_KeyboardModifiers
+  , mkConstMethod "orientation" np $ enumT e_Orientation
+  , mkConstMethod "pos" np $ objT c_QPointF
+  , mkConstMethod "scenePos" np $ objT c_QPointF
+  , mkConstMethod "screenPos" np $ objT c_QPoint
   ]

@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QCheckBox (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -30,6 +29,7 @@ import Foreign.Hoppy.Generator.Spec (
   mkBoolIsProp,
   mkCtor,
   mkProp,
+  np,
   )
 import Foreign.Hoppy.Generator.Types (enumT, objT, ptrT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
@@ -44,13 +44,13 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QCheckBox"]
-  [ QtExport $ ExportClass c_QCheckBox ]
+  [ qtExport c_QCheckBox ]
 
 c_QCheckBox =
   addReqIncludes [includeStd "QCheckBox"] $
   classSetEntityPrefix "" $
   makeClass (ident "QCheckBox") Nothing [c_QAbstractButton]
-  [ mkCtor "new" []
+  [ mkCtor "new" np
   , mkCtor "newWithParent" [ptrT $ objT c_QWidget]
   , mkCtor "newWithText" [objT c_QString]
   , mkCtor "newWithTextAndParent" [objT c_QString, ptrT $ objT c_QWidget]

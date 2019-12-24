@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QActionGroup (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -32,12 +31,13 @@ import Foreign.Hoppy.Generator.Spec (
   mkCtor,
   mkMethod,
   mkMethod',
+  np,
   )
 import Foreign.Hoppy.Generator.Types (boolT, objT, ptrT, voidT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QObject (c_QObject)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QIcon (c_QIcon)
-import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Internal.Listener (c_ListenerPtrQAction)
+import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Internal.Listener (listenerPtrQAction)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Widgets.QAction (c_QAction)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
@@ -47,7 +47,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QActionGroup"] $
-  QtExport (ExportClass c_QActionGroup) :
+  qtExport c_QActionGroup :
   map QtExportSignal signals
 
 c_QActionGroup =
@@ -61,7 +61,7 @@ c_QActionGroup =
   , mkMethod' "addAction" "addNewAction" [objT c_QString] $ ptrT $ objT c_QAction
   , mkMethod' "addAction" "addNewActionWithIcon" [objT c_QIcon, objT c_QString] $
     ptrT $ objT c_QAction
-  , mkConstMethod "checkedAction" [] $ ptrT $ objT c_QAction
+  , mkConstMethod "checkedAction" np $ ptrT $ objT c_QAction
   , mkBoolIsProp "enabled"
   , mkBoolIsProp "exclusive"
   , mkMethod "removeAction" [ptrT $ objT c_QAction] voidT
@@ -70,6 +70,6 @@ c_QActionGroup =
   ]
 
 signals =
-  [ makeSignal c_QActionGroup "hovered" c_ListenerPtrQAction
-  , makeSignal c_QActionGroup "triggered" c_ListenerPtrQAction
+  [ makeSignal c_QActionGroup "hovered" listenerPtrQAction
+  , makeSignal c_QActionGroup "triggered" listenerPtrQAction
   ]

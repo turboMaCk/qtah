@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QRandomGenerator (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   Operator (OpCall),
   classSetConversionToGc,
   classSetMonomorphicSuperclass,
@@ -33,7 +32,8 @@ import Foreign.Hoppy.Generator.Spec (
   mkStaticMethod,
   mkCtor,
   mkMethod',
-  mkMethod
+  mkMethod,
+  np,
   )
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Assignable, Copyable, Equatable),
@@ -50,7 +50,7 @@ import Graphics.UI.Qtah.Generator.Interface.Core.Types (quint32, quint64, qsizet
 aModule =
   AQtModule $
   makeQtModuleWithMinVersion ["Core", "QRandomGenerator"] [5, 10] $
-  [QtExport $ ExportClass c_QRandomGenerator]
+  [qtExport c_QRandomGenerator]
 
 c_QRandomGenerator =
   addReqIncludes [ includeStd "QRandomGenerator" ] $
@@ -64,7 +64,7 @@ c_QRandomGenerator =
   -- TODO QRandomGenerator::QRandomGenerator(std::seed_seq &sseq)
   , just $ mkCtor "newWithQuintQsizetype" [ptrT $ constT quint32, qsizetype]
   -- TODO QRandomGenerator::QRandomGenerator(const quint32 (&)[N] seedBuffer = ...)
-  , just $ mkCtor "new" []
+  , just $ mkCtor "new" np
   , just $ mkCtor "newWithQuint" [quint32]
   , just $ mkMethod' "bounded" "boundedWithDouble" [doubleT] doubleT
   , just $ mkMethod' "bounded" "boundedWithQuint" [quint32] quint32
@@ -74,17 +74,17 @@ c_QRandomGenerator =
   , just $ mkMethod "discard" [ullongT] $ voidT
   , just $ mkMethod "fillRange" [ptrT uintT, qsizetype] voidT
   -- TODO just $ mkMethod "fillRange" [ptrT $ uintT, qsizetype] $ voidT
-  , just $ mkMethod "generate64" [] quint64
-  , just $ mkMethod "generate" [] quint32
+  , just $ mkMethod "generate64" np quint64
+  , just $ mkMethod "generate" np quint32
   -- TODO void QRandomGenerator::generate(ForwardIterator begin, ForwardIterator end)
-  , just $ mkMethod "generateDouble" [] doubleT
-  , just $ mkStaticMethod "global" [] $ ptrT $ objT c_QRandomGenerator
-  , just $ mkStaticMethod "max" [] quint32
-  , just $ mkStaticMethod "min" [] quint32
-  , just $ mkStaticMethod "securelySeeded" [] $ objT c_QRandomGenerator
-  , just $ mkMethod' "seed" "seed" [] voidT
+  , just $ mkMethod "generateDouble" np doubleT
+  , just $ mkStaticMethod "global" np $ ptrT $ objT c_QRandomGenerator
+  , just $ mkStaticMethod "max" np quint32
+  , just $ mkStaticMethod "min" np quint32
+  , just $ mkStaticMethod "securelySeeded" np $ objT c_QRandomGenerator
+  , just $ mkMethod' "seed" "seed" np voidT
   , just $ mkMethod' "seed" "seedWithQuint" [quint32] voidT
   -- TODO void QRandomGenerator::seed(std::seed_seq &seed)
-  , just $ mkStaticMethod "system" [] $ ptrT $ objT c_QRandomGenerator
-  , just $ mkMethod OpCall [] quint32
+  , just $ mkStaticMethod "system" np $ ptrT $ objT c_QRandomGenerator
+  , just $ mkMethod OpCall np quint32
   ]

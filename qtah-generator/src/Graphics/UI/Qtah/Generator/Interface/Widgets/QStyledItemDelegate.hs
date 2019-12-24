@@ -21,13 +21,13 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QStyledItemDelegate (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
   includeStd,
   makeClass,
   mkCtor,
+  np,
   )
 import Foreign.Hoppy.Generator.Types (objT, ptrT)
 -- import Graphics.UI.Qtah.Generator.Interface.Core.QLocale (c_QLocale)
@@ -43,7 +43,7 @@ minVersion = [4, 2]
 aModule =
   AQtModule $
   makeQtModuleWithMinVersion ["Widgets", "QStyledItemDelegate"] minVersion
-  [ QtExport $ ExportClass c_QStyledItemDelegate ]
+  [ qtExport c_QStyledItemDelegate ]
 
 c_QStyledItemDelegate =
   addReqIncludes [includeStd "QStyledItemDelegate"] $
@@ -51,7 +51,7 @@ c_QStyledItemDelegate =
   makeClass (ident "QStyledItemDelegate") Nothing [c_QAbstractItemDelegate]
   [
   -- Public Functions
-    mkCtor "new" []
+    mkCtor "new" np
   , mkCtor "newWithParent" [ptrT $ objT c_QObject]
   -- TODO mkConstMethod
   --     "displayText" [objT c_QVariant, objT c_QLocale] (objT c_QString)

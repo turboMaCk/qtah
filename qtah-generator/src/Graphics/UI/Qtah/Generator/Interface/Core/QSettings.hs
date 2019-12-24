@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QSettings (
 
 import Foreign.Hoppy.Generator.Spec (
   Class,
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -31,6 +30,7 @@ import Foreign.Hoppy.Generator.Spec (
   mkConstMethod',
   mkCtor,
   mkMethod,
+  np,
   )
 import Foreign.Hoppy.Generator.Types (objT, ptrT, voidT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QObject (c_QObject)
@@ -45,14 +45,14 @@ aModule :: AModule
 aModule =
   AQtModule $
   makeQtModule ["Core", "QSettings"]
-  [QtExport $ ExportClass c_QSettings]
+  [qtExport c_QSettings]
 
 c_QSettings :: Class
 c_QSettings =
   addReqIncludes [includeStd "QSettings"] $
   classSetEntityPrefix "" $
   makeClass (ident "QSettings") Nothing [c_QObject]
-  [ mkCtor "new" []
+  [ mkCtor "new" np
   , mkCtor "newWithOrganization" [objT c_QString]
   , mkCtor "newWithOrganizationAndApplication" [objT c_QString, objT c_QString]
   , mkCtor "newWithOrganizationAndApplicationAndParent"

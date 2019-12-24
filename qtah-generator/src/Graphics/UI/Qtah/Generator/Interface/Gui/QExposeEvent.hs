@@ -27,6 +27,7 @@ import Foreign.Hoppy.Generator.Spec (
   makeClass,
   mkConstMethod,
   mkCtor,
+  np,
   )
 import Foreign.Hoppy.Generator.Types (objT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QEvent (c_QEvent)
@@ -48,5 +49,5 @@ c_QExposeEvent =
   classSetEntityPrefix "" $
   makeClass (ident "QExposeEvent") Nothing [c_QEvent]
   [ mkCtor "new" [objT c_QRegion]
-  , mkConstMethod "region" [] $ objT c_QRegion
+  , mkConstMethod "region" np $ objT c_QRegion
   ]

@@ -19,11 +19,10 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QDirIterator (
   aModule,
   c_QDirIterator,
   e_IteratorFlag,
-  bs_IteratorFlags,
+  fl_IteratorFlags,
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass, ExportBitspace, ExportEnum),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -32,14 +31,16 @@ import Foreign.Hoppy.Generator.Spec (
   makeClass,
   mkConstMethod,
   mkCtor,
-  mkMethod
+  mkMethod,
+  np,
   )
-import Foreign.Hoppy.Generator.Types (boolT, bitspaceT, constT, objT, refT)
+import Foreign.Hoppy.Generator.Types (boolT, constT, objT, refT)
 import Foreign.Hoppy.Generator.Version (collect, just)
+import Graphics.UI.Qtah.Generator.Flags (flagsT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 --import Graphics.UI.Qtah.Generator.Interface.Core.QFileInfo (c_QFileInfo)
 import Graphics.UI.Qtah.Generator.Interface.Core.QStringList (c_QStringList)
-import Graphics.UI.Qtah.Generator.Interface.Core.QDir (c_QDir, bs_Filters)
+import Graphics.UI.Qtah.Generator.Interface.Core.QDir (c_QDir, fl_Filters)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModuleWithMinVersion)
 import Graphics.UI.Qtah.Generator.Types
 
@@ -49,9 +50,9 @@ aModule =
   AQtModule $
   makeQtModuleWithMinVersion ["Core", "QDirIterator"] [4, 3] $
   collect
-  [ just $ QtExport $ ExportClass c_QDirIterator
-  , just $ QtExport $ ExportEnum e_IteratorFlag
-  , just $ QtExport $ ExportBitspace bs_IteratorFlags
+  [ just $ qtExport c_QDirIterator
+  , just $ qtExport e_IteratorFlag
+  , just $ qtExport fl_IteratorFlags
   ]
 
 c_QDirIterator =
@@ -60,25 +61,25 @@ c_QDirIterator =
   makeClass (ident "QDirIterator") Nothing [] $
   collect
   [ just $ mkCtor "new" [refT $ constT $ objT c_QDir]
-  , just $ mkCtor "newWithDirAndFlags" [refT $ constT $ objT c_QDir, bitspaceT bs_IteratorFlags]
+  , just $ mkCtor "newWithDirAndFlags" [refT $ constT $ objT c_QDir, flagsT fl_IteratorFlags]
   , just $ mkCtor "newWithString" [refT $ constT $ objT c_QString]
-  , just $ mkCtor "newWithStringAndFlags" [refT $ constT $ objT c_QString, bitspaceT bs_IteratorFlags]
-  , just $ mkCtor "newWithStringAndFilters" [refT $ constT $ objT c_QString, bitspaceT bs_Filters]
-  , just $ mkCtor "newWithStringAndFiltersAndFlags" [refT $ constT $ objT c_QString, bitspaceT bs_Filters, bitspaceT bs_IteratorFlags]
+  , just $ mkCtor "newWithStringAndFlags" [refT $ constT $ objT c_QString, flagsT fl_IteratorFlags]
+  , just $ mkCtor "newWithStringAndFilters" [refT $ constT $ objT c_QString, flagsT fl_Filters]
+  , just $ mkCtor "newWithStringAndFiltersAndFlags" [refT $ constT $ objT c_QString, flagsT fl_Filters, flagsT fl_IteratorFlags]
   , just $ mkCtor "newWithStringAndStringList" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QStringList]
-  , just $ mkCtor "newWithStringAndStringListAndFilters" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QStringList, bitspaceT bs_Filters]
-  , just $ mkCtor "newWithStringAndStringListAndFiltersAndFlags" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QStringList, bitspaceT bs_Filters, bitspaceT bs_IteratorFlags]
-  --, just $ mkConstMethod "fileInfo" [] $ objT c_QFileInfo
-  , just $ mkConstMethod "fileName" [] $ objT c_QString
-  , just $ mkConstMethod "filePath" [] $ objT c_QString
-  , just $ mkConstMethod "hasNext" [] boolT
-  , just $ mkMethod "next" [] $ objT c_QString
-  , just $ mkConstMethod "path" [] $ objT c_QString
+  , just $ mkCtor "newWithStringAndStringListAndFilters" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QStringList, flagsT fl_Filters]
+  , just $ mkCtor "newWithStringAndStringListAndFiltersAndFlags" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QStringList, flagsT fl_Filters, flagsT fl_IteratorFlags]
+  --, just $ mkConstMethod "fileInfo" np $ objT c_QFileInfo
+  , just $ mkConstMethod "fileName" np $ objT c_QString
+  , just $ mkConstMethod "filePath" np $ objT c_QString
+  , just $ mkConstMethod "hasNext" np boolT
+  , just $ mkMethod "next" np $ objT c_QString
+  , just $ mkConstMethod "path" np $ objT c_QString
   ]
 
-(e_IteratorFlag, bs_IteratorFlags) =
-  makeQtEnumBitspace (ident1 "QDirIterator" "IteratorFlag") "IteratorFlags" [includeStd "QDirIterator"]
-  [ (0x0, ["no", "iterator", "flags"])
-  , (0x2, ["subdirectories"])
-  , (0x1, ["follow", "symlinks"])
+(e_IteratorFlag, fl_IteratorFlags) =
+  makeQtEnumAndFlags (ident1 "QDirIterator" "IteratorFlag") "IteratorFlags" [includeStd "QDirIterator"]
+  [ "NoIteratorFlags"
+  , "Subdirectories"
+  , "FollowSymlinks"
   ]

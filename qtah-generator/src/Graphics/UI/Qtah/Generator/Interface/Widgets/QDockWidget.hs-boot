@@ -16,9 +16,9 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 module Graphics.UI.Qtah.Generator.Interface.Widgets.QDockWidget (
-  bs_DockWidgetFeatures,
+  fl_DockWidgetFeatures,
   ) where
 
-import Foreign.Hoppy.Generator.Spec (Bitspace)
+import Graphics.UI.Qtah.Generator.Flags (Flags)
 
-bs_DockWidgetFeatures :: Bitspace
+fl_DockWidgetFeatures :: Flags

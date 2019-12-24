@@ -20,7 +20,6 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QSlider (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass, ExportEnum),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -29,6 +28,7 @@ import Foreign.Hoppy.Generator.Spec (
   makeClass,
   mkCtor,
   mkProp,
+  np,
   )
 import Foreign.Hoppy.Generator.Types (enumT, intT, objT, ptrT)
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (e_Orientation)
@@ -42,15 +42,15 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QSlider"]
-  [ QtExport $ ExportClass c_QSlider
-  , QtExport $ ExportEnum e_TickPosition
+  [ qtExport c_QSlider
+  , qtExport e_TickPosition
   ]
 
 c_QSlider =
   addReqIncludes [includeStd "QSlider"] $
   classSetEntityPrefix "" $
   makeClass (ident "QSlider") Nothing [c_QAbstractSlider]
-  [ mkCtor "new" []
+  [ mkCtor "new" np
   , mkCtor "newWithParent" [ptrT $ objT c_QWidget]
   , mkCtor "newWithOrientation" [enumT e_Orientation]
   , mkCtor "newWithOrientationAndParent" [enumT e_Orientation, ptrT $ objT c_QWidget]
@@ -60,13 +60,10 @@ c_QSlider =
 
 e_TickPosition =
   makeQtEnum (ident1 "QSlider" "TickPosition") [includeStd "QSlider"]
-  [ (0, ["no", "ticks"])
-  , (1, ["ticks", "both", "sides"])
-  , (2, ["ticks", "above"])
-  , (3, ["ticks", "below"])
-    -- TicksLeft = TicksAbove
-    -- TicksRight = TicksBelow
-    --
-    -- We can't include these because duplicate enum values cause problems with
-    -- Hoppy.
+  [ "NoTicks"
+  , "TicksBothSides"
+  , "TicksAbove"
+  , "TicksBelow"
+  , "TicksLeft"
+  , "TicksRight"
   ]

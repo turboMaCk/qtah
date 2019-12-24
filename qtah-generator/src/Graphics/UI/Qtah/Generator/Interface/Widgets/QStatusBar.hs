@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QStatusBar (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -32,10 +31,11 @@ import Foreign.Hoppy.Generator.Spec (
   mkCtor,
   mkMethod,
   mkMethod',
+  np,
   )
 import Foreign.Hoppy.Generator.Types (intT, objT, ptrT, voidT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
-import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (c_ListenerQString)
+import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (listenerQString)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QWidget (c_QWidget)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
@@ -45,22 +45,22 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QStatusBar"] $
-  QtExport (ExportClass c_QStatusBar) :
+  qtExport c_QStatusBar :
   map QtExportSignal signals
 
 c_QStatusBar =
   addReqIncludes [includeStd "QStatusBar"] $
   classSetEntityPrefix "" $
   makeClass (ident "QStatusBar") Nothing [c_QWidget]
-  [ mkCtor "new" []
+  [ mkCtor "new" np
   , mkCtor "newWithParent" [ptrT $ objT c_QWidget]
   , mkMethod' "addPermanentWidget" "addPermanentWidget" [ptrT $ objT c_QWidget] voidT
   , mkMethod' "addPermanentWidget" "addPermanentWidgetWithStretch"
     [ptrT $ objT c_QWidget, intT] voidT
   , mkMethod' "addWidget" "addWidget" [ptrT $ objT c_QWidget] voidT
   , mkMethod' "addWidget" "addWidgetWithStretch" [ptrT $ objT c_QWidget, intT] voidT
-  , mkMethod "clearMessage" [] voidT
-  , mkConstMethod "currentMessage" [] $ objT c_QString
+  , mkMethod "clearMessage" np voidT
+  , mkConstMethod "currentMessage" np $ objT c_QString
   , mkMethod' "insertPermanentWidget" "insertPermanentWidget" [intT, ptrT $ objT c_QWidget] voidT
   , mkMethod' "insertPermanentWidget" "insertPermanentWidgetWithStretch"
     [intT, ptrT $ objT c_QWidget, intT] voidT
@@ -73,5 +73,5 @@ c_QStatusBar =
   ]
 
 signals =
-  [ makeSignal c_QStatusBar "messageChanged" c_ListenerQString
+  [ makeSignal c_QStatusBar "messageChanged" listenerQString
   ]

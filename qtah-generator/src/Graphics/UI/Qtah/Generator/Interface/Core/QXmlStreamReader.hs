@@ -24,7 +24,6 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QXmlStreamReader (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass, ExportEnum),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -35,7 +34,8 @@ import Foreign.Hoppy.Generator.Spec (
   mkCtor,
   mkMethod',
   mkMethod,
-  mkProp
+  mkProp,
+  np,
   )
 --import Graphics.UI.Qtah.Generator.Interface.Core.QStringRef (c_QStringRef)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
@@ -57,10 +57,10 @@ import Graphics.UI.Qtah.Generator.Interface.Core.Types (qint64)
 aModule =
   AQtModule $
   makeQtModule ["Core", "QXmlStreamReader"]
-  [ QtExport $ ExportClass c_QXmlStreamReader
-  , QtExport $ ExportEnum e_Error
-  , QtExport $ ExportEnum e_ReadElementTextBehaviour
-  , QtExport $ ExportEnum e_TokenType
+  [ qtExport c_QXmlStreamReader
+  , qtExport e_Error
+  , qtExport e_ReadElementTextBehaviour
+  , qtExport e_TokenType
   ]
 
 c_QXmlStreamReader =
@@ -68,7 +68,7 @@ c_QXmlStreamReader =
   classSetEntityPrefix "" $
   makeClass (ident "QXmlStreamReader") Nothing [] $
   collect
-  [ just $ mkCtor "new" []
+  [ just $ mkCtor "new" np
   , just $ mkCtor "newWithPtrChar" [ptrT $ constT charT]
   , just $ mkCtor "newWithString" [refT $ constT $ objT c_QString]
   , just $ mkCtor "newWithByteArray" [refT $ constT $ objT c_QByteArray]
@@ -79,82 +79,82 @@ c_QXmlStreamReader =
   , just $ mkMethod' "addData" "addDataWithPtrChar" [ptrT $ constT charT] voidT
   , just $ mkMethod "addExtraNamespaceDeclaration" [refT $ constT $ objT c_QXmlStreamNamespaceDeclaration] voidT
   , just $ mkMethod "addExtraNamespaceDeclarations" [refT $ constT $ objT qXmlStreamNamespaceDeclarations] voidT
-  , just $ mkConstMethod "atEnd" [] boolT
-  , just $ mkConstMethod "attributes" [] $ toGcT $ objT c_QXmlStreamAttributes
-  , just $ mkConstMethod "characterOffset" [] qint64
-  , just $ mkMethod "clear" [] voidT
-  , just $ mkConstMethod "columnNumber" [] qint64
+  , just $ mkConstMethod "atEnd" np boolT
+  , just $ mkConstMethod "attributes" np $ toGcT $ objT c_QXmlStreamAttributes
+  , just $ mkConstMethod "characterOffset" np qint64
+  , just $ mkMethod "clear" np voidT
+  , just $ mkConstMethod "columnNumber" np qint64
   , just $ mkProp "device" $ ptrT $ objT c_QIODevice
-  --, just $ mkConstMethod "documentEncoding" [] $ objT c_QStringRef
-  --, just $ mkConstMethod "documentVersion" [] $ objT c_QStringRef
-  --, just $ mkConstMethod "dtdName" [] $ objT c_QStringRef
-  --, just $ mkConstMethod "dtdPublicId" [] $ objT c_QStringRef
-  --, just $ mkConstMethod "dtdSystemId" [] $ objT c_QStringRef
-  , just $ mkConstMethod "entityDeclarations" [] $ toGcT $ objT qXmlStreamEntityDeclarations
+  --, just $ mkConstMethod "documentEncoding" np $ objT c_QStringRef
+  --, just $ mkConstMethod "documentVersion" np $ objT c_QStringRef
+  --, just $ mkConstMethod "dtdName" np $ objT c_QStringRef
+  --, just $ mkConstMethod "dtdPublicId" np $ objT c_QStringRef
+  --, just $ mkConstMethod "dtdSystemId" np $ objT c_QStringRef
+  , just $ mkConstMethod "entityDeclarations" np $ toGcT $ objT qXmlStreamEntityDeclarations
   , just $ mkProp "entityResolver" $ ptrT $ objT c_QXmlStreamEntityResolver
-  , just $ mkConstMethod "error" [] $ enumT e_Error
-  , just $ mkConstMethod "errorString" [] $ objT c_QString
-  , just $ mkConstMethod "hasError" [] boolT
-  , just $ mkConstMethod "isCDATA" [] boolT
-  , just $ mkConstMethod "isCharacters" [] boolT
-  , just $ mkConstMethod "isComment" [] boolT
-  , just $ mkConstMethod "isDTD" [] boolT
-  , just $ mkConstMethod "isEndDocument" [] boolT
-  , just $ mkConstMethod "isEndElement" [] boolT
-  , just $ mkConstMethod "isEntityReference" [] boolT
-  , just $ mkConstMethod "isProcessingInstruction" [] boolT
-  , just $ mkConstMethod "isStandaloneDocument" [] boolT
-  , just $ mkConstMethod "isStartDocument" [] boolT
-  , just $ mkConstMethod "isStartElement" [] boolT
-  , just $ mkConstMethod "isWhitespace" [] boolT
-  , just $ mkConstMethod "lineNumber" [] qint64
---  , just $ mkConstMethod "name" [] $ objT c_QStringRef
-  , just $ mkConstMethod "namespaceDeclarations" [] $ toGcT $ objT qXmlStreamNamespaceDeclarations
-  --, just $ mkConstMethod "namespaceUri" [] $ objT c_QStringRef
-  , just $ mkConstMethod "notationDeclarations" [] $ toGcT $ objT qXmlStreamNotationDeclarations
-  --, just $ mkConstMethod "prefix" [] $ objT c_QStringRef
-  --, just $ mkConstMethod "processingInstructionData" [] $ objT c_QStringRef
-  --, just $ mkConstMethod "processingInstructionTarget" [] $ objT c_QStringRef
-  --, just $ mkConstMethod "qualifiedName" [] $ objT c_QStringRef
-  , just $ mkMethod' "raiseError" "raiseError" [] voidT
+  , just $ mkConstMethod "error" np $ enumT e_Error
+  , just $ mkConstMethod "errorString" np $ objT c_QString
+  , just $ mkConstMethod "hasError" np boolT
+  , just $ mkConstMethod "isCDATA" np boolT
+  , just $ mkConstMethod "isCharacters" np boolT
+  , just $ mkConstMethod "isComment" np boolT
+  , just $ mkConstMethod "isDTD" np boolT
+  , just $ mkConstMethod "isEndDocument" np boolT
+  , just $ mkConstMethod "isEndElement" np boolT
+  , just $ mkConstMethod "isEntityReference" np boolT
+  , just $ mkConstMethod "isProcessingInstruction" np boolT
+  , just $ mkConstMethod "isStandaloneDocument" np boolT
+  , just $ mkConstMethod "isStartDocument" np boolT
+  , just $ mkConstMethod "isStartElement" np boolT
+  , just $ mkConstMethod "isWhitespace" np boolT
+  , just $ mkConstMethod "lineNumber" np qint64
+--  , just $ mkConstMethod "name" np $ objT c_QStringRef
+  , just $ mkConstMethod "namespaceDeclarations" np $ toGcT $ objT qXmlStreamNamespaceDeclarations
+  --, just $ mkConstMethod "namespaceUri" np $ objT c_QStringRef
+  , just $ mkConstMethod "notationDeclarations" np $ toGcT $ objT qXmlStreamNotationDeclarations
+  --, just $ mkConstMethod "prefix" np $ objT c_QStringRef
+  --, just $ mkConstMethod "processingInstructionData" np $ objT c_QStringRef
+  --, just $ mkConstMethod "processingInstructionTarget" np $ objT c_QStringRef
+  --, just $ mkConstMethod "qualifiedName" np $ objT c_QStringRef
+  , just $ mkMethod' "raiseError" "raiseError" np voidT
   , just $ mkMethod' "raiseError" "raiseErrorWithMessage" [refT $ constT $ objT c_QString] voidT
-  , just $ mkMethod' "readElementText" "readElementText" [] $ objT c_QString
+  , just $ mkMethod' "readElementText" "readElementText" np $ objT c_QString
   , just $ mkMethod' "readElementText" "readElementTextWithBehaviour" [enumT e_ReadElementTextBehaviour] $ objT c_QString
-  , just $ mkMethod "readNext" [] $ enumT e_TokenType
-  , just $ mkMethod "readNextStartElement" [] boolT
-  , just $ mkMethod "skipCurrentElement" [] voidT
-  --, just $ mkConstMethod "text" [] $ objT c_QStringRef
-  , just $ mkConstMethod "tokenString" [] $ objT c_QString
-  , just $ mkConstMethod "tokenType" [] $ enumT e_TokenType
+  , just $ mkMethod "readNext" np $ enumT e_TokenType
+  , just $ mkMethod "readNextStartElement" np boolT
+  , just $ mkMethod "skipCurrentElement" np voidT
+  --, just $ mkConstMethod "text" np $ objT c_QStringRef
+  , just $ mkConstMethod "tokenString" np $ objT c_QString
+  , just $ mkConstMethod "tokenType" np $ enumT e_TokenType
   ]
 
 e_Error =
   makeQtEnum (ident1 "QXmlStreamReader" "Error") [includeStd "QXmlStreamReader"]
-  [ (0, ["no", "error"])
-  , (1, ["unexpected", "element", "error"])
-  , (2, ["custom", "error"])
-  , (3, ["not", "well", "formed", "error"])
-  , (4, ["premature", "end", "of", "document", "error"])
+  [ "NoError"
+  , "UnexpectedElementError"
+  , "CustomError"
+  , "NotWellFormedError"
+  , "PrematureEndOfDocumentError"
   ]
 
 e_ReadElementTextBehaviour =
   makeQtEnum (ident1 "QXmlStreamReader" "ReadElementTextBehaviour") [includeStd "QXmlStreamReader"]
-  [ (0, ["error", "on", "unexpected", "element"])
-  , (1, ["include", "child", "elements"])
-  , (2, ["skip", "child", "elements"])
+  [ "ErrorOnUnexpectedElement"
+  , "IncludeChildElements"
+  , "SkipChildElements"
   ]
 
 e_TokenType =
   makeQtEnum (ident1 "QXmlStreamReader" "TokenType") [includeStd "QXmlStreamReader"]
-  [ (0, ["no", "token"])
-  , (1, ["invalid"])
-  , (2, ["start", "document"])
-  , (3, ["end", "document"])
-  , (4, ["start", "element"])
-  , (5, ["end", "element"])
-  , (6, ["characters"])
-  , (7, ["comment"])
-  , (8, ["d", "t", "d"])
-  , (9, ["entity", "reference"])
-  , (10, ["processing", "instruction"])
+  [ "NoToken"
+  , "Invalid"
+  , "StartDocument"
+  , "EndDocument"
+  , "StartElement"
+  , "EndElement"
+  , "Characters"
+  , "Comment"
+  , "DTD"
+  , "EntityReference"
+  , "ProcessingInstruction"
   ]

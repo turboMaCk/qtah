@@ -22,7 +22,6 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QTreeWidget (
 
 import Foreign.Hoppy.Generator.Spec (
   Class,
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -34,28 +33,29 @@ import Foreign.Hoppy.Generator.Spec (
   mkMethod,
   mkMethod',
   mkProp,
+  np,
   )
-
-import Foreign.Hoppy.Generator.Types (intT, objT, ptrT, voidT, enumT, constT, refT, bitspaceT, boolT)
+import Foreign.Hoppy.Generator.Types (intT, objT, ptrT, voidT, enumT, constT, refT, boolT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
+import Graphics.UI.Qtah.Generator.Flags (flagsT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Core.QList (c_QListQTreeWidgetItem)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Widgets.QTreeWidgetItem (c_QTreeWidgetItem)
 import Graphics.UI.Qtah.Generator.Interface.Core.QStringList (c_QStringList)
-import Graphics.UI.Qtah.Generator.Interface.Core.Types (e_SortOrder, bs_MatchFlags)
+import Graphics.UI.Qtah.Generator.Interface.Core.Types (e_SortOrder, fl_MatchFlags)
 import Graphics.UI.Qtah.Generator.Interface.Core.QPoint (c_QPoint)
 import Graphics.UI.Qtah.Generator.Interface.Core.QRect (c_QRect)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QAbstractItemView (e_ScrollHint)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
-  c_Listener,
-  c_ListenerPtrQTreeWidgetItem,
-  c_ListenerPtrQTreeWidgetItemInt,
-  c_ListenerPtrQTreeWidgetItemPtrQTreeWidgetItem,
+  listener,
+  listenerPtrQTreeWidgetItem,
+  listenerPtrQTreeWidgetItemInt,
+  listenerPtrQTreeWidgetItemPtrQTreeWidgetItem,
   )
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QTreeView (c_QTreeView)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Widgets.QWidget (c_QWidget)
-import Graphics.UI.Qtah.Generator.Interface.Core.QItemSelectionModel (bs_SelectionFlags)
+import Graphics.UI.Qtah.Generator.Interface.Core.QItemSelectionModel (fl_SelectionFlags)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
 
@@ -65,7 +65,7 @@ aModule :: AModule
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QTreeWidget"] $
-  QtExport (ExportClass c_QTreeWidget) :
+  qtExport c_QTreeWidget :
   map QtExportSignal signals
 
 
@@ -75,24 +75,24 @@ c_QTreeWidget =
   classSetEntityPrefix "" $
   makeClass (ident "QTreeWidget") Nothing [c_QTreeView] $
   collect
-  [ just $ mkCtor "new" []
+  [ just $ mkCtor "new" np
   , just $ mkCtor "newWithParent" [ptrT $ objT c_QWidget]
   , test (qtVersion >= [4, 1]) $ mkMethod "addTopLevelItem" [ptrT $ objT c_QTreeWidgetItem] voidT
   , just $ mkMethod "addTopLevelItems" [refT $ constT $ objT c_QListQTreeWidgetItem] voidT
   , just $ mkMethod' "closePersistentEditor" "closePersistentEditor" [ptrT $ objT c_QTreeWidgetItem] voidT
   , just $ mkMethod' "closePersistentEditor" "closePersistentEditorWithColumn" [ptrT $ objT c_QTreeWidgetItem, intT] voidT
   , just $ mkProp "columnCount" intT
-  , test (qtVersion >= [4, 1]) $ mkConstMethod "currentColumn" [] intT
-  , just $ mkConstMethod "currentItem" [] (ptrT $ objT c_QTreeWidgetItem)
+  , test (qtVersion >= [4, 1]) $ mkConstMethod "currentColumn" np intT
+  , just $ mkConstMethod "currentItem" np (ptrT $ objT c_QTreeWidgetItem)
   , just $ mkMethod' "editItem" "editItem" [ptrT $ objT c_QTreeWidgetItem] voidT
   , just $ mkMethod' "editItem" "editItemWithColumn" [ptrT $ objT c_QTreeWidgetItem, intT] voidT
-  , just $ mkConstMethod' "findItems" "findItems" [objT c_QString, bitspaceT bs_MatchFlags] $ objT c_QListQTreeWidgetItem
-  , just $ mkConstMethod' "findItems" "findItemsWithColumn" [objT c_QString, bitspaceT bs_MatchFlags, intT] $ objT c_QListQTreeWidgetItem
-  , just $ mkConstMethod "headerItem" [] (ptrT $ objT c_QTreeWidgetItem)
+  , just $ mkConstMethod' "findItems" "findItems" [objT c_QString, flagsT fl_MatchFlags] $ objT c_QListQTreeWidgetItem
+  , just $ mkConstMethod' "findItems" "findItemsWithColumn" [objT c_QString, flagsT fl_MatchFlags, intT] $ objT c_QListQTreeWidgetItem
+  , just $ mkConstMethod "headerItem" np (ptrT $ objT c_QTreeWidgetItem)
   , just $ mkConstMethod "indexOfTopLevelItem" [ptrT $ objT c_QTreeWidgetItem] intT
   , just $ mkMethod "insertTopLevelItem" [intT, ptrT $ objT c_QTreeWidgetItem] voidT
   , test (qtVersion >= [4, 1]) $ mkMethod "insertTopLevelItems" [intT, refT $ constT $ objT c_QListQTreeWidgetItem] voidT
-  , test (qtVersion >= [4, 2]) $ mkConstMethod "invisibleRootItem" [] (ptrT $ objT c_QTreeWidgetItem)
+  , test (qtVersion >= [4, 2]) $ mkConstMethod "invisibleRootItem" np (ptrT $ objT c_QTreeWidgetItem)
   , test (qtVersion >= [5, 10]) $ mkConstMethod' "isPersistentEditorOpen" "isPersistentEditorOpen" [ptrT $ objT c_QTreeWidgetItem] boolT
   , test (qtVersion >= [5, 10]) $ mkConstMethod' "isPersistentEditorOpen" "isPersistentEditorOpenWithColumn" [ptrT $ objT c_QTreeWidgetItem, intT] boolT
   , test (qtVersion >= [4, 3]) $ mkConstMethod "itemAbove" [constT $ ptrT $ objT c_QTreeWidgetItem] (ptrT $ objT c_QTreeWidgetItem)
@@ -104,39 +104,37 @@ c_QTreeWidget =
   , just $ mkMethod' "openPersistentEditor" "openPersistentEditor" [ptrT $ objT c_QTreeWidgetItem] voidT
   , just $ mkMethod' "openPersistentEditor" "openPersistentEditorWithColumn" [ptrT $ objT c_QTreeWidgetItem, intT] voidT
   , test (qtVersion >= [4, 3]) $ mkMethod "removeItemWidget" [ptrT $ objT c_QTreeWidgetItem, intT] voidT
-  , just $ mkConstMethod "selectedItems" [] $ objT c_QListQTreeWidgetItem
+  , just $ mkConstMethod "selectedItems" np $ objT c_QListQTreeWidgetItem
   , just $ mkMethod' "setCurrentItem" "setCurrentItem" [ptrT $ objT c_QTreeWidgetItem] voidT
   , test (qtVersion >= [4, 1]) $ mkMethod' "setCurrentItem" "setCurrentItemWithColumn" [ptrT $ objT c_QTreeWidgetItem, intT] voidT
-  , test (qtVersion >= [4, 4]) $ mkMethod' "setCurrentItem" "setCurrentItemWithColumnAndFlags" [ptrT $ objT c_QTreeWidgetItem, intT, bitspaceT bs_SelectionFlags] voidT
+  , test (qtVersion >= [4, 4]) $ mkMethod' "setCurrentItem" "setCurrentItemWithColumnAndFlags" [ptrT $ objT c_QTreeWidgetItem, intT, flagsT fl_SelectionFlags] voidT
   , just $ mkMethod "setHeaderItem" [ptrT $ objT c_QTreeWidgetItem] voidT
   , test (qtVersion >= [4, 2]) $ mkMethod "setHeaderLabel" [objT c_QString] voidT
   , just $ mkMethod "setHeaderLabels" [objT c_QStringList] voidT
   , test (qtVersion >= [4, 1]) $ mkMethod "setItemWidget" [ptrT $ objT c_QTreeWidgetItem, intT, ptrT $ objT c_QWidget] voidT
-  , test (qtVersion >= [4, 1]) $ mkConstMethod "sortColumn" [] intT
+  , test (qtVersion >= [4, 1]) $ mkConstMethod "sortColumn" np intT
   , just $ mkMethod "sortItems" [intT, enumT e_SortOrder] voidT
   , just $ mkMethod "takeTopLevelItem" [intT] $ ptrT $ objT c_QTreeWidgetItem
   , just $ mkConstMethod "topLevelItem" [intT] (ptrT $ objT c_QTreeWidgetItem)
-  , just $ mkConstMethod "topLevelItemCount" [] intT
+  , just $ mkConstMethod "topLevelItemCount" np intT
   , just $ mkConstMethod "visualItemRect" [constT $ ptrT $ objT c_QTreeWidgetItem] $ objT c_QRect
-  , just $ mkMethod "clear" [] voidT
+  , just $ mkMethod "clear" np voidT
   , just $ mkMethod "collapseItem" [constT $ ptrT $ objT c_QTreeWidgetItem] voidT
   , just $ mkMethod "expandItem" [constT $ ptrT $ objT c_QTreeWidgetItem] voidT
   , just $ mkMethod' "scrollToItem" "scrollToItem" [constT $ ptrT $ objT c_QTreeWidgetItem] voidT
   , just $ mkMethod' "scrollToItem" "scrollToItemWithHint" [constT $ ptrT $ objT c_QTreeWidgetItem, enumT e_ScrollHint] voidT
   ]
 
-
 signals :: [Signal]
 signals =
-  [ makeSignal c_QTreeWidget "currentItemChanged" c_ListenerPtrQTreeWidgetItemPtrQTreeWidgetItem
-  , makeSignal c_QTreeWidget "itemActivated" c_ListenerPtrQTreeWidgetItemInt
-  , makeSignal c_QTreeWidget "itemChanged" c_ListenerPtrQTreeWidgetItemInt
-  , makeSignal c_QTreeWidget "itemClicked" c_ListenerPtrQTreeWidgetItemInt
-  , makeSignal c_QTreeWidget "itemCollapsed" c_ListenerPtrQTreeWidgetItem
-  , makeSignal c_QTreeWidget "itemDoubleClicked" c_ListenerPtrQTreeWidgetItemInt
-  , makeSignal c_QTreeWidget "itemEntered" c_ListenerPtrQTreeWidgetItemInt
-  , makeSignal c_QTreeWidget "itemExpanded" c_ListenerPtrQTreeWidgetItem
-  , makeSignal c_QTreeWidget "itemPressed" c_ListenerPtrQTreeWidgetItemInt
-  , makeSignal c_QTreeWidget "itemSelectionChanged" c_Listener
+  [ makeSignal c_QTreeWidget "currentItemChanged" listenerPtrQTreeWidgetItemPtrQTreeWidgetItem
+  , makeSignal c_QTreeWidget "itemActivated" listenerPtrQTreeWidgetItemInt
+  , makeSignal c_QTreeWidget "itemChanged" listenerPtrQTreeWidgetItemInt
+  , makeSignal c_QTreeWidget "itemClicked" listenerPtrQTreeWidgetItemInt
+  , makeSignal c_QTreeWidget "itemCollapsed" listenerPtrQTreeWidgetItem
+  , makeSignal c_QTreeWidget "itemDoubleClicked" listenerPtrQTreeWidgetItemInt
+  , makeSignal c_QTreeWidget "itemEntered" listenerPtrQTreeWidgetItemInt
+  , makeSignal c_QTreeWidget "itemExpanded" listenerPtrQTreeWidgetItem
+  , makeSignal c_QTreeWidget "itemPressed" listenerPtrQTreeWidgetItemInt
+  , makeSignal c_QTreeWidget "itemSelectionChanged" listener
   ]
-

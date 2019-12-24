@@ -19,11 +19,10 @@ module Graphics.UI.Qtah.Generator.Interface.Gui.QPainter (
   aModule,
   c_QPainter,
   e_RenderHint,
-  bs_RenderHints,
+  fl_RenderHints,
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass, ExportEnum, ExportBitspace),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -33,12 +32,13 @@ import Foreign.Hoppy.Generator.Spec (
   mkCtor,
   mkMethod,
   mkMethod',
+  np,
   )
-import Foreign.Hoppy.Generator.Types (bitspaceT, enumT, intT, objT, ptrT, voidT)
+import Foreign.Hoppy.Generator.Types (enumT, intT, objT, ptrT, voidT)
 import Foreign.Hoppy.Generator.Version (collect, just)
--- import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Flags (flagsT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QRect (c_QRect)
-import Graphics.UI.Qtah.Generator.Interface.Core.Types (bs_ImageConversionFlags, e_GlobalColor)
+import Graphics.UI.Qtah.Generator.Interface.Core.Types (e_GlobalColor, fl_ImageConversionFlags)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QImage (c_QImage)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QPaintDevice (c_QPaintDevice)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
@@ -49,9 +49,9 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Gui", "QPainter"]
-  [ QtExport $ ExportClass c_QPainter
-  , QtExport $ ExportEnum e_RenderHint
-  , QtExport $ ExportBitspace bs_RenderHints
+  [ qtExport c_QPainter
+  , qtExport e_RenderHint
+  , qtExport fl_RenderHints
   ]
 
 c_QPainter =
@@ -59,21 +59,21 @@ c_QPainter =
   classSetEntityPrefix "" $
   makeClass (ident "QPainter") Nothing [] $
   collect
-  [ just $ mkCtor "new" []
+  [ just $ mkCtor "new" np
   , just $ mkCtor "newWithDevice" [ptrT $ objT c_QPaintDevice]
   , just $ mkMethod' "drawImage" "drawImageAtRaw" [intT, intT, objT c_QImage] voidT
   , just $ mkMethod' "drawImage" "drawImageAtRawAll"
-    [intT, intT, objT c_QImage, intT, intT, intT, intT, bitspaceT bs_ImageConversionFlags] voidT
+    [intT, intT, objT c_QImage, intT, intT, intT, intT, flagsT fl_ImageConversionFlags] voidT
   , just $ mkMethod' "fillRect" "fillRectWithGlobalColor" [objT c_QRect, enumT e_GlobalColor] voidT
   , just $ mkMethod "setRenderHint" [enumT e_RenderHint] voidT
   ]
 
-(e_RenderHint, bs_RenderHints) =
-  makeQtEnumBitspace (ident1 "QPainter" "RenderHint") "RenderHints" [includeStd "QPainter"]
-  [ (0x01, ["antialiasing"])
-  , (0x02, ["text","antialiasing"])
-  , (0x04, ["smooth","pixmap","transform"])
-  , (0x08, ["high","quality","antialiasing"])
-  , (0x10, ["non","cosmetic","default","pen"])
-  , (0x20, ["qt4","compatible","painting"])
+(e_RenderHint, fl_RenderHints) =
+  makeQtEnumAndFlags (ident1 "QPainter" "RenderHint") "RenderHints" [includeStd "QPainter"]
+  [ "Antialiasing"
+  , "TextAntialiasing"
+  , "SmoothPixmapTransform"
+  , "HighQualityAntialiasing"
+  , "NonCosmeticDefaultPen"
+  , "Qt4CompatiblePainting"
   ]

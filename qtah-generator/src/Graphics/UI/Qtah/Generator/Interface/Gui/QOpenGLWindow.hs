@@ -23,7 +23,6 @@ module Graphics.UI.Qtah.Generator.Interface.Gui.QOpenGLWindow (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass, ExportEnum),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -33,13 +32,14 @@ import Foreign.Hoppy.Generator.Spec (
   mkConstMethod,
   mkCtor,
   mkMethod,
+  np,
   )
 import Foreign.Hoppy.Generator.Types (boolT, enumT, objT, ptrT, voidT)
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (gluint)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QImage (c_QImage)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QPaintDeviceWindow (c_QPaintDeviceWindow)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QWindow (c_QWindow)
-import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (c_Listener)
+import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (listener)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModuleWithMinVersion)
 import Graphics.UI.Qtah.Generator.Types
 
@@ -50,35 +50,35 @@ minVersion = [5, 4]
 aModule =
   AQtModule $
   makeQtModuleWithMinVersion ["Gui", "QOpenGLWindow"] minVersion $
-  [ QtExport $ ExportClass c_QOpenGLWindow ] ++
+  [ qtExport c_QOpenGLWindow ] ++
   map QtExportSignal signals ++
-  [ QtExport $ ExportEnum e_UpdateBehavior ]
+  [ qtExport e_UpdateBehavior ]
 
 c_QOpenGLWindow =
   addReqIncludes [includeStd "QOpenGLWindow"] $
   classSetEntityPrefix "" $
   makeClass (ident "QOpenGLWindow") Nothing [c_QPaintDeviceWindow]
-  [ mkCtor "new" []
+  [ mkCtor "new" np
   , mkCtor "newWithUpdateBehavior" [enumT e_UpdateBehavior]
   , mkCtor "newWithUpdateBehaviorAndParent" [enumT e_UpdateBehavior, ptrT $ objT c_QWindow]
     -- TODO QOpenGLWindow(QOpenGLContext*, ...)
     -- TODO QOpenGLContext* context() const
-  , mkConstMethod "defaultFramebufferObject" [] gluint
-  , mkMethod "doneCurrent" [] voidT
-  , mkMethod "grabFramebuffer" [] $ objT c_QImage
-  , mkConstMethod "isValid" [] boolT
-  , mkMethod "makeCurrent" [] voidT
+  , mkConstMethod "defaultFramebufferObject" np gluint
+  , mkMethod "doneCurrent" np voidT
+  , mkMethod "grabFramebuffer" np $ objT c_QImage
+  , mkConstMethod "isValid" np boolT
+  , mkMethod "makeCurrent" np voidT
     -- TODO QOpenGLContext* shareContext() const
-  , mkConstMethod "updateBehavior" [] $ enumT e_UpdateBehavior
+  , mkConstMethod "updateBehavior" np $ enumT e_UpdateBehavior
   ]
 
 signals =
-  [ makeSignal c_QOpenGLWindow "frameSwapped" c_Listener
+  [ makeSignal c_QOpenGLWindow "frameSwapped" listener
   ]
 
 e_UpdateBehavior =
   makeQtEnum (ident1 "QOpenGLWindow" "UpdateBehavior") [includeStd "QOpenGLWindow"]
-  [ (0, ["no", "partial", "update"])
-  , (1, ["partial", "update", "blit"])
-  , (2, ["partial", "update", "blend"])
+  [ "NoPartialUpdate"
+  , "PartialUpdateBlit"
+  , "PartialUpdateBlend"
   ]

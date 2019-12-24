@@ -27,6 +27,7 @@ import Foreign.Hoppy.Generator.Spec (
   makeClass,
   mkConstMethod,
   mkCtor,
+  np,
   )
 import Foreign.Hoppy.Generator.Types (intT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QEvent (c_QEvent)
@@ -46,5 +47,5 @@ c_QTimerEvent =
   classSetEntityPrefix "" $
   makeClass (ident "QTimerEvent") Nothing [c_QEvent]
   [ mkCtor "new" [intT]
-  , mkConstMethod "timerId" [] intT
+  , mkConstMethod "timerId" np intT
   ]

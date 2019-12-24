@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QGraphicsPixmapItem (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass, ExportEnum),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -31,6 +30,7 @@ import Foreign.Hoppy.Generator.Spec (
   mkCtor,
   mkMethod',
   mkProp,
+  np,
   )
 import Foreign.Hoppy.Generator.Types (enumT, objT, ptrT, voidT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QPointF (c_QPointF)
@@ -45,15 +45,15 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QGraphicsPixmapItem"]
-  [ QtExport $ ExportClass c_QGraphicsPixmapItem
-  , QtExport $ ExportEnum e_ShapeMode
+  [ qtExport c_QGraphicsPixmapItem
+  , qtExport e_ShapeMode
   ]
 
 c_QGraphicsPixmapItem =
   addReqIncludes [includeStd "QGraphicsPixmapItem"] $
   classSetEntityPrefix "" $
   makeClass (ident "QGraphicsPixmapItem") Nothing [c_QGraphicsItem]
-  [ mkCtor "new" []
+  [ mkCtor "new" np
   , mkCtor "newWithParent" [ptrT $ objT c_QGraphicsItem]
   , mkCtor "newWithPixmap" [objT c_QPixmap]
   , mkCtor "newWithPixmapAndParent" [objT c_QPixmap, ptrT $ objT c_QGraphicsItem]
@@ -66,7 +66,7 @@ c_QGraphicsPixmapItem =
 
 e_ShapeMode =
   makeQtEnum (ident1 "QGraphicsPixmapItem" "ShapeMode") [includeStd "QGraphicsPixmapItem"]
-  [ (0, ["mask", "shape"])
-  , (1, ["bounding", "rect", "shape"])
-  , (2, ["heuristic", "mask", "shape"])
+  [ "MaskShape"
+  , "BoundingRectShape"
+  , "HeuristicMaskShape"
   ]

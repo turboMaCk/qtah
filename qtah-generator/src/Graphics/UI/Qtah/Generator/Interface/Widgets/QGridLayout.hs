@@ -20,7 +20,6 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QGridLayout (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   MethodApplicability (MConst, MNormal),
   Purity (Nonpure),
   addReqIncludes,
@@ -36,12 +35,14 @@ import Foreign.Hoppy.Generator.Spec (
   mkMethod,
   mkMethod',
   mkProp,
+  np,
   )
-import Foreign.Hoppy.Generator.Types (bitspaceT, constT, enumT, intT, objT, ptrT, refT, voidT)
+import Foreign.Hoppy.Generator.Types (constT, enumT, intT, objT, ptrT, refT, voidT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
+import Graphics.UI.Qtah.Generator.Flags (flagsT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QRect (c_QRect)
-import Graphics.UI.Qtah.Generator.Interface.Core.Types (bs_Alignment, e_Corner)
+import Graphics.UI.Qtah.Generator.Interface.Core.Types (fl_Alignment, e_Corner)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QLayout (c_QLayout)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QLayoutItem (c_QLayoutItem)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QWidget (c_QWidget)
@@ -53,7 +54,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QGridLayout"]
-  [ QtExport $ ExportClass c_QGridLayout ]
+  [ qtExport c_QGridLayout ]
 
 c_QGridLayout =
   addReqIncludes [includeStd "QGridLayout",
@@ -61,25 +62,25 @@ c_QGridLayout =
   classSetEntityPrefix "" $
   makeClass (ident "QGridLayout") Nothing [c_QLayout] $
   collect
-  [ just $ mkCtor "new" []
+  [ just $ mkCtor "new" np
   , just $ mkCtor "newWithParent" [ptrT $ objT c_QWidget]
   , just $ mkMethod' "addItem" "addItem" [ptrT $ objT c_QLayoutItem, intT, intT] voidT
   , just $ mkMethod' "addItem" "addItemWithSpan"
     [ptrT $ objT c_QLayoutItem, intT, intT, intT, intT] voidT
   , just $ mkMethod' "addItem" "addItemWithSpanAndAlignment"
-    [ptrT $ objT c_QLayoutItem, intT, intT, intT, intT, bitspaceT bs_Alignment] voidT
+    [ptrT $ objT c_QLayoutItem, intT, intT, intT, intT, flagsT fl_Alignment] voidT
   , just $ mkMethod' "addLayout" "addLayout" [ptrT $ objT c_QLayout, intT, intT] voidT
   , just $ mkMethod' "addLayout" "addLayoutWithSpan"
     [ptrT $ objT c_QLayout, intT, intT, intT, intT] voidT
   , just $ mkMethod' "addLayout" "addLayoutWithSpanAndAlignment"
-    [ptrT $ objT c_QLayout, intT, intT, intT, intT, bitspaceT bs_Alignment] voidT
+    [ptrT $ objT c_QLayout, intT, intT, intT, intT, flagsT fl_Alignment] voidT
   , just $ mkMethod' "addWidget" "addWidget" [ptrT $ objT c_QWidget, intT, intT] voidT
   , just $ mkMethod' "addWidget" "addWidgetWithSpan"
     [ptrT $ objT c_QWidget, intT, intT, intT, intT] voidT
   , just $ mkMethod' "addWidget" "addWidgetWithSpanAndAlignment"
-    [ptrT $ objT c_QWidget, intT, intT, intT, intT, bitspaceT bs_Alignment] voidT
+    [ptrT $ objT c_QWidget, intT, intT, intT, intT, flagsT fl_Alignment] voidT
   , just $ mkConstMethod "cellRect" [intT, intT] $ objT c_QRect
-  , just $ mkConstMethod "columnCount" [] intT
+  , just $ mkConstMethod "columnCount" np intT
   , just $ mkConstMethod "columnMinimumWidth" [intT] intT
   , just $ mkConstMethod "columnStretch" [intT] intT
   , just $ makeFnMethod (ident2 "qtah" "qgridlayout" "getItemRow") "getItemRow"
@@ -94,14 +95,14 @@ c_QGridLayout =
   , test (qtVersion >= [4, 4]) $
     mkConstMethod "itemAtPosition" [intT, intT] $ ptrT $ objT c_QLayoutItem
   , just $ mkProp "originCorner" $ enumT e_Corner
-  , just $ mkConstMethod "rowCount" [] intT
+  , just $ mkConstMethod "rowCount" np intT
   , just $ mkConstMethod "rowMinimumHeight" [intT] intT
   , just $ mkConstMethod "rowStretch" [intT] intT
   , just $ mkMethod "setColumnMinimumWidth" [intT, intT] voidT
   , just $ mkMethod "setColumnStretch" [intT, intT] voidT
   , just $ mkMethod "setRowMinimumHeight" [intT, intT] voidT
   , just $ mkMethod "setRowStretch" [intT, intT] voidT
-  , just $ mkConstMethod "spacing" [] intT
+  , just $ mkConstMethod "spacing" np intT
   , test (qtVersion >= [4, 3]) $ mkProp "verticalSpacing" intT
   ]
 

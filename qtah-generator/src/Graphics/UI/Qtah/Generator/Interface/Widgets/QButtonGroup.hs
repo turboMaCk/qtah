@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QButtonGroup (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -32,17 +31,18 @@ import Foreign.Hoppy.Generator.Spec (
   mkMethod,
   mkMethod',
   mkProp,
+  np,
   )
 import Foreign.Hoppy.Generator.Types (boolT, intT, objT, ptrT, voidT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.QList (c_QListQAbstractButton)
 import Graphics.UI.Qtah.Generator.Interface.Core.QObject (c_QObject)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
-  c_ListenerInt,
-  c_ListenerIntBool,
-  c_ListenerPtrQAbstractButton,
-  c_ListenerPtrQAbstractButtonBool,
+  listenerInt,
+  listenerIntBool,
+  listenerPtrQAbstractButton,
+  listenerPtrQAbstractButtonBool,
   )
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Widgets.QAbstractButton (
   c_QAbstractButton,
@@ -55,7 +55,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QButtonGroup"] $
-  (QtExport $ ExportClass c_QButtonGroup) :
+  (qtExport c_QButtonGroup) :
   map QtExportSignal signals
 
 c_QButtonGroup =
@@ -63,14 +63,14 @@ c_QButtonGroup =
   classSetEntityPrefix "" $
   makeClass (ident "QButtonGroup") Nothing [c_QObject] $
   collect
-  [ just $ mkCtor "new" []
+  [ just $ mkCtor "new" np
   , just $ mkCtor "newWithParent" [ptrT $ objT c_QObject]
   , just $ mkMethod' "addButton" "addButton" [ptrT $ objT c_QAbstractButton] voidT
   , just $ mkMethod' "addButton" "addButtonWithId" [ptrT $ objT c_QAbstractButton, intT] voidT
   , test (qtVersion >= [4, 1]) $ mkConstMethod "button" [intT] $ ptrT $ objT c_QAbstractButton
-  , just $ mkConstMethod "buttons" [] $ objT c_QListQAbstractButton
-  , just $ mkConstMethod "checkedButton" [] $ ptrT $ objT c_QAbstractButton
-  , test (qtVersion >= [4, 1]) $ mkConstMethod "checkedId" [] intT
+  , just $ mkConstMethod "buttons" np $ objT c_QListQAbstractButton
+  , just $ mkConstMethod "checkedButton" np $ ptrT $ objT c_QAbstractButton
+  , test (qtVersion >= [4, 1]) $ mkConstMethod "checkedId" np intT
   , just $ mkProp "exclusive" boolT
   , test (qtVersion >= [4, 1]) $ mkConstMethod "id" [ptrT $ objT c_QAbstractButton] intT
   , just $ mkMethod "removeButton" [ptrT $ objT c_QAbstractButton] voidT
@@ -79,16 +79,16 @@ c_QButtonGroup =
 
 signals =
   collect
-  [ just $ makeSignal c_QButtonGroup "buttonClicked" c_ListenerPtrQAbstractButton
-  , just $ makeSignal c_QButtonGroup "buttonClickedId" c_ListenerInt
+  [ just $ makeSignal c_QButtonGroup "buttonClicked" listenerPtrQAbstractButton
+  , just $ makeSignal c_QButtonGroup "buttonClickedId" listenerInt
   , test (qtVersion >= [4, 2]) $
-    makeSignal c_QButtonGroup "buttonPressed" c_ListenerPtrQAbstractButton
-  , test (qtVersion >= [4, 2]) $ makeSignal c_QButtonGroup "buttonPressedId" c_ListenerInt
+    makeSignal c_QButtonGroup "buttonPressed" listenerPtrQAbstractButton
+  , test (qtVersion >= [4, 2]) $ makeSignal c_QButtonGroup "buttonPressedId" listenerInt
   , test (qtVersion >= [4, 2]) $
-    makeSignal c_QButtonGroup "buttonReleased" c_ListenerPtrQAbstractButton
-  , test (qtVersion >= [4, 2]) $ makeSignal c_QButtonGroup "buttonReleasedId" c_ListenerInt
+    makeSignal c_QButtonGroup "buttonReleased" listenerPtrQAbstractButton
+  , test (qtVersion >= [4, 2]) $ makeSignal c_QButtonGroup "buttonReleasedId" listenerInt
   , test (qtVersion >= [5, 2]) $
-    makeSignal c_QButtonGroup "buttonToggled" c_ListenerPtrQAbstractButtonBool
+    makeSignal c_QButtonGroup "buttonToggled" listenerPtrQAbstractButtonBool
   , test (qtVersion >= [5, 2]) $
-    makeSignal c_QButtonGroup "buttonToggledId" c_ListenerIntBool
+    makeSignal c_QButtonGroup "buttonToggledId" listenerIntBool
   ]

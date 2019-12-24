@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Gui.QtahOpenGLWindow (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident2,
@@ -29,6 +28,7 @@ import Foreign.Hoppy.Generator.Spec (
   makeClass,
   mkCtor,
   mkMethod,
+  np,
   )
 import Foreign.Hoppy.Generator.Types (callbackT, enumT, objT, ptrT, voidT)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QOpenGLWindow (
@@ -46,13 +46,13 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModuleWithMinVersion ["Gui", "QtahOpenGLWindow"] minVersion
-  [ QtExport $ ExportClass c_QtahOpenGLWindow ]
+  [ qtExport c_QtahOpenGLWindow ]
 
 c_QtahOpenGLWindow =
   addReqIncludes [includeLocal "qtahopenglwindow.hpp"] $
   classSetEntityPrefix "" $
   makeClass (ident2 "qtah" "qtahopenglwindow" "QtahOpenGLWindow") Nothing [c_QOpenGLWindow]
-  [ mkCtor "new" []
+  [ mkCtor "new" np
   , mkCtor "newWithUpdateBehavior" [enumT e_UpdateBehavior]
   , mkCtor "newWithUpdateBehaviorAndParent" [enumT e_UpdateBehavior, ptrT $ objT c_QWindow]
     -- TODO QtahOpenGLWindow(QOpenGLContext*, ...)

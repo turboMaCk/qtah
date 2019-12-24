@@ -28,6 +28,7 @@ import Foreign.Hoppy.Generator.Spec (
   makeClass,
   mkConstMethod,
   mkCtor,
+  np,
   )
 import Foreign.Hoppy.Generator.Types (enumT, objT, ptrT)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QAction (c_QAction)
@@ -49,6 +50,6 @@ c_QActionEvent =
   makeClass (ident "QActionEvent") Nothing [c_QEvent]
   [ mkCtor "new" [enumT e_Type, ptrT $ objT c_QAction]
   , mkCtor "newBefore" [enumT e_Type, ptrT $ objT c_QAction]
-  , mkConstMethod "action" [] $ ptrT $ objT c_QAction
-  , mkConstMethod "before" [] $ ptrT $ objT c_QAction
+  , mkConstMethod "action" np $ ptrT $ objT c_QAction
+  , mkConstMethod "before" np $ ptrT $ objT c_QAction
   ]

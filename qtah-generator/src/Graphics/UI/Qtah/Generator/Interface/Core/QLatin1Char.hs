@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QLatin1Char (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -29,6 +28,7 @@ import Foreign.Hoppy.Generator.Spec (
   makeClass,
   mkConstMethod,
   mkCtor,
+  np,
   )
 import Foreign.Hoppy.Generator.Types (charT, ushortT)
 import Foreign.Hoppy.Generator.Version (collect, just)
@@ -40,7 +40,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Core", "QLatin1Char"] $
-  [QtExport $ ExportClass c_QLatin1Char]
+  [qtExport c_QLatin1Char]
 
 c_QLatin1Char =
   addReqIncludes [ includeStd "QLatin1Char" ] $
@@ -48,6 +48,6 @@ c_QLatin1Char =
   makeClass (ident "QLatin1Char") Nothing [] $
   collect
   [ just $ mkCtor "new" [charT]
-  , just $ mkConstMethod "toLatin1" [] charT
-  , just $ mkConstMethod "unicode" [] ushortT
+  , just $ mkConstMethod "toLatin1" np charT
+  , just $ mkConstMethod "unicode" np ushortT
   ]

@@ -18,17 +18,14 @@
 module Graphics.UI.Qtah.Generator.Interface.Core.QDebug (
   aModule,
   c_QDebug,
-  e_VerbosityLevel,
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass, ExportEnum),
   Operator (OpShl),
   addReqIncludes,
   classSetConversionToGc,
   classSetEntityPrefix,
   ident,
-  ident1,
   includeStd,
   makeClass,
   mkConstMethod,
@@ -36,6 +33,7 @@ import Foreign.Hoppy.Generator.Spec (
   mkCtor,
   mkMethod,
   mkMethod',
+  np,
   operatorPreferredExtName',
   )
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
@@ -61,7 +59,7 @@ import Foreign.Hoppy.Generator.Types (
   voidT,
   )
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Graphics.UI.Qtah.Generator.Interface.Core.QChar (c_QChar)
 import Graphics.UI.Qtah.Generator.Interface.Core.QByteArray (c_QByteArray)
@@ -75,9 +73,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Core", "QDebug"] $
-  collect
-  [ just $ QtExport $ ExportClass c_QDebug
-  , test (qtVersion >= [5, 13]) $ QtExport $ ExportEnum e_VerbosityLevel
+  [ qtExport c_QDebug
   ]
 
 c_QDebug =
@@ -91,20 +87,20 @@ c_QDebug =
     just $ mkCtor "newWithMsgType" [enumT e_QtMsgType]
   , just $ mkCtor "newWithString" [ptrT $ objT c_QString]
   , just $ mkCtor "newWithIODevice" [ptrT $ objT c_QIODevice]
-  , test (qtVersion >= [5, 0]) $ mkConstMethod "autoInsertSpaces" [] boolT
-  , test (qtVersion >= [5, 4]) $ mkMethod' "maybeQuote" "maybeQuote" [] $ refT $ objT c_QDebug
+  , test (qtVersion >= [5, 0]) $ mkConstMethod "autoInsertSpaces" np boolT
+  , test (qtVersion >= [5, 4]) $ mkMethod' "maybeQuote" "maybeQuote" np $ refT $ objT c_QDebug
   , test (qtVersion >= [5, 4]) $ mkMethod' "maybeQuote" "maybeQuoteWithChar" [charT] $ refT $ objT c_QDebug
-  , just $ mkMethod "maybeSpace" [] $ refT $ objT c_QDebug
-  , test (qtVersion >= [5, 4]) $ mkMethod "noquote" [] $ refT $ objT c_QDebug
-  , just $ mkMethod "nospace" [] $ refT $ objT c_QDebug
-  , test (qtVersion >= [5, 4]) $ mkMethod "quote" [] $ refT $ objT c_QDebug
-  , test (qtVersion >= [5, 4]) $ mkMethod "resetFormat" [] $ refT $ objT c_QDebug
+  , just $ mkMethod "maybeSpace" np $ refT $ objT c_QDebug
+  , test (qtVersion >= [5, 4]) $ mkMethod "noquote" np $ refT $ objT c_QDebug
+  , just $ mkMethod "nospace" np $ refT $ objT c_QDebug
+  , test (qtVersion >= [5, 4]) $ mkMethod "quote" np $ refT $ objT c_QDebug
+  , test (qtVersion >= [5, 4]) $ mkMethod "resetFormat" np $ refT $ objT c_QDebug
   , test (qtVersion >= [5, 0]) $ mkMethod "setAutoInsertSpaces" [boolT] voidT
   , test (qtVersion >= [5, 6]) $ mkMethod "setVerbosity" [intT] voidT
-  , just $ mkMethod "space" [] $ refT $ objT c_QDebug
+  , just $ mkMethod "space" np $ refT $ objT c_QDebug
   , just $ mkMethod "swap" [refT $ objT c_QDebug] voidT
   , test (qtVersion >= [5, 13]) $ mkMethod' "verbosity" "verbosityWithLevel" [intT] $ refT $ objT c_QDebug
-  , test (qtVersion >= [5, 6]) $ mkConstMethod' "verbosity" "verbosity" [] intT
+  , test (qtVersion >= [5, 6]) $ mkConstMethod' "verbosity" "verbosity" np intT
 
   , just $ mkMethod' OpShl (operatorPreferredExtName' OpShl ++ "QChar")
     [objT c_QChar] $ refT $ objT c_QDebug
@@ -145,11 +141,4 @@ c_QDebug =
     [refT $ constT $ objT c_QByteArray] $ refT $ objT c_QDebug
   , just $ mkMethod' OpShl (operatorPreferredExtName' OpShl ++ "PtrVoid")
     [ptrT $ constT voidT] $ refT $ objT c_QDebug
-  ]
-
-e_VerbosityLevel =
-  makeQtEnum (ident1 "QDebug" "VerbosityLevel") [includeStd "QDebug"]
-  [ (0, ["minimum", "verbosity"])
-  , (2, ["default", "verbosity"])
-  , (7, ["maximum", "verbosity"])
   ]

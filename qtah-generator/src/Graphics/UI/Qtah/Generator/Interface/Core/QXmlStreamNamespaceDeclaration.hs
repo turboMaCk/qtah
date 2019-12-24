@@ -22,7 +22,6 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QXmlStreamNamespaceDeclaration 
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   classSetConversionToGc,
   addReqIncludes,
   classSetEntityPrefix,
@@ -30,6 +29,7 @@ import Foreign.Hoppy.Generator.Spec (
   includeStd,
   makeClass,
   mkCtor,
+  np,
   )
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Copyable, Assignable, Equatable),
@@ -48,7 +48,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Core", "QXmlStreamNamespaceDeclaration"]
-  [QtExport $ ExportClass c_QXmlStreamNamespaceDeclaration]
+  [qtExport c_QXmlStreamNamespaceDeclaration]
 
 c_QXmlStreamNamespaceDeclaration =
   addReqIncludes [ includeStd "QXmlStreamNamespaceDeclaration" ] $
@@ -57,10 +57,10 @@ c_QXmlStreamNamespaceDeclaration =
   classSetEntityPrefix "" $
   makeClass (ident "QXmlStreamNamespaceDeclaration") Nothing [] $
   collect
-  [ just $ mkCtor "new" []
+  [ just $ mkCtor "new" np
   , just $ mkCtor "newWithPrefixAndNamespaceUri" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString]
-  --, just $ mkConstMethod "namespaceUri" [] $ objT c_QStringRef
-  --, just $ mkConstMethod "prefix" [] $ objT c_QStringRef
+  --, just $ mkConstMethod "namespaceUri" np $ objT c_QStringRef
+  --, just $ mkConstMethod "prefix" np $ objT c_QStringRef
   ]
 
 qXmlStreamNamespaceDeclarations = c_QVectorQXmlStreamNamespaceDeclaration

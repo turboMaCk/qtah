@@ -29,7 +29,6 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QPair (
 
 import Foreign.Hoppy.Generator.Spec (
   Class,
-  Export (ExportClass),
   Reqs,
   Type,
   addReqs,
@@ -39,6 +38,7 @@ import Foreign.Hoppy.Generator.Spec (
   makeClass,
   mkCtor,
   mkMethod,
+  np,
   reqInclude,
   toExtName,
   )
@@ -48,7 +48,7 @@ import Foreign.Hoppy.Generator.Spec.ClassFeature (
   )
 import Foreign.Hoppy.Generator.Types (intT, objT, refT, voidT, constT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (qreal)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QColor (c_QColor)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), QtModule, makeQtModule)
@@ -95,7 +95,7 @@ instantiate' pairName t1 t2 tReqs opts =
         classSetEntityPrefix "" $
         makeClass (identT "QPair" [t1,t2]) (Just $ toExtName pairName) [] $
         collect
-        [ just $ mkCtor "new" []
+        [ just $ mkCtor "new" np
         , just $ mkCtor "newWithValues" [refT $ constT t1, refT $ constT t2]
         , test (qtVersion >= [5, 5]) $ mkMethod "swap" [refT $ objT pair] voidT
           -- TODO first, second
@@ -109,7 +109,7 @@ instantiate' pairName t1 t2 tReqs opts =
 -- | Converts an instantiation into a list of exports to be included in a
 -- module.
 toExports :: Contents -> [QtExport]
-toExports m = [QtExport $ ExportClass $ c_QPair m]
+toExports m = [qtExport $ c_QPair m]
 
 createModule :: String -> Contents -> QtModule
 createModule name contents = makeQtModule ["Core", "QPair", name] $ toExports contents

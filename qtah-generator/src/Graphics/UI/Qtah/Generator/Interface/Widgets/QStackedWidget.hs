@@ -20,7 +20,6 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QStackedWidget (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -30,9 +29,10 @@ import Foreign.Hoppy.Generator.Spec (
   mkCtor,
   mkMethod,
   mkProp,
+  np,
   )
 import Foreign.Hoppy.Generator.Types (intT, objT, ptrT, voidT)
-import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (c_ListenerInt)
+import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (listenerInt)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QFrame (c_QFrame)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QWidget (c_QWidget)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
@@ -43,17 +43,17 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QStackedWidget"] $
-  QtExport (ExportClass c_QStackedWidget) :
+  qtExport c_QStackedWidget :
   map QtExportSignal signals
 
 c_QStackedWidget =
   addReqIncludes [includeStd "QStackedWidget"] $
   classSetEntityPrefix "" $
   makeClass (ident "QStackedWidget") Nothing [c_QFrame]
-  [ mkCtor "new" []
+  [ mkCtor "new" np
   , mkCtor "newWithParent" [ptrT $ objT c_QWidget]
   , mkMethod "addWidget" [ptrT $ objT c_QWidget] intT
-  , mkConstMethod "count" [] intT
+  , mkConstMethod "count" np intT
   , mkProp "currentIndex" intT
   , mkProp "currentWidget" $ ptrT $ objT c_QWidget
   , mkConstMethod "indexOf" [ptrT $ objT c_QWidget] intT
@@ -63,6 +63,6 @@ c_QStackedWidget =
   ]
 
 signals =
-  [ makeSignal c_QStackedWidget "currentChanged" c_ListenerInt
-  , makeSignal c_QStackedWidget "widgetRemoved" c_ListenerInt
+  [ makeSignal c_QStackedWidget "currentChanged" listenerInt
+  , makeSignal c_QStackedWidget "widgetRemoved" listenerInt
   ]

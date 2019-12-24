@@ -33,7 +33,6 @@ import Foreign.Hoppy.Generator.Spec (
     classHaskellConversionToCppFn,
     classHaskellConversionType
     ),
-  Export (ExportClass),
   addAddendumHaskell,
   addReqIncludes,
   classSetEntityPrefix,
@@ -45,10 +44,12 @@ import Foreign.Hoppy.Generator.Spec (
   mkCtor,
   mkMethod,
   mkStaticMethod,
+  np,
   )
-import Foreign.Hoppy.Generator.Types (bitspaceT, boolT, objT, ptrT, voidT)
+import Foreign.Hoppy.Generator.Types (boolT, objT, ptrT, voidT)
+import Graphics.UI.Qtah.Generator.Flags (flagsT)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Core.QItemSelectionModel (
-  bs_SelectionFlags,
+  fl_SelectionFlags,
   )
 import Graphics.UI.Qtah.Generator.Interface.Core.QItemSelectionRange (c_QItemSelectionRange)
 import Graphics.UI.Qtah.Generator.Interface.Core.QList (
@@ -71,7 +72,7 @@ import Language.Haskell.Syntax (
 aModule =
   AQtModule $
   makeQtModule ["Core", "QItemSelection"]
-  [ QtExport $ ExportClass c_QItemSelection ]
+  [ qtExport c_QItemSelection ]
 
 c_QItemSelection =
   addReqIncludes [includeStd "QItemSelection"] $
@@ -90,11 +91,11 @@ c_QItemSelection =
     (inheritHasContents c_QItemSelection c_QListQItemSelectionRange $ objT c_QItemSelectionRange) $
   classSetEntityPrefix "" $
   makeClass (ident "QItemSelection") Nothing [c_QListQItemSelectionRange]
-  [ mkCtor "new" []
+  [ mkCtor "new" np
   , mkCtor "newWithRange" [objT c_QModelIndex, objT c_QModelIndex]
   , mkConstMethod "contains" [objT c_QModelIndex] boolT
-  , mkConstMethod "indexes" [] $ objT c_QListQModelIndex
-  , mkMethod "merge" [objT c_QItemSelection, bitspaceT bs_SelectionFlags] voidT
+  , mkConstMethod "indexes" np $ objT c_QListQModelIndex
+  , mkMethod "merge" [objT c_QItemSelection, flagsT fl_SelectionFlags] voidT
   , mkMethod "select" [objT c_QModelIndex, objT c_QModelIndex] voidT
   , mkStaticMethod "split"
     [objT c_QItemSelectionRange, objT c_QItemSelectionRange, ptrT $ objT c_QItemSelection] voidT

@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Gui.QRegion (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass, ExportEnum),
   addReqIncludes,
   classSetConversionToGc,
   classSetEntityPrefix,
@@ -34,6 +33,7 @@ import Foreign.Hoppy.Generator.Spec (
   mkCtor,
   mkMethod,
   mkMethod',
+  np,
   )
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Assignable, Copyable, Equatable),
@@ -41,7 +41,7 @@ import Foreign.Hoppy.Generator.Spec.ClassFeature (
   )
 import Foreign.Hoppy.Generator.Types (boolT, enumT, intT, objT, refT, voidT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.QPoint (c_QPoint)
 import Graphics.UI.Qtah.Generator.Interface.Core.QRect (c_QRect)
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (e_FillRule)
@@ -54,8 +54,8 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Gui", "QRegion"]
-  [ QtExport $ ExportClass c_QRegion
-  , QtExport $ ExportEnum e_RegionType
+  [ qtExport c_QRegion
+  , qtExport e_RegionType
   ]
 
 c_QRegion =
@@ -65,13 +65,13 @@ c_QRegion =
   classSetEntityPrefix "" $
   makeClass (ident "QRegion") Nothing [] $
   collect
-  [ just $ mkCtor "new" []
+  [ just $ mkCtor "new" np
   , just $ mkCtor "newFromPoints" [intT, intT, intT, intT, enumT e_RegionType]
   , just $ mkCtor "newFromPolygon" [objT c_QPolygon]
   , just $ mkCtor "newFromPolygonAll" [objT c_QPolygon, enumT e_FillRule]
     -- TODO newFromBitmap (needs QBitmap)
   , just $ mkCtor "newFromRect" [objT c_QRect, enumT e_RegionType]
-  , just $ mkConstMethod "boundingRect" [] $ objT c_QRect
+  , just $ mkConstMethod "boundingRect" np $ objT c_QRect
   , just $ mkConstMethod' "contains" "containsPoint" [objT c_QPoint] boolT
   , just $ mkConstMethod' "contains" "containsRect" [objT c_QRect] boolT
   , test (qtVersion >= [4, 2]) $
@@ -80,9 +80,9 @@ c_QRegion =
     mkConstMethod' "intersected" "intersectedWithRect" [objT c_QRect] $ objT c_QRegion
   , test (qtVersion >= [4, 2]) $ mkConstMethod' "intersects" "intersects" [objT c_QRegion] boolT
   , test (qtVersion >= [4, 2]) $ mkConstMethod' "intersects" "intersectsRect" [objT c_QRect] boolT
-  , just $ mkConstMethod "isEmpty" [] boolT
-  , test (qtVersion >= [5, 0]) $ mkConstMethod "isNull" [] boolT
-  , test (qtVersion >= [4, 6]) $ mkConstMethod "rectCount" [] intT
+  , just $ mkConstMethod "isEmpty" np boolT
+  , test (qtVersion >= [5, 0]) $ mkConstMethod "isNull" np boolT
+  , test (qtVersion >= [4, 6]) $ mkConstMethod "rectCount" np intT
     -- TODO rects
     -- TODO setRects
   , test (qtVersion >= [4, 2]) $
@@ -104,6 +104,6 @@ c_QRegion =
 
 e_RegionType =
   makeQtEnum (ident1 "QRegion" "RegionType") [includeStd "QRegion"]
-  [ (0, ["rectangle"])
-  , (1, ["ellipse"])
+  [ "Rectangle"
+  , "Ellipse"
   ]

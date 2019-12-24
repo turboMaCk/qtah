@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QStringListModel (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -29,6 +28,7 @@ import Foreign.Hoppy.Generator.Spec (
   makeClass,
   mkCtor,
   mkProp,
+  np,
   )
 import Foreign.Hoppy.Generator.Types (objT, ptrT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QAbstractListModel (c_QAbstractListModel)
@@ -42,13 +42,13 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Core", "QStringListModel"]
-  [ QtExport $ ExportClass c_QStringListModel ]
+  [ qtExport c_QStringListModel ]
 
 c_QStringListModel =
   addReqIncludes [includeStd "QStringListModel"] $
   classSetEntityPrefix "" $
   makeClass (ident "QStringListModel") Nothing [c_QAbstractListModel]
-  [ mkCtor "new" []
+  [ mkCtor "new" np
   , mkCtor "newWithParent" [ptrT $ objT c_QObject]
   , mkCtor "newWithContents" [objT c_QStringList]
   , mkCtor "newWithContentsAndParent" [objT c_QStringList, ptrT $ objT c_QObject]

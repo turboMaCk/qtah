@@ -147,6 +147,7 @@ library
     , Graphics.UI.Qtah.Core.QXmlStreamWriter
     , Graphics.UI.Qtah.Core.Types
     , Graphics.UI.Qtah.Event
+    , Graphics.UI.Qtah.Flags
     , Graphics.UI.Qtah.Gui.HColor
     , Graphics.UI.Qtah.Gui.QActionEvent
     , Graphics.UI.Qtah.Gui.QBackingStore
@@ -515,6 +516,9 @@ library
     , Graphics.UI.Qtah.Internal.EventListener
     , Graphics.UI.Qtah.Internal.Listener
     , Graphics.UI.Qtah.Internal.SceneEventListener
+  default-extensions:
+      FunctionalDependencies
+    , MultiParamTypeClasses
   other-extensions:
       ExistentialQuantification
     , FlexibleContexts
@@ -523,7 +527,7 @@ library
       base >=4 && <5
     , binary >=0.7 && <0.9
     , bytestring >=0.10 && <0.11
-    , hoppy-runtime >=0.5 && <0.6
+    , hoppy-runtime >=0.7 && <0.8
     , qtah-cpp >=0.6 && <0.7
     , qtah-generator >=0.6 && <0.7
   hs-source-dirs: src
@@ -539,7 +543,7 @@ test-suite test-qtah
       Graphics.UI.Qtah.EventTest
   build-depends:
       base >=4 && <5
-    , hoppy-runtime >=0.5 && <0.6
+    , hoppy-runtime >=0.7 && <0.8
     , HUnit >=1.2 && <1.7
     , qtah
   hs-source-dirs: tests

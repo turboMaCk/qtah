@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QMarginsF (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   Operator (OpAddAssign, OpDivideAssign, OpMultiplyAssign, OpSubtractAssign),
   addReqIncludes,
   classSetEntityPrefix,
@@ -32,6 +31,7 @@ import Foreign.Hoppy.Generator.Spec (
   mkCtor,
   mkMethod',
   mkProp,
+  np,
   operatorPreferredExtName',
   )
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
@@ -51,18 +51,18 @@ minVersion = [5, 3]
 aModule =
   AQtModule $
   makeQtModuleWithMinVersion ["Core", "QMarginsF"] minVersion
-  [ QtExport $ ExportClass c_QMarginsF ]
+  [ qtExport c_QMarginsF ]
 
 c_QMarginsF =
   addReqIncludes [includeStd "QMarginsF"] $
   classAddFeatures [Assignable, Copyable, Equatable] $
   classSetEntityPrefix "" $
   makeClass (ident "QMarginsF") Nothing []
-  [ mkCtor "newNull" []
+  [ mkCtor "newNull" np
   , mkCtor "new" [qreal, qreal, qreal, qreal]
   , mkCtor "newWithMargins" [objT c_QMargins]
   , mkProp "bottom" qreal
-  , mkConstMethod "isNull" [] boolT
+  , mkConstMethod "isNull" np boolT
   , mkProp "left" qreal
   , mkProp "right" qreal
   , mkProp "top" qreal

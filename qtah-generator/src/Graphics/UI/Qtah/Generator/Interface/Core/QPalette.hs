@@ -30,9 +30,8 @@ import Graphics.UI.Qtah.Generator.Interface.Gui.QColor (c_QColor)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QBrush (c_QBrush)
 import Foreign.Hoppy.Generator.Types (int64T, constT, objT, refT, voidT, boolT, enumT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass, ExportEnum),
   Include,
   includeStd,
   addReqIncludes,
@@ -45,7 +44,8 @@ import Foreign.Hoppy.Generator.Spec (
   mkConstMethod',
   mkCtor,
   mkMethod',
-  mkMethod
+  mkMethod,
+  np,
   )
 import Graphics.UI.Qtah.Generator.Module (AModule(AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
@@ -60,9 +60,9 @@ aModule :: AModule
 aModule =
   AQtModule $
   makeQtModule ["Core", "QPalette"]
-  [ QtExport $ ExportClass c_QPalette
-  , QtExport $ ExportEnum e_ColorRole
-  , QtExport $ ExportEnum e_ColorGroup
+  [ qtExport c_QPalette
+  , qtExport e_ColorRole
+  , qtExport e_ColorGroup
   ]
 
 c_QPalette =
@@ -72,36 +72,36 @@ c_QPalette =
   classSetEntityPrefix "" $
   makeClass (ident "QPalette") Nothing [] $
   collect
-  [ just $ mkCtor "new" []
+  [ just $ mkCtor "new" np
   , just $ mkCtor "newWithColor" [refT $ constT $ objT c_QColor]
   , just $ mkCtor "newWithColors" [refT $ constT $ objT c_QColor, refT $ constT $ objT c_QColor]
   , just $ mkCtor "newWithGlobalColor" [enumT e_GlobalColor]
   , just $ mkCtor "newWithBrushes" [refT $ constT $ objT c_QBrush, refT $ constT $ objT c_QBrush, refT $ constT $ objT c_QBrush,
     refT $ constT $ objT c_QBrush, refT $ constT $ objT c_QBrush, refT $ constT $ objT c_QBrush,
     refT $ constT $ objT c_QBrush, refT $ constT $ objT c_QBrush, refT $ constT $ objT c_QBrush]
-  , just $ mkConstMethod "alternateBase" [] $ refT $ constT $ objT c_QBrush
-  , just $ mkConstMethod "base" [] $ refT $ constT $ objT c_QBrush
-  , just $ mkConstMethod "brightText" [] $ refT $ constT $ objT c_QBrush
+  , just $ mkConstMethod "alternateBase" np $ refT $ constT $ objT c_QBrush
+  , just $ mkConstMethod "base" np $ refT $ constT $ objT c_QBrush
+  , just $ mkConstMethod "brightText" np $ refT $ constT $ objT c_QBrush
   , just $ mkConstMethod' "brush" "brushWithGroup" [enumT e_ColorGroup, enumT e_ColorRole] $ refT $ constT $ objT c_QBrush
   , just $ mkConstMethod' "brush" "brush" [enumT e_ColorRole] $ refT $ constT $ objT c_QBrush
-  , just $ mkConstMethod "button" [] $ refT $ constT $ objT c_QBrush
-  , just $ mkConstMethod "buttonText" [] $ refT $ constT $ objT c_QBrush
-  , just $ mkConstMethod "cacheKey" [] int64T
+  , just $ mkConstMethod "button" np $ refT $ constT $ objT c_QBrush
+  , just $ mkConstMethod "buttonText" np $ refT $ constT $ objT c_QBrush
+  , just $ mkConstMethod "cacheKey" np int64T
   , just $ mkConstMethod' "color" "colorWithGroup" [enumT e_ColorGroup, enumT e_ColorRole] $ refT $ constT $ objT c_QColor
   , just $ mkConstMethod' "color" "color" [enumT e_ColorRole] $ refT $ constT $ objT c_QColor
-  , just $ mkConstMethod "currentColorGroup" [] $ enumT e_ColorGroup
-  , just $ mkConstMethod "dark" [] $ refT $ constT $ objT c_QBrush
-  , just $ mkConstMethod "highlight" [] $ refT $ constT $ objT c_QBrush
-  , just $ mkConstMethod "highlightedText" [] $ refT $ constT $ objT c_QBrush
+  , just $ mkConstMethod "currentColorGroup" np $ enumT e_ColorGroup
+  , just $ mkConstMethod "dark" np $ refT $ constT $ objT c_QBrush
+  , just $ mkConstMethod "highlight" np $ refT $ constT $ objT c_QBrush
+  , just $ mkConstMethod "highlightedText" np $ refT $ constT $ objT c_QBrush
   , test (qtVersion >= [4, 2]) $ mkConstMethod "isBrushSet" [enumT e_ColorGroup, enumT e_ColorRole] boolT
   , just $ mkConstMethod "isCopyOf" [refT $ constT $ objT c_QPalette] boolT
   , just $ mkConstMethod "isEqual" [enumT e_ColorGroup, enumT e_ColorGroup] boolT
-  , just $ mkConstMethod "light" [] $ refT $ constT $ objT c_QBrush
-  , just $ mkConstMethod "link" [] $ refT $ constT $ objT c_QBrush
-  , just $ mkConstMethod "linkVisited" [] $ refT $ constT $ objT c_QBrush
-  , just $ mkConstMethod "mid" [] $ refT $ constT $ objT c_QBrush
-  , just $ mkConstMethod "midlight" [] $ refT $ constT $ objT c_QBrush
-  , test (qtVersion >= [5, 12]) $ mkConstMethod "placeholderText" [] $ refT $ constT $ objT c_QBrush
+  , just $ mkConstMethod "light" np $ refT $ constT $ objT c_QBrush
+  , just $ mkConstMethod "link" np $ refT $ constT $ objT c_QBrush
+  , just $ mkConstMethod "linkVisited" np $ refT $ constT $ objT c_QBrush
+  , just $ mkConstMethod "mid" np $ refT $ constT $ objT c_QBrush
+  , just $ mkConstMethod "midlight" np $ refT $ constT $ objT c_QBrush
+  , test (qtVersion >= [5, 12]) $ mkConstMethod "placeholderText" np $ refT $ constT $ objT c_QBrush
   , just $ mkMethod' "setBrush" "setBrush" [enumT e_ColorRole, refT $ constT $ objT c_QBrush] voidT
   , just $ mkMethod' "setBrush" "setBrushWithGroup" [enumT e_ColorGroup, enumT e_ColorRole, refT $ constT $ objT c_QBrush] voidT
   , just $ mkMethod' "setColor" "setColor" [enumT e_ColorRole, refT $ constT $ objT c_QColor] voidT
@@ -110,33 +110,33 @@ c_QPalette =
     refT $ constT $ objT c_QBrush, refT $ constT $ objT c_QBrush, refT $ constT $ objT c_QBrush,
     refT $ constT $ objT c_QBrush, refT $ constT $ objT c_QBrush, refT $ constT $ objT c_QBrush] voidT
   , just $ mkMethod "setCurrentColorGroup" [enumT e_ColorGroup] voidT
-  , just $ mkConstMethod "shadow" [] $ refT $ constT $ objT c_QBrush
+  , just $ mkConstMethod "shadow" np $ refT $ constT $ objT c_QBrush
   , test (qtVersion >= [5, 0]) $ mkMethod "swap" [refT $ objT c_QPalette] voidT
-  , just $ mkConstMethod "text" [] $ refT $ constT $ objT c_QBrush
-  , test (qtVersion >= [4, 4]) $ mkConstMethod "toolTipBase" [] $ refT $ constT $ objT c_QBrush
-  , test (qtVersion >= [4, 4]) $ mkConstMethod "toolTipText" [] $ refT $ constT $ objT c_QBrush
-  , just $ mkConstMethod "window" [] $ refT $ constT $ objT c_QBrush
-  , just $ mkConstMethod "windowText" [] $ refT $ constT $ objT c_QBrush
+  , just $ mkConstMethod "text" np $ refT $ constT $ objT c_QBrush
+  , test (qtVersion >= [4, 4]) $ mkConstMethod "toolTipBase" np $ refT $ constT $ objT c_QBrush
+  , test (qtVersion >= [4, 4]) $ mkConstMethod "toolTipText" np $ refT $ constT $ objT c_QBrush
+  , just $ mkConstMethod "window" np $ refT $ constT $ objT c_QBrush
+  , just $ mkConstMethod "windowText" np $ refT $ constT $ objT c_QBrush
   ]
 
 e_ColorGroup =
   makeQtEnum (ident1 "QPalette" "ColorGroup") qPaletteInclude
-  [ (1, ["disabled"])
-  , (0, ["active"])
-  , (2, ["inactive"])
- --, (0, ["normal"])
+  [ "Disabled"
+  , "Active"
+  , "Inactive"
+  , "Normal"
   ]
 
 e_ColorRole =
   makeQtEnum (ident1 "QPalette" "ColorRole") qPaletteInclude
-  [ (10, ["window"])
-  , (0,  ["window", "text"])
-  , (9,  ["base"])
-  , (16, ["alternate", "base"])
-  , (18, ["tool", "tip", "base"])
-  , (19, ["tool", "tip", "text"])
-  , (6,  ["text"])
-  , (1,  ["button"])
-  , (8,  ["button", "text"])
-  , (7,  ["bright", "text"])
+  [ "Window"
+  , "WindowText"
+  , "Base"
+  , "AlternateBase"
+  , "ToolTipBase"
+  , "ToolTipText"
+  , "Text"
+  , "Button"
+  , "ButtonText"
+  , "BrightText"
   ]

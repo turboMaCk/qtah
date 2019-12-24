@@ -19,7 +19,7 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QString (
   aModule,
   c_QString,
   e_SectionFlag,
-  bs_SectionFlags,
+  fl_SectionFlags,
   e_NormalizationForm,
   e_SplitBehavior,
   ) where
@@ -35,7 +35,6 @@ import Foreign.Hoppy.Generator.Spec (
     classHaskellConversionToCppFn,
     classHaskellConversionType
   ),
-  Export (ExportClass, ExportBitspace, ExportEnum),
   MethodApplicability (MNormal),
   Operator (OpArray),
   Purity (Nonpure),
@@ -53,7 +52,8 @@ import Foreign.Hoppy.Generator.Spec (
   mkConstMethod',
   mkCtor,
   mkMethod',
-  mkMethod
+  mkMethod,
+  np,
   )
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Assignable, Copyable, Comparable, Equatable),
@@ -62,7 +62,7 @@ import Foreign.Hoppy.Generator.Spec.ClassFeature (
 import Foreign.Hoppy.Generator.Std.String (c_string)
 import Foreign.Hoppy.Generator.Types (doubleT, charT, constT, intT, objT, ptrT, refT, voidT, longT, ulongT, uintT, shortT, ushortT, boolT, floatT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.QByteArray (c_QByteArray)
 import Graphics.UI.Qtah.Generator.Interface.Core.QChar (c_QChar)
 import Graphics.UI.Qtah.Generator.Interface.Imports
@@ -81,11 +81,11 @@ import Language.Haskell.Syntax (
 aModule =
   AQtModule $
   makeQtModule ["Core", "QString"]
-  [ QtExport $ ExportClass c_QString
-  , QtExport $ ExportEnum e_SectionFlag
-  , QtExport $ ExportBitspace bs_SectionFlags
-  , QtExport $ ExportEnum e_NormalizationForm
-  , QtExport $ ExportEnum e_SplitBehavior
+  [ qtExport c_QString
+  , qtExport e_SectionFlag
+  , qtExport fl_SectionFlags
+  , qtExport e_NormalizationForm
+  , qtExport e_SplitBehavior
   ]
 
 c_QString =
@@ -105,7 +105,7 @@ c_QString =
   classSetEntityPrefix "" $
   makeClass (ident "QString") Nothing [] $
   collect
-  [ just $ mkCtor "new" []
+  [ just $ mkCtor "new" np
   , just $ mkCtor "newFromByteArray" [objT c_QByteArray]
   , just $ mkCtor "newFromCString" [ptrT $ constT charT]
   , just $ mkCtor "newFromSizeQChar" [intT, objT c_QChar]
@@ -194,107 +194,107 @@ c_QString =
   , just $ mkConstMethod' "arg" "argNineQStrings" [objT c_QString, objT c_QString, objT c_QString, objT c_QString, objT c_QString, objT c_QString, objT c_QString, objT c_QString, objT c_QString] $ objT c_QString
 
   , just $ mkConstMethod' OpArray "at" [intT] $ objT c_QChar
-  , test (qtVersion >= [5, 10]) $ mkConstMethod "back" [] $ objT c_QChar
+  , test (qtVersion >= [5, 10]) $ mkConstMethod "back" np $ objT c_QChar
   -- TODO QCharRef QString::back()
   -- TODO QString::iterator QString::begin()
   -- TODO QString::const_iterator QString::begin() const
 
-  , just $ mkConstMethod "capacity" [] intT
+  , just $ mkConstMethod "capacity" np intT
 
   -- TODO QString::const_iterator QString::cbegin() const
   -- TODO QString::const_iterator QString::cend() const
 
   , just $ mkMethod "chop" [intT] voidT
   , test (qtVersion >= [5, 10]) $ mkConstMethod "chopped" [intT] $ objT c_QString
-  , just $ mkMethod "clear" [] voidT
+  , just $ mkMethod "clear" np voidT
 
   -- TODO compare methods
   -- TODO QString::const_iterator QString::constBegin() const
   -- TODO const QChar *QString::constData() const
   -- TODO QString::const_iterator QString::constEnd() const
 
-  , test (qtVersion >= [5, 0]) $ mkConstMethod "toHtmlEscaped" [] $ objT c_QString
-  , just $ mkConstMethod "toLatin1" [] $ objT c_QByteArray
-  , just $ mkConstMethod "toLocal8Bit" [] $ objT c_QByteArray
-  , just $ mkConstMethod "toStdString" [] $ objT c_string
-  , just $ mkConstMethod "toUtf8" [] $ objT c_QByteArray
+  , test (qtVersion >= [5, 0]) $ mkConstMethod "toHtmlEscaped" np $ objT c_QString
+  , just $ mkConstMethod "toLatin1" np $ objT c_QByteArray
+  , just $ mkConstMethod "toLocal8Bit" np $ objT c_QByteArray
+  , just $ mkConstMethod "toStdString" np $ objT c_string
+  , just $ mkConstMethod "toUtf8" np $ objT c_QByteArray
   -- TODO CFStringRef QString::toCFString() const
-  , just $ mkConstMethod "toCaseFolded" [] $ objT c_QString
+  , just $ mkConstMethod "toCaseFolded" np $ objT c_QString
 
-  , just $ mkConstMethod' "toDouble" "toDouble" [] doubleT
+  , just $ mkConstMethod' "toDouble" "toDouble" np doubleT
   , just $ mkConstMethod' "toDouble" "toDoubleWithOk" [ptrT boolT] doubleT
 
-  , just $ mkConstMethod' "toFloat" "toFloat" [] floatT
+  , just $ mkConstMethod' "toFloat" "toFloat" np floatT
   , just $ mkConstMethod' "toFloat" "toFloatWithOk" [ptrT boolT] floatT
 
-  , just $ mkConstMethod' "toInt" "toInt" [] intT
+  , just $ mkConstMethod' "toInt" "toInt" np intT
   , just $ mkConstMethod' "toInt" "toIntWithOk" [ptrT boolT] intT
   , just $ mkConstMethod' "toInt" "toIntWithOkAndBase" [ptrT boolT, intT] intT
 
-  , just $ mkConstMethod' "toLong" "toLong" [] longT
+  , just $ mkConstMethod' "toLong" "toLong" np longT
   , just $ mkConstMethod' "toLong" "toLongWithOk" [ptrT boolT] longT
   , just $ mkConstMethod' "toLong" "toLongWithOkAndBase" [ptrT boolT, intT] longT
 
-  , just $ mkConstMethod' "toLongLong" "toLonglong" [] qlonglong
+  , just $ mkConstMethod' "toLongLong" "toLonglong" np qlonglong
   , just $ mkConstMethod' "toLongLong" "toLonglongWithOk" [ptrT boolT] qlonglong
   , just $ mkConstMethod' "toLongLong" "toLonglongWithOkAndBase" [ptrT boolT, intT] qlonglong
 
-  , just $ mkConstMethod "toLower" [] $ objT c_QString
+  , just $ mkConstMethod "toLower" np $ objT c_QString
   -- TODO NSString *QString::toNSString() const
 
-  , just $ mkConstMethod' "toShort" "toShort" [] shortT
+  , just $ mkConstMethod' "toShort" "toShort" np shortT
   , just $ mkConstMethod' "toShort" "toShortWithOk" [ptrT boolT] shortT
   , just $ mkConstMethod' "toShort" "toShortWithOkAndBase" [ptrT boolT, intT] shortT
 
-  , just $ mkConstMethod' "toUInt" "toUInt" [] uintT
+  , just $ mkConstMethod' "toUInt" "toUInt" np uintT
   , just $ mkConstMethod' "toUInt" "toUIntWithOk" [ptrT boolT] uintT
   , just $ mkConstMethod' "toUInt" "toUIntWithOkAndBase" [ptrT boolT, intT] uintT
 
-  , just $ mkConstMethod' "toULong" "toULong" [] ulongT
+  , just $ mkConstMethod' "toULong" "toULong" np ulongT
   , just $ mkConstMethod' "toULong" "toULongWithOk" [ptrT boolT] ulongT
   , just $ mkConstMethod' "toULong" "toULongWithOkAndBase" [ptrT boolT, intT] ulongT
 
-  , just $ mkConstMethod' "toULongLong" "toUlonglong" [] qulonglong
+  , just $ mkConstMethod' "toULongLong" "toUlonglong" np qulonglong
   , just $ mkConstMethod' "toULongLong" "toUlonglongWithOk" [ptrT boolT] qulonglong
   , just $ mkConstMethod' "toULongLong" "toUlonglongWithOkAndBase" [ptrT boolT, intT] qulonglong
 
-  , just $ mkConstMethod' "toUShort" "toUshort" [] ushortT
+  , just $ mkConstMethod' "toUShort" "toUshort" np ushortT
   , just $ mkConstMethod' "toUShort" "toUshortWithOk" [ptrT boolT] ushortT
   , just $ mkConstMethod' "toUShort" "toUshortWithOkAndBase" [ptrT boolT, intT] ushortT
 
-  --, test (qtVersion >= [4, 2]) $ mkConstMethod "toUcs4" [] $ toGcT $ objT c_QVectorUInt
+  --, test (qtVersion >= [4, 2]) $ mkConstMethod "toUcs4" np $ toGcT $ objT c_QVectorUInt
 
-  , just $ mkConstMethod "toUpper" [] $ objT c_QString
+  , just $ mkConstMethod "toUpper" np $ objT c_QString
 
   -- int QString::toWCharArray(wchar_t *array) const
 
-  , just $ mkConstMethod "trimmed" [] $ objT c_QString
+  , just $ mkConstMethod "trimmed" np $ objT c_QString
   , just $ mkMethod "truncate" [intT] voidT
 
-  --, just $ mkConstMethod "unicode" [] $ objT c_QChar
-  --, just $ mkConstMethod "utf16" [] $ ptrT ushortT
+  --, just $ mkConstMethod "unicode" np $ objT c_QChar
+  --, just $ mkConstMethod "utf16" np $ ptrT ushortT
     -- TODO Lots more method here.
   ]
 
 e_NormalizationForm =
     makeQtEnum (ident1 "QString" "NormalizationForm") [includeStd "QString"]
-    [ (0, ["normalization", "form", "_", "d"])
-    , (1, ["normalization", "form", "_", "c"])
-    , (2, ["normalization", "form", "_", "k", "d"])
-    , (3, ["normalization", "form", "_", "k", "c"])
+    [ "NormalizationForm_D"
+    , "NormalizationForm_C"
+    , "NormalizationForm_KD"
+    , "NormalizationForm_KC"
     ]
 
-(e_SectionFlag, bs_SectionFlags) =
-    makeQtEnumBitspace (ident1 "QString" "SectionFlag") "SectionFlags" [includeStd "QString"]
-    [ (0x00, ["section", "default"])
-    , (0x01, ["section", "skip", "empty"])
-    , (0x02, ["section", "include", "leading", "sep"])
-    , (0x04, ["section", "include", "trailing", "sep"])
-    , (0x08, ["section", "case", "insensitive", "seps"])
+(e_SectionFlag, fl_SectionFlags) =
+    makeQtEnumAndFlags (ident1 "QString" "SectionFlag") "SectionFlags" [includeStd "QString"]
+    [ "SectionDefault"
+    , "SectionSkipEmpty"
+    , "SectionIncludeLeadingSep"
+    , "SectionIncludeTrailingSep"
+    , "SectionCaseInsensitiveSeps"
     ]
 
 e_SplitBehavior =
     makeQtEnum (ident1 "QString" "SplitBehavior") [includeStd "QString"]
-    [ (0, ["keep", "empty", "parts"])
-    , (1, ["skip", "empty", "parts"])
+    [ "KeepEmptyParts"
+    , "SkipEmptyParts"
     ]

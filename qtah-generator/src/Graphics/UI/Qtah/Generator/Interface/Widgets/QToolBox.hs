@@ -22,7 +22,6 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QToolBox (
 
 import Foreign.Hoppy.Generator.Spec (
   Class,
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -32,14 +31,14 @@ import Foreign.Hoppy.Generator.Spec (
   mkCtor,
   mkMethod,
   mkMethod',
+  np,
   )
-import Foreign.Hoppy.Generator.Types (
-  bitspaceT, boolT, intT, objT, ptrT, voidT,
-  )
+import Foreign.Hoppy.Generator.Types (boolT, intT, objT, ptrT, voidT)
+import Graphics.UI.Qtah.Generator.Flags (flagsT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
-import Graphics.UI.Qtah.Generator.Interface.Core.Types (bs_WindowFlags)
+import Graphics.UI.Qtah.Generator.Interface.Core.Types (fl_WindowFlags)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QIcon (c_QIcon)
-import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (c_ListenerInt)
+import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (listenerInt)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QFrame (c_QFrame)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QWidget (c_QWidget)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
@@ -51,7 +50,7 @@ aModule :: AModule
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QToolBox"] $
-  QtExport (ExportClass c_QToolBox) :
+  qtExport c_QToolBox :
   map QtExportSignal signals
 
 c_QToolBox :: Class
@@ -61,20 +60,20 @@ c_QToolBox =
   makeClass (ident "QToolBox") Nothing [c_QFrame]
   [
   -- Properties
-    mkConstMethod "count" [] intT
-  , mkConstMethod "currentIndex" [] intT
+    mkConstMethod "count" np intT
+  , mkConstMethod "currentIndex" np intT
   -- Public Functions
-  , mkCtor "new" []
+  , mkCtor "new" np
   , mkCtor "newWithParent" [ptrT $ objT c_QWidget]
   , mkCtor
-      "newWithParentAndFlags" [ptrT $ objT c_QWidget, bitspaceT bs_WindowFlags]
+      "newWithParentAndFlags" [ptrT $ objT c_QWidget, flagsT fl_WindowFlags]
   , mkMethod'
       "addItem"
       "addItemWithIcon"
       [ptrT $ objT c_QWidget, objT c_QIcon, objT c_QString]
       intT
   , mkMethod "addItem" [ptrT $ objT c_QWidget, objT c_QString] intT
-  , mkConstMethod "currentWidget" [] (ptrT $ objT c_QWidget)
+  , mkConstMethod "currentWidget" np (ptrT $ objT c_QWidget)
   , mkConstMethod "indexOf" [ptrT $ objT c_QWidget] intT
   , mkMethod'
       "insertItem"
@@ -99,5 +98,5 @@ c_QToolBox =
 
 signals :: [Signal]
 signals =
-  [ makeSignal c_QToolBox "currentChanged" c_ListenerInt
+  [ makeSignal c_QToolBox "currentChanged" listenerInt
   ]

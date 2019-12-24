@@ -22,7 +22,6 @@ module Graphics.UI.Qtah.Generator.Interface.Gui.QValidator (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportEnum, ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -34,7 +33,7 @@ import Foreign.Hoppy.Generator.Spec (
 import Foreign.Hoppy.Generator.Types (enumT, intT, objT, refT, voidT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QObject (c_QObject)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
-import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (c_Listener)
+import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (listener)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
 
@@ -43,9 +42,9 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Gui", "QValidator"] $
-  (QtExport $ ExportClass c_QValidator) :
+  (qtExport c_QValidator) :
   map QtExportSignal signals ++
-  [ QtExport $ ExportEnum e_State ]
+  [ qtExport e_State ]
 
 c_QValidator =
   addReqIncludes [includeStd "QValidator"] $
@@ -58,12 +57,12 @@ c_QValidator =
   ]
 
 signals =
-  [ makeSignal c_QValidator "changed" c_Listener
+  [ makeSignal c_QValidator "changed" listener
   ]
 
 e_State =
   makeQtEnum (ident1 "QValidator" "State") [includeStd "QValidator"]
-  [ (0, ["invalid"])
-  , (1, ["intermediate"])
-  , (2, ["acceptable"])
+  [ "Invalid"
+  , "Intermediate"
+  , "Acceptable"
   ]

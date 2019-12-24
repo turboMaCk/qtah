@@ -27,20 +27,21 @@ import Foreign.Hoppy.Generator.Spec (
   includeStd,
   makeClass,
   mkConstMethod,
+  np,
   )
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Foreign.Hoppy.Generator.Types (bitspaceT, enumT, objT)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Foreign.Hoppy.Generator.Types (enumT, objT)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
+import Graphics.UI.Qtah.Generator.Flags (flagsT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QPoint (c_QPoint)
 import Graphics.UI.Qtah.Generator.Interface.Core.QPointF (c_QPointF)
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (
-  bs_KeyboardModifiers,
+  fl_KeyboardModifiers,
   e_MouseButton,
-  bs_MouseButtons,
-  bs_MouseEventFlags,
-  bs_KeyboardModifiers,
-  e_MouseEventSource,
+  fl_MouseButtons,
   e_MouseEventFlag_minVersion,
+  fl_MouseEventFlags,
+  e_MouseEventSource,
   e_MouseEventSource_minVersion,
   )
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QGraphicsSceneEvent (c_QGraphicsSceneEvent)
@@ -60,20 +61,20 @@ c_QGraphicsSceneMouseEvent =
   classSetEntityPrefix "" $
   makeClass (ident "QGraphicsSceneMouseEvent") Nothing [c_QGraphicsSceneEvent] $
   collect
-  [ just $ mkConstMethod "button" [] $ enumT e_MouseButton
+  [ just $ mkConstMethod "button" np $ enumT e_MouseButton
   , just $ mkConstMethod "buttonDownPos" [enumT e_MouseButton] $ objT c_QPointF
   , just $ mkConstMethod "buttonDownScenePos" [enumT e_MouseButton] $ objT c_QPointF
   , just $ mkConstMethod "buttonDownScreenPos" [enumT e_MouseButton] $ objT c_QPoint
-  , just $ mkConstMethod "buttons" [] $ bitspaceT bs_MouseButtons
-  , test (qtVersion >= e_MouseEventFlag_minVersion) $ mkConstMethod "flags" [] $
-      bitspaceT bs_MouseEventFlags
-  , just $ mkConstMethod "lastPos" [] $ objT c_QPointF
-  , just $ mkConstMethod "lastScenePos" [] $ objT c_QPointF
-  , just $ mkConstMethod "lastScreenPos" [] $ objT c_QPoint
-  , just $ mkConstMethod "modifiers" [] $ bitspaceT bs_KeyboardModifiers
-  , just $ mkConstMethod "pos" [] $ objT c_QPointF
-  , just $ mkConstMethod "scenePos" [] $ objT c_QPointF
-  , just $ mkConstMethod "screenPos" [] $ objT c_QPoint
-  , test (qtVersion >= e_MouseEventSource_minVersion) $ mkConstMethod "source" [] $
+  , just $ mkConstMethod "buttons" np $ flagsT fl_MouseButtons
+  , test (qtVersion >= e_MouseEventFlag_minVersion) $ mkConstMethod "flags" np $
+      flagsT fl_MouseEventFlags
+  , just $ mkConstMethod "lastPos" np $ objT c_QPointF
+  , just $ mkConstMethod "lastScenePos" np $ objT c_QPointF
+  , just $ mkConstMethod "lastScreenPos" np $ objT c_QPoint
+  , just $ mkConstMethod "modifiers" np $ flagsT fl_KeyboardModifiers
+  , just $ mkConstMethod "pos" np $ objT c_QPointF
+  , just $ mkConstMethod "scenePos" np $ objT c_QPointF
+  , just $ mkConstMethod "screenPos" np $ objT c_QPoint
+  , test (qtVersion >= e_MouseEventSource_minVersion) $ mkConstMethod "source" np $
       enumT e_MouseEventSource
   ]

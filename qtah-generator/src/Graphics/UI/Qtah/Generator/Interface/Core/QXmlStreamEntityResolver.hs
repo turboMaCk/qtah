@@ -21,13 +21,12 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QXmlStreamEntityResolver (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
   includeStd,
   makeClass,
-  mkMethod
+  mkMethod,
   )
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Foreign.Hoppy.Generator.Types (constT, objT, refT)
@@ -40,7 +39,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModuleWithMinVersion ["Core", "QXmlStreamEntityResolver"] [4, 4] $
-  [QtExport $ ExportClass c_QXmlStreamEntityResolver]
+  [qtExport c_QXmlStreamEntityResolver]
 
 c_QXmlStreamEntityResolver =
   addReqIncludes [ includeStd "QXmlStreamEntityResolver" ] $

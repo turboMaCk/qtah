@@ -20,7 +20,6 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QFileDialog (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportBitspace, ExportEnum, ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -33,15 +32,17 @@ import Foreign.Hoppy.Generator.Spec (
   mkMethod',
   mkProp,
   mkStaticMethod',
+  np,
   )
-import Foreign.Hoppy.Generator.Types (bitspaceT, boolT, enumT, objT, ptrT, voidT)
+import Foreign.Hoppy.Generator.Types (boolT, enumT, objT, ptrT, voidT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
-import Graphics.UI.Qtah.Generator.Interface.Core.QDir (bs_Filters, c_QDir)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
+import Graphics.UI.Qtah.Generator.Flags (flagsT)
+import Graphics.UI.Qtah.Generator.Interface.Core.QDir (c_QDir, fl_Filters)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Graphics.UI.Qtah.Generator.Interface.Core.QStringList (c_QStringList)
-import Graphics.UI.Qtah.Generator.Interface.Core.Types (bs_WindowFlags)
-import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (c_ListenerQString)
+import Graphics.UI.Qtah.Generator.Interface.Core.Types (fl_WindowFlags)
+import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (listenerQString)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QDialog (c_QDialog)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QWidget (c_QWidget)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
@@ -52,13 +53,13 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QFileDialog"] $
-  [ QtExport $ ExportClass c_QFileDialog
-  , QtExport $ ExportEnum e_AcceptMode
-  , QtExport $ ExportEnum e_DialogLabel
-  , QtExport $ ExportEnum e_FileMode
-  , QtExport $ ExportEnum e_Option
-  , QtExport $ ExportBitspace bs_Options
-  , QtExport $ ExportEnum e_ViewMode
+  [ qtExport c_QFileDialog
+  , qtExport e_AcceptMode
+  , qtExport e_DialogLabel
+  , qtExport e_FileMode
+  , qtExport e_Option
+  , qtExport fl_Options
+  , qtExport e_ViewMode
   ] ++ map QtExportSignal signals
 
 c_QFileDialog =
@@ -66,9 +67,9 @@ c_QFileDialog =
   classSetEntityPrefix "" $
   makeClass (ident "QFileDialog") Nothing [c_QDialog] $
   collect
-  [ just $ mkCtor "new" []
+  [ just $ mkCtor "new" np
   , just $ mkCtor "newWithParent" [ptrT $ objT c_QWidget]
-  , just $ mkCtor "newWithParentAndFlags" [ptrT $ objT c_QWidget, bitspaceT bs_WindowFlags]
+  , just $ mkCtor "newWithParentAndFlags" [ptrT $ objT c_QWidget, flagsT fl_WindowFlags]
   , just $ mkCtor "newWithParentAndCaption" [ptrT $ objT c_QWidget, objT c_QString]
   , just $ mkCtor "newWithParentAndCaptionAndDirectory"
     [ptrT $ objT c_QWidget, objT c_QString, objT c_QString]
@@ -76,26 +77,26 @@ c_QFileDialog =
     [ptrT $ objT c_QWidget, objT c_QString, objT c_QString, objT c_QString]
   , just $ mkProp "acceptMode" $ enumT e_AcceptMode
   , just $ mkProp "defaultSuffix" $ objT c_QString
-  , just $ mkConstMethod "directory" [] $ objT c_QDir
+  , just $ mkConstMethod "directory" np $ objT c_QDir
     -- TODO directoryUrl (>=5.2)
   , just $ mkProp "fileMode" $ enumT e_FileMode
-  , test (qtVersion >= [4, 4]) $ mkProp "filter" $ bitspaceT bs_Filters
+  , test (qtVersion >= [4, 4]) $ mkProp "filter" $ flagsT fl_Filters
   , just $ mkStaticMethod' "getExistingDirectory" "getExistingDirectory"
     [ptrT $ objT c_QWidget, objT c_QString, objT c_QString] $ objT c_QString
   , just $ mkStaticMethod' "getExistingDirectory" "getExistingDirectoryWithOptions"
-    [ptrT $ objT c_QWidget, objT c_QString, objT c_QString, bitspaceT bs_Options] $ objT c_QString
+    [ptrT $ objT c_QWidget, objT c_QString, objT c_QString, flagsT fl_Options] $ objT c_QString
     -- TODO getExistingDirectoryUrl (>=5.2)
   , just $ mkStaticMethod' "getOpenFileName" "getOpenFileName"
     [ptrT $ objT c_QWidget, objT c_QString, objT c_QString, objT c_QString] $ objT c_QString
   , just $ mkStaticMethod' "getOpenFileName" "getOpenFileNameWithOptions"
     [ptrT $ objT c_QWidget, objT c_QString, objT c_QString,
-     objT c_QString, ptrT $ objT c_QString, bitspaceT bs_Options] $
+     objT c_QString, ptrT $ objT c_QString, flagsT fl_Options] $
     objT c_QString
   , just $ mkStaticMethod' "getOpenFileNames" "getOpenFileNames"
     [ptrT $ objT c_QWidget, objT c_QString, objT c_QString, objT c_QString] $ objT c_QStringList
   , just $ mkStaticMethod' "getOpenFileNames" "getOpenFileNamesWithOptions"
     [ptrT $ objT c_QWidget, objT c_QString, objT c_QString,
-     objT c_QString, ptrT $ objT c_QString, bitspaceT bs_Options] $
+     objT c_QString, ptrT $ objT c_QString, flagsT fl_Options] $
     objT c_QStringList
     -- TODO getOpenFileUrl (>=5.2)
     -- TODO getOpenFileUrls (>=5.2)
@@ -103,7 +104,7 @@ c_QFileDialog =
     [ptrT $ objT c_QWidget, objT c_QString, objT c_QString, objT c_QString] $ objT c_QString
   , just $ mkStaticMethod' "getSaveFileName" "getSaveFileNameWithOptions"
     [ptrT $ objT c_QWidget, objT c_QString, objT c_QString,
-     objT c_QString, ptrT $ objT c_QString, bitspaceT bs_Options] $
+     objT c_QString, ptrT $ objT c_QString, flagsT fl_Options] $
     objT c_QString
     -- TODO getSaveFileUrl (>=5.2)
   , just $ mkProp "history" $ objT c_QStringList
@@ -113,7 +114,7 @@ c_QFileDialog =
   , test (qtVersion >= [5, 2]) $ mkProp "mimeTypeFilters" $ objT c_QStringList
   , test (qtVersion >= [4, 4]) $ mkProp "nameFilters" $ objT c_QStringList
     -- TODO open (>=4.5)
-  , test (qtVersion >= [4, 5]) $ mkProp "options" $ bitspaceT bs_Options
+  , test (qtVersion >= [4, 5]) $ mkProp "options" $ flagsT fl_Options
     -- TODO proxyModel
     -- TODO restoreState (>=4.3)
     -- TODO saveState (>=4.3)
@@ -121,8 +122,8 @@ c_QFileDialog =
     -- TODO selectMimeTypeFilter (>=5.2)
   , just $ mkMethod "selectNameFilter" [objT c_QString] voidT
     -- TODO selectUrl (>=5.2)
-  , just $ mkConstMethod "selectedFiles" [] $ objT c_QStringList
-  , test (qtVersion >= [4, 4]) $ mkConstMethod "selectedNameFilter" [] $ objT c_QString
+  , just $ mkConstMethod "selectedFiles" np $ objT c_QStringList
+  , test (qtVersion >= [4, 4]) $ mkConstMethod "selectedNameFilter" np $ objT c_QString
     -- TODO selectedUrls (>=5.2)
   , just $ mkMethod' "setDirectory" "setDirectory" [objT c_QDir] voidT
   , just $ mkMethod' "setDirectory" "setDirectoryPath" [objT c_QString] voidT
@@ -141,56 +142,56 @@ c_QFileDialog =
 
 signals =
   collect
-  [ just $ makeSignal c_QFileDialog "currentChanged" c_ListenerQString
+  [ just $ makeSignal c_QFileDialog "currentChanged" listenerQString
     -- TODO currentUrlChanged (>=5.2)
-  , just $ makeSignal c_QFileDialog "directoryEntered" c_ListenerQString
+  , just $ makeSignal c_QFileDialog "directoryEntered" listenerQString
     -- TODO directoryUrlEntered (>=5.2)
-  , just $ makeSignal c_QFileDialog "fileSelected" c_ListenerQString
+  , just $ makeSignal c_QFileDialog "fileSelected" listenerQString
     -- TODO filesSelected
-  , test (qtVersion >= [4, 3]) $ makeSignal c_QFileDialog "filterSelected" c_ListenerQString
+  , test (qtVersion >= [4, 3]) $ makeSignal c_QFileDialog "filterSelected" listenerQString
     -- TODO urlSelected (>=5.2)
     -- TODO urlsSelected (>=5.2)
   ]
 
 e_AcceptMode =
   makeQtEnum (ident1 "QFileDialog" "AcceptMode") [includeStd "QFileDialog"]
-  [ (0, ["accept", "open"])
-  , (1, ["accept", "save"])
+  [ "AcceptOpen"
+  , "AcceptSave"
   ]
 
 e_DialogLabel =
   makeQtEnum (ident1 "QFileDialog" "DialogLabel") [includeStd "QFileDialog"]
-  [ (0, ["look", "in"])
-  , (1, ["file", "name"])
-  , (2, ["file", "type"])
-  , (3, ["accept"])
-  , (4, ["reject"])
+  [ "LookIn"
+  , "FileName"
+  , "FileType"
+  , "Accept"
+  , "Reject"
   ]
 
 e_FileMode =
   makeQtEnum (ident1 "QFileDialog" "FileMode") [includeStd "QFileDialog"] $
   collect
-  [ just (0, ["any", "file"])
-  , just (1, ["existing", "file"])
-  , just (2, ["directory"])
-  , just (3, ["existing", "files"])
-  , test (qtVersion < [4, 5]) (4, ["directory", "only"])
+  [ just "AnyFile"
+  , just "ExistingFile"
+  , just "Directory"
+  , just "ExistingFiles"
+  , test (qtVersion < [4, 5]) "DirectoryOnly"
   ]
 
-(e_Option, bs_Options) =
-  makeQtEnumBitspace (ident1 "QFileDialog" "Option") "Options" [includeStd "QFileDialog"]
-  [ (0x1, ["show", "dirs", "only"])
-  , (0x2, ["dont", "resolve", "symlinks"])
-  , (0x4, ["dont", "confirm", "overwrite"])
-  , (0x8, ["dont", "use", "sheet"])
-  , (0x10, ["dont", "use", "native", "dialog"])
-  , (0x20, ["read", "only"])
-  , (0x40, ["hide", "name", "filter", "details"])
-  , (0x80, ["dont", "use", "custom", "directory", "icons"])
+(e_Option, fl_Options) =
+  makeQtEnumAndFlags (ident1 "QFileDialog" "Option") "Options" [includeStd "QFileDialog"]
+  [ "ShowDirsOnly"
+  , "DontResolveSymlinks"
+  , "DontConfirmOverwrite"
+  , "DontUseSheet"
+  , "DontUseNativeDialog"
+  , "ReadOnly"
+  , "HideNameFilterDetails"
+  , "DontUseCustomDirectoryIcons"
   ]
 
 e_ViewMode =
   makeQtEnum (ident1 "QFileDialog" "ViewMode") [includeStd "QFileDialog"]
-  [ (0, ["detail"])
-  , (1, ["list"])
+  [ "Detail"
+  , "List"
   ]

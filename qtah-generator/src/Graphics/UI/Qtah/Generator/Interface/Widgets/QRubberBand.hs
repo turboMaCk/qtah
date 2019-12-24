@@ -20,7 +20,6 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QRubberBand (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportEnum, ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -30,6 +29,7 @@ import Foreign.Hoppy.Generator.Spec (
   mkConstMethod,
   mkCtor,
   mkMethod,
+  np,
   )
 import Foreign.Hoppy.Generator.Types (enumT, objT, ptrT, voidT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QPoint (c_QPoint)
@@ -44,8 +44,8 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QRubberBand"]
-  [ QtExport $ ExportClass c_QRubberBand
-  , QtExport $ ExportEnum e_Shape
+  [ qtExport c_QRubberBand
+  , qtExport e_Shape
   ]
 
 c_QRubberBand =
@@ -57,11 +57,11 @@ c_QRubberBand =
   , mkMethod "move" [objT c_QPoint] voidT
   , mkMethod "resize" [objT c_QSize] voidT
   , mkMethod "setGeometry" [objT c_QRect] voidT
-  , mkConstMethod "shape" [] $ enumT e_Shape
+  , mkConstMethod "shape" np $ enumT e_Shape
   ]
 
 e_Shape =
   makeQtEnum (ident1 "QRubberBand" "Shape") [includeStd "QRubberBand"]
-  [ (0, ["line"])
-  , (1, ["rectangle"])
+  [ "Line"
+  , "Rectangle"
   ]

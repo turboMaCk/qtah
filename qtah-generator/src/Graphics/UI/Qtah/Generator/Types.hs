@@ -17,35 +17,42 @@
 
 module Graphics.UI.Qtah.Generator.Types (
   QtExport (..),
-  qtExportToExport,
+  qtExport,
+  qtExportToExports,
   makeQtEnum,
-  makeQtEnumBitspace,
+  makeQtEnum',
+  makeQtEnumAndFlags,
+  makeQtEnumAndFlags',
+  makeQtEnumAndFlagsWithOverrides,
+  ListenerInfo (ListenerInfo),
   Signal, makeSignal, makeSignal',
-  signalCName, signalHaskellName, signalClass, signalListenerClass,
+  signalCName, signalHaskellName, signalClass, signalListenerClass, signalCallback,
   ) where
 
+import qualified Data.Set as S
 import Foreign.Hoppy.Generator.Spec (
-  Bitspace,
+  Callback,
   Class,
   CppEnum,
-  Export (ExportClass, ExportFn),
+  Scoped (Unscoped),
+  Export (Export),
+  Exportable,
+  ForeignLanguage (Haskell),
   Function,
   Identifier,
   Include,
   addReqIncludes,
-  bitspaceAddCppType,
-  bitspaceAddEnum,
-  bitspaceSetValuePrefix,
+  enumAddEntryNameOverrides,
+  enumSetHasBitOperations,
+  enumSetUnknownValueEntry,
   enumSetValuePrefix,
   identifierParts,
-  identT,
   idPartBase,
-  includeStd,
-  makeBitspace,
-  makeEnum,
+  makeAutoEnum,
   toExtName,
+  toExport,
   )
-import Foreign.Hoppy.Generator.Types (enumT, intT)
+import Graphics.UI.Qtah.Generator.Flags (Flags, makeFlags)
 
 data QtExport =
   QtExport Export
@@ -57,44 +64,80 @@ data QtExport =
     -- ^ This is a special value that is exported exactly once, and generates
     -- some bindings that need special logic.
 
-qtExportToExport :: QtExport -> Maybe Export
-qtExportToExport qtExport = case qtExport of
-  QtExport export -> Just export
-  QtExportFnRenamed fn _ -> Just $ ExportFn fn
-  QtExportSignal {} -> Nothing
-  QtExportEvent cls -> Just $ ExportClass cls
-  QtExportSceneEvent cls -> Just $ ExportClass cls
-  QtExportSpecials -> Nothing
+qtExport :: Exportable a => a -> QtExport
+qtExport = QtExport . toExport
+
+qtExportToExports :: QtExport -> [Export]
+qtExportToExports qtExport = case qtExport of
+  QtExport export -> [export]
+  QtExportFnRenamed fn _ -> [Export fn]
+  QtExportSignal {} -> []
+  QtExportEvent cls -> [Export cls]
+  QtExportSceneEvent cls -> [Export cls]
+  QtExportSpecials -> []
 
 -- | Creates a 'CppEnum' whose 'ExtName' is the concatenation of all part of its
 -- 'Identifier'.  This should be used for all Qt enums.
-makeQtEnum :: Identifier -> [Include] -> [(Int, [String])] -> CppEnum
-makeQtEnum identifier includes valueNames =
+makeQtEnum :: Identifier -> [Include] -> [String] -> CppEnum
+makeQtEnum identifier includes names =
+  makeQtEnum' identifier
+              Unscoped  -- Most Qt enums are unscoped.
+              includes
+              names
+
+-- | Creates a 'CppEnum' like 'makeQtEnum' does, but also takes a boolean
+-- parameter indicating whether the enum is scoped.
+makeQtEnum' :: Identifier -> Scoped -> [Include] -> [String] -> CppEnum
+makeQtEnum' identifier scoped includes names =
   addReqIncludes includes $
   enumSetValuePrefix "" $
-  makeEnum identifier
-           (Just $ toExtName $ concatMap idPartBase $ identifierParts identifier)
-           valueNames
+  enumSetUnknownValueEntry ("Unknown" ++ niceName) $
+  enumSetHasBitOperations False $
+  addEntryOverrides $
+  makeAutoEnum identifier
+               (Just $ toExtName niceName)
+               scoped
+               names
+  where niceName = concatMap idPartBase $ identifierParts identifier
+        addEntryOverrides = enumAddEntryNameOverrides Haskell applicableOverrides
+        applicableOverrides = filter (\(from, _) -> S.member from nameSet) enumNameOverrides
+        nameSet = S.fromList names
 
--- | Creates an (enum, bitspace) pair with the same values and similar names,
--- and whose enum values can be converted to bitspace values.
-makeQtEnumBitspace :: Identifier -> String -> [Include] -> [(Int, [String])] -> (CppEnum, Bitspace)
-makeQtEnumBitspace identifier bitspaceName includes valueNames =
-  let enum = makeQtEnum identifier includes valueNames
-      bitspaceExtName = toExtName $ concat $
-                        replaceLast bitspaceName $
-                        map idPartBase (identifierParts identifier)
-  in (enum,
-      addReqIncludes (includeStd "QFlag" : includeStd "QFlags" : includes) $
-      bitspaceAddCppType (identT "QFlags" [enumT enum])
-                         (Just "QFlag")
-                         (Just "int") $
-      bitspaceAddEnum enum $
-      bitspaceSetValuePrefix "" $
-      makeBitspace bitspaceExtName intT valueNames)
-  where replaceLast _ [] = []
-        replaceLast y [_] = [y]
-        replaceLast y (x:xs) = x:replaceLast y xs
+-- | Creates a 'CppEnum' and 'Flags' pair, with the same entries and related
+-- names.
+makeQtEnumAndFlags :: Identifier -> String -> [Include] -> [String] -> (CppEnum, Flags)
+makeQtEnumAndFlags enumIdentifier flagsName includes names =
+  let enum = makeQtEnum enumIdentifier includes names
+      flags = makeFlags enum flagsName
+  in (enum, flags)
+
+-- | Creates a 'CppEnum' and 'Flags' pair like 'makeQtEnumAndFlags' does, but
+-- also takes a boolean parameter indicating whether the enum is scoped.
+makeQtEnumAndFlags' :: Identifier -> String -> Scoped -> [Include] -> [String] -> (CppEnum, Flags)
+makeQtEnumAndFlags' enumIdentifier flagsName scoped includes names =
+  let enum = makeQtEnum' enumIdentifier scoped includes names
+      flags = makeFlags enum flagsName
+  in (enum, flags)
+
+-- | This version of 'makeQtEnumAndFlags' accepts entry name overrides, which is
+-- useful because flag bindings can conflict with method names (they're both
+-- Haskell identifiers starting with lower-case letters).
+makeQtEnumAndFlagsWithOverrides ::
+  Identifier -> String -> [Include] -> [String] -> [(String, String)] -> (CppEnum, Flags)
+makeQtEnumAndFlagsWithOverrides enumIdentifier flagsName includes names nameOverrides =
+  let enum = enumAddEntryNameOverrides Haskell nameOverrides $
+             makeQtEnum enumIdentifier includes names
+      flags = makeFlags enum flagsName
+  in (enum, flags)
+
+-- | Global enum entry name overrides.  These are applied to all enum entries,
+-- to handle the cases where they overlap with Haskell keywords.
+--
+-- TODO Fill these out based on enums we're defined so far.
+enumNameOverrides :: [(String, String)]
+enumNameOverrides =
+  [ ("Type", "Typ")
+  ]
 
 -- | Specification for a signal in the Qt signals and slots framework.
 data Signal = Signal
@@ -107,17 +150,23 @@ data Signal = Signal
     -- as the C name.
   , signalListenerClass :: Class
     -- ^ An appropriately typed listener class.
+  , signalCallback :: Callback
+    -- ^ The callback type used by the listener.
   }
+
+data ListenerInfo = ListenerInfo Class Callback
 
 makeSignal :: Class  -- ^ 'signalClass'
            -> String  -- ^ 'signalCName'
-           -> Class  -- ^ 'signalListenerClass'
+           -> ListenerInfo  -- ^ 'signalListenerClass' and 'signalCallback'.
            -> Signal
-makeSignal cls cName = Signal cls cName cName
+makeSignal cls cName (ListenerInfo listenerClass callback) =
+  Signal cls cName cName listenerClass callback
 
 makeSignal' :: Class  -- ^ 'signalClass'
             -> String  -- ^ 'signalCName'
             -> String  -- ^ 'signalHaskellName'
-            -> Class  -- ^ 'signalListenerClass'
+            -> ListenerInfo  -- ^ 'signalListenerClass' and 'signalCallback'.
             -> Signal
-makeSignal' = Signal
+makeSignal' cls cName hsName (ListenerInfo listenerClass callback) =
+  Signal cls cName hsName listenerClass callback

@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QVariantAnimation (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -29,13 +28,13 @@ import Foreign.Hoppy.Generator.Spec (
   makeClass,
   mkConstMethod,
   mkMethod,
-  mkProp
+  mkProp,
   )
 import Graphics.UI.Qtah.Generator.Interface.Core.QAbstractAnimation (c_QAbstractAnimation)
 import Graphics.UI.Qtah.Generator.Interface.Core.QVariant (c_QVariant)
 import Foreign.Hoppy.Generator.Types (voidT, constT, objT, refT)
 import Foreign.Hoppy.Generator.Version (collect, just)
-import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (c_ListenerRefConstQVariant)
+import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (listenerRefConstQVariant)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModuleWithMinVersion)
 import Graphics.UI.Qtah.Generator.Types
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (qreal)
@@ -45,7 +44,7 @@ import Graphics.UI.Qtah.Generator.Interface.Core.Types (qreal)
 aModule =
   AQtModule $
   makeQtModuleWithMinVersion ["Core", "QVariantAnimation"] [4, 6] $
-  (QtExport $ ExportClass c_QVariantAnimation) :
+  (qtExport c_QVariantAnimation) :
   map QtExportSignal signals
 
 c_QVariantAnimation =
@@ -65,5 +64,5 @@ c_QVariantAnimation =
 signals :: [Signal]
 signals =
   collect
-  [ just $ makeSignal c_QVariantAnimation "valueChanged" c_ListenerRefConstQVariant
+  [ just $ makeSignal c_QVariantAnimation "valueChanged" listenerRefConstQVariant
   ]

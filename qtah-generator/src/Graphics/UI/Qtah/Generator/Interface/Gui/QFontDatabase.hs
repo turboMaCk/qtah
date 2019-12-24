@@ -21,13 +21,12 @@ module Graphics.UI.Qtah.Generator.Interface.Gui.QFontDatabase (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
   includeStd,
   makeClass,
-  mkStaticMethod
+  mkStaticMethod,
   )
 import Foreign.Hoppy.Generator.Types (intT, objT)
 import Foreign.Hoppy.Generator.Version (collect, just)
@@ -40,7 +39,7 @@ import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 aModule =
   AQtModule $
   makeQtModule ["Gui", "QFontDatabase"]
-  [ QtExport $ ExportClass c_QFontDatabase
+  [ qtExport c_QFontDatabase
   ]
 
 c_QFontDatabase =

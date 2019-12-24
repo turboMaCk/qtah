@@ -20,11 +20,10 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QGraphicsScene (
   c_QGraphicsScene,
   e_ItemIndexMethod,
   e_SceneLayer,
-  bs_SceneLayers,
+  fl_SceneLayers,
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass, ExportEnum, ExportBitspace),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -37,10 +36,11 @@ import Foreign.Hoppy.Generator.Spec (
   mkConstMethod,
   mkConstMethod',
   mkProp,
+  np,
   )
 import Foreign.Hoppy.Generator.Types (voidT, objT, ptrT, intT, boolT, enumT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (qreal)
 import Graphics.UI.Qtah.Generator.Interface.Core.QEvent (c_QEvent)
 -- import Graphics.UI.Qtah.Generator.Interface.Core.QLineF (c_QLineF)
@@ -68,14 +68,11 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QGraphicsScene"] $
-  (QtExport $ ExportClass c_QGraphicsScene) :
-  map (QtExport . ExportEnum)
-    [ e_ItemIndexMethod
-    , e_SceneLayer
-    ] ++
-  map (QtExport . ExportBitspace)
-    [ bs_SceneLayers
-    ]
+  [ qtExport c_QGraphicsScene
+  , qtExport e_ItemIndexMethod
+  , qtExport e_SceneLayer
+  , qtExport fl_SceneLayers
+  ]
 
 -- Due to a parsing bug types of the form `T<S*>` were generated incorrectly.
 c_QGraphicsScene =
@@ -83,12 +80,12 @@ c_QGraphicsScene =
   classSetEntityPrefix "" $
   makeClass (ident "QGraphicsScene") Nothing [c_QObject] $
   collect
-  [ just $ mkCtor "new" []
+  [ just $ mkCtor "new" np
   , just $ mkCtor "newWithParent" [ptrT $ objT c_QObject]
   , just $ mkCtor "newWithRect" [objT c_QRectF]
   , just $ mkCtor "newWithRaw" [qreal, qreal, qreal, qreal]
-  , just $ mkConstMethod "activePanel" [] $ ptrT $ objT c_QGraphicsItem
-  -- TODO mkConstMethod "activeWindow" [] $ ptrT $ objT c_QGraphicsWidget
+  , just $ mkConstMethod "activePanel" np $ ptrT $ objT c_QGraphicsItem
+  -- TODO mkConstMethod "activeWindow" np $ ptrT $ objT c_QGraphicsWidget
   , just $ mkMethod' "addEllipse" "addEllipseRectF"
       [objT c_QRectF] $ ptrT $ objT c_QGraphicsEllipseItem
   , just $ mkMethod' "addEllipse" "addEllipseRectFAll"
@@ -129,11 +126,11 @@ c_QGraphicsScene =
   -- TODO mkMethod' "addText" "addTextAll" [objT c_QString, objT c_QFont] $
   --   ptrT $ objT c_QGraphicsTextItem
   -- TODO mkMethod "addWidget" [ptrT $ objT c_QWidget] $ ptrT $ objT c_QGraphicsProxyWidget
-  -- TODO mkMethod' "addWidget" "addWidgetAll" [ptrT $ objT c_QWidget, bitspaceT bs_WindowFlags] $
+  -- TODO mkMethod' "addWidget" "addWidgetAll" [ptrT $ objT c_QWidget, enumT e_WindowFlags] $
   --   ptrT $ objT c_QGraphicsProxyWidget
-  , just $ mkConstMethod "backgroundBrush" [] $ objT c_QBrush
-  , just $ mkConstMethod "bspTreeDepth" [] intT
-  , just $ mkMethod "clearFocus" [] voidT
+  , just $ mkConstMethod "backgroundBrush" np $ objT c_QBrush
+  , just $ mkConstMethod "bspTreeDepth" np intT
+  , just $ mkMethod "clearFocus" np voidT
   -- TODO mkConstMethod "collidingItems" [ptrT $ objT c_QGraphicsItem] $
   --   objT c_QList<QGraphicsItem $ objT c_*>
   -- TODO mkConstMethod' "collidingItems" "collidingItemsAll"
@@ -141,22 +138,22 @@ c_QGraphicsScene =
   --     objT c_QList<QGraphicsItem $ objT c_*>
   -- TODO mkMethod "createItemGroup" [objT c_QList<QGraphicsItem] $ ptrT $ objT c_QGraphicsItemGroup
   -- TODO mkMethod "destroyItemGroup" [ptrT $ objT c_QGraphicsItemGroup] voidT
-  , just $ mkConstMethod "focusItem" [] $ ptrT $ objT c_QGraphicsItem
+  , just $ mkConstMethod "focusItem" np $ ptrT $ objT c_QGraphicsItem
   , just $ mkProp "font" $ objT c_QFont
-  , just $ mkConstMethod "foregroundBrush" [] $ objT c_QBrush
-  , just $ mkConstMethod "hasFocus" [] boolT
-  , just $ mkConstMethod "height" [] qreal
+  , just $ mkConstMethod "foregroundBrush" np $ objT c_QBrush
+  , just $ mkConstMethod "hasFocus" np boolT
+  , just $ mkConstMethod "height" np qreal
   -- TODO mkConstMethod "inputMethodQuery" [objT c_Qt::InputMethodQuery] $ objT c_QVariant
   , just $ mkMethod "invalidate" [qreal, qreal, qreal, qreal] voidT
   -- TODO mkMethod' "invalidate" "invalidateAll"
   --   [qreal, qreal, qreal, qreal, objT c_SceneLayers] voidT
-  , just $ mkConstMethod "isActive" [] boolT
+  , just $ mkConstMethod "isActive" np boolT
   , just $ mkConstMethod' "itemAt" "itemAtPointF" [objT c_QPointF, objT c_QTransform] $
       ptrT $ objT c_QGraphicsItem
   , just $ mkConstMethod' "itemAt" "itemAtRaw" [qreal, qreal, objT c_QTransform] $
       ptrT $ objT c_QGraphicsItem
-  -- TODO mkConstMethod "itemIndexMethod" [] $ objT c_ItemIndexMethod
-  -- TODO mkConstMethod' "items" "items" [] $ objT c_QList<QGraphicsItem $ objT c_*>
+  -- TODO mkConstMethod "itemIndexMethod" np $ objT c_ItemIndexMethod
+  -- TODO mkConstMethod' "items" "items" np $ objT c_QList<QGraphicsItem $ objT c_*>
   -- TODO mkConstMethod' "items" "itemsAll" [enumT e_SortOrder] $
   --   objT c_QList<QGraphicsItem $ objT c_*>
   -- TODO mkConstMethod' "items" "items" [objT c_QPointF] $
@@ -187,23 +184,23 @@ c_QGraphicsScene =
   --   [ qreal, qreal, qreal, qreal, objT c_Qt::ItemSelectionMode
   --   , objT c_Qt::SortOrder, objT c_QTransform
   --   ] $ objT c_QList<QGraphicsItem $ objT c_*>
-  , just $ mkConstMethod "itemsBoundingRect" [] $ objT c_QRectF
-  , test (qtVersion >= [5, 4]) $ mkConstMethod "minimumRenderSize" [] qreal
-  , just $ mkConstMethod "mouseGrabberItem" [] $ ptrT $ objT c_QGraphicsItem
-  -- TODO mkConstMethod "palette" [] $ objT c_QPalette
+  , just $ mkConstMethod "itemsBoundingRect" np $ objT c_QRectF
+  , test (qtVersion >= [5, 4]) $ mkConstMethod "minimumRenderSize" np qreal
+  , just $ mkConstMethod "mouseGrabberItem" np $ ptrT $ objT c_QGraphicsItem
+  -- TODO mkConstMethod "palette" np $ objT c_QPalette
   , just $ mkMethod "removeItem" [ptrT $ objT c_QGraphicsItem] voidT
   -- TODO mkMethod "render" [ptrT $ objT c_QPainter] voidT
   -- TODO mkMethod' "render" "renderAll"
   --   [ptrT $ objT c_QPainter, objT c_QRectF, objT c_QRectF, enumT e_AspectRatioMode] voidT
-  , just $ mkConstMethod "sceneRect" [] $ objT c_QRectF
-  -- TODO mkConstMethod "selectedItems" [] $ objT c_QList<QGraphicsItem $ objT c_*>
-  , just $ mkConstMethod "selectionArea" [] $ objT c_QPainterPath
+  , just $ mkConstMethod "sceneRect" np $ objT c_QRectF
+  -- TODO mkConstMethod "selectedItems" np $ objT c_QList<QGraphicsItem $ objT c_*>
+  , just $ mkConstMethod "selectionArea" np $ objT c_QPainterPath
   , just $ mkMethod "sendEvent" [ptrT $ objT c_QGraphicsItem, ptrT $ objT c_QEvent] boolT
   , just $ mkMethod "setActivePanel" [ptrT $ objT c_QGraphicsItem] voidT
   -- TODO mkMethod "setActiveWindow" [ptrT $ objT c_QGraphicsWidget] voidT
   , just $ mkMethod "setBackgroundBrush" [objT c_QBrush] voidT
   , just $ mkMethod "setBspTreeDepth" [intT] voidT
-  , just $ mkMethod "setFocus" [] voidT
+  , just $ mkMethod "setFocus" np voidT
   , just $ mkMethod' "setFocus" "setFocusAll" [enumT e_FocusReason] voidT
   , just $ mkMethod "setFocusItem" [ptrT $ objT c_QGraphicsItem] voidT
   , just $ mkMethod' "setFocusItem" "setFocusItemAll"
@@ -227,25 +224,25 @@ c_QGraphicsScene =
   --   ] voidT
   , just $ mkMethod "setStickyFocus" [boolT] voidT
   -- TODO mkMethod "setStyle" [ptrT $ objT c_QStyle] voidT
-  , just $ mkConstMethod "stickyFocus" [] boolT
-  -- TODO mkConstMethod "style" [] $ ptrT $ objT c_QStyle
+  , just $ mkConstMethod "stickyFocus" np boolT
+  -- TODO mkConstMethod "style" np $ ptrT $ objT c_QStyle
   , just $ mkMethod "update" [qreal, qreal, qreal, qreal] voidT
-  -- TODO mkConstMethod "views" [] $ objT c_QList<QGraphicsView $ objT c_*>
-  , just $ mkConstMethod "width" [] qreal
+  -- TODO mkConstMethod "views" np $ objT c_QList<QGraphicsView $ objT c_*>
+  , just $ mkConstMethod "width" np qreal
   ]
 
 e_ItemIndexMethod =
   makeQtEnum (ident1 "QGraphicsScene" "ItemIndexMethod")
   [includeStd "QGraphicsScene"]
-  [ (0, ["bsp","tree","index"])
-  , (-1, ["no","index"])
+  [ "BspTreeIndex"
+  , "NoIndex"
   ]
 
-(e_SceneLayer, bs_SceneLayers) =
-  makeQtEnumBitspace (ident1 "QGraphicsScene" "SceneLayer") "SceneLayers"
+(e_SceneLayer, fl_SceneLayers) =
+  makeQtEnumAndFlags (ident1 "QGraphicsScene" "SceneLayer") "SceneLayers"
   [includeStd "QGraphicsScene"]
-  [ (0x1, ["item","layer"])
-  , (0x2, ["background","layer"])
-  , (0x4, ["foreground","layer"])
-  , (0xffff, ["all","layers"])
+  [ "ItemLayer"
+  , "BackgroundLayer"
+  , "ForegroundLayer"
+  , "AllLayers"
   ]

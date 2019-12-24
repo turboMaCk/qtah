@@ -28,6 +28,7 @@ import Foreign.Hoppy.Generator.Spec (
   makeClass,
   mkConstMethod,
   mkCtor,
+  np,
   )
 import Foreign.Hoppy.Generator.Types (constT, objT, refT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QRect (c_QRect)
@@ -50,6 +51,6 @@ c_QPaintEvent =
   makeClass (ident "QPaintEvent") Nothing [c_QEvent]
   [ mkCtor "newWithRect" [objT c_QRect]
   , mkCtor "newWithRegion" [objT c_QRegion]
-  , mkConstMethod "rect" [] $ refT $ constT $ objT c_QRect
-  , mkConstMethod "region" [] $ refT $ constT $ objT c_QRegion
+  , mkConstMethod "rect" np $ refT $ constT $ objT c_QRect
+  , mkConstMethod "region" np $ refT $ constT $ objT c_QRegion
   ]

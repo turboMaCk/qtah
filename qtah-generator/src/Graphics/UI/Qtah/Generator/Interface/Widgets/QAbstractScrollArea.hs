@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QAbstractScrollArea (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -30,10 +29,12 @@ import Foreign.Hoppy.Generator.Spec (
   mkConstMethod,
   mkCtor,
   mkMethod,
+  np,
   )
-import Foreign.Hoppy.Generator.Types (bitspaceT, enumT, objT, ptrT, voidT)
+import Foreign.Hoppy.Generator.Types (enumT, objT, ptrT, voidT)
+import Graphics.UI.Qtah.Generator.Flags (flagsT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QSize (c_QSize)
-import Graphics.UI.Qtah.Generator.Interface.Core.Types (bs_Alignment, e_ScrollBarPolicy)
+import Graphics.UI.Qtah.Generator.Interface.Core.Types (fl_Alignment, e_ScrollBarPolicy)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QFrame (c_QFrame)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Widgets.QWidget (c_QWidget)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QScrollBar (c_QScrollBar)
@@ -45,27 +46,27 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QAbstractScrollArea"]
-  [ QtExport $ ExportClass c_QAbstractScrollArea ]
+  [ qtExport c_QAbstractScrollArea ]
 
 c_QAbstractScrollArea =
   addReqIncludes [includeStd "QAbstractScrollArea"] $
   classSetEntityPrefix "" $
   makeClass (ident "QAbstractScrollArea") Nothing [c_QFrame]
-  [ mkCtor "new" []
+  [ mkCtor "new" np
   , mkCtor "newWithParent" [ptrT $ objT c_QWidget]
-  , mkMethod "addScrollBarWidget" [ptrT $ objT c_QWidget, bitspaceT bs_Alignment] voidT
-  , mkConstMethod "cornerWidget" [] $ ptrT $ objT c_QWidget
-  , mkConstMethod "horizontalScrollBar" [] $ ptrT $ objT c_QScrollBar
-  , mkConstMethod "horizontalScrollBarPolicy" [] $ enumT e_ScrollBarPolicy
-  , mkConstMethod "maximumViewportSize" [] $ objT c_QSize
-  -- TODO mkMethod "scrollBarWidgets" [enumT e_Alignment] $ objT c_QWidgetList
+  , mkMethod "addScrollBarWidget" [ptrT $ objT c_QWidget, flagsT fl_Alignment] voidT
+  , mkConstMethod "cornerWidget" np $ ptrT $ objT c_QWidget
+  , mkConstMethod "horizontalScrollBar" np $ ptrT $ objT c_QScrollBar
+  , mkConstMethod "horizontalScrollBarPolicy" np $ enumT e_ScrollBarPolicy
+  , mkConstMethod "maximumViewportSize" np $ objT c_QSize
+  -- TODO mkMethod "scrollBarWidgets" [flagsT fl_Alignment] $ objT c_QWidgetList
   , mkMethod "setCornerWidget" [ptrT $ objT c_QWidget] voidT
   , mkMethod "setHorizontalScrollBar" [ptrT $ objT c_QScrollBar] voidT
   , mkMethod "setHorizontalScrollBarPolicy" [enumT e_ScrollBarPolicy] voidT
   , mkMethod "setVerticalScrollBar" [ptrT $ objT c_QScrollBar] voidT
   , mkMethod "setVerticalScrollBarPolicy" [enumT e_ScrollBarPolicy] voidT
   , mkMethod "setViewport" [ptrT $ objT c_QWidget] voidT
-  , mkConstMethod "verticalScrollBar" [] $ ptrT $ objT c_QScrollBar
-  , mkConstMethod "verticalScrollBarPolicy" [] $ enumT e_ScrollBarPolicy
-  , mkConstMethod "viewport" [] $ ptrT $ objT c_QWidget
+  , mkConstMethod "verticalScrollBar" np $ ptrT $ objT c_QScrollBar
+  , mkConstMethod "verticalScrollBarPolicy" np $ enumT e_ScrollBarPolicy
+  , mkConstMethod "viewport" np $ ptrT $ objT c_QWidget
   ]

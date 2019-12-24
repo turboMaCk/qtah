@@ -21,11 +21,10 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QDialogButtonBox (
   e_ButtonLayout,
   e_ButtonRole,
   e_StandardButton,
-  bs_StandardButtons,
+  fl_StandardButtons,
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportBitspace, ExportClass, ExportEnum),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -37,14 +36,16 @@ import Foreign.Hoppy.Generator.Spec (
   mkMethod,
   mkMethod',
   mkProp,
+  np,
   )
-import Foreign.Hoppy.Generator.Types (bitspaceT, boolT, enumT, objT, ptrT, voidT)
+import Foreign.Hoppy.Generator.Types (boolT, enumT, objT, ptrT, voidT)
+import Graphics.UI.Qtah.Generator.Flags (flagsT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QList (c_QListQAbstractButton)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (e_Orientation)
 import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
-  c_Listener,
-  c_ListenerPtrQAbstractButton,
+  listener,
+  listenerPtrQAbstractButton,
   )
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QAbstractButton (c_QAbstractButton)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QPushButton (c_QPushButton)
@@ -59,27 +60,26 @@ minVersion = [4, 2]
 aModule =
   AQtModule $
   makeQtModuleWithMinVersion ["Widgets", "QDialogButtonBox"] minVersion $
-  (QtExport $ ExportClass c_QDialogButtonBox) :
+  (qtExport c_QDialogButtonBox) :
   map QtExportSignal signals ++
-  map QtExport
-  [ ExportEnum e_ButtonLayout
-  , ExportEnum e_ButtonRole
-  , ExportEnum e_StandardButton
-  , ExportBitspace bs_StandardButtons
+  [ qtExport e_ButtonLayout
+  , qtExport e_ButtonRole
+  , qtExport e_StandardButton
+  , qtExport fl_StandardButtons
   ]
 
 c_QDialogButtonBox =
   addReqIncludes [includeStd "QDialogButtonBox"] $
   classSetEntityPrefix "" $
   makeClass (ident "QDialogButtonBox") Nothing [c_QWidget]
-  [ mkCtor "new" []
+  [ mkCtor "new" np
   , mkCtor "newWithParent" [ptrT $ objT c_QWidget]
     -- TODO Other ctors? v v
   --, mkCtor "newWithOrientation" [enumT e_Orientation]
   --, mkCtor "newWithOrientationAndParent" [enumT e_Orientation, ptrT $ objT c_QWidget]
-  --, mkCtor "newWithButtons" []
+  --, mkCtor "newWithButtons" np
   --, mkCtor "newWithParent" [ptrT $ objT c_QWidget]
-  --, mkCtor "new" []
+  --, mkCtor "new" np
   --, mkCtor "newWithParent" [ptrT $ objT c_QWidget]
   , mkMethod' "addButton" "addButton" [ptrT $ objT c_QAbstractButton, enumT e_ButtonRole] voidT
   , mkMethod' "addButton" "addButtonWithText"
@@ -87,64 +87,64 @@ c_QDialogButtonBox =
   , mkMethod' "addButton" "addStandardButton" [enumT e_StandardButton] $ ptrT $ objT c_QPushButton
   , mkConstMethod "button" [enumT e_StandardButton] $ ptrT $ objT c_QPushButton
   , mkConstMethod "buttonRole" [ptrT $ objT c_QAbstractButton] $ enumT e_ButtonRole
-  , mkConstMethod "buttons" [] $ objT c_QListQAbstractButton
+  , mkConstMethod "buttons" np $ objT c_QListQAbstractButton
   , mkProp "centerButtons" boolT
-  , mkMethod "clear" [] voidT
+  , mkMethod "clear" np voidT
   , mkProp "orientation" $ enumT e_Orientation
   , mkMethod "removeButton" [ptrT $ objT c_QAbstractButton] voidT
   , mkConstMethod "standardButton" [ptrT $ objT c_QAbstractButton] $ enumT e_StandardButton
-  , mkProp "standardButtons" $ bitspaceT bs_StandardButtons
+  , mkProp "standardButtons" $ flagsT fl_StandardButtons
   ]
 
 signals =
-  [ makeSignal c_QDialogButtonBox "accepted" c_Listener
-  , makeSignal c_QDialogButtonBox "clicked" c_ListenerPtrQAbstractButton
-  , makeSignal c_QDialogButtonBox "helpRequested" c_Listener
-  , makeSignal c_QDialogButtonBox "rejected" c_Listener
+  [ makeSignal c_QDialogButtonBox "accepted" listener
+  , makeSignal c_QDialogButtonBox "clicked" listenerPtrQAbstractButton
+  , makeSignal c_QDialogButtonBox "helpRequested" listener
+  , makeSignal c_QDialogButtonBox "rejected" listener
   ]
 
 e_ButtonLayout =
   makeQtEnum (ident1 "QDialogButtonBox" "ButtonLayout") [includeStd "QDialogButtonBox"]
-  [ (0, ["win", "layout"])
-  , (1, ["mac", "layout"])
-  , (2, ["kde", "layout"])
-  , (3, ["gnome", "layout"])
+  [ "WinLayout"
+  , "MacLayout"
+  , "KdeLayout"
+  , "GnomeLayout"
   ]
 
 e_ButtonRole =
   makeQtEnum (ident1 "QDialogButtonBox" "ButtonRole") [includeStd "QDialogButtonBox"]
-  [ (-1, ["invalid", "role"])
-  , (0, ["accept", "role"])
-  , (1, ["reject", "role"])
-  , (2, ["destructive", "role"])
-  , (3, ["action", "role"])
-  , (4, ["help", "role"])
-  , (5, ["yes", "role"])
-  , (6, ["no", "role"])
-  , (7, ["reset", "role"])
-  , (8, ["apply", "role"])
+  [ "InvalidRole"
+  , "AcceptRole"
+  , "RejectRole"
+  , "DestructiveRole"
+  , "ActionRole"
+  , "HelpRole"
+  , "YesRole"
+  , "NoRole"
+  , "ResetRole"
+  , "ApplyRole"
   ]
 
-(e_StandardButton, bs_StandardButtons) =
-  makeQtEnumBitspace (ident1 "QDialogButtonBox" "StandardButton") "StandardButtons"
+(e_StandardButton, fl_StandardButtons) =
+  makeQtEnumAndFlags (ident1 "QDialogButtonBox" "StandardButton") "StandardButtons"
   [includeStd "QDialogButtonBox"]
-  [ (0x00000400, ["ok"])
-  , (0x00002000, ["open"])
-  , (0x00000800, ["save"])
-  , (0x00400000, ["cancel"])
-  , (0x00200000, ["close"])
-  , (0x00800000, ["discard"])
-  , (0x02000000, ["apply"])
-  , (0x04000000, ["reset"])
-  , (0x08000000, ["restore", "defaults"])
-  , (0x01000000, ["help"])
-  , (0x00001000, ["save", "all"])
-  , (0x00004000, ["yes"])
-  , (0x00008000, ["yes", "to", "all"])
-  , (0x00010000, ["no"])
-  , (0x00020000, ["no", "to", "all"])
-  , (0x00040000, ["abort"])
-  , (0x00080000, ["retry"])
-  , (0x00100000, ["ignore"])
-  , (0x00000000, ["no", "button"])
+  [ "Ok"
+  , "Open"
+  , "Save"
+  , "Cancel"
+  , "Close"
+  , "Discard"
+  , "Apply"
+  , "Reset"
+  , "RestoreDefaults"
+  , "Help"
+  , "SaveAll"
+  , "Yes"
+  , "YesToAll"
+  , "No"
+  , "NoToAll"
+  , "Abort"
+  , "Retry"
+  , "Ignore"
+  , "NoButton"
   ]

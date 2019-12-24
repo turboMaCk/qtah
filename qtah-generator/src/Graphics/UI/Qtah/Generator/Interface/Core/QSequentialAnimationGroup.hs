@@ -21,21 +21,21 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QSequentialAnimationGroup (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
   includeStd,
   makeClass,
   mkConstMethod,
-  mkMethod
+  mkMethod,
+  np,
   )
 import Graphics.UI.Qtah.Generator.Interface.Core.QAnimationGroup (c_QAnimationGroup)
 import Graphics.UI.Qtah.Generator.Interface.Core.QPauseAnimation (c_QPauseAnimation)
 import Graphics.UI.Qtah.Generator.Interface.Core.QAbstractAnimation (c_QAbstractAnimation)
 import Foreign.Hoppy.Generator.Types (intT, objT, ptrT)
 import Foreign.Hoppy.Generator.Version (collect, just)
-import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (c_ListenerQAbstractAnimation)
+import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (listenerQAbstractAnimation)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModuleWithMinVersion)
 import Graphics.UI.Qtah.Generator.Types
 
@@ -44,7 +44,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModuleWithMinVersion ["Core", "QSequentialAnimationGroup"] [4, 6] $
-  (QtExport $ ExportClass c_QSequentialAnimationGroup) :
+  (qtExport c_QSequentialAnimationGroup) :
   map QtExportSignal signals
 
 c_QSequentialAnimationGroup =
@@ -54,11 +54,11 @@ c_QSequentialAnimationGroup =
   collect
   [ just $ mkMethod "addPause" [intT] $ ptrT $ objT c_QPauseAnimation
   , just $ mkMethod "insertPause" [intT, intT] $ ptrT $ objT c_QPauseAnimation
-  , just $ mkConstMethod "currentAnimation" [] $ ptrT $ objT c_QAbstractAnimation
+  , just $ mkConstMethod "currentAnimation" np $ ptrT $ objT c_QAbstractAnimation
   ]
 
 signals :: [Signal]
 signals =
   collect
-  [ just $ makeSignal c_QSequentialAnimationGroup "currentAnimationChanged" c_ListenerQAbstractAnimation
+  [ just $ makeSignal c_QSequentialAnimationGroup "currentAnimationChanged" listenerQAbstractAnimation
   ]

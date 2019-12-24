@@ -21,14 +21,14 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QAbstractGraphicsShapeItem (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
   includeStd,
   makeClass,
   mkConstMethod,
-  mkMethod
+  mkMethod,
+  np,
   )
 import Foreign.Hoppy.Generator.Types (objT, voidT)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QBrush (c_QBrush)
@@ -42,15 +42,15 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QAbstractGraphicsShapeItem"]
-  [ QtExport $ ExportClass c_QAbstractGraphicsShapeItem
+  [ qtExport c_QAbstractGraphicsShapeItem
   ]
 
 c_QAbstractGraphicsShapeItem =
   addReqIncludes [includeStd "QAbstractGraphicsShapeItem"] $
   classSetEntityPrefix "" $
   makeClass (ident "QAbstractGraphicsShapeItem") Nothing [c_QGraphicsItem]
-  [ mkConstMethod "brush" [] $ objT c_QBrush
-  , mkConstMethod "pen" [] $ objT c_QPen
+  [ mkConstMethod "brush" np $ objT c_QBrush
+  , mkConstMethod "pen" np $ objT c_QPen
   , mkMethod "setBrush" [objT c_QBrush] voidT
   , mkMethod "setPen" [objT c_QPen] voidT
   ]
