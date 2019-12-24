@@ -17,6 +17,7 @@
 
 module Main where
 
+import Control.Monad (when)
 import Data.List (intercalate)
 import Foreign.Hoppy.Generator.Main (run)
 import Foreign.Hoppy.Generator.Spec (
@@ -43,6 +44,7 @@ import System.FilePath (
   takeDirectory,
   takeFileName,
   )
+import System.IO (hPutStrLn, stderr)
 
 mod_std :: Module
 mod_std = moduleModify' Std.mod_std $ do
@@ -73,6 +75,12 @@ main =
       putStrLn $ "Error initializing interface: " ++ errorMsg
       exitFailure
     Right iface -> do
+      -- If building against Qt 4, then warn that it is no longer supported.
+      when (qtVersion < [5, 0]) $ do
+        hPutStrLn stderr $
+          "WARNING: Qtah no longer supports Qt 4.x.  Please upgrade to Qt 5.  Found version " ++
+          intercalate "." (map show qtVersion) ++ "."
+
       args <- getArgs
       case args of
         ["--qt-version"] -> putStrLn $ intercalate "." $ map show qtVersion
