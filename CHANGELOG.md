@@ -2,13 +2,15 @@
 
 ## Unreleased
 
-This release primarily adds support for Hoppy 0.6, including all of its new
-features and changes.  For more details, see its changelog.
+This release marks the largest API increase in any Qtah release so far: 62 new
+classes, many others fleshed out with new methods, and lots of new enums as
+well.  This also bumps Qtah from Hoppy 0.5 to Hoppy 0.7, incorporating all of
+the new features launched in Hoppy 0.6 (the impact of which is summarized here).
 
 - [API change] `QFlags` are now implemented in Qtah itself, rather than relying
   on Bitspaces from Hoppy.  There is a new `Flags` typeclasses to complement the
-  old `IsFooBitspace` per-bitspace typeclasses.  This new typeclass links a
-  flags type together with its enum and raw numeric types.  The `IsFooBitspace`
+  existing `IsFoo` per-bitspace/flags typeclasses.  This new typeclass links a
+  flags type together with its enum and raw numeric types.  The `IsFoo`
   typeclasses no longer have instances for `Int`, to make conversions between
   numeric types more explicit.
 
@@ -22,9 +24,9 @@ features and changes.  For more details, see its changelog.
   match against them.
 
   Two: Hoppy previously had issues when two enum entries had the same numeric
-  value, so we just picked an arbitrary one.  Hoppy now supports this, so we can
-  start including all enum entries.  For now, we've just added some entries of
-  `ImageConversionFlag`.
+  value, so for the binding definitions we just picked the most sensible one.
+  Hoppy now supports this, so we can start including all enum entries.  Some
+  but not all enums have had their missing values added.
 
   Three: Enums no longer have instances for `Bounded` and `Enum`.  Instead, they
   have instances for a new `CppEnum` typeclass provided by Hoppy.  The `Bounded`
@@ -34,9 +36,14 @@ features and changes.  For more details, see its changelog.
   everything is an `Int`.  This might require you to perform additional casts
   for type safety.
 
-- Thanks to Maxim Koltsov and especially to Jagoda Górska for a huge number of
+- Thanks to Maxim Koltsov and Yuriy Syrovetskiy for more additions and bug
+  fixes, and an especially huge thanks to Jagoda GÃ³rska for a huge number of
   additions in this release: 62 new classes, many others fleshed out with new
   methods, and lots of new enums as well.
+
+- As of this release, Qtah will no longer support Qt 4.x.  Qt 4 has been dead
+  for a long time now, with most Linux distributions having dropped it, and it
+  is no longer feasible to continue testing against and supporting it.
 
 - Removed uses of CPP from qtah-generator, except for Setup.hs.  This bumps
   minimum version requirements to base >= 4.8.0 (GHC 8.0) and mtl >= 2.2.1, both

@@ -48,9 +48,10 @@ To build and install locally, run:
 
     $ ./install.sh
 
-If you want to instead build against Qt 4, then run:
+If you want to instead build against Qt 4 (no longer supported, and gradually
+being removed), then run:
 
-    $ QTAH_QT_FLAGS=qt4 ./install.sh
+    $ QTAH_QT_FLAGS=qt4 ./install.sh      (Qt 4 is unsupported)
 
 The `install.sh` script is just a thin wrapper around running `cabal configure`,
 `build`, `install` on each of the packages in turn.  For more information about
@@ -72,7 +73,7 @@ installing Qtah:
 
 ### Dependencies
 
-- Qt 4.8 or 5.x with development files
+- Qt 4.8 (unsupported) or 5.x with development files
 - make and a C++ compiler
 - bash 4.1 or newer
 - GHC 7.8-8.2
