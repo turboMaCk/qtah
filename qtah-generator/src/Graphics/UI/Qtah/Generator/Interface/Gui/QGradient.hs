@@ -82,12 +82,12 @@ c_QGradient =
   ]
 
 e_CoordinateMode =
-  makeQtEnum (ident1 "QGradient" "CoordinateMode") [includeStd "QGradient"]
+  makeQtEnum (ident1 "QGradient" "CoordinateMode") [includeStd "QGradient"] $
   [ "LogicalMode"
   , "StretchToDeviceMode"
   , "ObjectBoundingMode"
-  , "ObjectMode"
-  ]
+  ] ++
+  ["ObjectMode" | qtVersion >= [5, 12]]
 
 e_Preset =
   makeQtEnum (ident1 "QGradient" "Preset") [includeStd "QGradient"]

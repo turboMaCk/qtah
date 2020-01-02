@@ -20,6 +20,7 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QChar (
   c_QChar,
   ) where
 
+import Control.Monad (guard)
 import Foreign.Hoppy.Generator.Language.Haskell (
   addImports,
   sayLn,
@@ -332,7 +333,7 @@ e_UnicodeVersion =
   ]
 
 e_Script =
-    makeQtEnum (ident1 "QChar" "Script") [includeStd "QChar"]
+    makeQtEnum (ident1 "QChar" "Script") [includeStd "QChar"] $
     [ "Script_Unknown"
     , "Script_Inherited"
     , "Script_Common"
@@ -459,20 +460,24 @@ e_Script =
     , "Script_Khudawadi"
     , "Script_Tirhuta"
     , "Script_WarangCiti"
-    , "Script_Ahom"
-    , "Script_AnatolianHieroglyphs"
-    , "Script_Hatran"
-    , "Script_Multani"
-    , "Script_OldHungarian"
-    , "Script_SignWriting"
-    , "Script_Adlam"
-    , "Script_Bhaiksuki"
-    , "Script_Marchen"
-    , "Script_Newa"
-    , "Script_Osage"
-    , "Script_Tangut"
-    , "Script_MasaramGondi"
-    , "Script_Nushu"
-    , "Script_Soyombo"
-    , "Script_ZanabazarSquare"
-    ]
+    ] ++
+    (guard (qtVersion >= [5, 6]) *>
+      [ "Script_Ahom"
+      , "Script_AnatolianHieroglyphs"
+      , "Script_Hatran"
+      , "Script_Multani"
+      , "Script_OldHungarian"
+      , "Script_SignWriting"
+      ]) ++
+    (guard (qtVersion >= [5, 11]) *>
+      [ "Script_Adlam"
+      , "Script_Bhaiksuki"
+      , "Script_Marchen"
+      , "Script_Newa"
+      , "Script_Osage"
+      , "Script_Tangut"
+      , "Script_MasaramGondi"
+      , "Script_Nushu"
+      , "Script_Soyombo"
+      , "Script_ZanabazarSquare"
+      ])

@@ -1508,7 +1508,7 @@ e_WhiteSpaceMode =
   ]
 
 e_WidgetAttribute =
-  makeQtEnum (ident1 "Qt" "WidgetAttribute") qtInclude
+  makeQtEnum (ident1 "Qt" "WidgetAttribute") qtInclude $
   [ "WA_AcceptDrops"
   , "WA_AlwaysShowToolTips"
   , "WA_ContentsPropagated"
@@ -1560,7 +1560,6 @@ e_WidgetAttribute =
   , "WA_ShowModal"
   , "WA_StaticContents"
   , "WA_StyleSheet"
-  , "WA_StyleSheetTarget"
   , "WA_TabletTracking"
   , "WA_TranslucentBackground"
   , "WA_UnderMouse"
@@ -1592,7 +1591,8 @@ e_WidgetAttribute =
   , "WA_X11DoNotAcceptFocus"
   , "WA_AlwaysStackOnTop"
   , "WA_ContentsMarginsRespectsSafeArea"
-  ]
+  ] ++
+  ["WA_StyleSheetTarget" | qtVersion >= [5, 12]]
 
 e_WindowFrameSection =
   makeQtEnum (ident1 "Qt" "WindowFrameSection") qtInclude

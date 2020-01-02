@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-resolver: lts-10.3
+resolver: lts-14.10
 
 packages:
 - qtah
@@ -24,6 +24,6 @@ packages:
 - qtah-generator
 
 extra-deps:
-- hoppy-generator-0.5.2
-- hoppy-runtime-0.5.1
-- hoppy-std-0.5.0
+- hoppy-generator-0.7.0
+- hoppy-runtime-0.7.0
+- hoppy-std-0.7.0

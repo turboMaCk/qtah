@@ -22,6 +22,7 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QIODevice (
   fl_OpenMode,
   ) where
 
+import Control.Monad (guard)
 import Foreign.Hoppy.Generator.Spec (
   addReqIncludes,
   classSetEntityPrefix,
@@ -119,9 +120,11 @@ c_QIODevice =
   , "Truncate"
   , "Text"
   , "Unbuffered"
-  , "NewOnly"
-  , "ExistingOnly"
-  ]
+  ] ++
+  (guard (qtVersion >= [5, 11]) *>
+    [ "NewOnly"
+    , "ExistingOnly"
+    ])
 
 signals =
   collect $

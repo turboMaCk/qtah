@@ -54,6 +54,7 @@ calculateEnumValues args =
     , ""
     , "QT += core gui"
     , "greaterThan(QT_MAJOR_VERSION, 4): QT += widgets"
+    , "CONFIG += cmdline"
     , "TARGET = qtahenum"
     , "SOURCES += " ++ sourceFile
     ]
