@@ -51,11 +51,11 @@ import Graphics.UI.Qtah.Generator.Types
 
 aModule =
   AQtModule $
-  makeQtModule ["Widgets", "QMenuBar"] $
-  qtExport c_QMenuBar :
-  map QtExportSignal signals
+  makeQtModule ["Widgets", "QMenuBar"]
+  [ QtExportClassAndSignals c_QMenuBar signals ]
 
-c_QMenuBar =
+(c_QMenuBar, signals) =
+  makeQtClassAndSignals signalGens $
   addReqIncludes [includeStd "QMenuBar"] $
   classSetEntityPrefix "" $
   makeClass (ident "QMenuBar") Nothing [c_QWidget] $
@@ -83,7 +83,8 @@ c_QMenuBar =
   , just $ mkMethod "setCornerWidget" [ptrT $ objT c_QWidget, enumT e_Corner] voidT
   ]
 
-signals =
-  [ makeSignal c_QMenuBar "hovered" listenerPtrQAction
-  , makeSignal c_QMenuBar "triggered" listenerPtrQAction
+signalGens :: [SignalGen]
+signalGens =
+  [ makeSignal "hovered" listenerPtrQAction
+  , makeSignal "triggered" listenerPtrQAction
   ]

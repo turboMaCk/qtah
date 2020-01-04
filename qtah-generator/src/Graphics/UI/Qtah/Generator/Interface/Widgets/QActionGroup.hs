@@ -46,11 +46,11 @@ import Graphics.UI.Qtah.Generator.Types
 
 aModule =
   AQtModule $
-  makeQtModule ["Widgets", "QActionGroup"] $
-  qtExport c_QActionGroup :
-  map QtExportSignal signals
+  makeQtModule ["Widgets", "QActionGroup"]
+  [ QtExportClassAndSignals c_QActionGroup signals ]
 
-c_QActionGroup =
+(c_QActionGroup, signals) =
+  makeQtClassAndSignals signalGens $
   addReqIncludes [includeStd "QActionGroup"] $
   classSetEntityPrefix "" $
   makeClass (ident "QActionGroup") Nothing
@@ -69,7 +69,8 @@ c_QActionGroup =
   , mkBoolIsProp "visible"
   ]
 
-signals =
-  [ makeSignal c_QActionGroup "hovered" listenerPtrQAction
-  , makeSignal c_QActionGroup "triggered" listenerPtrQAction
+signalGens :: [SignalGen]
+signalGens =
+  [ makeSignal "hovered" listenerPtrQAction
+  , makeSignal "triggered" listenerPtrQAction
   ]

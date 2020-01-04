@@ -116,10 +116,10 @@ import Graphics.UI.Qtah.Generator.Flags (
 import Graphics.UI.Qtah.Generator.Types (
   QtExport (
     QtExport,
+    QtExportClassAndSignals,
     QtExportEvent,
     QtExportFnRenamed,
     QtExportSceneEvent,
-    QtExportSignal,
     QtExportSpecials
   ),
   Signal,
@@ -289,7 +289,9 @@ sayQtExport path qtExport = case qtExport of
     addExport rename
     sayBind rename $ getFnImportName fn
 
-  QtExportSignal sig -> sayExportSignal sig
+  QtExportClassAndSignals cls sigs -> do
+    sayExportClass cls
+    mapM_ sayExportSignal sigs
 
   QtExportEvent cls -> do
     sayExportClass cls

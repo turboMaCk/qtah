@@ -59,12 +59,12 @@ import Graphics.UI.Qtah.Generator.Types
 aModule :: AModule
 aModule =
   AQtModule $
-  makeQtModule ["Widgets", "QMainWindow"] $
-  qtExport c_QMainWindow :
-  map QtExportSignal signals
+  makeQtModule ["Widgets", "QMainWindow"]
+  [ QtExportClassAndSignals c_QMainWindow signals ]
 
 c_QMainWindow :: Class
-c_QMainWindow =
+(c_QMainWindow, signals) =
+  makeQtClassAndSignals signalGens $
   addReqIncludes [includeStd "QMainWindow"] $
   classSetEntityPrefix "" $
   makeClass (ident "QMainWindow") Nothing [c_QWidget]
@@ -114,8 +114,8 @@ c_QMainWindow =
   , mkProp "unifiedTitleAndToolBarOnMac" boolT
   ]
 
-signals :: [Signal]
-signals =
-  [ makeSignal c_QMainWindow "iconSizeChanged" listenerQSize
+signalGens :: [SignalGen]
+signalGens =
+  [ makeSignal "iconSizeChanged" listenerQSize
     -- TODO toolButtonStyleChanged
   ]

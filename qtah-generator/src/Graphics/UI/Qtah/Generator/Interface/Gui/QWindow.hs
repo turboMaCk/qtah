@@ -82,13 +82,13 @@ minVersion = [5, 0]
 aModule =
   AQtModule $
   makeQtModuleWithMinVersion ["Gui", "QWindow"] minVersion $
-  [ qtExport c_QWindow ] ++
-  map QtExportSignal signals ++
-  [ qtExport e_AncestorMode
+  [ QtExportClassAndSignals c_QWindow signals
+  , qtExport e_AncestorMode
   , qtExport e_Visibility
   ]
 
-c_QWindow =
+(c_QWindow, signals) =
+  makeQtClassAndSignals signalGens $
   addReqIncludes [includeStd "QWindow"] $
   classSetEntityPrefix "" $
   makeClass (ident "QWindow") Nothing [c_QObject, c_QSurface] $
@@ -166,25 +166,26 @@ c_QWindow =
   , just $ mkProp "y" intT
   ]
 
-signals =
-  [ makeSignal c_QWindow "activeChanged" listener
-  , makeSignal c_QWindow "contentOrientationChanged" listenerScreenOrientation
-  , makeSignal c_QWindow "focusObjectChanged" listenerPtrQObject
-  , makeSignal c_QWindow "heightChanged" listenerInt
-  , makeSignal c_QWindow "maximumHeightChanged" listenerInt
-  , makeSignal c_QWindow "maximumWidthChanged" listenerInt
-  , makeSignal c_QWindow "minimumHeightChanged" listenerInt
-  , makeSignal c_QWindow "minimumWidthChanged" listenerInt
-  , makeSignal c_QWindow "modalityChanged" listenerWindowModality
-  , makeSignal c_QWindow "opacityChanged" listenerQreal
-    -- TODO makeSignal c_QWindow "screenChanged" listenerPtrQScreen
-  , makeSignal c_QWindow "visibilityChanged" listenerQWindowVisibility
-  , makeSignal c_QWindow "visibleChanged" listenerBool
-  , makeSignal c_QWindow "widthChanged" listenerInt
-  , makeSignal c_QWindow "windowStateChanged" listenerWindowState
-  , makeSignal c_QWindow "windowTitleChanged" listenerQString
-  , makeSignal c_QWindow "xChanged" listenerInt
-  , makeSignal c_QWindow "yChanged" listenerInt
+signalGens :: [SignalGen]
+signalGens =
+  [ makeSignal "activeChanged" listener
+  , makeSignal "contentOrientationChanged" listenerScreenOrientation
+  , makeSignal "focusObjectChanged" listenerPtrQObject
+  , makeSignal "heightChanged" listenerInt
+  , makeSignal "maximumHeightChanged" listenerInt
+  , makeSignal "maximumWidthChanged" listenerInt
+  , makeSignal "minimumHeightChanged" listenerInt
+  , makeSignal "minimumWidthChanged" listenerInt
+  , makeSignal "modalityChanged" listenerWindowModality
+  , makeSignal "opacityChanged" listenerQreal
+    -- TODO makeSignal "screenChanged" listenerPtrQScreen
+  , makeSignal "visibilityChanged" listenerQWindowVisibility
+  , makeSignal "visibleChanged" listenerBool
+  , makeSignal "widthChanged" listenerInt
+  , makeSignal "windowStateChanged" listenerWindowState
+  , makeSignal "windowTitleChanged" listenerQString
+  , makeSignal "xChanged" listenerInt
+  , makeSignal "yChanged" listenerInt
   ]
 
 e_AncestorMode =

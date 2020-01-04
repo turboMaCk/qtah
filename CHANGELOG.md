@@ -2,9 +2,20 @@
 
 ## Unreleased
 
+- Added the ability to emit Qt signals from Haskell code by exposing them as the
+  regular methods that they are (issue #40).  These methods' names begin with
+  `emit` to make it clear that they emit signals.
+
 - Fixed building on macOS w.r.t. new enum autodetection (issue #43).
 
 - Version bound fixes for parts of the Qt API (issue #42).
+
+- Removed QApplication signals `aboutToReleaseGpuResources` and
+  `aboutToUseGpuResources`.  These were dropped a while ago (perhaps with the
+  launch of Qt 5) and were only available for the Symbian platform.
+
+- Fixed misspelling of QWidget's `windowTitleChanged` signal making this signal
+  inoperable.
 
 ## (2019-12-23) *-0.6.0
 

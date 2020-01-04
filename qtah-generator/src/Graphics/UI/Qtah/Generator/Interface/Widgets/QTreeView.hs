@@ -53,12 +53,12 @@ import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
 aModule :: AModule
 aModule =
   AQtModule $
-  makeQtModule ["Widgets", "QTreeView"] $
-  qtExport c_QTreeView :
-  map QtExportSignal signals
+  makeQtModule ["Widgets", "QTreeView"]
+  [ QtExportClassAndSignals c_QTreeView signals ]
 
 c_QTreeView :: Class
-c_QTreeView =
+(c_QTreeView, signals) =
+  makeQtClassAndSignals signalGens $
   addReqIncludes [includeStd "QTreeView"] $
   classSetEntityPrefix "" $
   makeClass (ident "QTreeView") Nothing [c_QAbstractItemView] $
@@ -112,8 +112,8 @@ c_QTreeView =
   , test (qtVersion >= [4, 2]) $ mkMethod "sortByColumn" [intT, enumT e_SortOrder] voidT
   ]
 
-signals :: [Signal]
-signals =
-  [ makeSignal c_QTreeView "collapsed" listenerRefConstQModelIndex
-  , makeSignal c_QTreeView "expanded" listenerRefConstQModelIndex
+signalGens :: [SignalGen]
+signalGens =
+  [ makeSignal "collapsed" listenerRefConstQModelIndex
+  , makeSignal "expanded" listenerRefConstQModelIndex
   ]

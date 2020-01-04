@@ -50,14 +50,14 @@ import Graphics.UI.Qtah.Generator.Types
 
 aModule =
   AQtModule $
-  makeQtModule ["Widgets", "QTabWidget"] $
-  qtExport c_QTabWidget :
-  map QtExportSignal signals ++
-  [ qtExport e_TabPosition
+  makeQtModule ["Widgets", "QTabWidget"]
+  [ QtExportClassAndSignals c_QTabWidget signals
+  , qtExport e_TabPosition
   , qtExport e_TabShape
   ]
 
-c_QTabWidget =
+(c_QTabWidget, signals) =
+  makeQtClassAndSignals signalGens $
   addReqIncludes [includeStd "QTabWidget"] $
   classSetEntityPrefix "" $
   makeClass (ident "QTabWidget") Nothing [c_QWidget] $
@@ -115,9 +115,10 @@ e_TabShape =
   , "Triangular"
   ]
 
-signals =
-  [ makeSignal c_QTabWidget "currentChanged" listenerInt
-  , makeSignal c_QTabWidget "tabBarClicked" listenerInt
-  , makeSignal c_QTabWidget "tabBarDoubleClicked" listenerInt
-  , makeSignal c_QTabWidget "tabCloseRequested" listenerInt
+signalGens :: [SignalGen]
+signalGens =
+  [ makeSignal "currentChanged" listenerInt
+  , makeSignal "tabBarClicked" listenerInt
+  , makeSignal "tabBarDoubleClicked" listenerInt
+  , makeSignal "tabCloseRequested" listenerInt
   ]

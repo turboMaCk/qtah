@@ -76,8 +76,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Core", "QAbstractItemModel"] $
-  qtExport c_QAbstractItemModel :
-  map QtExportSignal signals ++
+  QtExportClassAndSignals c_QAbstractItemModel signals :
   collect
   [ just $ qtExport e_LayoutChangeHint
   , test (qtVersion >= [5, 11]) $ qtExport e_CheckIndexOption
@@ -85,7 +84,8 @@ aModule =
   ]
 
 
-c_QAbstractItemModel =
+(c_QAbstractItemModel, signals) =
+  makeQtClassAndSignals signalGens $
   addReqIncludes [includeStd "QAbstractItemModel"] $
   classSetEntityPrefix "" $
   makeClass (ident "QAbstractItemModel") Nothing [c_QObject] $
@@ -162,30 +162,31 @@ c_QAbstractItemModel =
   , test (qtVersion >= [4, 2]) $ mkConstMethod "supportedDropActions" np $ flagsT fl_DropActions
   ]
 
-signals =
+signalGens :: [SignalGen]
+signalGens =
   collect
-  [ just $ makeSignal c_QAbstractItemModel "columnsAboutToBeInserted" listenerQModelIndexIntInt
-  , test (qtVersion >= [4, 6]) $ makeSignal c_QAbstractItemModel "columnsAboutToBeMoved"
+  [ just $ makeSignalPrivate "columnsAboutToBeInserted" listenerQModelIndexIntInt
+  , test (qtVersion >= [4, 6]) $ makeSignalPrivate "columnsAboutToBeMoved"
     listenerQModelIndexIntIntQModelIndexInt
-  , just $ makeSignal c_QAbstractItemModel "columnsAboutToBeRemoved" listenerQModelIndexIntInt
-  , just $ makeSignal c_QAbstractItemModel "columnsInserted" listenerQModelIndexIntInt
-  , test (qtVersion >= [4, 6]) $ makeSignal c_QAbstractItemModel "columnsMoved"
+  , just $ makeSignalPrivate "columnsAboutToBeRemoved" listenerQModelIndexIntInt
+  , just $ makeSignalPrivate "columnsInserted" listenerQModelIndexIntInt
+  , test (qtVersion >= [4, 6]) $ makeSignalPrivate "columnsMoved"
     listenerQModelIndexIntIntQModelIndexInt
-  , just $ makeSignal c_QAbstractItemModel "columnsRemoved" listenerQModelIndexIntInt
-  , just $ makeSignal c_QAbstractItemModel "dataChanged" listenerQModelIndexQModelIndexQVectorInt
-  , just $ makeSignal c_QAbstractItemModel "headerDataChanged" listenerOrientationIntInt
+  , just $ makeSignalPrivate "columnsRemoved" listenerQModelIndexIntInt
+  , just $ makeSignal "dataChanged" listenerQModelIndexQModelIndexQVectorInt
+  , just $ makeSignal "headerDataChanged" listenerOrientationIntInt
     -- TODO layoutAboutToBeChanged (>=5.0)
     -- TODO layoutChanged (>=5.0)
-  , test (qtVersion >= [4, 2]) $ makeSignal c_QAbstractItemModel "modelAboutToBeReset" listener
-  , test (qtVersion >= [4, 1]) $ makeSignal c_QAbstractItemModel "modelReset" listener
-  , just $ makeSignal c_QAbstractItemModel "rowsAboutToBeInserted" listenerQModelIndexIntInt
-  , test (qtVersion >= [4, 6]) $ makeSignal c_QAbstractItemModel "rowsAboutToBeMoved"
+  , test (qtVersion >= [4, 2]) $ makeSignalPrivate "modelAboutToBeReset" listener
+  , test (qtVersion >= [4, 1]) $ makeSignalPrivate "modelReset" listener
+  , just $ makeSignalPrivate "rowsAboutToBeInserted" listenerQModelIndexIntInt
+  , test (qtVersion >= [4, 6]) $ makeSignalPrivate "rowsAboutToBeMoved"
     listenerQModelIndexIntIntQModelIndexInt
-  , just $ makeSignal c_QAbstractItemModel "rowsAboutToBeRemoved" listenerQModelIndexIntInt
-  , just $ makeSignal c_QAbstractItemModel "rowsInserted" listenerQModelIndexIntInt
-  , test (qtVersion >= [4, 6]) $ makeSignal c_QAbstractItemModel "rowsMoved"
+  , just $ makeSignalPrivate "rowsAboutToBeRemoved" listenerQModelIndexIntInt
+  , just $ makeSignalPrivate "rowsInserted" listenerQModelIndexIntInt
+  , test (qtVersion >= [4, 6]) $ makeSignalPrivate "rowsMoved"
     listenerQModelIndexIntIntQModelIndexInt
-  , just $ makeSignal c_QAbstractItemModel "rowsRemoved" listenerQModelIndexIntInt
+  , just $ makeSignalPrivate "rowsRemoved" listenerQModelIndexIntInt
   ]
 
 e_LayoutChangeHint =

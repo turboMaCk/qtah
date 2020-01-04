@@ -24,10 +24,11 @@ module Graphics.UI.Qtah.Generator.Common (
   maybeFail,
   firstM,
   lowerFirst,
+  upperFirst,
   ) where
 
 import Control.Monad.Trans.Maybe (MaybeT (MaybeT), runMaybeT)
-import Data.Char (toLower)
+import Data.Char (toLower, toUpper)
 import Data.Foldable (asum)
 import Data.List (findIndex)
 
@@ -73,3 +74,8 @@ firstM = runMaybeT . asum . map MaybeT
 lowerFirst :: String -> String
 lowerFirst "" = ""
 lowerFirst (c:cs) = toLower c : cs
+
+-- | Upper cases the first character of a string, if nonempty.
+upperFirst :: String -> String
+upperFirst "" = ""
+upperFirst (c:cs) = toUpper c : cs

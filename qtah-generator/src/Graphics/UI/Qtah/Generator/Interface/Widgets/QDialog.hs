@@ -46,11 +46,12 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QDialog"] $
-  qtExport c_QDialog :
-  map QtExportSignal signals ++
-  [ qtExport e_DialogCode ]
+  [ QtExportClassAndSignals c_QDialog signals
+  , qtExport e_DialogCode
+  ]
 
-c_QDialog =
+(c_QDialog, signals) =
+  makeQtClassAndSignals signalGens $
   addReqIncludes [includeStd "QDialog"] $
   classSetEntityPrefix "" $
   makeClass (ident "QDialog") Nothing [c_QWidget]
@@ -67,10 +68,11 @@ c_QDialog =
   , mkBoolIsProp "sizeGripEnabled"
   ]
 
-signals =
-  [ makeSignal c_QDialog "accepted" listener
-  , makeSignal c_QDialog "finished" listenerInt
-  , makeSignal c_QDialog "rejected" listener
+signalGens :: [SignalGen]
+signalGens =
+  [ makeSignal "accepted" listener
+  , makeSignal "finished" listenerInt
+  , makeSignal "rejected" listener
   ]
 
 e_DialogCode =

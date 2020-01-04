@@ -64,12 +64,12 @@ import Graphics.UI.Qtah.Generator.Types
 aModule :: AModule
 aModule =
   AQtModule $
-  makeQtModule ["Widgets", "QToolBar"] $
-  qtExport c_QToolBar :
-  map QtExportSignal signals
+  makeQtModule ["Widgets", "QToolBar"]
+  [ QtExportClassAndSignals c_QToolBar signals ]
 
 c_QToolBar :: Class
-c_QToolBar =
+(c_QToolBar, signals) =
+  makeQtClassAndSignals signalGens $
   addReqIncludes [includeStd "QToolBar"] $
   classSetEntityPrefix "" $
   makeClass (ident "QToolBar") Nothing [c_QWidget]
@@ -96,14 +96,14 @@ c_QToolBar =
   , mkConstMethod "widgetForAction" [ptrT $ objT c_QAction] $ ptrT $ objT c_QWidget
   ]
 
-signals :: [Signal]
-signals =
-  [ makeSignal c_QToolBar "actionTriggered" listenerPtrQAction
-  , makeSignal c_QToolBar "allowedAreasChanged" listenerToolBarAreas
-  , makeSignal c_QToolBar "iconSizeChanged" listenerQSize
-  , makeSignal c_QToolBar "movableChanged" listenerBool
-  , makeSignal c_QToolBar "orientationChanged" listenerOrientation
-  , makeSignal c_QToolBar "toolButtonStyleChanged" listenerToolButtonStyle
-  , makeSignal c_QToolBar "topLevelChanged" listenerBool
-  , makeSignal c_QToolBar "visibilityChanged" listenerBool
+signalGens :: [SignalGen]
+signalGens =
+  [ makeSignal "actionTriggered" listenerPtrQAction
+  , makeSignal "allowedAreasChanged" listenerToolBarAreas
+  , makeSignal "iconSizeChanged" listenerQSize
+  , makeSignal "movableChanged" listenerBool
+  , makeSignal "orientationChanged" listenerOrientation
+  , makeSignal "toolButtonStyleChanged" listenerToolButtonStyle
+  , makeSignal "topLevelChanged" listenerBool
+  , makeSignal "visibilityChanged" listenerBool
   ]

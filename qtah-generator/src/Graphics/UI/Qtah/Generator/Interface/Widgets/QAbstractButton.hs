@@ -46,11 +46,11 @@ import Graphics.UI.Qtah.Generator.Types
 
 aModule =
   AQtModule $
-  makeQtModule ["Widgets", "QAbstractButton"] $
-  qtExport c_QAbstractButton :
-  map QtExportSignal signals
+  makeQtModule ["Widgets", "QAbstractButton"]
+  [ QtExportClassAndSignals c_QAbstractButton signals ]
 
-c_QAbstractButton =
+(c_QAbstractButton, signals) =
+  makeQtClassAndSignals signalGens $
   addReqIncludes [includeStd "QAbstractButton"] $
   classSetEntityPrefix "" $
   makeClass (ident "QAbstractButton") Nothing [c_QWidget]
@@ -72,9 +72,10 @@ c_QAbstractButton =
   , mkMethod "toggle" np voidT
   ]
 
-signals =
-  [ makeSignal c_QAbstractButton "clicked" listenerBool
-  , makeSignal c_QAbstractButton "pressed" listener
-  , makeSignal c_QAbstractButton "released" listener
-  , makeSignal c_QAbstractButton "toggled" listenerBool
+signalGens :: [SignalGen]
+signalGens =
+  [ makeSignal "clicked" listenerBool
+  , makeSignal "pressed" listener
+  , makeSignal "released" listener
+  , makeSignal "toggled" listenerBool
   ]

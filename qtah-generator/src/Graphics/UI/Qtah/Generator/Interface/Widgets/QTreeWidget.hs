@@ -64,13 +64,13 @@ import Graphics.UI.Qtah.Generator.Types
 aModule :: AModule
 aModule =
   AQtModule $
-  makeQtModule ["Widgets", "QTreeWidget"] $
-  qtExport c_QTreeWidget :
-  map QtExportSignal signals
+  makeQtModule ["Widgets", "QTreeWidget"]
+  [ QtExportClassAndSignals c_QTreeWidget signals ]
 
 
 c_QTreeWidget :: Class
-c_QTreeWidget =
+(c_QTreeWidget, signals) =
+  makeQtClassAndSignals signalGens $
   addReqIncludes [includeStd "QTreeWidget"] $
   classSetEntityPrefix "" $
   makeClass (ident "QTreeWidget") Nothing [c_QTreeView] $
@@ -125,16 +125,16 @@ c_QTreeWidget =
   , just $ mkMethod' "scrollToItem" "scrollToItemWithHint" [constT $ ptrT $ objT c_QTreeWidgetItem, enumT e_ScrollHint] voidT
   ]
 
-signals :: [Signal]
-signals =
-  [ makeSignal c_QTreeWidget "currentItemChanged" listenerPtrQTreeWidgetItemPtrQTreeWidgetItem
-  , makeSignal c_QTreeWidget "itemActivated" listenerPtrQTreeWidgetItemInt
-  , makeSignal c_QTreeWidget "itemChanged" listenerPtrQTreeWidgetItemInt
-  , makeSignal c_QTreeWidget "itemClicked" listenerPtrQTreeWidgetItemInt
-  , makeSignal c_QTreeWidget "itemCollapsed" listenerPtrQTreeWidgetItem
-  , makeSignal c_QTreeWidget "itemDoubleClicked" listenerPtrQTreeWidgetItemInt
-  , makeSignal c_QTreeWidget "itemEntered" listenerPtrQTreeWidgetItemInt
-  , makeSignal c_QTreeWidget "itemExpanded" listenerPtrQTreeWidgetItem
-  , makeSignal c_QTreeWidget "itemPressed" listenerPtrQTreeWidgetItemInt
-  , makeSignal c_QTreeWidget "itemSelectionChanged" listener
+signalGens :: [SignalGen]
+signalGens =
+  [ makeSignal "currentItemChanged" listenerPtrQTreeWidgetItemPtrQTreeWidgetItem
+  , makeSignal "itemActivated" listenerPtrQTreeWidgetItemInt
+  , makeSignal "itemChanged" listenerPtrQTreeWidgetItemInt
+  , makeSignal "itemClicked" listenerPtrQTreeWidgetItemInt
+  , makeSignal "itemCollapsed" listenerPtrQTreeWidgetItem
+  , makeSignal "itemDoubleClicked" listenerPtrQTreeWidgetItemInt
+  , makeSignal "itemEntered" listenerPtrQTreeWidgetItemInt
+  , makeSignal "itemExpanded" listenerPtrQTreeWidgetItem
+  , makeSignal "itemPressed" listenerPtrQTreeWidgetItemInt
+  , makeSignal "itemSelectionChanged" listener
   ]

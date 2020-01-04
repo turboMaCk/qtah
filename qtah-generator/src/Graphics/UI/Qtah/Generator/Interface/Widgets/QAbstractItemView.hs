@@ -77,10 +77,9 @@ import Graphics.UI.Qtah.Generator.Types
 
 aModule =
   AQtModule $
-  makeQtModule ["Widgets", "QAbstractItemView"] $
-  qtExport c_QAbstractItemView :
-  map QtExportSignal signals ++
-  [ qtExport e_DragDropMode
+  makeQtModule ["Widgets", "QAbstractItemView"]
+  [ QtExportClassAndSignals c_QAbstractItemView signals
+  , qtExport e_DragDropMode
   , qtExport e_EditTrigger
   , qtExport fl_EditTriggers
   , qtExport e_ScrollHint
@@ -89,7 +88,8 @@ aModule =
   , qtExport e_SelectionMode
   ]
 
-c_QAbstractItemView =
+(c_QAbstractItemView, signals) =
+  makeQtClassAndSignals signalGens $
   addReqIncludes [includeStd "QAbstractItemView"] $
   classSetEntityPrefix "" $
   makeClass (ident "QAbstractItemView") Nothing [c_QAbstractScrollArea]
@@ -146,14 +146,15 @@ c_QAbstractItemView =
   , mkConstMethod "visualRect" [objT c_QModelIndex] $ objT c_QRect
   ]
 
-signals =
-  [ makeSignal c_QAbstractItemView "activated" listenerQModelIndex
-  , makeSignal c_QAbstractItemView "clicked" listenerQModelIndex
-  , makeSignal c_QAbstractItemView "doubleClicked" listenerQModelIndex
-  , makeSignal c_QAbstractItemView "entered" listenerQModelIndex
-  , makeSignal c_QAbstractItemView "iconSizeChanged" listenerQSize
-  , makeSignal c_QAbstractItemView "pressed" listenerQModelIndex
-  , makeSignal c_QAbstractItemView "viewportEntered" listener
+signalGens :: [SignalGen]
+signalGens =
+  [ makeSignal "activated" listenerQModelIndex
+  , makeSignal "clicked" listenerQModelIndex
+  , makeSignal "doubleClicked" listenerQModelIndex
+  , makeSignal "entered" listenerQModelIndex
+  , makeSignal "iconSizeChanged" listenerQSize
+  , makeSignal "pressed" listenerQModelIndex
+  , makeSignal "viewportEntered" listener
   ]
 
 e_DragDropMode =

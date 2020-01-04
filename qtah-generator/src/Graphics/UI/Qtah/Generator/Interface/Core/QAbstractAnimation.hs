@@ -52,15 +52,15 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModuleWithMinVersion ["Core", "QAbstractAnimation"] [4, 6] $
-  qtExport c_QAbstractAnimation :
-  map QtExportSignal signals ++
+  QtExportClassAndSignals c_QAbstractAnimation signals :
   collect
   [ just $ qtExport e_DeletionPolicy
   , just $ qtExport e_Direction
   , just $ qtExport e_State
   ]
 
-c_QAbstractAnimation =
+(c_QAbstractAnimation, signals) =
+  makeQtClassAndSignals signalGens $
   addReqIncludes [ includeStd "QAbstractAnimation" ] $
   classSetEntityPrefix "" $
   makeClass (ident "QAbstractAnimation") Nothing [c_QObject] $
@@ -79,13 +79,13 @@ c_QAbstractAnimation =
     -- TODO
   ]
 
-signals :: [Signal]
-signals =
+signalGens :: [SignalGen]
+signalGens =
   collect
-  [ just $ makeSignal c_QAbstractAnimation "currentLoopChanged" listenerInt
-  , just $ makeSignal c_QAbstractAnimation "directionChanged" listenerDirection
-  , just $ makeSignal c_QAbstractAnimation "finished" listener
-  , just $ makeSignal c_QAbstractAnimation "stateChanged" listenerStateState
+  [ just $ makeSignal "currentLoopChanged" listenerInt
+  , just $ makeSignal "directionChanged" listenerDirection
+  , just $ makeSignal "finished" listener
+  , just $ makeSignal "stateChanged" listenerStateState
   ]
 
 e_DeletionPolicy =

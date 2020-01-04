@@ -45,10 +45,10 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModuleWithMinVersion ["Core", "QFileSystemWatcher"] [4, 2] $
-  (qtExport c_QFileSystemWatcher) :
-  map QtExportSignal signals
+  [ QtExportClassAndSignals c_QFileSystemWatcher signals ]
 
-c_QFileSystemWatcher =
+(c_QFileSystemWatcher, signals) =
+  makeQtClassAndSignals signalGens $
   addReqIncludes [ includeStd "QFileSystemWatcher" ] $
   classSetEntityPrefix "" $
   makeClass (ident "QFileSystemWatcher") Nothing [c_QObject] $
@@ -65,9 +65,9 @@ c_QFileSystemWatcher =
   , just $ mkMethod "removePaths" [refT $ constT $ objT c_QStringList] $ objT c_QStringList
   ]
 
-signals :: [Signal]
-signals =
+signalGens :: [SignalGen]
+signalGens =
   collect
-  [ just $ makeSignal c_QFileSystemWatcher "directoryChanged" listenerQString
-  , just $ makeSignal c_QFileSystemWatcher "fileChanged" listenerQString
+  [ just $ makeSignalPrivate "directoryChanged" listenerQString
+  , just $ makeSignalPrivate "fileChanged" listenerQString
   ]

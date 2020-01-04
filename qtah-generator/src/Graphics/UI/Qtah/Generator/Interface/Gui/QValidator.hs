@@ -42,11 +42,12 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Gui", "QValidator"] $
-  (qtExport c_QValidator) :
-  map QtExportSignal signals ++
-  [ qtExport e_State ]
+  [ QtExportClassAndSignals c_QValidator signals
+  , qtExport e_State
+  ]
 
-c_QValidator =
+(c_QValidator, signals) =
+  makeQtClassAndSignals signalGens $
   addReqIncludes [includeStd "QValidator"] $
   classSetEntityPrefix "" $
   makeClass (ident "QValidator") Nothing [c_QObject]
@@ -56,8 +57,9 @@ c_QValidator =
   , mkConstMethod "validate" [refT $ objT c_QString, refT intT] $ enumT e_State
   ]
 
-signals =
-  [ makeSignal c_QValidator "changed" listener
+signalGens :: [SignalGen]
+signalGens =
+  [ makeSignal "changed" listener
   ]
 
 e_State =

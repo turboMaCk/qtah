@@ -53,11 +53,12 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Gui", "QClipboard"] $
-  (qtExport c_QClipboard) :
-  map QtExportSignal signals ++
-  [ qtExport e_Mode ]
+  [ QtExportClassAndSignals c_QClipboard signals
+  , qtExport e_Mode
+  ]
 
-c_QClipboard =
+(c_QClipboard, signals) =
+  makeQtClassAndSignals signalGens $
   addReqIncludes [includeStd "QClipboard"] $
   classSetDtorPrivate $
   classSetEntityPrefix "" $
@@ -89,12 +90,13 @@ c_QClipboard =
     objT c_QString
   ]
 
-signals =
+signalGens :: [SignalGen]
+signalGens =
   collect
-  [ test (qtVersion >= [4, 2]) $ makeSignal c_QClipboard "changed" listenerQClipboardMode
-  , just $ makeSignal c_QClipboard "dataChanged" listener
-  , test (qtVersion >= [4, 2]) $ makeSignal c_QClipboard "findBufferChanged" listener
-  , just $ makeSignal c_QClipboard "selectionChanged" listener
+  [ test (qtVersion >= [4, 2]) $ makeSignal "changed" listenerQClipboardMode
+  , just $ makeSignal "dataChanged" listener
+  , test (qtVersion >= [4, 2]) $ makeSignal "findBufferChanged" listener
+  , just $ makeSignal "selectionChanged" listener
   ]
 
 e_Mode =

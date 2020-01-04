@@ -42,11 +42,11 @@ import Graphics.UI.Qtah.Generator.Types
 
 aModule =
   AQtModule $
-  makeQtModule ["Widgets", "QStackedWidget"] $
-  qtExport c_QStackedWidget :
-  map QtExportSignal signals
+  makeQtModule ["Widgets", "QStackedWidget"]
+  [ QtExportClassAndSignals c_QStackedWidget signals ]
 
-c_QStackedWidget =
+(c_QStackedWidget, signals) =
+  makeQtClassAndSignals signalGens $
   addReqIncludes [includeStd "QStackedWidget"] $
   classSetEntityPrefix "" $
   makeClass (ident "QStackedWidget") Nothing [c_QFrame]
@@ -62,7 +62,8 @@ c_QStackedWidget =
   , mkConstMethod "widget" [intT] $ ptrT $ objT c_QWidget
   ]
 
-signals =
-  [ makeSignal c_QStackedWidget "currentChanged" listenerInt
-  , makeSignal c_QStackedWidget "widgetRemoved" listenerInt
+signalGens :: [SignalGen]
+signalGens =
+  [ makeSignal "currentChanged" listenerInt
+  , makeSignal "widgetRemoved" listenerInt
   ]

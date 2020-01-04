@@ -43,11 +43,11 @@ import Graphics.UI.Qtah.Generator.Interface.Core.Types (qreal)
 
 aModule =
   AQtModule $
-  makeQtModuleWithMinVersion ["Core", "QVariantAnimation"] [4, 6] $
-  (qtExport c_QVariantAnimation) :
-  map QtExportSignal signals
+  makeQtModuleWithMinVersion ["Core", "QVariantAnimation"] [4, 6]
+  [ QtExportClassAndSignals c_QVariantAnimation signals ]
 
-c_QVariantAnimation =
+(c_QVariantAnimation, signals) =
+  makeQtClassAndSignals signalGens $
   addReqIncludes [ includeStd "QVariantAnimation" ] $
   classSetEntityPrefix "" $
   makeClass (ident "QVariantAnimation") Nothing [c_QAbstractAnimation] $
@@ -61,8 +61,8 @@ c_QVariantAnimation =
     -- TODO Other methods.
   ]
 
-signals :: [Signal]
-signals =
+signalGens :: [SignalGen]
+signalGens =
   collect
-  [ just $ makeSignal c_QVariantAnimation "valueChanged" listenerRefConstQVariant
+  [ just $ makeSignal "valueChanged" listenerRefConstQVariant
   ]

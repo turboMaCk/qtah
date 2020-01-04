@@ -58,14 +58,14 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QTextEdit"] $
-  qtExport c_QTextEdit :
-  map QtExportSignal signals ++
-  [ qtExport e_LineWrapMode
+  [ QtExportClassAndSignals c_QTextEdit signals
+  , qtExport e_LineWrapMode
   , qtExport e_AutoFormattingFlag
   , qtExport fl_AutoFormatting
   ]
 
-c_QTextEdit =
+(c_QTextEdit, signals) =
+  makeQtClassAndSignals signalGens $
   addReqIncludes [includeStd "QTextEdit"] $
   classSetEntityPrefix "" $
   makeClass (ident "QTextEdit") Nothing [c_QAbstractScrollArea]
@@ -136,14 +136,15 @@ c_QTextEdit =
   , mkMethod' "zoomOut" "zoomOutPoints" [intT] voidT
   ]
 
-signals =
-  [ makeSignal c_QTextEdit "copyAvailable" listenerBool
+signalGens :: [SignalGen]
+signalGens =
+  [ makeSignal "copyAvailable" listenerBool
     -- TODO currentCharFormatChanged
-  , makeSignal c_QTextEdit "cursorPositionChanged" listener
-  , makeSignal c_QTextEdit "redoAvailable" listenerBool
-  , makeSignal c_QTextEdit "selectionChanged" listener
-  , makeSignal c_QTextEdit "textChanged" listener
-  , makeSignal c_QTextEdit "undoAvailable" listenerBool
+  , makeSignal "cursorPositionChanged" listener
+  , makeSignal "redoAvailable" listenerBool
+  , makeSignal "selectionChanged" listener
+  , makeSignal "textChanged" listener
+  , makeSignal "undoAvailable" listenerBool
   ]
 
 e_LineWrapMode =

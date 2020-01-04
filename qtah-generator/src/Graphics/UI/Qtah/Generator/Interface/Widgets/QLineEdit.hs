@@ -60,11 +60,12 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QLineEdit"] $
-  qtExport c_QLineEdit :
-  map QtExportSignal signals ++
-  [ qtExport e_EchoMode ]
+  [ QtExportClassAndSignals c_QLineEdit signals
+  , qtExport e_EchoMode
+  ]
 
-c_QLineEdit =
+(c_QLineEdit, signals) =
+  makeQtClassAndSignals signalGens $
   addReqIncludes [includeStd "QLineEdit"] $
   classSetEntityPrefix "" $
   makeClass (ident "QLineEdit") Nothing [c_QWidget] $
@@ -120,13 +121,14 @@ c_QLineEdit =
   , just $ mkProp "validator" $ ptrT $ constT $ objT c_QValidator
   ]
 
-signals =
-  [ makeSignal c_QLineEdit "cursorPositionChanged" listenerIntInt
-  , makeSignal c_QLineEdit "editingFinished" listener
-  , makeSignal c_QLineEdit "returnPressed" listener
-  , makeSignal c_QLineEdit "selectionChanged" listener
-  , makeSignal c_QLineEdit "textEdited" listenerQString
-  , makeSignal c_QLineEdit "textChanged" listenerQString
+signalGens :: [SignalGen]
+signalGens =
+  [ makeSignal "cursorPositionChanged" listenerIntInt
+  , makeSignal "editingFinished" listener
+  , makeSignal "returnPressed" listener
+  , makeSignal "selectionChanged" listener
+  , makeSignal "textEdited" listenerQString
+  , makeSignal "textChanged" listenerQString
   ]
 
 e_EchoMode =

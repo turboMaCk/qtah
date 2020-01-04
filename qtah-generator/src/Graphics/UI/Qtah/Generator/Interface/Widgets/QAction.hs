@@ -53,8 +53,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QAction"] $
-  qtExport c_QAction :
-  map QtExportSignal signals ++
+  QtExportClassAndSignals c_QAction signals :
   collect
   [ just $ qtExport e_ActionEvent
   , just $ qtExport e_MenuRole
@@ -62,7 +61,8 @@ aModule =
   , test (qtVersion < [5]) $ qtExport e_SoftKeyRole
   ]
 
-c_QAction =
+(c_QAction, signals) =
+  makeQtClassAndSignals signalGens $
   addReqIncludes [includeStd "QAction"] $
   classSetEntityPrefix "" $
   makeClass (ident "QAction") Nothing [c_QObject] $
@@ -110,11 +110,12 @@ c_QAction =
   , just $ mkProp "whatsThis" $ objT c_QString
   ]
 
-signals =
-  [ makeSignal c_QAction "changed" listener
-  , makeSignal c_QAction "hovered" listener
-  , makeSignal c_QAction "toggled" listenerBool
-  , makeSignal c_QAction "triggered" listenerBool
+signalGens :: [SignalGen]
+signalGens =
+  [ makeSignal "changed" listener
+  , makeSignal "hovered" listener
+  , makeSignal "toggled" listenerBool
+  , makeSignal "triggered" listenerBool
   ]
 
 e_ActionEvent =

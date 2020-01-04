@@ -44,11 +44,11 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Core", "QTimer"]
-  [ qtExport c_QTimer
-  , QtExportSignal s_timeout
+  [ QtExportClassAndSignals c_QTimer signals
   ]
 
-c_QTimer =
+(c_QTimer, signals) =
+  makeQtClassAndSignals signalGens $
   addReqIncludes [includeStd "QTimer"] $
   classSetEntityPrefix "" $
   makeClass (ident "QTimer") Nothing [c_QObject] $
@@ -69,4 +69,7 @@ c_QTimer =
   -- , just $ mkConstMethod "timerType" np $ objT c_Qt::TimerType
   ]
 
-s_timeout = makeSignal c_QTimer "timeout" listener
+signalGens :: [SignalGen]
+signalGens =
+  [ makeSignalPrivate "timeout" listener
+  ]

@@ -54,11 +54,11 @@ import Graphics.UI.Qtah.Generator.Types
 
 aModule =
   AQtModule $
-  makeQtModule ["Widgets", "QButtonGroup"] $
-  (qtExport c_QButtonGroup) :
-  map QtExportSignal signals
+  makeQtModule ["Widgets", "QButtonGroup"]
+  [ QtExportClassAndSignals c_QButtonGroup signals ]
 
-c_QButtonGroup =
+(c_QButtonGroup, signals) =
+  makeQtClassAndSignals signalGens $
   addReqIncludes [includeStd "QButtonGroup"] $
   classSetEntityPrefix "" $
   makeClass (ident "QButtonGroup") Nothing [c_QObject] $
@@ -77,18 +77,21 @@ c_QButtonGroup =
   , test (qtVersion >= [4, 1]) $ mkMethod "setId" [ptrT $ objT c_QAbstractButton, intT] voidT
   ]
 
-signals =
+signalGens :: [SignalGen]
+signalGens =
   collect
-  [ just $ makeSignal c_QButtonGroup "buttonClicked" listenerPtrQAbstractButton
-  , just $ makeSignal c_QButtonGroup "buttonClickedId" listenerInt
+  [ just $ makeSignal' "buttonClicked" "buttonClicked" listenerPtrQAbstractButton
+  , just $ makeSignal' "buttonClicked" "buttonClickedId" listenerInt
   , test (qtVersion >= [4, 2]) $
-    makeSignal c_QButtonGroup "buttonPressed" listenerPtrQAbstractButton
-  , test (qtVersion >= [4, 2]) $ makeSignal c_QButtonGroup "buttonPressedId" listenerInt
+    makeSignal' "buttonPressed" "buttonPressed" listenerPtrQAbstractButton
   , test (qtVersion >= [4, 2]) $
-    makeSignal c_QButtonGroup "buttonReleased" listenerPtrQAbstractButton
-  , test (qtVersion >= [4, 2]) $ makeSignal c_QButtonGroup "buttonReleasedId" listenerInt
+    makeSignal' "buttonPressed" "buttonPressedId" listenerInt
+  , test (qtVersion >= [4, 2]) $
+    makeSignal' "buttonReleased" "buttonReleased" listenerPtrQAbstractButton
+  , test (qtVersion >= [4, 2]) $
+    makeSignal' "buttonReleased" "buttonReleasedId" listenerInt
   , test (qtVersion >= [5, 2]) $
-    makeSignal c_QButtonGroup "buttonToggled" listenerPtrQAbstractButtonBool
+    makeSignal' "buttonToggled" "buttonToggled" listenerPtrQAbstractButtonBool
   , test (qtVersion >= [5, 2]) $
-    makeSignal c_QButtonGroup "buttonToggledId" listenerIntBool
+    makeSignal' "buttonToggled" "buttonToggledId" listenerIntBool
   ]

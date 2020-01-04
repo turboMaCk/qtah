@@ -81,11 +81,11 @@ import Graphics.UI.Qtah.Generator.Types
 
 aModule =
   AQtModule $
-  makeQtModule ["Widgets", "QWidget"] $
-  qtExport c_QWidget :
-  map QtExportSignal signals
+  makeQtModule ["Widgets", "QWidget"]
+  [ QtExportClassAndSignals c_QWidget signals ]
 
-c_QWidget =
+(c_QWidget, signals) =
+  makeQtClassAndSignals signalGens $
   addReqIncludes [includeStd "QWidget"] $
   classSetEntityPrefix "" $
   makeClass (ident "QWidget") Nothing [c_QObject] $
@@ -342,10 +342,11 @@ c_QWidget =
   , just $ mkConstMethod "y" np intT
   ]
 
-signals =
+signalGens :: [SignalGen]
+signalGens =
   collect
-  [ just $ makeSignal c_QWidget "customContextMenuRequested" listenerQPoint
-  , test (qtVersion >= [5, 0]) $ makeSignal c_QWidget "windowIconChanged" listenerRefConstQIcon
+  [ just $ makeSignal "customContextMenuRequested" listenerQPoint
+  , test (qtVersion >= [5, 0]) $ makeSignal "windowIconChanged" listenerRefConstQIcon
     -- TODO windowIconTextChanged (>=5.0?  Deprecated by 5.7.)
-  , test (qtVersion >= [5, 0]) $ makeSignal c_QWidget "windowTitleChangd" listenerQString
+  , test (qtVersion >= [5, 0]) $ makeSignal "windowTitleChanged" listenerQString
   ]

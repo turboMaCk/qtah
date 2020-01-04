@@ -49,12 +49,12 @@ import Graphics.UI.Qtah.Generator.Types
 aModule :: AModule
 aModule =
   AQtModule $
-  makeQtModule ["Widgets", "QToolBox"] $
-  qtExport c_QToolBox :
-  map QtExportSignal signals
+  makeQtModule ["Widgets", "QToolBox"]
+  [ QtExportClassAndSignals c_QToolBox signals ]
 
 c_QToolBox :: Class
-c_QToolBox =
+(c_QToolBox, signals) =
+  makeQtClassAndSignals signalGens $
   addReqIncludes [includeStd "QToolBox"] $
   classSetEntityPrefix "" $
   makeClass (ident "QToolBox") Nothing [c_QFrame]
@@ -96,7 +96,7 @@ c_QToolBox =
   , mkMethod "setCurrentWidget" [ptrT $ objT c_QWidget] voidT
   ]
 
-signals :: [Signal]
-signals =
-  [ makeSignal c_QToolBox "currentChanged" listenerInt
+signalGens :: [SignalGen]
+signalGens =
+  [ makeSignal "currentChanged" listenerInt
   ]

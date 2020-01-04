@@ -49,11 +49,11 @@ import Graphics.UI.Qtah.Generator.Types
 
 aModule =
   AQtModule $
-  makeQtModule ["Widgets", "QSpinBox"] $
-  qtExport c_QSpinBox :
-  map QtExportSignal signals
+  makeQtModule ["Widgets", "QSpinBox"]
+  [ QtExportClassAndSignals c_QSpinBox signals ]
 
-c_QSpinBox =
+(c_QSpinBox, signals) =
+  makeQtClassAndSignals signalGens $
   addReqIncludes [includeStd "QSpinBox"] $
   classSetEntityPrefix "" $
   makeClass (ident "QSpinBox") Nothing [c_QAbstractSpinBox] $
@@ -71,7 +71,8 @@ c_QSpinBox =
   , just $ mkProp "value" intT
   ]
 
-signals =
-  [ makeSignal' c_QSpinBox "valueChanged" "valueChangedInt" listenerInt
-  , makeSignal' c_QSpinBox "valueChanged" "valueChangedString" listenerQString
+signalGens :: [SignalGen]
+signalGens =
+  [ makeSignal' "valueChanged" "valueChangedInt" listenerInt
+  , makeSignal' "valueChanged" "valueChangedString" listenerQString
   ]

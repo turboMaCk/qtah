@@ -49,13 +49,13 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QProgressBar"] $
-  qtExport c_QProgressBar :
-  map QtExportSignal signals ++
   collect
-  [ test (qtVersion >= [4, 1]) $ qtExport e_Direction
+  [ just $ QtExportClassAndSignals c_QProgressBar signals
+  , test (qtVersion >= [4, 1]) $ qtExport e_Direction
   ]
 
-c_QProgressBar =
+(c_QProgressBar, signals) =
+  makeQtClassAndSignals signalGens $
   addReqIncludes [includeStd "QProgressBar"] $
   classSetEntityPrefix "" $
   makeClass (ident "QProgressBar") Nothing [c_QWidget] $
@@ -78,8 +78,9 @@ c_QProgressBar =
   , just $ mkProp "value" intT
   ]
 
-signals =
-  [ makeSignal c_QProgressBar "valueChanged" listenerInt
+signalGens :: [SignalGen]
+signalGens =
+  [ makeSignal "valueChanged" listenerInt
   ]
 
 -- Introduced in Qt 4.1.

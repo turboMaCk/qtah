@@ -43,11 +43,11 @@ import Graphics.UI.Qtah.Generator.Types
 
 aModule =
   AQtModule $
-  makeQtModuleWithMinVersion ["Core", "QSequentialAnimationGroup"] [4, 6] $
-  (qtExport c_QSequentialAnimationGroup) :
-  map QtExportSignal signals
+  makeQtModuleWithMinVersion ["Core", "QSequentialAnimationGroup"] [4, 6]
+  [ QtExportClassAndSignals c_QSequentialAnimationGroup signals ]
 
-c_QSequentialAnimationGroup =
+(c_QSequentialAnimationGroup, signals) =
+  makeQtClassAndSignals signalGens $
   addReqIncludes [ includeStd "QSequentialAnimationGroup" ] $
   classSetEntityPrefix "" $
   makeClass (ident "QSequentialAnimationGroup") Nothing [c_QAnimationGroup] $
@@ -57,8 +57,8 @@ c_QSequentialAnimationGroup =
   , just $ mkConstMethod "currentAnimation" np $ ptrT $ objT c_QAbstractAnimation
   ]
 
-signals :: [Signal]
-signals =
+signalGens :: [SignalGen]
+signalGens =
   collect
-  [ just $ makeSignal c_QSequentialAnimationGroup "currentAnimationChanged" listenerQAbstractAnimation
+  [ just $ makeSignal "currentAnimationChanged" listenerQAbstractAnimation
   ]

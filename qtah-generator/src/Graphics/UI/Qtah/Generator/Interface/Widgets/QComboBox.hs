@@ -48,11 +48,11 @@ import Graphics.UI.Qtah.Generator.Types
 
 aModule =
   AQtModule $
-  makeQtModule ["Widgets", "QComboBox"] $
-  qtExport c_QComboBox :
-  map QtExportSignal signals
+  makeQtModule ["Widgets", "QComboBox"]
+  [ QtExportClassAndSignals c_QComboBox signals ]
 
-c_QComboBox =
+(c_QComboBox, signals) =
+  makeQtClassAndSignals signalGens $
   addReqIncludes [includeStd "QComboBox"] $
   classSetEntityPrefix "" $
   makeClass (ident "QComboBox") Nothing [c_QWidget] $
@@ -68,11 +68,12 @@ c_QComboBox =
   , just $ mkProp "currentText" $ objT c_QString
   ]
 
-signals =
-  [ makeSignal c_QComboBox "activated" listenerInt
-  , makeSignal' c_QComboBox "activated" "activatedString" listenerQString
-  , makeSignal c_QComboBox "currentIndexChanged" listenerInt
-  , makeSignal' c_QComboBox "currentIndexChanged" "currentIndexChangedString" listenerQString
+signalGens :: [SignalGen]
+signalGens =
+  [ makeSignal "activated" listenerInt
+  , makeSignal' "activated" "activatedString" listenerQString
+  , makeSignal "currentIndexChanged" listenerInt
+  , makeSignal' "currentIndexChanged" "currentIndexChangedString" listenerQString
   ]
 
 -- TODO The rest of QComboBox.

@@ -68,10 +68,10 @@ import Graphics.UI.Qtah.Generator.Interface.Core.Types (e_ConnectionType)
 aModule =
   AQtModule $
   makeQtModule ["Core", "QObject"] $
-  (qtExport c_QObject) :
-  map QtExportSignal signals
+  [ QtExportClassAndSignals c_QObject signals ]
 
-c_QObject =
+(c_QObject, signals) =
+  makeQtClassAndSignals signalGens $
   addReqIncludes [ includeStd "QObject"
                  , includeLocal "wrap_qobject.hpp"
                  ] $
@@ -134,7 +134,8 @@ c_QObject =
   , just $ mkConstMethod "thread" np $ ptrT $ objT c_QThread
   ]
 
-signals =
-  [ makeSignal c_QObject "destroyed" listenerPtrQObject
-  , makeSignal c_QObject "objectNameChanged" listenerQString
+signalGens :: [SignalGen]
+signalGens =
+  [ makeSignal "destroyed" listenerPtrQObject
+  , makeSignalPrivate "objectNameChanged" listenerQString
   ]

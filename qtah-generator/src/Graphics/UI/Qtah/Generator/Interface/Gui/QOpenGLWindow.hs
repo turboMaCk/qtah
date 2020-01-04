@@ -50,11 +50,12 @@ minVersion = [5, 4]
 aModule =
   AQtModule $
   makeQtModuleWithMinVersion ["Gui", "QOpenGLWindow"] minVersion $
-  [ qtExport c_QOpenGLWindow ] ++
-  map QtExportSignal signals ++
-  [ qtExport e_UpdateBehavior ]
+  [ QtExportClassAndSignals c_QOpenGLWindow signals
+  , qtExport e_UpdateBehavior
+  ]
 
-c_QOpenGLWindow =
+(c_QOpenGLWindow, signals) =
+  makeQtClassAndSignals signalGens $
   addReqIncludes [includeStd "QOpenGLWindow"] $
   classSetEntityPrefix "" $
   makeClass (ident "QOpenGLWindow") Nothing [c_QPaintDeviceWindow]
@@ -72,8 +73,9 @@ c_QOpenGLWindow =
   , mkConstMethod "updateBehavior" np $ enumT e_UpdateBehavior
   ]
 
-signals =
-  [ makeSignal c_QOpenGLWindow "frameSwapped" listener
+signalGens :: [SignalGen]
+signalGens =
+  [ makeSignal "frameSwapped" listener
   ]
 
 e_UpdateBehavior =

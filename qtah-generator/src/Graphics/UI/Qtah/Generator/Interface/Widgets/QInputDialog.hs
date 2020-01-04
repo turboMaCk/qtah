@@ -59,15 +59,15 @@ minVersion = [4, 5]
 
 aModule =
   AQtModule $
-  makeQtModuleWithMinVersion ["Widgets", "QInputDialog"] minVersion $
-  qtExport c_QInputDialog :
-  map QtExportSignal signals ++
-  [ qtExport e_InputDialogOption
+  makeQtModuleWithMinVersion ["Widgets", "QInputDialog"] minVersion
+  [ QtExportClassAndSignals c_QInputDialog signals
+  , qtExport e_InputDialogOption
   , qtExport fl_InputDialogOptions
   , qtExport e_InputMode
   ]
 
-c_QInputDialog =
+(c_QInputDialog, signals) =
+  makeQtClassAndSignals signalGens $
   addReqIncludes [includeStd "QInputDialog"] $
   classSetEntityPrefix "" $
   makeClass (ident "QInputDialog") Nothing [c_QDialog] $
@@ -129,13 +129,14 @@ c_QInputDialog =
   , just $ mkProp "textValue" $ objT c_QString
   ]
 
-signals =
-  [ makeSignal c_QInputDialog "doubleValueChanged" listenerDouble
-  , makeSignal c_QInputDialog "doubleValueSelected" listenerDouble
-  , makeSignal c_QInputDialog "intValueChanged" listenerInt
-  , makeSignal c_QInputDialog "intValueSelected" listenerInt
-  , makeSignal c_QInputDialog "textValueChanged" listenerQString
-  , makeSignal c_QInputDialog "textValueSelected" listenerQString
+signalGens :: [SignalGen]
+signalGens =
+  [ makeSignal "doubleValueChanged" listenerDouble
+  , makeSignal "doubleValueSelected" listenerDouble
+  , makeSignal "intValueChanged" listenerInt
+  , makeSignal "intValueSelected" listenerInt
+  , makeSignal "textValueChanged" listenerQString
+  , makeSignal "textValueSelected" listenerQString
   ]
 
 (e_InputDialogOption, fl_InputDialogOptions) =
