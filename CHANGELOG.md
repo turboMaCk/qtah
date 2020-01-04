@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## (2019-12-23) *-0.6.0
+
 This release marks the largest API increase in any Qtah release so far: 62 new
 classes, many others fleshed out with new methods, and lots of new enums as
 well.  This also bumps Qtah from Hoppy 0.5 to Hoppy 0.7, incorporating all of
