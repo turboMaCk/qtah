@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Fixed building on macOS w.r.t. new enum autodetection (issue #43).
+
+- Version bound fixes for parts of the Qt API (issue #42).
+
 ## (2019-12-23) *-0.6.0
 
 This release marks the largest API increase in any Qtah release so far: 62 new
