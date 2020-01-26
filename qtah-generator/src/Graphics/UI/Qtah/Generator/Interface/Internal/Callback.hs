@@ -70,6 +70,7 @@ import Graphics.UI.Qtah.Generator.Interface.Core.Types (
   e_ToolButtonStyle,
   e_WindowModality,
   e_WindowState,
+  fl_WindowStates,
   qreal,
   qlonglong,
   )
@@ -85,6 +86,7 @@ import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Widgets.QDockWidget (
   fl_DockWidgetFeatures,
   )
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QGraphicsItem (c_QGraphicsItem)
+import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Widgets.QMdiSubWindow (c_QMdiSubWindow)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Widgets.QSystemTrayIcon (
   e_ActivationReason,
   )
@@ -113,6 +115,7 @@ aModule =
       , just $ Export cb_PtrQAbstractItemModelVoid
       , just $ Export cb_PtrQActionVoid
       , just $ Export cb_PtrQGraphicsItemPtrQEventBool
+      , just $ Export cb_PtrQMdiSubWindowVoid
       , just $ Export cb_PtrQObjectPtrQEventBool
       , just $ Export cb_PtrQObjectVoid
       , just $ Export cb_PtrQPaintEventVoid
@@ -144,6 +147,7 @@ aModule =
       , just $ Export cb_ToolButtonStyleVoid
       , just $ Export cb_WindowModalityVoid
       , just $ Export cb_WindowStateVoid
+      , just $ Export cb_WindowStatesWindowStatesVoid
       , just $ Export cb_QlonglongVoid
       , just $ Export cb_IntQlonglongVoid
       , just $ Export cb_ProcessErrorVoid
@@ -211,6 +215,10 @@ cb_PtrQActionVoid =
 cb_PtrQGraphicsItemPtrQEventBool =
   makeCallback (toExtName "CallbackPtrQGraphicsItemPtrQEventBool")
   [ptrT $ objT c_QGraphicsItem, ptrT $ objT c_QEvent] boolT
+
+cb_PtrQMdiSubWindowVoid =
+  makeCallback (toExtName "CallbackPtrQMdiSubWindowVoid")
+  [ptrT $ objT c_QMdiSubWindow] voidT
 
 cb_PtrQObjectPtrQEventBool =
   makeCallback (toExtName "CallbackPtrQObjectPtrQEventBool")
@@ -341,6 +349,10 @@ cb_WindowModalityVoid =
 cb_WindowStateVoid =
   makeCallback (toExtName "CallbackWindowStateVoid")
   [enumT e_WindowState] voidT
+
+cb_WindowStatesWindowStatesVoid =
+  makeCallback (toExtName "CallbackWindowStatesWindowStatesVoid")
+  [flagsT fl_WindowStates, flagsT fl_WindowStates] voidT
 
 cb_QlonglongVoid =
   makeCallback (toExtName "CallbackQlonglongVoid")

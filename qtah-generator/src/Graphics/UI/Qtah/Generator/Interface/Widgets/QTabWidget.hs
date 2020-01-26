@@ -17,6 +17,8 @@
 
 module Graphics.UI.Qtah.Generator.Interface.Widgets.QTabWidget (
   aModule,
+  e_TabPosition,
+  e_TabShape,
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
