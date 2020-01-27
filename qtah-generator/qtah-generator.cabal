@@ -246,6 +246,7 @@ executable qtah-generator
     , Graphics.UI.Qtah.Generator.Interface.Widgets.QLabel
     , Graphics.UI.Qtah.Generator.Interface.Widgets.QLayout
     , Graphics.UI.Qtah.Generator.Interface.Widgets.QLayoutItem
+    , Graphics.UI.Qtah.Generator.Interface.Widgets.QLCDNumber
     , Graphics.UI.Qtah.Generator.Interface.Widgets.QLineEdit
     , Graphics.UI.Qtah.Generator.Interface.Widgets.QListView
     , Graphics.UI.Qtah.Generator.Interface.Widgets.QMainWindow

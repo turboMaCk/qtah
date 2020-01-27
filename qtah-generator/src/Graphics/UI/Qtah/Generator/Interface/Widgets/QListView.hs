@@ -130,5 +130,3 @@ e_ViewMode =
   [ "ListMode"
   , "IconMode"
   ]
-
-

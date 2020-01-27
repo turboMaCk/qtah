@@ -58,6 +58,7 @@ import qualified Graphics.UI.Qtah.Generator.Interface.Widgets.QInputDialog as QI
 import qualified Graphics.UI.Qtah.Generator.Interface.Widgets.QLabel as QLabel
 import qualified Graphics.UI.Qtah.Generator.Interface.Widgets.QLayout as QLayout
 import qualified Graphics.UI.Qtah.Generator.Interface.Widgets.QLayoutItem as QLayoutItem
+import qualified Graphics.UI.Qtah.Generator.Interface.Widgets.QLCDNumber as QLCDNumber
 import qualified Graphics.UI.Qtah.Generator.Interface.Widgets.QLineEdit as QLineEdit
 import qualified Graphics.UI.Qtah.Generator.Interface.Widgets.QListView as QListView
 import qualified Graphics.UI.Qtah.Generator.Interface.Widgets.QMainWindow as QMainWindow
@@ -140,6 +141,7 @@ modules =
   , QLabel.aModule
   , QLayout.aModule
   , QLayoutItem.aModule
+  , QLCDNumber.aModule
   , QLineEdit.aModule
   , QListView.aModule
   , QMainWindow.aModule

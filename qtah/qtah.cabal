@@ -240,10 +240,12 @@ library
     , Graphics.UI.Qtah.Widgets.QLabel
     , Graphics.UI.Qtah.Widgets.QLayout
     , Graphics.UI.Qtah.Widgets.QLayoutItem
+    , Graphics.UI.Qtah.Widgets.QLCDNumber
     , Graphics.UI.Qtah.Widgets.QLineEdit
     , Graphics.UI.Qtah.Widgets.QListView
     , Graphics.UI.Qtah.Widgets.QMainWindow
     , Graphics.UI.Qtah.Widgets.QMdiArea
+    , Graphics.UI.Qtah.Widgets.QMdiSubWindow
     , Graphics.UI.Qtah.Widgets.QMenu
     , Graphics.UI.Qtah.Widgets.QMenuBar
     , Graphics.UI.Qtah.Widgets.QMessageBox
@@ -480,10 +482,12 @@ library
     , Graphics.UI.Qtah.Generated.Widgets.QLabel
     , Graphics.UI.Qtah.Generated.Widgets.QLayout
     , Graphics.UI.Qtah.Generated.Widgets.QLayoutItem
+    , Graphics.UI.Qtah.Generated.Widgets.QLCDNumber
     , Graphics.UI.Qtah.Generated.Widgets.QLineEdit
     , Graphics.UI.Qtah.Generated.Widgets.QListView
     , Graphics.UI.Qtah.Generated.Widgets.QMainWindow
     , Graphics.UI.Qtah.Generated.Widgets.QMdiArea
+    , Graphics.UI.Qtah.Generated.Widgets.QMdiSubWindow
     , Graphics.UI.Qtah.Generated.Widgets.QMenu
     , Graphics.UI.Qtah.Generated.Widgets.QMenuBar
     , Graphics.UI.Qtah.Generated.Widgets.QMessageBox
