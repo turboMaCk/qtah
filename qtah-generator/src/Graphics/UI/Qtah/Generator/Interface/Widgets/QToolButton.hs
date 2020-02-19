@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QToolButton (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportEnum, ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -31,6 +30,7 @@ import Foreign.Hoppy.Generator.Spec (
   mkCtor,
   mkMethod,
   mkProp,
+  np,
   )
 import Foreign.Hoppy.Generator.Types (boolT, enumT, objT, ptrT, voidT)
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (e_ArrowType, e_ToolButtonStyle)
@@ -46,8 +46,8 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QToolButton"]
-  [ QtExport $ ExportClass c_QToolButton
-  , QtExport $ ExportEnum e_ToolButtonPopupMode
+  [ qtExport c_QToolButton
+  , qtExport e_ToolButtonPopupMode
   ]
 
 c_QToolButton =
@@ -55,7 +55,7 @@ c_QToolButton =
   classSetEntityPrefix "" $
   makeClass (ident "QToolButton") Nothing
   [ c_QAbstractButton ]
-  [ mkCtor "new" []
+  [ mkCtor "new" np
   , mkCtor "newWithParent" [ptrT $ objT c_QWidget]
   , mkProp "arrowType" $ enumT e_ArrowType
   , mkProp "autoRaise" boolT
@@ -63,12 +63,12 @@ c_QToolButton =
   , mkProp "menu" $ ptrT $ objT c_QMenu
   , mkProp "popupMode" $ enumT e_ToolButtonPopupMode
   , mkProp "toolButtonStyle" $ enumT e_ToolButtonStyle
-  , mkMethod "showMenu" [] voidT
+  , mkMethod "showMenu" np voidT
   ]
 
 e_ToolButtonPopupMode =
   makeQtEnum (ident1 "QToolButton" "ToolButtonPopupMode") [includeStd "QToolButton"]
-  [ (0, ["delayed", "popup"])
-  , (1, ["menu", "button", "popup"])
-  , (2, ["instant", "popup"])
+  [ "DelayedPopup"
+  , "MenuButtonPopup"
+  , "InstantPopup"
   ]

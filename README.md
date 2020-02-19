@@ -48,9 +48,10 @@ To build and install locally, run:
 
     $ ./install.sh
 
-If you want to instead build against Qt 4, then run:
+If you want to instead build against Qt 4 (no longer supported, and gradually
+being removed), then run:
 
-    $ QTAH_QT_FLAGS=qt4 ./install.sh
+    $ QTAH_QT_FLAGS=qt4 ./install.sh      (Qt 4 is unsupported)
 
 The `install.sh` script is just a thin wrapper around running `cabal configure`,
 `build`, `install` on each of the packages in turn.  For more information about
@@ -72,7 +73,7 @@ installing Qtah:
 
 ### Dependencies
 
-- Qt 4.8 or 5.x with development files
+- Qt 4.8 (unsupported) or 5.x with development files
 - make and a C++ compiler
 - bash 4.1 or newer
 - GHC 7.8-8.2
@@ -237,8 +238,11 @@ have to manage objects you didn't create explicitly with a constructor call.
 
 ## Developing
 
-Patches welcome!  Please enable the pre-commit hook at `scripts/git-pre-commit`
-which checks lint and copyright/license issues:
+The Qtah `master` branch tracks the latest Hoppy release.  There may also be a
+`next` branch which tracks unreleased Hoppy `master`.
+
+Patches are welcome!  Please enable the pre-commit hook at
+`scripts/git-pre-commit` which checks lint and copyright/license issues:
 
     $ ln -s ../../scripts/git-pre-commit .git/hooks/pre-commit
 
@@ -254,7 +258,7 @@ following prefixes for naming C++ bindings in the generator:
 
 - `c_MyClass` for classes.
 - `e_MyEnum` for enums.
-- `bs_MyBitspace` for bitspaces.
+- `fl_MyBitspace` for bitspaces.
 - `f_MyFunction` for functions.
 - `cb_MyCallback` for callbacks.
 
@@ -334,7 +338,7 @@ class files always live under `Widgets` in Qtah.
 #### To add an enum or bitspace
 
 These are generally associated with a class.  Use `makeQtEnum` or
-`makeQtEnumBitspace` and include it in the associated class's module.  See
+`makeQtEnumAndFlags` and include it in the associated class's module.  See
 [QMessageBox](qtah-generator/src/Graphics/UI/Qtah/Generator/Interface/Widgets/QMessageBox.hs)
 as an example.
 

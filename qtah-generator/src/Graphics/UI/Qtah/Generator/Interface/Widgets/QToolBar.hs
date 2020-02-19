@@ -22,7 +22,6 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QToolBar (
 
 import Foreign.Hoppy.Generator.Spec (
   Class,
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -34,24 +33,26 @@ import Foreign.Hoppy.Generator.Spec (
   mkMethod,
   mkMethod',
   mkProp,
+  np,
   )
-import Foreign.Hoppy.Generator.Types (bitspaceT, boolT, enumT, objT, ptrT, voidT)
+import Foreign.Hoppy.Generator.Types (boolT, enumT, objT, ptrT, voidT)
+import Graphics.UI.Qtah.Generator.Flags (flagsT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QSize (c_QSize)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (
-  bs_ToolBarAreas,
   e_Orientation,
   e_ToolBarArea,
+  fl_ToolBarAreas,
   e_ToolButtonStyle,
   )
 import Graphics.UI.Qtah.Generator.Interface.Gui.QIcon (c_QIcon)
 import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
-  c_ListenerBool,
-  c_ListenerOrientation,
-  c_ListenerPtrQAction,
-  c_ListenerQSize,
-  c_ListenerToolBarAreas,
-  c_ListenerToolButtonStyle,
+  listenerBool,
+  listenerOrientation,
+  listenerPtrQAction,
+  listenerQSize,
+  listenerToolBarAreas,
+  listenerToolButtonStyle,
   )
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QAction (c_QAction)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QWidget (c_QWidget)
@@ -64,7 +65,7 @@ aModule :: AModule
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QToolBar"] $
-  QtExport (ExportClass c_QToolBar) :
+  qtExport c_QToolBar :
   map QtExportSignal signals
 
 c_QToolBar :: Class
@@ -72,37 +73,37 @@ c_QToolBar =
   addReqIncludes [includeStd "QToolBar"] $
   classSetEntityPrefix "" $
   makeClass (ident "QToolBar") Nothing [c_QWidget]
-  [ mkCtor "new" []
+  [ mkCtor "new" np
   , mkCtor "newWithParent" [ptrT $ objT c_QWidget]
   , mkCtor "newWithTitle" [objT c_QString]
   , mkCtor "newWithTitleAndParent" [objT c_QString, ptrT $ objT c_QWidget]
   , mkMethod' "addAction" "addAction" [objT c_QString] $ ptrT $ objT c_QAction
   , mkMethod' "addAction" "addActionWithIcon" [objT c_QIcon, objT c_QString] $ ptrT $ objT c_QAction
-  , mkMethod "addSeparator" [] $ ptrT $ objT c_QAction
+  , mkMethod "addSeparator" np $ ptrT $ objT c_QAction
   , mkMethod "addWidget" [ptrT $ objT c_QWidget] $ ptrT $ objT c_QAction
-  , mkProp "allowedAreas" $ bitspaceT bs_ToolBarAreas
-  , mkMethod "clear" [] voidT
+  , mkProp "allowedAreas" $ flagsT fl_ToolBarAreas
+  , mkMethod "clear" np voidT
   , mkBoolIsProp "floatable"
   , mkProp "iconSize" $ objT c_QSize
   , mkMethod "insertSeparator" [ptrT $ objT c_QAction] $ ptrT $ objT c_QAction
   , mkMethod "insertWidget" [ptrT $ objT c_QAction, ptrT $ objT c_QWidget] $ ptrT $ objT c_QAction
   , mkConstMethod "isAreaAllowed" [enumT e_ToolBarArea] boolT
-  , mkConstMethod "isFloating" [] boolT
+  , mkConstMethod "isFloating" np boolT
   , mkBoolIsProp "movable"
   , mkProp "orientation" $ enumT e_Orientation
-  , mkMethod "toggleViewAction" [] $ ptrT $ objT c_QAction
+  , mkMethod "toggleViewAction" np $ ptrT $ objT c_QAction
   , mkProp "toolButtonStyle" $ enumT e_ToolButtonStyle
   , mkConstMethod "widgetForAction" [ptrT $ objT c_QAction] $ ptrT $ objT c_QWidget
   ]
 
 signals :: [Signal]
 signals =
-  [ makeSignal c_QToolBar "actionTriggered" c_ListenerPtrQAction
-  , makeSignal c_QToolBar "allowedAreasChanged" c_ListenerToolBarAreas
-  , makeSignal c_QToolBar "iconSizeChanged" c_ListenerQSize
-  , makeSignal c_QToolBar "movableChanged" c_ListenerBool
-  , makeSignal c_QToolBar "orientationChanged" c_ListenerOrientation
-  , makeSignal c_QToolBar "toolButtonStyleChanged" c_ListenerToolButtonStyle
-  , makeSignal c_QToolBar "topLevelChanged" c_ListenerBool
-  , makeSignal c_QToolBar "visibilityChanged" c_ListenerBool
+  [ makeSignal c_QToolBar "actionTriggered" listenerPtrQAction
+  , makeSignal c_QToolBar "allowedAreasChanged" listenerToolBarAreas
+  , makeSignal c_QToolBar "iconSizeChanged" listenerQSize
+  , makeSignal c_QToolBar "movableChanged" listenerBool
+  , makeSignal c_QToolBar "orientationChanged" listenerOrientation
+  , makeSignal c_QToolBar "toolButtonStyleChanged" listenerToolButtonStyle
+  , makeSignal c_QToolBar "topLevelChanged" listenerBool
+  , makeSignal c_QToolBar "visibilityChanged" listenerBool
   ]

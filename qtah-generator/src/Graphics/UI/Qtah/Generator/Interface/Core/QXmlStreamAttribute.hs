@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QXmlStreamAttribute (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   classSetConversionToGc,
   addReqIncludes,
   classSetEntityPrefix,
@@ -30,6 +29,7 @@ import Foreign.Hoppy.Generator.Spec (
   makeClass,
   mkConstMethod,
   mkCtor,
+  np,
   )
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Copyable, Assignable, Equatable),
@@ -39,7 +39,7 @@ import Foreign.Hoppy.Generator.Spec.ClassFeature (
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Foreign.Hoppy.Generator.Types (boolT, constT, objT, refT)
 import Foreign.Hoppy.Generator.Version (just, collect)
-import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModuleWithMinVersion)
+import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
 
 {-# ANN module "HLint: ignore Use camelCase" #-}
@@ -47,7 +47,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Core", "QXmlStreamAttribute"] $
-  [QtExport $ ExportClass c_QXmlStreamAttribute]
+  [qtExport c_QXmlStreamAttribute]
 
 c_QXmlStreamAttribute =
   addReqIncludes [ includeStd "QXmlStreamAttribute" ] $
@@ -56,13 +56,13 @@ c_QXmlStreamAttribute =
   classSetEntityPrefix "" $
   makeClass (ident "QXmlStreamAttribute") Nothing [] $
   collect
-  [ just $ mkCtor "new" []
+  [ just $ mkCtor "new" np
   , just $ mkCtor "newWithQualifiedNameAndValue" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString]
   , just $ mkCtor "newWithNamespaceUriAndNameAndValue" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString, refT $ constT $ objT c_QString]
-  , just $ mkConstMethod "isDefault" [] boolT
-  --, just $ mkConstMethod "name" [] $ objT c_QStringRef
-  --, just $ mkConstMethod "namespaceUri" [] $ objT c_QStringRef
-  --, just $ mkConstMethod "prefix" [] $ objT c_QStringRef
-  --, just $ mkConstMethod "qualifiedName" [] $ objT c_QStringRef
-  --, just $ mkConstMethod "value" [] $ objT c_QStringRef
+  , just $ mkConstMethod "isDefault" np boolT
+  --, just $ mkConstMethod "name" np $ objT c_QStringRef
+  --, just $ mkConstMethod "namespaceUri" np $ objT c_QStringRef
+  --, just $ mkConstMethod "prefix" np $ objT c_QStringRef
+  --, just $ mkConstMethod "qualifiedName" np $ objT c_QStringRef
+  --, just $ mkConstMethod "value" np $ objT c_QStringRef
   ]

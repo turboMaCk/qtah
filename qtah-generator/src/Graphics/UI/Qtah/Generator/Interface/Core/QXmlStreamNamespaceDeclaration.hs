@@ -22,7 +22,6 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QXmlStreamNamespaceDeclaration 
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   classSetConversionToGc,
   addReqIncludes,
   classSetEntityPrefix,
@@ -30,6 +29,7 @@ import Foreign.Hoppy.Generator.Spec (
   includeStd,
   makeClass,
   mkCtor,
+  np,
   )
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Copyable, Assignable, Equatable),
@@ -39,9 +39,8 @@ import Foreign.Hoppy.Generator.Spec.ClassFeature (
 import Foreign.Hoppy.Generator.Types (constT, objT, refT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Core.QVector (c_QVectorQXmlStreamNamespaceDeclaration)
-import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
-import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModuleWithMinVersion)
+import Foreign.Hoppy.Generator.Version (collect, just)
+import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
 
 {-# ANN module "HLint: ignore Use camelCase" #-}
@@ -49,7 +48,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Core", "QXmlStreamNamespaceDeclaration"]
-  [QtExport $ ExportClass c_QXmlStreamNamespaceDeclaration]
+  [qtExport c_QXmlStreamNamespaceDeclaration]
 
 c_QXmlStreamNamespaceDeclaration =
   addReqIncludes [ includeStd "QXmlStreamNamespaceDeclaration" ] $
@@ -58,10 +57,10 @@ c_QXmlStreamNamespaceDeclaration =
   classSetEntityPrefix "" $
   makeClass (ident "QXmlStreamNamespaceDeclaration") Nothing [] $
   collect
-  [ just $ mkCtor "new" []
+  [ just $ mkCtor "new" np
   , just $ mkCtor "newWithPrefixAndNamespaceUri" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString]
-  --, just $ mkConstMethod "namespaceUri" [] $ objT c_QStringRef
-  --, just $ mkConstMethod "prefix" [] $ objT c_QStringRef
+  --, just $ mkConstMethod "namespaceUri" np $ objT c_QStringRef
+  --, just $ mkConstMethod "prefix" np $ objT c_QStringRef
   ]
 
 qXmlStreamNamespaceDeclarations = c_QVectorQXmlStreamNamespaceDeclaration

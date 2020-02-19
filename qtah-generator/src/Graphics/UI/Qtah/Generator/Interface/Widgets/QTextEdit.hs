@@ -20,7 +20,6 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QTextEdit (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportEnum, ExportBitspace, ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -34,17 +33,19 @@ import Foreign.Hoppy.Generator.Spec (
   mkMethod,
   mkMethod',
   mkProp,
+  np,
   )
-import Foreign.Hoppy.Generator.Types (bitspaceT, boolT, enumT, intT, objT, ptrT, voidT)
+import Foreign.Hoppy.Generator.Types (boolT, enumT, intT, objT, ptrT, voidT)
+import Graphics.UI.Qtah.Generator.Flags (flagsT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QPoint (c_QPoint)
 import Graphics.UI.Qtah.Generator.Interface.Core.QRect (c_QRect)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
-import Graphics.UI.Qtah.Generator.Interface.Core.Types (bs_Alignment, qreal)
+import Graphics.UI.Qtah.Generator.Interface.Core.Types (fl_Alignment, qreal)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QColor (c_QColor)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QFont (c_QFont)
 import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
-  c_Listener,
-  c_ListenerBool,
+  listener,
+  listenerBool,
   )
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QAbstractScrollArea (c_QAbstractScrollArea)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QMenu (c_QMenu)
@@ -57,42 +58,42 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QTextEdit"] $
-  QtExport (ExportClass c_QTextEdit) :
+  qtExport c_QTextEdit :
   map QtExportSignal signals ++
-  [ QtExport $ ExportEnum e_LineWrapMode
-  , QtExport $ ExportEnum e_AutoFormattingFlag
-  , QtExport $ ExportBitspace bs_AutoFormatting
+  [ qtExport e_LineWrapMode
+  , qtExport e_AutoFormattingFlag
+  , qtExport fl_AutoFormatting
   ]
 
 c_QTextEdit =
   addReqIncludes [includeStd "QTextEdit"] $
   classSetEntityPrefix "" $
   makeClass (ident "QTextEdit") Nothing [c_QAbstractScrollArea]
-  [ mkCtor "new" []
+  [ mkCtor "new" np
   , mkCtor "newWithParent" [ptrT $ objT c_QWidget]
   , mkCtor "newWithText" [objT c_QString]
   , mkCtor "newWithTextAndParent" [objT c_QString, ptrT $ objT c_QWidget]
   , mkProp "acceptRichText" boolT
-  , mkProp "alignment" $ bitspaceT bs_Alignment
+  , mkProp "alignment" $ flagsT fl_Alignment
   , mkConstMethod "anchorAt" [objT c_QPoint] $ objT c_QString
   , mkMethod "append" [objT c_QString] voidT
-  , mkProp "autoFormatting" $ bitspaceT bs_AutoFormatting
-  , mkConstMethod "canPaste" [] boolT
-  , mkMethod "clear" [] voidT
-  , mkMethod "copy" [] voidT
-  , mkMethod' "createStandardContextMenu" "createStandardContextMenu" [] $ ptrT $ objT c_QMenu
+  , mkProp "autoFormatting" $ flagsT fl_AutoFormatting
+  , mkConstMethod "canPaste" np boolT
+  , mkMethod "clear" np voidT
+  , mkMethod "copy" np voidT
+  , mkMethod' "createStandardContextMenu" "createStandardContextMenu" np $ ptrT $ objT c_QMenu
   , mkMethod' "createStandardContextMenu" "createStandardContextMenuAt" [objT c_QPoint] $
     ptrT $ objT c_QMenu
     -- TODO currentCharFormat
   , mkProp "currentFont" $ objT c_QFont
     -- TODO cursorForPosition
-  , mkConstMethod' "cursorRect" "cursorRect" [] $ objT c_QRect
+  , mkConstMethod' "cursorRect" "cursorRect" np $ objT c_QRect
     -- TODO cursorRect(const QTextCursor&)
   , mkProp "cursorWidth" intT
-  , mkMethod "cut" [] voidT
+  , mkMethod "cut" np voidT
     -- TODO document
   , mkProp "documentTitle" $ objT c_QString
-  , mkMethod "ensureCursorVisible" [] voidT
+  , mkMethod "ensureCursorVisible" np voidT
     -- TODO extraSelections
   , mkMethod' "find" "find" [objT c_QString] boolT
     -- TODO find with FindFlags
@@ -109,12 +110,12 @@ c_QTextEdit =
     -- TODO mergeCurrentCharFormat
     -- TODO moveCursor
   , mkProp "overwriteMode" boolT
-  , mkMethod "paste" [] voidT
+  , mkMethod "paste" np voidT
     -- TODO print
   , mkBoolIsProp "readOnly"
-  , mkMethod "redo" [] voidT
+  , mkMethod "redo" np voidT
   , mkMethod "scrollToAnchor" [objT c_QString] voidT
-  , mkMethod "selectAll" [] voidT
+  , mkMethod "selectAll" np voidT
   , mkMethod "setHtml" [objT c_QString] voidT
   , mkMethod "setPlainText" [objT c_QString] voidT
   , mkMethod "setText" [objT c_QString] voidT
@@ -124,38 +125,38 @@ c_QTextEdit =
   , mkProp "textColor" $ objT c_QColor
     -- TODO textCursor
     -- TODO textInteractionFlags
-  , mkConstMethod "toHtml" [] $ objT c_QString
-  , mkConstMethod "toPlainText" [] $ objT c_QString
-  , mkMethod "undo" [] voidT
+  , mkConstMethod "toHtml" np $ objT c_QString
+  , mkConstMethod "toPlainText" np $ objT c_QString
+  , mkMethod "undo" np voidT
   , mkBoolIsProp "undoRedoEnabled"
     -- TODO wordWrapMode
-  , mkMethod "zoomIn" [] voidT
+  , mkMethod "zoomIn" np voidT
   , mkMethod' "zoomIn" "zoomInPoints" [intT] voidT
-  , mkMethod "zoomOut" [] voidT
+  , mkMethod "zoomOut" np voidT
   , mkMethod' "zoomOut" "zoomOutPoints" [intT] voidT
   ]
 
 signals =
-  [ makeSignal c_QTextEdit "copyAvailable" c_ListenerBool
+  [ makeSignal c_QTextEdit "copyAvailable" listenerBool
     -- TODO currentCharFormatChanged
-  , makeSignal c_QTextEdit "cursorPositionChanged" c_Listener
-  , makeSignal c_QTextEdit "redoAvailable" c_ListenerBool
-  , makeSignal c_QTextEdit "selectionChanged" c_Listener
-  , makeSignal c_QTextEdit "textChanged" c_Listener
-  , makeSignal c_QTextEdit "undoAvailable" c_ListenerBool
+  , makeSignal c_QTextEdit "cursorPositionChanged" listener
+  , makeSignal c_QTextEdit "redoAvailable" listenerBool
+  , makeSignal c_QTextEdit "selectionChanged" listener
+  , makeSignal c_QTextEdit "textChanged" listener
+  , makeSignal c_QTextEdit "undoAvailable" listenerBool
   ]
 
 e_LineWrapMode =
   makeQtEnum (ident1 "QTextEdit" "LineWrapMode") [includeStd "QTextEdit"]
-  [ (0, ["no", "wrap"])
-  , (1, ["widget", "width"])
-  , (2, ["fixed", "pixel", "width"])
-  , (3, ["fixed", "column", "width"])
+  [ "NoWrap"
+  , "WidgetWidth"
+  , "FixedPixelWidth"
+  , "FixedColumnWidth"
   ]
 
-(e_AutoFormattingFlag, bs_AutoFormatting) =
-  makeQtEnumBitspace (ident1 "QTextEdit" "AutoFormattingFlag") "AutoFormatting" [includeStd "QTextEdit"]
-  [ (0, ["auto", "none"])
-  , (0x00000001, ["auto", "bullet", "list"])
-  , (0xffffffff, ["auto", "all"])
+(e_AutoFormattingFlag, fl_AutoFormatting) =
+  makeQtEnumAndFlags (ident1 "QTextEdit" "AutoFormattingFlag") "AutoFormatting" [includeStd "QTextEdit"]
+  [ "AutoNone"
+  , "AutoBulletList"
+  , "AutoAll"
   ]

@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QTimer (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export(ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -30,11 +29,12 @@ import Foreign.Hoppy.Generator.Spec (
   mkMethod,
   mkConstMethod,
   mkCtor,
+  np,
   )
 import Foreign.Hoppy.Generator.Types (boolT, intT, voidT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
-import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (c_Listener)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
+import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (listener)
 import Graphics.UI.Qtah.Generator.Interface.Core.QObject (c_QObject)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
@@ -44,7 +44,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Core", "QTimer"]
-  [ QtExport $ ExportClass c_QTimer
+  [ qtExport c_QTimer
   , QtExportSignal s_timeout
   ]
 
@@ -53,20 +53,20 @@ c_QTimer =
   classSetEntityPrefix "" $
   makeClass (ident "QTimer") Nothing [c_QObject] $
   collect
-  [ just $ mkCtor "new" []
-  , just $ mkConstMethod "interval" [] intT
-  -- , just $ mkConstMethod "intervalAsDuration" [] $ objT c_std::chrono::milliseconds
-  , just $ mkConstMethod "isActive" [] boolT
-  , just $ mkConstMethod "isSingleShot" [] boolT
-  , test (qtVersion >= [5, 0]) $ mkConstMethod "remainingTime" [] intT
-  -- , just $ mkConstMethod "remainingTimeAsDuration" [] $ objT c_std::chrono::milliseconds
+  [ just $ mkCtor "new" np
+  , just $ mkConstMethod "interval" np intT
+  -- , just $ mkConstMethod "intervalAsDuration" np $ objT c_std::chrono::milliseconds
+  , just $ mkConstMethod "isActive" np boolT
+  , just $ mkConstMethod "isSingleShot" np boolT
+  , test (qtVersion >= [5, 0]) $ mkConstMethod "remainingTime" np intT
+  -- , just $ mkConstMethod "remainingTimeAsDuration" np $ objT c_std::chrono::milliseconds
   , just $ mkMethod "setInterval" [intT] voidT
   -- , just $ mkMethod' "setInterval" "setInterval" [objT c_std::chrono::milliseconds] voidT
   , just $ mkMethod "setSingleShot" [boolT] voidT
   -- , just $ mkMethod "setTimerType" [objT c_Qt::TimerType] voidT
   , just $ mkMethod "start" [intT] voidT
-  , just $ mkConstMethod "timerId" [] intT
-  -- , just $ mkConstMethod "timerType" [] $ objT c_Qt::TimerType
+  , just $ mkConstMethod "timerId" np intT
+  -- , just $ mkConstMethod "timerType" np $ objT c_Qt::TimerType
   ]
 
-s_timeout = makeSignal c_QTimer "timeout" c_Listener
+s_timeout = makeSignal c_QTimer "timeout" listener

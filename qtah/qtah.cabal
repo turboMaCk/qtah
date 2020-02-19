@@ -1,5 +1,5 @@
 name: qtah
-version: 0.6.0
+version: 0.6.1
 synopsis: Qt bindings for Haskell
 homepage: http://khumba.net/projects/qtah
 license: LGPL-3
@@ -147,6 +147,7 @@ library
     , Graphics.UI.Qtah.Core.QXmlStreamWriter
     , Graphics.UI.Qtah.Core.Types
     , Graphics.UI.Qtah.Event
+    , Graphics.UI.Qtah.Flags
     , Graphics.UI.Qtah.Gui.HColor
     , Graphics.UI.Qtah.Gui.QActionEvent
     , Graphics.UI.Qtah.Gui.QBackingStore
@@ -387,7 +388,7 @@ library
     , Graphics.UI.Qtah.Generated.Core.QXmlStreamEntityResolver
     , Graphics.UI.Qtah.Generated.Core.QXmlStreamNamespaceDeclaration
     , Graphics.UI.Qtah.Generated.Core.QXmlStreamNotationDeclaration
-    , Graphics.UI.Qtah.Generated.Core.QXmlStreamReader 
+    , Graphics.UI.Qtah.Generated.Core.QXmlStreamReader
     , Graphics.UI.Qtah.Generated.Core.QXmlStreamWriter
     , Graphics.UI.Qtah.Generated.Core.Types
     , Graphics.UI.Qtah.Generated.Gui.QActionEvent
@@ -515,6 +516,9 @@ library
     , Graphics.UI.Qtah.Internal.EventListener
     , Graphics.UI.Qtah.Internal.Listener
     , Graphics.UI.Qtah.Internal.SceneEventListener
+  default-extensions:
+      FunctionalDependencies
+    , MultiParamTypeClasses
   other-extensions:
       ExistentialQuantification
     , FlexibleContexts
@@ -523,11 +527,11 @@ library
       base >=4 && <5
     , binary >=0.7 && <0.9
     , bytestring >=0.10 && <0.11
-    , hoppy-runtime >=0.5 && <0.6
+    , hoppy-runtime >=0.7 && <0.8
     , qtah-cpp >=0.6 && <0.7
     , qtah-generator >=0.6 && <0.7
   hs-source-dirs: src
-  ghc-options: -O2 -W -fwarn-incomplete-patterns -fwarn-unused-do-bind
+  ghc-options: -W -fwarn-incomplete-patterns -fwarn-unused-do-bind
   default-language: Haskell2010
   -- There would be an "extra-libraries: qtah" here, but we need to add it from
   -- Setup.hs instead.
@@ -539,11 +543,11 @@ test-suite test-qtah
       Graphics.UI.Qtah.EventTest
   build-depends:
       base >=4 && <5
-    , hoppy-runtime >=0.5 && <0.6
+    , hoppy-runtime >=0.7 && <0.8
     , HUnit >=1.2 && <1.7
     , qtah
   hs-source-dirs: tests
-  ghc-options: -O2 -W -fwarn-incomplete-patterns -fwarn-unused-do-bind -dynamic
+  ghc-options: -W -fwarn-incomplete-patterns -fwarn-unused-do-bind -dynamic
   default-language: Haskell2010
 
 custom-setup

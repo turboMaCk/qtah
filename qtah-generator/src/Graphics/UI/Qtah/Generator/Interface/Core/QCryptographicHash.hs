@@ -22,7 +22,6 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QCryptographicHash (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass, ExportEnum),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -33,11 +32,12 @@ import Foreign.Hoppy.Generator.Spec (
   mkStaticMethod,
   mkCtor,
   mkMethod',
-  mkMethod
+  mkMethod,
+  np,
   )
 import Foreign.Hoppy.Generator.Types (boolT, charT, intT, voidT, enumT, constT, objT, ptrT, refT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.QIODevice (c_QIODevice)
 import Graphics.UI.Qtah.Generator.Interface.Core.QByteArray (c_QByteArray)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModuleWithMinVersion)
@@ -49,8 +49,8 @@ aModule =
   AQtModule $
   makeQtModuleWithMinVersion ["Core", "QCryptographicHash"] [4, 3] $
   collect
-  [ just $ QtExport $ ExportClass c_QCryptographicHash
-  , just $ QtExport $ ExportEnum e_Algorithm
+  [ just $ qtExport c_QCryptographicHash
+  , just $ qtExport e_Algorithm
   ]
 
 c_QCryptographicHash =
@@ -64,22 +64,26 @@ c_QCryptographicHash =
   , test (qtVersion >= [5, 0]) $ mkMethod' "addData" "addDataIODevice" [ptrT $ objT c_QIODevice] boolT
   , just $ mkStaticMethod "hash" [refT $ constT $ objT c_QByteArray, enumT e_Algorithm] $ objT c_QByteArray
   , test (qtVersion >= [5, 12]) $ mkStaticMethod "hashLength" [enumT e_Algorithm] intT
-  , just $ mkMethod "reset" [] $ voidT
-  , just $ mkConstMethod "result" [] $ objT c_QByteArray
+  , just $ mkMethod "reset" np $ voidT
+  , just $ mkConstMethod "result" np $ objT c_QByteArray
   ]
 
 e_Algorithm =
   makeQtEnum (ident1 "QCryptographicHash" "Algorithm") [includeStd "QCryptographicHash"] $
   collect
-  [ just $ (0, ["md4"])
-  , just $ (1, ["md5"])
-  , just $ (2, ["sha1"])
-  , test (qtVersion >= [5, 0]) $ (3, ["sha224"])
-  , test (qtVersion >= [5, 0]) $ (4, ["sha256"])
-  , test (qtVersion >= [5, 0]) $ (5, ["sha384"])
-  , test (qtVersion >= [5, 0]) $ (6, ["sha512"])
-  , test (qtVersion >= [5, 9, 2]) $ (7, ["keccak_224"])
-  , test (qtVersion >= [5, 9, 2]) $ (8, ["keccak_256"])
-  , test (qtVersion >= [5, 9, 2]) $ (9, ["keccak_384"])
-  , test (qtVersion >= [5, 9, 2]) $ (10, ["keccak_512"])
+  [ just "Md4"
+  , just "Md5"
+  , just "Sha1"
+  , test (qtVersion >= [5, 0]) "Sha224"
+  , test (qtVersion >= [5, 0]) "Sha256"
+  , test (qtVersion >= [5, 0]) "Sha384"
+  , test (qtVersion >= [5, 0]) "Sha512"
+  , test (qtVersion >= [5, 1]) "Sha3_224"
+  , test (qtVersion >= [5, 1]) "Sha3_256"
+  , test (qtVersion >= [5, 1]) "Sha3_384"
+  , test (qtVersion >= [5, 1]) "Sha3_512"
+  , test (qtVersion >= [5, 9, 2]) "Keccak_224"
+  , test (qtVersion >= [5, 9, 2]) "Keccak_256"
+  , test (qtVersion >= [5, 9, 2]) "Keccak_384"
+  , test (qtVersion >= [5, 9, 2]) "Keccak_512"
   ]

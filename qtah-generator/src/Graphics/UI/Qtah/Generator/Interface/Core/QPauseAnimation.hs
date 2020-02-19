@@ -21,13 +21,12 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QPauseAnimation (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
   includeStd,
   makeClass,
-  mkMethod
+  mkMethod,
   )
 import Graphics.UI.Qtah.Generator.Interface.Core.QAbstractAnimation (c_QAbstractAnimation)
 import Foreign.Hoppy.Generator.Types (intT, voidT)
@@ -40,7 +39,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModuleWithMinVersion ["Core", "QPauseAnimation"] [4, 6] $
-  [QtExport $ ExportClass c_QPauseAnimation]
+  [qtExport c_QPauseAnimation]
 
 c_QPauseAnimation =
   addReqIncludes [ includeStd "QPauseAnimation" ] $

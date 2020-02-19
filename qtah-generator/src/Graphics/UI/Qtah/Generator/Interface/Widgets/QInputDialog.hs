@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QInputDialog (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportBitspace, ExportEnum, ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -34,17 +33,19 @@ import Foreign.Hoppy.Generator.Spec (
   mkMethod,
   mkProp,
   mkStaticMethod',
+  np,
   )
-import Foreign.Hoppy.Generator.Types (bitspaceT, boolT, doubleT, enumT, intT, objT, ptrT, voidT)
+import Foreign.Hoppy.Generator.Types (boolT, doubleT, enumT, intT, objT, ptrT, voidT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
+import Graphics.UI.Qtah.Generator.Flags (flagsT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Graphics.UI.Qtah.Generator.Interface.Core.QStringList (c_QStringList)
-import Graphics.UI.Qtah.Generator.Interface.Core.Types (bs_InputMethodHints, bs_WindowFlags)
+import Graphics.UI.Qtah.Generator.Interface.Core.Types (fl_InputMethodHints, fl_WindowFlags)
 import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
-  c_ListenerDouble,
-  c_ListenerInt,
-  c_ListenerQString,
+  listenerDouble,
+  listenerInt,
+  listenerQString,
   )
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QDialog (c_QDialog)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QLineEdit (e_EchoMode)
@@ -59,11 +60,11 @@ minVersion = [4, 5]
 aModule =
   AQtModule $
   makeQtModuleWithMinVersion ["Widgets", "QInputDialog"] minVersion $
-  QtExport (ExportClass c_QInputDialog) :
+  qtExport c_QInputDialog :
   map QtExportSignal signals ++
-  [ QtExport $ ExportEnum e_InputDialogOption
-  , QtExport $ ExportBitspace bs_InputDialogOptions
-  , QtExport $ ExportEnum e_InputMode
+  [ qtExport e_InputDialogOption
+  , qtExport fl_InputDialogOptions
+  , qtExport e_InputMode
   ]
 
 c_QInputDialog =
@@ -71,9 +72,9 @@ c_QInputDialog =
   classSetEntityPrefix "" $
   makeClass (ident "QInputDialog") Nothing [c_QDialog] $
   collect
-  [ just $ mkCtor "new" []
+  [ just $ mkCtor "new" np
   , just $ mkCtor "newWithParent" [ptrT $ objT c_QWidget]
-  , just $ mkCtor "newWithParentAndFlags" [ptrT $ objT c_QWidget, bitspaceT bs_WindowFlags]
+  , just $ mkCtor "newWithParentAndFlags" [ptrT $ objT c_QWidget, flagsT fl_WindowFlags]
   , just $ mkProp "cancelButtonText" $ objT c_QString
   , just $ mkBoolIsProp "comboBoxEditable"
   , just $ mkProp "comboBoxItems" $ objT c_QStringList
@@ -85,31 +86,31 @@ c_QInputDialog =
     [ptrT $ objT c_QWidget, objT c_QString, objT c_QString] doubleT
   , just $ mkStaticMethod' "getDouble" "getDoubleWithOptions"
     [ptrT $ objT c_QWidget, objT c_QString, objT c_QString, doubleT, doubleT, doubleT,
-     intT, ptrT boolT, bitspaceT bs_WindowFlags]
+     intT, ptrT boolT, flagsT fl_WindowFlags]
     doubleT
   , just $ mkStaticMethod' "getInt" "getInt"
     [ptrT $ objT c_QWidget, objT c_QString, objT c_QString] intT
   , just $ mkStaticMethod' "getInt" "getIntWithOptions"
     [ptrT $ objT c_QWidget, objT c_QString, objT c_QString, intT, intT, intT,
-     intT, ptrT boolT, bitspaceT bs_WindowFlags]
+     intT, ptrT boolT, flagsT fl_WindowFlags]
     intT
   , just $ mkStaticMethod' "getItem" "getItem"
     [ptrT $ objT c_QWidget, objT c_QString, objT c_QString, objT c_QStringList] $ objT c_QString
   , just $ mkStaticMethod' "getItem" "getItemWithOptions"
     [ptrT $ objT c_QWidget, objT c_QString, objT c_QString, objT c_QStringList,
-     intT, boolT, ptrT boolT, bitspaceT bs_WindowFlags, bitspaceT bs_InputMethodHints] $
+     intT, boolT, ptrT boolT, flagsT fl_WindowFlags, flagsT fl_InputMethodHints] $
     objT c_QString
   , test (qtVersion >= [5, 2]) $ mkStaticMethod' "getMultiLineText" "getMultiLineText"
     [ptrT $ objT c_QWidget, objT c_QString, objT c_QString] $ objT c_QString
   , test (qtVersion >= [5, 2]) $ mkStaticMethod' "getMultiLineText" "getMultiLineTextWithOptions"
     [ptrT $ objT c_QWidget, objT c_QString, objT c_QString, objT c_QString, ptrT boolT,
-     bitspaceT bs_WindowFlags, bitspaceT bs_InputMethodHints] $
+     flagsT fl_WindowFlags, flagsT fl_InputMethodHints] $
     objT c_QString
   , just $ mkStaticMethod' "getText" "getText"
     [ptrT $ objT c_QWidget, objT c_QString, objT c_QString] $ objT c_QString
   , just $ mkStaticMethod' "getText" "getTextWithOptions"
     [ptrT $ objT c_QWidget, objT c_QString, objT c_QString, enumT e_EchoMode,
-     objT c_QString, ptrT boolT, bitspaceT bs_WindowFlags, bitspaceT bs_InputMethodHints] $
+     objT c_QString, ptrT boolT, flagsT fl_WindowFlags, flagsT fl_InputMethodHints] $
     objT c_QString
   , just $ mkProp "inputMode" $ enumT e_InputMode
   , just $ mkProp "intMaximum" intT
@@ -119,7 +120,7 @@ c_QInputDialog =
   , just $ mkProp "labelText" $ objT c_QString
   , just $ mkProp "okButtonText" $ objT c_QString
     -- TODO open (if it can fit into the type system nicely)
-  , just $ mkProp "options" $ bitspaceT bs_InputDialogOptions
+  , just $ mkProp "options" $ flagsT fl_InputDialogOptions
   , just $ mkMethod "setDoubleRange" [doubleT, doubleT] voidT
   , just $ mkMethod "setIntRange" [intT, intT] voidT
   , just $ mkMethod "setOption" [enumT e_InputDialogOption, boolT] voidT
@@ -129,25 +130,25 @@ c_QInputDialog =
   ]
 
 signals =
-  [ makeSignal c_QInputDialog "doubleValueChanged" c_ListenerDouble
-  , makeSignal c_QInputDialog "doubleValueSelected" c_ListenerDouble
-  , makeSignal c_QInputDialog "intValueChanged" c_ListenerInt
-  , makeSignal c_QInputDialog "intValueSelected" c_ListenerInt
-  , makeSignal c_QInputDialog "textValueChanged" c_ListenerQString
-  , makeSignal c_QInputDialog "textValueSelected" c_ListenerQString
+  [ makeSignal c_QInputDialog "doubleValueChanged" listenerDouble
+  , makeSignal c_QInputDialog "doubleValueSelected" listenerDouble
+  , makeSignal c_QInputDialog "intValueChanged" listenerInt
+  , makeSignal c_QInputDialog "intValueSelected" listenerInt
+  , makeSignal c_QInputDialog "textValueChanged" listenerQString
+  , makeSignal c_QInputDialog "textValueSelected" listenerQString
   ]
 
-(e_InputDialogOption, bs_InputDialogOptions) =
-  makeQtEnumBitspace (ident1 "QInputDialog" "InputDialogOption") "InputDialogOptions"
+(e_InputDialogOption, fl_InputDialogOptions) =
+  makeQtEnumAndFlags (ident1 "QInputDialog" "InputDialogOption") "InputDialogOptions"
   [includeStd "QInputDialog"]
-  [ (0x1, ["no", "buttons"])
-  , (0x2, ["use", "list", "view", "for", "combo", "box", "items"])
-  , (0x4, ["use", "plain", "text", "edit", "for", "text", "input"])
+  [ "NoButtons"
+  , "UseListViewForComboBoxItems"
+  , "UsePlainTextEditForTextInput"
   ]
 
 e_InputMode =
   makeQtEnum (ident1 "QInputDialog" "InputMode") [includeStd "QInputDialog"]
-  [ (0, ["text", "input"])
-  , (1, ["int", "input"])
-  , (2, ["double", "input"])
+  [ "TextInput"
+  , "IntInput"
+  , "DoubleInput"
   ]

@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QPluginLoader (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -32,12 +31,14 @@ import Foreign.Hoppy.Generator.Spec (
   mkCtor,
   mkMethod',
   mkMethod,
-  mkProp
+  mkProp,
+  np,
   )
-import Foreign.Hoppy.Generator.Types (boolT, bitspaceT, constT, objT, ptrT, refT)
+import Foreign.Hoppy.Generator.Types (boolT, constT, objT, ptrT, refT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
-import Graphics.UI.Qtah.Generator.Interface.Core.QLibrary (bs_LoadHints)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
+import Graphics.UI.Qtah.Generator.Flags (flagsT)
+import Graphics.UI.Qtah.Generator.Interface.Core.QLibrary (fl_LoadHints)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Graphics.UI.Qtah.Generator.Interface.Core.QObject (c_QObject)
 --import Graphics.UI.Qtah.Generator.Interface.Core.QJsonObject (c_QJsonObject)
@@ -52,25 +53,25 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Core", "QPluginLoader"] $
-  [QtExport $ ExportClass c_QPluginLoader]
+  [qtExport c_QPluginLoader]
 
 c_QPluginLoader =
   addReqIncludes [ includeStd "QPluginLoader" ] $
   classSetEntityPrefix "" $
   makeClass (ident "QPluginLoader") Nothing [c_QObject] $
   collect
-  [ just $ mkCtor "new" []
+  [ just $ mkCtor "new" np
   , just $ mkCtor "newWithParent" [ptrT $ objT c_QObject]
   , just $ mkCtor "newWithFilename" [refT $ constT $ objT c_QString]
   , just $ mkCtor "newWithFilenameAndParent" [refT $ constT $ objT c_QString, ptrT $ objT c_QObject]
-  , test (qtVersion >= [4, 2]) $ mkConstMethod "errorString" [] $ objT c_QString
-  , just $ mkMethod' "instance" "getInstance" [] $ ptrT $ objT c_QObject
-  , just $ mkConstMethod "isLoaded" [] $ boolT
-  , just $ mkMethod "load" [] boolT
-  --, just $ mkConstMethod "metaData" [] $ objT c_QJsonObject
-  , just $ mkStaticMethod "staticInstances" [] $ objT c_QListQObject
-  --, just $ mkStaticMethod "staticPlugins" [] $ objT c_QVectorQStaticPlugin
-  , just $ mkMethod "unload" [] boolT
+  , test (qtVersion >= [4, 2]) $ mkConstMethod "errorString" np $ objT c_QString
+  , just $ mkMethod' "instance" "getInstance" np $ ptrT $ objT c_QObject
+  , just $ mkConstMethod "isLoaded" np $ boolT
+  , just $ mkMethod "load" np boolT
+  --, just $ mkConstMethod "metaData" np $ objT c_QJsonObject
+  , just $ mkStaticMethod "staticInstances" np $ objT c_QListQObject
+  --, just $ mkStaticMethod "staticPlugins" np $ objT c_QVectorQStaticPlugin
+  , just $ mkMethod "unload" np boolT
   , just $ mkProp "fileName" $ objT c_QString
-  , test (qtVersion >= [4, 4]) $ mkProp "loadHints" $ bitspaceT bs_LoadHints
+  , test (qtVersion >= [4, 4]) $ mkProp "loadHints" $ flagsT fl_LoadHints
   ]

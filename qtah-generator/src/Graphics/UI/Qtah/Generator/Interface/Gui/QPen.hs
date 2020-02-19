@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Gui.QPen (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetConversionToGc,
   classSetEntityPrefix,
@@ -29,6 +28,7 @@ import Foreign.Hoppy.Generator.Spec (
   includeStd,
   makeClass,
   mkCtor,
+  np,
   )
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Assignable, Copyable, Equatable),
@@ -44,7 +44,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Gui", "QPen"]
-  [ QtExport $ ExportClass c_QPen ]
+  [ qtExport c_QPen ]
 
 c_QPen =
   addReqIncludes [includeStd "QPen"] $
@@ -52,6 +52,6 @@ c_QPen =
   classAddFeatures [Assignable, Copyable, Equatable] $
   classSetEntityPrefix "" $
   makeClass (ident "QPen") Nothing []
-  [ mkCtor "new" []
+  [ mkCtor "new" np
   , mkCtor "newWithColor" [objT c_QColor]
   ]

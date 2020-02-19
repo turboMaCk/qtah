@@ -22,7 +22,6 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QXmlStreamNotationDeclaration (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   classSetConversionToGc,
   addReqIncludes,
   classSetEntityPrefix,
@@ -30,6 +29,7 @@ import Foreign.Hoppy.Generator.Spec (
   includeStd,
   makeClass,
   mkCtor,
+  np,
   )
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Copyable, Assignable, Equatable),
@@ -38,7 +38,7 @@ import Foreign.Hoppy.Generator.Spec.ClassFeature (
 --import Graphics.UI.Qtah.Generator.Interface.Core.QStringRef (c_QStringRef)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Core.QVector (c_QVectorQXmlStreamNotationDeclaration)
 import Foreign.Hoppy.Generator.Version (collect, just)
-import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModuleWithMinVersion)
+import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
 
 {-# ANN module "HLint: ignore Use camelCase" #-}
@@ -46,7 +46,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Core", "QXmlStreamNotationDeclaration"]
-  [QtExport $ ExportClass c_QXmlStreamNotationDeclaration]
+  [qtExport c_QXmlStreamNotationDeclaration]
 
 c_QXmlStreamNotationDeclaration =
   addReqIncludes [ includeStd "QXmlStreamNotationDeclaration" ] $
@@ -55,10 +55,10 @@ c_QXmlStreamNotationDeclaration =
   classSetEntityPrefix "" $
   makeClass (ident "QXmlStreamNotationDeclaration") Nothing [] $
   collect
-  [ just $ mkCtor "new" []
-  --, just $ mkConstMethod "name" [] $ objT c_QStringRef
-  --, just $ mkConstMethod "publicId" [] $ objT c_QStringRef
-  --, just $ mkConstMethod "systemId" [] $ objT c_QStringRef
+  [ just $ mkCtor "new" np
+  --, just $ mkConstMethod "name" np $ objT c_QStringRef
+  --, just $ mkConstMethod "publicId" np $ objT c_QStringRef
+  --, just $ mkConstMethod "systemId" np $ objT c_QStringRef
   ]
 
 qXmlStreamNotationDeclarations = c_QVectorQXmlStreamNotationDeclaration

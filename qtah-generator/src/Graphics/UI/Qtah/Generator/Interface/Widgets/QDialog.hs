@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QDialog (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportEnum, ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -32,10 +31,12 @@ import Foreign.Hoppy.Generator.Spec (
   mkCtor,
   mkMethod,
   mkProp,
+  np,
   )
-import Foreign.Hoppy.Generator.Types (bitspaceT, intT, objT, ptrT, voidT)
-import Graphics.UI.Qtah.Generator.Interface.Core.Types (bs_WindowFlags)
-import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (c_Listener, c_ListenerInt)
+import Foreign.Hoppy.Generator.Types (intT, objT, ptrT, voidT)
+import Graphics.UI.Qtah.Generator.Flags (flagsT)
+import Graphics.UI.Qtah.Generator.Interface.Core.Types (fl_WindowFlags)
+import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (listener, listenerInt)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QWidget (c_QWidget)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
@@ -45,35 +46,35 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QDialog"] $
-  QtExport (ExportClass c_QDialog) :
+  qtExport c_QDialog :
   map QtExportSignal signals ++
-  [ QtExport $ ExportEnum e_DialogCode ]
+  [ qtExport e_DialogCode ]
 
 c_QDialog =
   addReqIncludes [includeStd "QDialog"] $
   classSetEntityPrefix "" $
   makeClass (ident "QDialog") Nothing [c_QWidget]
-  [ mkCtor "new" []
+  [ mkCtor "new" np
   , mkCtor "newWithParent" [ptrT $ objT c_QWidget]
-  , mkCtor "newWithParentAndFlags" [ptrT $ objT c_QWidget, bitspaceT bs_WindowFlags]
-  , mkMethod "accept" [] voidT
+  , mkCtor "newWithParentAndFlags" [ptrT $ objT c_QWidget, flagsT fl_WindowFlags]
+  , mkMethod "accept" np voidT
   , mkMethod "done" [intT] voidT
-  , mkMethod "exec" [] intT
+  , mkMethod "exec" np intT
   , mkBoolIsProp "modal"
-  , mkMethod "open" [] voidT
-  , mkMethod "reject" [] voidT
+  , mkMethod "open" np voidT
+  , mkMethod "reject" np voidT
   , mkProp "result" intT
   , mkBoolIsProp "sizeGripEnabled"
   ]
 
 signals =
-  [ makeSignal c_QDialog "accepted" c_Listener
-  , makeSignal c_QDialog "finished" c_ListenerInt
-  , makeSignal c_QDialog "rejected" c_Listener
+  [ makeSignal c_QDialog "accepted" listener
+  , makeSignal c_QDialog "finished" listenerInt
+  , makeSignal c_QDialog "rejected" listener
   ]
 
 e_DialogCode =
   makeQtEnum (ident1 "QDialog" "DialogCode") [includeStd "QDialog"]
-  [ (0, ["rejected"])
-  , (1, ["accepted"])
+  [ "Rejected"
+  , "Accepted"
   ]

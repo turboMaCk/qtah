@@ -22,7 +22,6 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QLockFile (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass, ExportEnum),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -32,7 +31,8 @@ import Foreign.Hoppy.Generator.Spec (
   mkConstMethod,
   mkCtor,
   mkMethod',
-  mkMethod
+  mkMethod,
+  np,
   )
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Foreign.Hoppy.Generator.Types (boolT, intT, voidT, enumT, constT, objT, ptrT, refT, llongT)
@@ -46,8 +46,8 @@ aModule =
   AQtModule $
   makeQtModuleWithMinVersion ["Core", "QLockFile"] [5, 1] $
   collect
-  [ just $ QtExport $ ExportClass c_QLockFile
-  , just $ QtExport $ ExportEnum e_LockError
+  [ just $ qtExport c_QLockFile
+  , just $ qtExport e_LockError
   ]
 
 c_QLockFile =
@@ -56,23 +56,23 @@ c_QLockFile =
   makeClass (ident "QLockFile") Nothing [] $
   collect
   [ just $ mkCtor "new" [refT $ constT $ objT c_QString]
-  , just $ mkConstMethod "error" [] $ enumT e_LockError
+  , just $ mkConstMethod "error" np $ enumT e_LockError
   , -- TODO Return a tuple instead.
     just $ mkConstMethod "getLockInfo" [ptrT $ llongT, ptrT $ objT c_QString, ptrT $ objT c_QString] boolT
-  , just $ mkConstMethod "isLocked" [] boolT
-  , just $ mkMethod "lock" [] boolT
-  , just $ mkMethod "removeStaleLockFile" [] boolT
+  , just $ mkConstMethod "isLocked" np boolT
+  , just $ mkMethod "lock" np boolT
+  , just $ mkMethod "removeStaleLockFile" np boolT
   , just $ mkMethod "setStaleLockTime" [intT] voidT
-  , just $ mkConstMethod "staleLockTime" [] intT
-  , just $ mkMethod' "tryLock" "tryLock" [] boolT
+  , just $ mkConstMethod "staleLockTime" np intT
+  , just $ mkMethod' "tryLock" "tryLock" np boolT
   , just $ mkMethod' "tryLock" "tryLockWithTimeout" [intT] boolT
-  , just $ mkMethod "unlock" [] voidT
+  , just $ mkMethod "unlock" np voidT
   ]
 
 e_LockError =
   makeQtEnum (ident1 "QLockFile" "LockError") [includeStd "QLockFile"]
-  [ (0, ["no", "error"])
-  , (1, ["lock", "failed", "error"])
-  , (2, ["permission", "error"])
-  , (3, ["unknown", "error"])
+  [ "NoError"
+  , "LockFailedError"
+  , "PermissionError"
+  , "UnknownError"
   ]

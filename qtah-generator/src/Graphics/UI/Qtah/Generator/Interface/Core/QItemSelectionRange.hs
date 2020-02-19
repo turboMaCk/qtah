@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QItemSelectionRange (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetConversionToGc,
   classSetEntityPrefix,
@@ -32,6 +31,7 @@ import Foreign.Hoppy.Generator.Spec (
   mkConstMethod',
   mkCtor,
   mkMethod,
+  np,
   )
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Assignable, Copyable, Equatable),
@@ -39,7 +39,7 @@ import Foreign.Hoppy.Generator.Spec.ClassFeature (
   )
 import Foreign.Hoppy.Generator.Types (boolT, constT, intT, objT, ptrT, refT, voidT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Core.QList (c_QListQModelIndex)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Core.QAbstractItemModel (
   c_QAbstractItemModel,
@@ -54,7 +54,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Core", "QItemSelectionRange"]
-  [ QtExport $ ExportClass c_QItemSelectionRange ]
+  [ qtExport c_QItemSelectionRange ]
 
 c_QItemSelectionRange =
   addReqIncludes [includeStd "QItemSelectionRange"] $
@@ -63,31 +63,31 @@ c_QItemSelectionRange =
   classSetEntityPrefix "" $
   makeClass (ident "QItemSelectionRange") Nothing [] $
   collect
-  [ just $ mkCtor "new" []
+  [ just $ mkCtor "new" np
   , just $ mkCtor "newWithIndex" [objT c_QModelIndex]
   , just $ mkCtor "newWithIndices" [objT c_QModelIndex, objT c_QModelIndex]
-  , just $ mkConstMethod "bottom" [] intT
-  , just $ mkConstMethod "bottomRight" [] $
+  , just $ mkConstMethod "bottom" np intT
+  , just $ mkConstMethod "bottomRight" np $
     if qtVersion >= [5, 0]
     then refT $ constT $ objT c_QPersistentModelIndex
     else objT c_QModelIndex
   , just $ mkConstMethod' "contains" "containsIndex" [objT c_QModelIndex] boolT
   , just $ mkConstMethod' "contains" "containsBelowParent" [intT, intT, objT c_QModelIndex] boolT
-  , just $ mkConstMethod "height" [] intT
-  , just $ mkConstMethod "indexes" [] $ objT c_QListQModelIndex
+  , just $ mkConstMethod "height" np intT
+  , just $ mkConstMethod "indexes" np $ objT c_QListQModelIndex
   , just $ mkConstMethod "intersected" [objT c_QItemSelectionRange] $ objT c_QItemSelectionRange
   , just $ mkConstMethod "intersects" [objT c_QItemSelectionRange] boolT
-  , just $ mkConstMethod "isEmpty" [] boolT
-  , just $ mkConstMethod "isValid" [] boolT
-  , just $ mkConstMethod "left" [] intT
-  , just $ mkConstMethod "model" [] $ ptrT $ constT $ objT c_QAbstractItemModel
-  , just $ mkConstMethod "parent" [] $ objT c_QModelIndex
-  , just $ mkConstMethod "right" [] intT
+  , just $ mkConstMethod "isEmpty" np boolT
+  , just $ mkConstMethod "isValid" np boolT
+  , just $ mkConstMethod "left" np intT
+  , just $ mkConstMethod "model" np $ ptrT $ constT $ objT c_QAbstractItemModel
+  , just $ mkConstMethod "parent" np $ objT c_QModelIndex
+  , just $ mkConstMethod "right" np intT
   , test (qtVersion >= [5, 6]) $ mkMethod "swap" [refT $ objT c_QItemSelectionRange] voidT
-  , just $ mkConstMethod "top" [] intT
-  , just $ mkConstMethod "topLeft" [] $
+  , just $ mkConstMethod "top" np intT
+  , just $ mkConstMethod "topLeft" np $
     if qtVersion >= [5, 0]
     then refT $ constT $ objT c_QPersistentModelIndex
     else objT c_QModelIndex
-  , just $ mkConstMethod "width" [] intT
+  , just $ mkConstMethod "width" np intT
   ]

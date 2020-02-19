@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QSaveFile (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -30,6 +29,7 @@ import Foreign.Hoppy.Generator.Spec (
   mkConstMethod,
   mkCtor,
   mkMethod,
+  np,
   )
 import Foreign.Hoppy.Generator.Types (ptrT, boolT, objT, voidT, constT)
 import Foreign.Hoppy.Generator.Version (collect, just)
@@ -44,7 +44,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModuleWithMinVersion ["Core", "QSaveFile"] [5, 1]
-  [QtExport $ ExportClass c_QSaveFile]
+  [qtExport c_QSaveFile]
 
 c_QSaveFile =
   addReqIncludes [includeStd "QSaveFile"] $
@@ -52,12 +52,12 @@ c_QSaveFile =
   makeClass (ident "QSaveFile") Nothing [c_QFileDevice] $
   collect
   [ just $ mkCtor "newWithNameAndParent" [constT $ objT c_QString, ptrT $ objT c_QObject]
-  , just $ mkCtor "new" []
+  , just $ mkCtor "new" np
   , just $ mkCtor "newWithParent" [ptrT $ objT c_QObject]
   , just $ mkCtor "newWithName" [constT $ objT c_QString]
-  , just $ mkMethod "cancelWriting" [] voidT
-  , just $ mkMethod "commit" [] boolT
-  , just $ mkConstMethod "directWriteFallback" [] boolT
+  , just $ mkMethod "cancelWriting" np voidT
+  , just $ mkMethod "commit" np boolT
+  , just $ mkConstMethod "directWriteFallback" np boolT
   , just $ mkMethod "setDirectWriteFallback" [boolT] voidT
   , just $ mkMethod "setFileName" [constT $ objT c_QString] voidT
   ]

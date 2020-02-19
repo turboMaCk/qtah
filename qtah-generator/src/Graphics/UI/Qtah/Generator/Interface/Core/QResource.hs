@@ -22,7 +22,6 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QResource (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass, ExportEnum),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -33,14 +32,15 @@ import Foreign.Hoppy.Generator.Spec (
   mkConstMethod',
   mkStaticMethod',
   mkCtor,
-  mkMethod
+  mkMethod,
+  np,
   )
 
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Graphics.UI.Qtah.Generator.Interface.Core.QDateTime (c_QDateTime)
 import Foreign.Hoppy.Generator.Types (ucharT, boolT, voidT, enumT, constT, objT, ptrT, refT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModuleWithMinVersion)
 import Graphics.UI.Qtah.Generator.Types
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (qint64)
@@ -51,8 +51,8 @@ aModule =
   AQtModule $
   makeQtModuleWithMinVersion ["Core", "QResource"] [4, 2] $
   collect
-  [ just $ QtExport $ ExportClass c_QResource
-  , test (qtVersion >= [5, 13]) $ QtExport $ ExportEnum e_Compression
+  [ just $ qtExport c_QResource
+  , test (qtVersion >= [5, 13]) $ qtExport e_Compression
   ]
 
 c_QResource =
@@ -60,24 +60,24 @@ c_QResource =
   classSetEntityPrefix "" $
   makeClass (ident "QResource") Nothing [] $
   collect
-  [ just $ mkCtor "new" []
+  [ just $ mkCtor "new" np
   , just $ mkCtor "newWithFile" [refT $ constT $ objT c_QString]
   --, just $ mkCtor "newWithFileAndLocale" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QLocale]
-  , just $ mkConstMethod "absoluteFilePath" [] $ objT c_QString
-  , test (qtVersion >= [5, 13]) $ mkConstMethod "compressionAlgorithm" [] $ enumT e_Compression
-  , just $ mkConstMethod' "data" "getData" [] $ ptrT $ constT ucharT
-  , just $ mkConstMethod "fileName" [] $ objT c_QString
-  , just $ mkConstMethod "isCompressed" [] boolT
-  , just $ mkConstMethod "isValid" [] boolT
-  , just $ mkConstMethod "lastModified" [] $ objT c_QDateTime
-  --, just $ mkConstMethod "locale" [] $ objT c_QLocale
+  , just $ mkConstMethod "absoluteFilePath" np $ objT c_QString
+  , test (qtVersion >= [5, 13]) $ mkConstMethod "compressionAlgorithm" np $ enumT e_Compression
+  , just $ mkConstMethod' "data" "getData" np $ ptrT $ constT ucharT
+  , just $ mkConstMethod "fileName" np $ objT c_QString
+  , just $ mkConstMethod "isCompressed" np boolT
+  , just $ mkConstMethod "isValid" np boolT
+  , test (qtVersion >= [5, 8]) $ mkConstMethod "lastModified" np $ objT c_QDateTime
+  --, just $ mkConstMethod "locale" np $ objT c_QLocale
   , just $ mkStaticMethod' "registerResource" "registerResourcePath" [refT $ constT $ objT c_QString ] boolT
   , just $ mkStaticMethod' "registerResource" "registerResourcePathAndTree" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString] boolT
   , test (qtVersion >= [4, 3]) $ mkStaticMethod' "registerResource" "registerResourceData" [ptrT $ constT ucharT] boolT
   , test (qtVersion >= [4, 3]) $ mkStaticMethod' "registerResource" "registerResourceDataAndTree" [ptrT $ constT ucharT, refT $ constT $ objT c_QString] boolT
   , just $ mkMethod "setFileName" [refT $ constT $ objT c_QString] voidT
   -- just $ mkMethod "setLocale" [refT $ constT $ objT c_QLocale] $ voidT
-  , just $ mkConstMethod "size" [] qint64
+  , just $ mkConstMethod "size" np qint64
   , just $ mkStaticMethod' "unregisterResource" "unregisterResourcePath" [refT $ constT $ objT c_QString ] boolT
   , just $ mkStaticMethod' "unregisterResource" "unregisterResourcePathAndTree" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString] boolT
   , test (qtVersion >= [4, 3]) $ mkStaticMethod' "unregisterResource" "unregisterResourceData" [ptrT $ constT ucharT] boolT
@@ -86,7 +86,7 @@ c_QResource =
 
 e_Compression =
   makeQtEnum (ident1 "QResource" "Compression") [includeStd "QResource"]
-  [ (0, ["no", "compression"])
-  , (1, ["zlib", "compression"])
-  , (2, ["zstd", "compression"])
+  [ "NoCompression"
+  , "ZlibCompression"
+  , "ZstdCompression"
   ]

@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QRandomGenerator64 (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   Operator (OpCall),
   classSetConversionToGc,
   addReqIncludes,
@@ -31,7 +30,8 @@ import Foreign.Hoppy.Generator.Spec (
   makeClass,
   mkStaticMethod,
   mkCtor,
-  mkMethod
+  mkMethod,
+  np,
   )
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Assignable, Copyable, Equatable),
@@ -49,7 +49,7 @@ import Graphics.UI.Qtah.Generator.Interface.Core.QRandomGenerator (c_QRandomGene
 aModule =
   AQtModule $
   makeQtModuleWithMinVersion ["Core", "QRandomGenerator64"] [5, 10] $
-  [QtExport $ ExportClass c_QRandomGenerator64]
+  [qtExport c_QRandomGenerator64]
 
 c_QRandomGenerator64 =
   addReqIncludes [ includeStd "QRandomGenerator64" ] $
@@ -62,10 +62,10 @@ c_QRandomGenerator64 =
   -- TODO QRandomGenerator::QRandomGenerator(std::seed_seq &sseq)
   , just $ mkCtor "newWithQuintQsizetype" [ptrT $ constT quint32, qsizetype]
   -- TODO QRandomGenerator::QRandomGenerator(const quint32 (&)[N] seedBuffer = ...)
-  , just $ mkCtor "new" []
+  , just $ mkCtor "new" np
   , just $ mkCtor "newWithQuint" [quint32]
-  , just $ mkMethod "generate" [] quint64
-  , just $ mkStaticMethod "max" [] quint64
-  , just $ mkStaticMethod "min" [] quint64
-  , just $ mkMethod OpCall [] quint64
+  , just $ mkMethod "generate" np quint64
+  , just $ mkStaticMethod "max" np quint64
+  , just $ mkStaticMethod "min" np quint64
+  , just $ mkMethod OpCall np quint64
   ]

@@ -17,6 +17,7 @@
 
 module Main where
 
+import Control.Monad (when)
 import Data.List (intercalate)
 import Foreign.Hoppy.Generator.Main (run)
 import Foreign.Hoppy.Generator.Spec (
@@ -29,7 +30,8 @@ import Foreign.Hoppy.Generator.Spec (
   moduleSetHppPath,
   )
 import qualified Foreign.Hoppy.Generator.Std as Std
-import Graphics.UI.Qtah.Generator.Flags (qmakeArguments, qmakeExecutable, qtVersion)
+import Graphics.UI.Qtah.Generator.Enum (installEnumCalculator)
+import Graphics.UI.Qtah.Generator.Config (qmakeArguments, qmakeExecutable, qtVersion)
 import Graphics.UI.Qtah.Generator.Module
 import qualified Graphics.UI.Qtah.Generator.Interface.Core as Core
 import qualified Graphics.UI.Qtah.Generator.Interface.Gui as Gui
@@ -42,6 +44,7 @@ import System.FilePath (
   takeDirectory,
   takeFileName,
   )
+import System.IO (hPutStrLn, stderr)
 
 mod_std :: Module
 mod_std = moduleModify' Std.mod_std $ do
@@ -61,6 +64,7 @@ modules =
 
 interfaceResult :: Either String Interface
 interfaceResult =
+  fmap installEnumCalculator $
   interfaceAddHaskellModuleBase ["Graphics", "UI", "Qtah"] =<<
   interface "qtah" (concatMap aModuleHoppyModules modules)
 
@@ -71,6 +75,12 @@ main =
       putStrLn $ "Error initializing interface: " ++ errorMsg
       exitFailure
     Right iface -> do
+      -- If building against Qt 4, then warn that it is no longer supported.
+      when (qtVersion < [5, 0]) $ do
+        hPutStrLn stderr $
+          "WARNING: Qtah no longer supports Qt 4.x.  Please upgrade to Qt 5.  Found version " ++
+          intercalate "." (map show qtVersion) ++ "."
+
       args <- getArgs
       case args of
         ["--qt-version"] -> putStrLn $ intercalate "." $ map show qtVersion

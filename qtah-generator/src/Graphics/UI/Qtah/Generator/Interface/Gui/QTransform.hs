@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Gui.QTransform (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetConversionToGc,
   classSetEntityPrefix,
@@ -43,7 +42,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Gui", "QTransform"]
-  [ QtExport $ ExportClass c_QTransform ]
+  [ qtExport c_QTransform ]
 
 c_QTransform =
   addReqIncludes [includeStd "QTransform"] $

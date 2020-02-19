@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QProcessEnvironment (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   classSetConversionToGc,
@@ -34,6 +33,7 @@ import Foreign.Hoppy.Generator.Spec (
   mkMethod,
   mkMethod',
   mkStaticMethod,
+  np,
   )
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Assignable, Copyable, Equatable),
@@ -41,7 +41,7 @@ import Foreign.Hoppy.Generator.Spec.ClassFeature (
   )
 import Foreign.Hoppy.Generator.Types (boolT, objT, refT, voidT, constT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Graphics.UI.Qtah.Generator.Interface.Core.QStringList (c_QStringList)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModuleWithMinVersion)
@@ -52,7 +52,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModuleWithMinVersion ["Core", "QProcessEnvironment"] [4, 6]
-  [QtExport $ ExportClass c_QProcessEnvironment]
+  [qtExport c_QProcessEnvironment]
 
 c_QProcessEnvironment =
   addReqIncludes [includeStd "QProcessEnvironment"] $
@@ -61,17 +61,17 @@ c_QProcessEnvironment =
   classSetEntityPrefix "" $
   makeClass (ident "QProcessEnvironment") Nothing [] $
   collect
-  [ just $ mkCtor "new" []
-  , just $ mkMethod "clear" [] voidT
+  [ just $ mkCtor "new" np
+  , just $ mkMethod "clear" np voidT
   , just $ mkConstMethod "contains" [refT $ constT $ objT c_QString] boolT
   , just $ mkMethod' "insert" "insertWithName" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString] voidT
   , test (qtVersion >= [4, 8]) $ mkMethod' "insert" "insert" [refT $ constT $ objT c_QProcessEnvironment] voidT
-  , just $ mkConstMethod "isEmpty" [] boolT
-  , test (qtVersion >= [4, 8]) $ mkConstMethod "keys" [] $ objT c_QStringList
+  , just $ mkConstMethod "isEmpty" np boolT
+  , test (qtVersion >= [4, 8]) $ mkConstMethod "keys" np $ objT c_QStringList
   , just $ mkMethod "remove" [refT $ constT $ objT c_QString] voidT
   , test (qtVersion >= [5, 0]) $ mkMethod "swap" [refT $ objT c_QProcessEnvironment] voidT
-  , just $ mkConstMethod "toStringList" [] $ objT c_QStringList
+  , just $ mkConstMethod "toStringList" np $ objT c_QStringList
   , just $ mkConstMethod' "value" "value" [refT $ constT $ objT c_QString] $ objT c_QString
   , just $ mkConstMethod' "value" "valueWithDefault" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString] $ objT c_QString
-  , test (qtVersion >= [4, 6]) $ mkStaticMethod "systemEnvironment" [] $ objT c_QProcessEnvironment
+  , test (qtVersion >= [4, 6]) $ mkStaticMethod "systemEnvironment" np $ objT c_QProcessEnvironment
   ]

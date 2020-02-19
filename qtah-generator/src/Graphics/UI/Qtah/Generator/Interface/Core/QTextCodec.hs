@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QTextCodec (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   classSetDtorPrivate,
@@ -32,6 +31,7 @@ import Foreign.Hoppy.Generator.Spec (
   mkConstMethod',
   mkStaticMethod,
   mkStaticMethod',
+  np,
   )
 import Foreign.Hoppy.Generator.Types (boolT, intT, objT, ptrT, voidT)
 import Foreign.Hoppy.Generator.Version (collect, just)
@@ -47,7 +47,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Core", "QTextCodec"]
-  [ QtExport $ ExportClass c_QTextCodec
+  [ qtExport c_QTextCodec
   ]
 
 c_QTextCodec =
@@ -56,26 +56,26 @@ c_QTextCodec =
   classSetEntityPrefix "" $
   makeClass (ident "QTextCodec") Nothing [] $
   collect
-  [ just $ mkConstMethod "aliases" [] $ objT c_QListQByteArray
+  [ just $ mkConstMethod "aliases" np $ objT c_QListQByteArray
   , just $ mkConstMethod' "canEncode" "canEncodeChar" [objT c_QChar] boolT
   , just $ mkConstMethod' "canEncode" "canEncodeString" [objT c_QString] boolT
   , just $ mkConstMethod "fromUnicode" [objT c_QString] $ objT c_QByteArray
     -- TODO QByteArray fromUnicode(const QChar*, int, ConverterState* =) const
     -- TODO QTextDecoder* makeDecoder(ConversionFlags =) const
     -- TODO QTextEncoder* makeEncoder(ConversionFlags =) const
-  , just $ mkConstMethod "mibEnum" [] intT
-  , just $ mkConstMethod "name" [] $ objT c_QByteArray
+  , just $ mkConstMethod "mibEnum" np intT
+  , just $ mkConstMethod "name" np $ objT c_QByteArray
   , just $ mkConstMethod "toUnicode" [objT c_QByteArray] $ objT c_QString
     -- TODO QString toUnicode(const char*) const
     -- TODO QString toUnicode(const char*, int, ConverterState* =) const
 
-  , just $ mkStaticMethod "availableCodecs" [] $ objT c_QListQByteArray
-  , just $ mkStaticMethod "availableMibs" [] $ objT c_QListInt
+  , just $ mkStaticMethod "availableCodecs" np $ objT c_QListQByteArray
+  , just $ mkStaticMethod "availableMibs" np $ objT c_QListInt
   , just $ mkStaticMethod' "codecForHtml" "codecForHtml"
     [objT c_QByteArray] $ ptrT $ objT c_QTextCodec
   , just $ mkStaticMethod' "codecForHtml" "codecForHtmlWithDefault"
     [objT c_QByteArray, ptrT $ objT c_QTextCodec] $ ptrT $ objT c_QTextCodec
-  , just $ mkStaticMethod "codecForLocale" [] $ ptrT $ objT c_QTextCodec
+  , just $ mkStaticMethod "codecForLocale" np $ ptrT $ objT c_QTextCodec
   , just $ mkStaticMethod "codecForMib" [intT] $ ptrT $ objT c_QTextCodec
   , just $ mkStaticMethod "codecForName" [objT c_QByteArray] $ ptrT $ objT c_QTextCodec
     -- TODO QTextCodec* codecForName(const char*)  (Omit this?)

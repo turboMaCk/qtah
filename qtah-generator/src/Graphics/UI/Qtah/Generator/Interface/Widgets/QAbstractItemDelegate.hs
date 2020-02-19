@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QAbstractItemDelegate (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -37,7 +36,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QAbstractItemDelegate"] $
-  QtExport (ExportClass c_QAbstractItemDelegate) :
+  qtExport c_QAbstractItemDelegate :
   map QtExportSignal signals
 
 c_QAbstractItemDelegate =

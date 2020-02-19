@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QGraphicsRectItem (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -30,6 +29,7 @@ import Foreign.Hoppy.Generator.Spec (
   mkMethod',
   mkConstMethod,
   mkCtor,
+  np,
   )
 import Foreign.Hoppy.Generator.Types (voidT, objT)
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (qreal)
@@ -44,15 +44,15 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QGraphicsRectItem"]
-  [ QtExport $ ExportClass c_QGraphicsRectItem
+  [ qtExport c_QGraphicsRectItem
   ]
 
 c_QGraphicsRectItem =
   addReqIncludes [includeStd "QGraphicsRectItem"] $
   classSetEntityPrefix "" $
   makeClass (ident "QGraphicsRectItem") Nothing [c_QAbstractGraphicsShapeItem]
-  [ mkCtor "new" []
+  [ mkCtor "new" np
   , mkCtor "newWithRaw" [qreal, qreal, qreal, qreal]
-  , mkConstMethod "rect" [] $ objT c_QRectF
+  , mkConstMethod "rect" np $ objT c_QRectF
   , mkMethod' "setRect" "setRectRaw" [qreal, qreal, qreal, qreal] voidT
   ]

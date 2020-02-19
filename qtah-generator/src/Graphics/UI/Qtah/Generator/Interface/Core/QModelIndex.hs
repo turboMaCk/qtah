@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QModelIndex (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   classSetConversionToGc,
@@ -31,13 +30,13 @@ import Foreign.Hoppy.Generator.Spec (
   mkConstMethod,
   mkConstMethod',
   mkCtor,
+  np,
   )
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Assignable, Copyable, Equatable),
   classAddFeatures,
   )
 import Foreign.Hoppy.Generator.Types (
-  bitspaceT,
   boolT,
   constT,
   enumT,
@@ -46,12 +45,13 @@ import Foreign.Hoppy.Generator.Types (
   ptrT,
   )
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
+import Graphics.UI.Qtah.Generator.Flags (flagsT)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Core.QAbstractItemModel (
   c_QAbstractItemModel,
   )
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Core.QVariant (c_QVariant)
-import Graphics.UI.Qtah.Generator.Interface.Core.Types (bs_ItemFlags, e_ItemDataRole)
+import Graphics.UI.Qtah.Generator.Interface.Core.Types (e_ItemDataRole, fl_ItemFlags)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
 
@@ -60,7 +60,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Core", "QModelIndex"]
-  [ QtExport $ ExportClass c_QModelIndex ]
+  [ qtExport c_QModelIndex ]
 
 c_QModelIndex =
   addReqIncludes [includeStd "QModelIndex"] $
@@ -69,17 +69,17 @@ c_QModelIndex =
   classSetEntityPrefix "" $
   makeClass (ident "QModelIndex") Nothing [] $
   collect
-  [ just $ mkCtor "new" []
+  [ just $ mkCtor "new" np
   , just $ mkConstMethod "child" [intT, intT] $ objT c_QModelIndex
-  , just $ mkConstMethod "column" [] intT
-  , just $ mkConstMethod' "data" "getData" [] $ objT c_QVariant
+  , just $ mkConstMethod "column" np intT
+  , just $ mkConstMethod' "data" "getData" np $ objT c_QVariant
   , just $ mkConstMethod' "data" "getDataWithRole" [enumT e_ItemDataRole] $ objT c_QVariant
-  , test (qtVersion >= [4, 2]) $ mkConstMethod "flags" [] $ bitspaceT bs_ItemFlags
+  , test (qtVersion >= [4, 2]) $ mkConstMethod "flags" np $ flagsT fl_ItemFlags
     -- TODO internalId
     -- TODO internalPointer
-  , just $ mkConstMethod "isValid" [] boolT
-  , just $ mkConstMethod "model" [] $ ptrT $ constT $ objT c_QAbstractItemModel
-  , just $ mkConstMethod "parent" [] $ objT c_QModelIndex
-  , just $ mkConstMethod "row" [] intT
+  , just $ mkConstMethod "isValid" np boolT
+  , just $ mkConstMethod "model" np $ ptrT $ constT $ objT c_QAbstractItemModel
+  , just $ mkConstMethod "parent" np $ objT c_QModelIndex
+  , just $ mkConstMethod "row" np intT
   , just $ mkConstMethod "sibling" [intT, intT] $ objT c_QModelIndex
   ]

@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QBuffer (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -30,7 +29,8 @@ import Foreign.Hoppy.Generator.Spec (
   mkConstMethod',
   mkCtor,
   mkMethod',
-  mkMethod
+  mkMethod,
+  np,
   )
 import Graphics.UI.Qtah.Generator.Interface.Core.QIODevice (c_QIODevice)
 import Graphics.UI.Qtah.Generator.Interface.Core.QByteArray (c_QByteArray)
@@ -45,20 +45,20 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Core", "QBuffer"]
-  [ QtExport $ ExportClass c_QBuffer ]
+  [ qtExport c_QBuffer ]
 
 c_QBuffer =
   addReqIncludes [ includeStd "QBuffer" ] $
   classSetEntityPrefix "" $
   makeClass (ident "QBuffer") Nothing [c_QIODevice] $
   collect
-  [ just $ mkCtor "new" []
+  [ just $ mkCtor "new" np
   , just $ mkCtor "newWithParent" [ptrT $ objT c_QObject]
   , just $ mkCtor "newWithByteArray" [ptrT $ objT c_QByteArray]
   , just $ mkCtor "newWithByteArrayAndParent" [ptrT $ objT c_QByteArray, ptrT $ objT c_QObject]
-  , just $ mkMethod' "buffer" "buffer" [] $ refT $ objT c_QByteArray
-  , just $ mkConstMethod' "buffer" "bufferConst" [] $ refT $ constT $ objT c_QByteArray
-  , just $ mkConstMethod' "data" "getData" [] $ refT $ constT $ objT c_QByteArray
+  , just $ mkMethod' "buffer" "buffer" np $ refT $ objT c_QByteArray
+  , just $ mkConstMethod' "buffer" "bufferConst" np $ refT $ constT $ objT c_QByteArray
+  , just $ mkConstMethod' "data" "getData" np $ refT $ constT $ objT c_QByteArray
   , just $ mkMethod "setBuffer" [ptrT $ objT c_QByteArray] voidT
   , just $ mkMethod' "setData" "setDataByteArray" [refT $ constT $ objT c_QByteArray] voidT
   , just $ mkMethod' "setData" "setDataRaw" [ptrT $ constT charT, intT] voidT

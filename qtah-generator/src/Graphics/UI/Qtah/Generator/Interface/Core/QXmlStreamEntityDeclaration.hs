@@ -22,7 +22,6 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QXmlStreamEntityDeclaration (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   classSetConversionToGc,
   addReqIncludes,
   classSetEntityPrefix,
@@ -30,6 +29,7 @@ import Foreign.Hoppy.Generator.Spec (
   includeStd,
   makeClass,
   mkCtor,
+  np,
   )
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Copyable, Assignable, Equatable),
@@ -39,7 +39,7 @@ import Foreign.Hoppy.Generator.Spec.ClassFeature (
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Core.QVector (c_QVectorQXmlStreamEntityDeclaration)
 --import Foreign.Hoppy.Generator.Types (objT)
 import Foreign.Hoppy.Generator.Version (collect, just)
-import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModuleWithMinVersion)
+import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
 
 {-# ANN module "HLint: ignore Use camelCase" #-}
@@ -47,7 +47,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Core", "QXmlStreamEntityDeclaration"]
-  [QtExport $ ExportClass c_QXmlStreamEntityDeclaration]
+  [qtExport c_QXmlStreamEntityDeclaration]
 
 c_QXmlStreamEntityDeclaration =
   addReqIncludes [ includeStd "QXmlStreamEntityDeclaration" ] $
@@ -56,12 +56,12 @@ c_QXmlStreamEntityDeclaration =
   classSetEntityPrefix "" $
   makeClass (ident "QXmlStreamEntityDeclaration") Nothing [] $
   collect
-  [ just $ mkCtor "new" []
-  --, just $ mkConstMethod "name" [] $ objT c_QStringRef
-  --, just $ mkConstMethod "notationName" [] $ objT c_QStringRef
-  --, just $ mkConstMethod "publicId" [] $ objT c_QStringRef
-  --, just $ mkConstMethod "systemId" [] $ objT c_QStringRef
-  --, just $ mkConstMethod "value" [] $ objT c_QStringRef
+  [ just $ mkCtor "new" np
+  --, just $ mkConstMethod "name" np $ objT c_QStringRef
+  --, just $ mkConstMethod "notationName" np $ objT c_QStringRef
+  --, just $ mkConstMethod "publicId" np $ objT c_QStringRef
+  --, just $ mkConstMethod "systemId" np $ objT c_QStringRef
+  --, just $ mkConstMethod "value" np $ objT c_QStringRef
   ]
 
 qXmlStreamEntityDeclarations = c_QVectorQXmlStreamEntityDeclaration

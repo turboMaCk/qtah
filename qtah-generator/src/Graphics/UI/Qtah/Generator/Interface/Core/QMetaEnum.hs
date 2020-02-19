@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QMetaEnum (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetConversionToGc,
   classSetEntityPrefix,
@@ -30,6 +29,7 @@ import Foreign.Hoppy.Generator.Spec (
   makeClass,
   mkConstMethod,
   mkConstMethod',
+  np,
   )
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Copyable),
@@ -37,7 +37,7 @@ import Foreign.Hoppy.Generator.Spec.ClassFeature (
   )
 import Foreign.Hoppy.Generator.Types (boolT, intT, objT, ptrT, constT, charT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.QByteArray (c_QByteArray)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
@@ -47,7 +47,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Core", "QMetaEnum"]
-  [ QtExport $ ExportClass c_QMetaEnum ]
+  [ qtExport c_QMetaEnum ]
 
 c_QMetaEnum =
   addReqIncludes [includeStd "QMetaEnum"] $
@@ -57,19 +57,19 @@ c_QMetaEnum =
   makeClass (ident "QMetaEnum") Nothing [] $
   collect
   [ -- TODO QStrings instead of const char*.
-    test (qtVersion >= [5, 12]) $ mkConstMethod "enumName" [] $ ptrT $ constT charT
-  , just $ mkConstMethod "isFlag" [] boolT
-  , test (qtVersion >= [5, 8]) $ mkConstMethod "isScoped" [] boolT
-  , just $ mkConstMethod "isValid" [] boolT
+    test (qtVersion >= [5, 12]) $ mkConstMethod "enumName" np $ ptrT $ constT charT
+  , just $ mkConstMethod "isFlag" np boolT
+  , test (qtVersion >= [5, 8]) $ mkConstMethod "isScoped" np boolT
+  , just $ mkConstMethod "isValid" np boolT
   , just $ mkConstMethod "key" [intT] $ ptrT $ constT charT
-  , just $ mkConstMethod "keyCount" [] intT
+  , just $ mkConstMethod "keyCount" np intT
     -- TODO Return Maybes here.
   , just $ mkConstMethod' "keyToValue" "keyToValue" [ptrT $ constT charT] intT
   , just $ mkConstMethod' "keyToValue" "keyToValueWithPtrBool" [ptrT $ constT charT, ptrT boolT] intT
   , just $ mkConstMethod' "keysToValue" "keysToValue" [ptrT $ constT charT] intT
   , just $ mkConstMethod' "keysToValue" "keysToValueWithPtrBool" [ptrT $ constT charT, ptrT boolT] intT
-  , just $ mkConstMethod "name" [] $ ptrT $ constT charT
-  , just $ mkConstMethod "scope" [] $ ptrT $ constT charT
+  , just $ mkConstMethod "name" np $ ptrT $ constT charT
+  , just $ mkConstMethod "scope" np $ ptrT $ constT charT
   , just $ mkConstMethod "value" [intT] intT
   , just $ mkConstMethod "valueToKey" [intT] $ ptrT $ constT charT
   , just $ mkConstMethod "valueToKeys" [intT] $ objT c_QByteArray

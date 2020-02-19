@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QDebugStateSaver (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -40,7 +39,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModuleWithMinVersion ["Core", "QDebugStateSaver"] [5, 1]
-  [QtExport $ ExportClass c_QDebugStateSaver]
+  [qtExport c_QDebugStateSaver]
 
 c_QDebugStateSaver =
   addReqIncludes [ includeStd "QDebugStateSaver" ] $

@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QTextDecoder (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -43,7 +42,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Core", "QTextDecoder"] $
-  [QtExport $ ExportClass c_QTextDecoder]
+  [qtExport c_QTextDecoder]
 
 c_QTextDecoder =
   addReqIncludes [ includeStd "QTextDecoder" ] $

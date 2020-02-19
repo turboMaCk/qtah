@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QXmlStreamAttributes (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -30,15 +29,15 @@ import Foreign.Hoppy.Generator.Spec (
   mkConstMethod',
   mkCtor,
   mkMethod',
+  np,
   )
 --import Graphics.UI.Qtah.Generator.Interface.Core.QStringRef (c_QStringRef)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Graphics.UI.Qtah.Generator.Interface.Core.QLatin1String (c_QLatin1String)
 import Graphics.UI.Qtah.Generator.Interface.Core.QVector (c_QVectorQXmlStreamAttribute)
 import Foreign.Hoppy.Generator.Types (boolT, voidT, constT, objT, refT)
-import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
-import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModuleWithMinVersion)
+import Foreign.Hoppy.Generator.Version (collect, just)
+import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
 
 {-# ANN module "HLint: ignore Use camelCase" #-}
@@ -46,14 +45,14 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Core", "QXmlStreamAttributes"]
-  [QtExport $ ExportClass c_QXmlStreamAttributes]
+  [qtExport c_QXmlStreamAttributes]
 
 c_QXmlStreamAttributes =
   addReqIncludes [ includeStd "QXmlStreamAttributes" ] $
   classSetEntityPrefix "" $
   makeClass (ident "QXmlStreamAttributes") Nothing [c_QVectorQXmlStreamAttribute] $
   collect
-  [ just $ mkCtor "new" []
+  [ just $ mkCtor "new" np
   , just $ mkMethod' "append" "appendWithNamespaceUriAndNameAndValue" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString, refT $ constT $ objT c_QString] voidT
   , just $ mkMethod' "append" "appendWithQualifiedNameAndValue" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString] voidT
   , just $ mkConstMethod' "hasAttribute" "hasAttribute" [refT $ constT $ objT c_QString] boolT

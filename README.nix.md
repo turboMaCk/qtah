@@ -1,26 +1,13 @@
 Nix expressions are provided to ease building Qtah within
 [Nixpkgs](https://nixos.org/nixpkgs).  Qtah can be inserted into Nixpkgs with
-the following overrides, after updating `qtahDir` as appropriate for your
-environment.
+the overlay at `nix/overlay.nix`, or you can use `nix/nixpkgs.nix` which
+provides Nixpkgs with Qtah built-in.  You may need to locally modify
+`nixpkgs.nix` to include the overlay provided by a local copy of Hoppy (at
+`nix/overlay.nix` in the Hoppy repo).
 
-    packageOverrides = pkgs:
-      let qtahDir = /my/projects/qtah.git;
-          qt = pkgs.qt5.qtbase;  # (Or pkgs.qt4.)
-      in rec {
-        haskellPackages = pkgs.haskellPackages.override {
-          overrides = self: super: {
-            qtah-generator = self.callPackage (qtahDir + /qtah-generator) {};
-            qtah-cpp = self.callPackage (qtahDir + /qtah-cpp) { inherit qt; };
-            qtah = self.callPackage (qtahDir + /qtah) { inherit qt; };
-            qtah-examples = self.callPackage (qtahDir + /qtah-examples) {};
-          };
-        };
-      };
-
-The Haskell packages accept two optional parameters.  `enableSplitObjs`, when
-non-null, will override Nixpkgs's default behaivour for Cabal, and the boolean
-`forceParallelBuilding` will force a parallel build for faster development, at
-the risk of nondeterministic results (see
+The Nix expressions for Qtah packages accept one additional optional parameter.
+The boolean `forceParallelBuilding` will force a parallel build for faster
+development, at the risk of nondeterministic results (see
 [Nixpkgs bug 3220](https://github.com/NixOS/nixpkgs/issues/3220)).
 
 ---

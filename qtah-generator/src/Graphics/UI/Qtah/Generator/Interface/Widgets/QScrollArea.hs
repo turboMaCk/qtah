@@ -20,7 +20,6 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QScrollArea (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -30,11 +29,13 @@ import Foreign.Hoppy.Generator.Spec (
   mkMethod,
   mkMethod',
   mkProp,
+  np,
   )
-import Foreign.Hoppy.Generator.Types (bitspaceT, boolT, intT, objT, ptrT, voidT)
+import Foreign.Hoppy.Generator.Types (boolT, intT, objT, ptrT, voidT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
-import Graphics.UI.Qtah.Generator.Interface.Core.Types (bs_Alignment)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
+import Graphics.UI.Qtah.Generator.Flags (flagsT)
+import Graphics.UI.Qtah.Generator.Interface.Core.Types (fl_Alignment)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QAbstractScrollArea (c_QAbstractScrollArea)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QWidget (c_QWidget)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
@@ -45,23 +46,23 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QScrollArea"]
-  [ QtExport $ ExportClass c_QScrollArea ]
+  [ qtExport c_QScrollArea ]
 
 c_QScrollArea =
   addReqIncludes [includeStd "QScrollArea"] $
   classSetEntityPrefix "" $
   makeClass (ident "QScrollArea") Nothing [c_QAbstractScrollArea] $
   collect
-  [ just $ mkCtor "new" []
+  [ just $ mkCtor "new" np
   , just $ mkCtor "newWithParent" [ptrT $ objT c_QWidget]
-  , test (qtVersion >= [4, 2]) $ mkProp "alignment" $ bitspaceT bs_Alignment
+  , test (qtVersion >= [4, 2]) $ mkProp "alignment" $ flagsT fl_Alignment
   , just $ mkMethod' "ensureVisible" "ensureVisible" [intT, intT] voidT
   , just $ mkMethod' "ensureVisible" "ensureVisibleWithMargins" [intT, intT, intT, intT] voidT
   , test (qtVersion >= [4, 2]) $ mkMethod' "ensureWidgetVisible" "ensureWidgetVisible"
     [ptrT $ objT c_QWidget] voidT
   , test (qtVersion >= [4, 2]) $ mkMethod' "ensureWidgetVisible" "ensureWidgetVisibleWithMargins"
     [ptrT $ objT c_QWidget, intT, intT] voidT
-  , just $ mkMethod "takeWidget" [] $ ptrT $ objT c_QWidget
+  , just $ mkMethod "takeWidget" np $ ptrT $ objT c_QWidget
   , just $ mkProp "widget" $ ptrT $ objT c_QWidget
   , just $ mkProp "widgetResizable" boolT
   ]

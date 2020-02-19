@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QDateTimeEdit (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportBitspace, ExportClass, ExportEnum),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -31,13 +30,15 @@ import Foreign.Hoppy.Generator.Spec (
   mkConstMethod,
   mkCtor,
   mkProp,
+  np,
   )
-import Foreign.Hoppy.Generator.Types (bitspaceT, boolT, enumT, intT, objT)
+import Foreign.Hoppy.Generator.Types (boolT, enumT, intT, objT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
+import Graphics.UI.Qtah.Generator.Flags (flagsT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QDate (c_QDate)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
-import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (c_ListenerQDate)
+import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (listenerQDate)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QAbstractSpinBox (
   c_QAbstractSpinBox,
   )
@@ -49,11 +50,10 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QDateTimeEdit"] $
-  QtExport (ExportClass c_QDateTimeEdit) :
+  qtExport c_QDateTimeEdit :
   map QtExportSignal signals ++
-  (map QtExport . collect)
-  [ just $ ExportEnum e_Section
-  , just $ ExportBitspace bs_Sections
+  [ qtExport e_Section
+  , qtExport fl_Sections
   ]
 
 c_QDateTimeEdit =
@@ -69,7 +69,7 @@ c_QDateTimeEdit =
   , just $ mkProp "date" (objT c_QDate)
   -- TODO just $ mkProp "dateTime" (objT c_QDateTime)
   , just $ mkProp "displayFormat" (objT c_QString)
-  , just $ mkConstMethod "displayedSections" [] (bitspaceT bs_Sections)
+  , just $ mkConstMethod "displayedSections" np $ flagsT fl_Sections
   , just $ mkProp "maximumDate" (objT c_QDate)
   -- TODO test (qtVersion >= [4, 4]) $
   --      mkProp "maximumDateTime" (objT c_QDateTime)
@@ -78,31 +78,29 @@ c_QDateTimeEdit =
   -- TODO test (qtVersion >= [4, 4]) $
   --      mkProp "minimumDateTime" (objT c_QDateTime)
   -- TODO just $ mkProp "minimumTime" c_QTime
-  , test (qtVersion >= [4, 3]) $ mkConstMethod "sectionCount" [] intT
+  , test (qtVersion >= [4, 3]) $ mkConstMethod "sectionCount" np intT
   -- TODO just $ mkProp "time" c_QTime
   -- TODO test (qtVersion >= [4, 4]) $ mkProp "timeSpec" Qt.TimeSpec
   -- Public Functions
-  , just $ mkCtor "new" []
+  , just $ mkCtor "new" np
   -- TODO Other methods.
   ]
 
 signals =
-  [ makeSignal c_QDateTimeEdit "dateChanged" c_ListenerQDate
+  [ makeSignal c_QDateTimeEdit "dateChanged" listenerQDate
   -- TODO void dateTimeChanged(const QDateTime &datetime)
   -- TODO void timeChanged(const QTime &time)
   ]
 
-(e_Section, bs_Sections) = makeQtEnumBitspace
-  (ident1 "QDateTimeEdit" "Section")
-  "Sections"
-  [includeStd "QDateTimeEdit"]
-  [ (0x0000, ["no", "section"])
-  , (0x0001, ["am", "pm", "section"])
-  , (0x0002, ["m", "sec", "section"])
-  , (0x0004, ["second", "section"])
-  , (0x0008, ["minute", "section"])
-  , (0x0010, ["hour", "section"])
-  , (0x0100, ["day", "section"])
-  , (0x0200, ["month", "section"])
-  , (0x0400, ["year", "section"])
+(e_Section, fl_Sections) =
+  makeQtEnumAndFlags (ident1 "QDateTimeEdit" "Section") "Sections" [includeStd "QDateTimeEdit"]
+  [ "NoSection"
+  , "AmPmSection"
+  , "MSecSection"
+  , "SecondSection"
+  , "MinuteSection"
+  , "HourSection"
+  , "DaySection"
+  , "MonthSection"
+  , "YearSection"
   ]

@@ -15,19 +15,23 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-{ mkDerivation, base, binary, bytestring, hoppy-runtime
+{ mkDerivation, base, binary, bytestring, hoppy-runtime, qt
 # Keep qtah on a line by itself, scripts/set-qt-version looks for it:
 , qtah
 , stdenv, lib
-, enableSplitObjs ? null
 , forceParallelBuilding ? false
 }:
-mkDerivation ({
+mkDerivation {
   pname = "qtah-examples";
-  version = "0.6.0";
+  version = "0.6.1";
   src = ./.;
   isLibrary = false;
   isExecutable = true;
+
+  # We need to apply this hook to wrap the binary, so that it has access to the
+  # Qt plugins directory.  Otherwise, it will fail to launch.
+  buildDepends = [ qt.wrapQtAppsHook ];
+
   executableHaskellDepends = [
     base binary bytestring hoppy-runtime
     # Keep qtah on a line by itself, scripts/set-qt-version looks for it:
@@ -41,4 +45,4 @@ mkDerivation ({
     if forceParallelBuilding
     then "configureFlags+=\" --ghc-option=-j$NIX_BUILD_CORES\""
     else null;
-} // lib.filterAttrs (k: v: v != null) { inherit enableSplitObjs; })
+}

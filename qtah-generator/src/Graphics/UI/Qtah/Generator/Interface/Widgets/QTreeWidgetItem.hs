@@ -24,7 +24,6 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QTreeWidgetItem (
 import Foreign.Hoppy.Generator.Spec (
   Class,
   CppEnum,
-  Export (ExportClass, ExportEnum),
   Operator (OpLt),
   addReqIncludes,
   classSetEntityPrefix,
@@ -36,14 +35,16 @@ import Foreign.Hoppy.Generator.Spec (
   mkConstMethod',
   mkCtor,
   mkMethod,
+  np,
   )
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Assignable),
   classAddFeatures,
   )
-import Foreign.Hoppy.Generator.Types (intT, objT, ptrT, refT, constT, voidT, boolT, enumT, bitspaceT)
+import Foreign.Hoppy.Generator.Types (intT, objT, ptrT, refT, constT, voidT, boolT, enumT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
+import Graphics.UI.Qtah.Generator.Flags (flagsT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Core.QList (c_QListQTreeWidgetItem)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QBrush (c_QBrush)
@@ -52,11 +53,10 @@ import Graphics.UI.Qtah.Generator.Interface.Core.QSize (c_QSize)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QFont (c_QFont)
 import Graphics.UI.Qtah.Generator.Interface.Core.QStringList (c_QStringList)
 import Graphics.UI.Qtah.Generator.Interface.Core.QVariant (c_QVariant)
-import Graphics.UI.Qtah.Generator.Interface.Core.Types (e_SortOrder)
+import Graphics.UI.Qtah.Generator.Interface.Core.Types (e_CheckState, e_SortOrder, fl_ItemFlags)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QIcon (c_QIcon)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
-import Graphics.UI.Qtah.Generator.Interface.Core.Types (e_CheckState, bs_ItemFlags)
 
 {-# ANN module "HLint: ignore Use camelCase" #-}
 
@@ -64,12 +64,10 @@ aModule :: AModule
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QTreeWidgetItem"] $
-  map
-    QtExport
-    [ ExportClass c_QTreeWidgetItem
-    , ExportEnum e_ChildIndicatorPolicy
-    , ExportEnum e_ItemType
-    ]
+  [ qtExport c_QTreeWidgetItem
+  , qtExport e_ChildIndicatorPolicy
+  , qtExport e_ItemType
+  ]
 
 c_QTreeWidgetItem :: Class
 c_QTreeWidgetItem =
@@ -78,7 +76,7 @@ c_QTreeWidgetItem =
   classSetEntityPrefix "" $
   makeClass (ident "QTreeWidgetItem") Nothing [] $
   collect
-  [ just $ mkCtor "new" []
+  [ just $ mkCtor "new" np
   , just $ mkCtor "newWithType" [intT]
   , just $ mkCtor "newWithStrings" [objT c_QStringList]
   , just $ mkCtor "newWithStringsAndType" [objT c_QStringList, intT]
@@ -97,24 +95,24 @@ c_QTreeWidgetItem =
   , test (qtVersion >= [4, 2]) $ mkConstMethod "background" [intT] $ objT c_QBrush
   , just $ mkConstMethod "checkState" [intT] $ enumT e_CheckState
   , just $ mkConstMethod "child" [intT] (ptrT $ objT c_QTreeWidgetItem)
-  , just $ mkConstMethod "childCount" [] intT
-  , just $ mkConstMethod "childIndicatorPolicy" [] (enumT e_ChildIndicatorPolicy)
-  , just $ mkConstMethod "clone" [] $ ptrT $ objT c_QTreeWidgetItem
-  , just $ mkConstMethod "columnCount" [] intT
+  , just $ mkConstMethod "childCount" np intT
+  , just $ mkConstMethod "childIndicatorPolicy" np (enumT e_ChildIndicatorPolicy)
+  , just $ mkConstMethod "clone" np $ ptrT $ objT c_QTreeWidgetItem
+  , just $ mkConstMethod "columnCount" np intT
   , just $ mkConstMethod' "data" "getData" [intT, intT] (objT c_QVariant)
-  , just $ mkConstMethod "flags" [] $ bitspaceT bs_ItemFlags
+  , just $ mkConstMethod "flags" np $ flagsT fl_ItemFlags
   , just $ mkConstMethod "font" [intT] $ objT c_QFont
   , test (qtVersion >= [4, 2]) $ mkConstMethod "foreground" [intT] $ objT c_QBrush
   , just $ mkConstMethod "icon" [intT] $ objT c_QIcon
   , just $ mkConstMethod "indexOfChild" [ptrT $ objT c_QTreeWidgetItem] intT
   , just $ mkMethod "insertChild" [intT, ptrT $ objT c_QTreeWidgetItem] voidT
   , test (qtVersion >= [4, 1]) $ mkMethod "insertChildren" [intT, refT $ constT $ objT c_QListQTreeWidgetItem] voidT
-  , test (qtVersion >= [4, 3]) $ mkConstMethod "isDisabled" [] boolT
-  , test (qtVersion >= [4, 2]) $ mkConstMethod "isExpanded" [] boolT
-  , test (qtVersion >= [4, 3]) $ mkConstMethod "isFirstColumnSpanned" [] boolT
-  , test (qtVersion >= [4, 2]) $ mkConstMethod "isHidden" [] boolT
-  , test (qtVersion >= [4, 2]) $ mkConstMethod "isSelected" [] boolT
-  , just $ mkConstMethod "parent" [] (ptrT $ objT c_QTreeWidgetItem)
+  , test (qtVersion >= [4, 3]) $ mkConstMethod "isDisabled" np boolT
+  , test (qtVersion >= [4, 2]) $ mkConstMethod "isExpanded" np boolT
+  , test (qtVersion >= [4, 3]) $ mkConstMethod "isFirstColumnSpanned" np boolT
+  , test (qtVersion >= [4, 2]) $ mkConstMethod "isHidden" np boolT
+  , test (qtVersion >= [4, 2]) $ mkConstMethod "isSelected" np boolT
+  , just $ mkConstMethod "parent" np (ptrT $ objT c_QTreeWidgetItem)
   -- TODO void QTreeWidgetItem::read(QDataStream &in)
   , just $ mkMethod "removeChild" [ptrT $ objT c_QTreeWidgetItem] voidT
   , test (qtVersion >= [4, 2]) $ mkMethod "setBackground" [intT, objT c_QBrush] voidT
@@ -124,7 +122,7 @@ c_QTreeWidgetItem =
   , test (qtVersion >= [4, 3]) $ mkMethod "setDisabled" [boolT] voidT
   , test (qtVersion >= [4, 2]) $ mkMethod "setExpanded" [boolT] voidT
   , test (qtVersion >= [4, 3]) $ mkMethod "setFirstColumnSpanned" [boolT] voidT
-  , just $ mkMethod "setFlags" [bitspaceT bs_ItemFlags] voidT
+  , just $ mkMethod "setFlags" [flagsT fl_ItemFlags] voidT
   , just $ mkMethod "setFont" [intT, objT c_QFont] voidT
   , test (qtVersion >= [4, 2]) $ mkMethod "setForeground" [intT, objT c_QBrush] voidT
   , test (qtVersion >= [4, 2]) $ mkMethod "setHidden" [boolT] voidT
@@ -140,12 +138,12 @@ c_QTreeWidgetItem =
   , test (qtVersion >= [4, 2]) $ mkMethod "sortChildren" [intT, enumT e_SortOrder] voidT
   , just $ mkConstMethod "statusTip" [intT] $ objT c_QString
   , just $ mkMethod "takeChild" [intT] $ ptrT $ objT c_QTreeWidgetItem
-  , test (qtVersion >= [4, 1]) $ mkMethod "takeChildren" [] $ objT c_QListQTreeWidgetItem
+  , test (qtVersion >= [4, 1]) $ mkMethod "takeChildren" np $ objT c_QListQTreeWidgetItem
   , just $ mkConstMethod "text" [intT] (objT c_QString)
   , just $ mkConstMethod "textAlignment" [intT] intT
   , just $ mkConstMethod "toolTip" [intT] $ objT c_QString
-  , just $ mkConstMethod "treeWidget" [] $ ptrT $ objT c_QTreeWidget
-  , just $ mkConstMethod' "type" "getType" [] intT
+  , just $ mkConstMethod "treeWidget" np $ ptrT $ objT c_QTreeWidget
+  , just $ mkConstMethod' "type" "getType" np intT
   , just $ mkConstMethod "whatsThis" [intT] $ objT c_QString
   , just $ mkMethod OpLt [refT $ constT $ objT c_QTreeWidgetItem] boolT
   -- TODO void QTreeWidgetItem::write(QDataStream &out) const
@@ -157,9 +155,9 @@ e_ChildIndicatorPolicy =
   makeQtEnum
     (ident1 "QTreeWidgetItem" "ChildIndicatorPolicy")
     [includeStd "QTreeWidgetItem"]
-    [ (0, ["show", "indicator"])
-    , (1, ["dont", "show", "indicator"])
-    , (2, ["dont", "show", "indicator", "when", "childless"])
+    [ "ShowIndicator"
+    , "DontShowIndicator"
+    , "DontShowIndicatorWhenChildless"
     ]
 
 e_ItemType :: CppEnum
@@ -167,7 +165,7 @@ e_ItemType =
   makeQtEnum
     (ident1 "QTreeWidgetItem" "ItemType")
     [includeStd "QTreeWidgetItem"]
-    [ (0, ["type"])
-    , (1000, ["user", "type"])
+    [ "Type"
+    , "UserType"
     ]
 

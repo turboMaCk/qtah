@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QLayoutItem (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -30,11 +29,13 @@ import Foreign.Hoppy.Generator.Spec (
   mkConstMethod,
   mkMethod,
   mkProp,
+  np,
   )
-import Foreign.Hoppy.Generator.Types (bitspaceT, boolT, intT, objT, ptrT, voidT)
+import Foreign.Hoppy.Generator.Types (boolT, intT, objT, ptrT, voidT)
+import Graphics.UI.Qtah.Generator.Flags (flagsT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QRect (c_QRect)
 import Graphics.UI.Qtah.Generator.Interface.Core.QSize (c_QSize)
-import Graphics.UI.Qtah.Generator.Interface.Core.Types (bs_Alignment, bs_Orientations)
+import Graphics.UI.Qtah.Generator.Interface.Core.Types (fl_Alignment, fl_Orientations)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Widgets.QLayout (c_QLayout)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Widgets.QWidget (c_QWidget)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
@@ -45,26 +46,26 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QLayoutItem"]
-  [ QtExport $ ExportClass c_QLayoutItem ]
+  [ qtExport c_QLayoutItem ]
 
 c_QLayoutItem =
   addReqIncludes [includeStd "QLayoutItem"] $
   classSetEntityPrefix "" $
   makeClass (ident "QLayoutItem") Nothing []
   -- Abstract.
-  [ mkProp "alignment" $ bitspaceT bs_Alignment
+  [ mkProp "alignment" $ flagsT fl_Alignment
     -- TODO controlTypes
-  , mkConstMethod "expandingDirections" [] $ bitspaceT bs_Orientations
+  , mkConstMethod "expandingDirections" np $ flagsT fl_Orientations
   , mkProp "geometry" $ objT c_QRect
-  , mkConstMethod "hasHeightForWidth" [] boolT
+  , mkConstMethod "hasHeightForWidth" np boolT
   , mkConstMethod "heightForWidth" [intT] intT
-  , mkMethod "invalidate" [] voidT
-  , mkConstMethod "isEmpty" [] boolT
-  , mkMethod "layout" [] $ ptrT $ objT c_QLayout
-  , mkConstMethod "maximumSize" [] $ objT c_QSize
+  , mkMethod "invalidate" np voidT
+  , mkConstMethod "isEmpty" np boolT
+  , mkMethod "layout" np $ ptrT $ objT c_QLayout
+  , mkConstMethod "maximumSize" np $ objT c_QSize
   , mkConstMethod "minimumHeightForWidth" [intT] intT
-  , mkConstMethod "minimumSize" [] $ objT c_QSize
-  , mkConstMethod "sizeHint" [] $ objT c_QSize
+  , mkConstMethod "minimumSize" np $ objT c_QSize
+  , mkConstMethod "sizeHint" np $ objT c_QSize
     -- TODO spacerItem
-  , mkMethod "widget" [] $ ptrT $ objT c_QWidget
+  , mkMethod "widget" np $ ptrT $ objT c_QWidget
   ]

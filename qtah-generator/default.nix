@@ -17,12 +17,11 @@
 
 { mkDerivation, base, containers, directory, filepath, haskell-src
 , hoppy-generator, hoppy-std, mtl, stdenv, lib
-, enableSplitObjs ? null
 , forceParallelBuilding ? false
 }:
-mkDerivation ({
+mkDerivation {
   pname = "qtah-generator";
-  version = "0.6.0";
+  version = "0.6.1";
   src = ./.;
   isLibrary = true;
   isExecutable = true;
@@ -39,4 +38,4 @@ mkDerivation ({
      then "configureFlags+=\" --ghc-option=-j$NIX_BUILD_CORES\""
      else ""}
   '';
-} // lib.filterAttrs (k: v: v != null) { inherit enableSplitObjs; })
+}

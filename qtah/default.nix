@@ -17,17 +17,16 @@
 
 { mkDerivation, base, binary, bytestring, hoppy-runtime, HUnit
 , qt, qtah-cpp, qtah-generator, stdenv, lib
-, enableSplitObjs ? null
 , forceParallelBuilding ? false
 }:
-mkDerivation ({
+mkDerivation {
   pname = "qtah";
-  version = "0.6.0";
+  version = "0.6.1";
   src = ./.;
   libraryHaskellDepends = [
     base binary bytestring hoppy-runtime qtah-cpp qtah-generator
   ];
-  libraryToolDepends = [ qt ];
+  libraryToolDepends = [ qt.qtbase ];
   testHaskellDepends = [ base hoppy-runtime HUnit ];
   homepage = "http://khumba.net/projects/qtah";
   description = "Qt bindings for Haskell";
@@ -40,4 +39,4 @@ mkDerivation ({
 
   # Save 9000+ lines of useless warnings.
   haddockFlags = [ "--haddock-options=--no-print-missing-docs" ];
-} // lib.filterAttrs (k: v: v != null) { inherit enableSplitObjs; })
+}

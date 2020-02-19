@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Gui.QBitmap (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetConversionToGc,
   classSetEntityPrefix,
@@ -32,13 +31,13 @@ import Foreign.Hoppy.Generator.Spec (
   mkCtor,
   mkMethod,
   mkStaticMethod',
+  np,
   )
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Assignable, Copyable),
   classAddFeatures,
   )
 import Foreign.Hoppy.Generator.Types (
-  bitspaceT,
   enumT,
   intT,
   objT,
@@ -50,9 +49,10 @@ import Foreign.Hoppy.Generator.Types (
   ucharT
   )
 import Foreign.Hoppy.Generator.Version (collect, just)
+import Graphics.UI.Qtah.Generator.Flags (flagsT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QSize (c_QSize)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
-import Graphics.UI.Qtah.Generator.Interface.Core.Types (bs_ImageConversionFlags)
+import Graphics.UI.Qtah.Generator.Interface.Core.Types (fl_ImageConversionFlags)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QImage (c_QImage, e_Format)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QPixmap (c_QPixmap)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QTransform (c_QTransform)
@@ -64,7 +64,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Gui", "QBitmap"]
-  [ QtExport $ ExportClass c_QBitmap
+  [ qtExport c_QBitmap
   ]
 
 c_QBitmap =
@@ -74,17 +74,17 @@ c_QBitmap =
   classSetEntityPrefix "" $
   makeClass (ident "QBitmap") Nothing [c_QPixmap] $
   collect
-  [ just $ mkCtor "new" []
+  [ just $ mkCtor "new" np
   , just $ mkCtor "newWithSize" [objT c_QSize]
   , just $ mkCtor "newWithSizeRaw" [intT, intT]
   , just $ mkCtor "newWithFile" [objT c_QString]
     -- TODO QString wrapper:
   , just $ mkCtor "newWithFileAndFormat" [objT c_QString, ptrT $ constT charT ]
-  , just $ mkMethod "clear" [] voidT
+  , just $ mkMethod "clear" np voidT
   , just $ mkMethod "swap" [refT $ objT c_QBitmap] voidT
   , just $ mkConstMethod "transformed" [objT c_QTransform] $ objT c_QBitmap
   , just $ mkStaticMethod' "fromData" "fromData" [objT c_QSize, ptrT $ constT ucharT] $ objT c_QBitmap
   , just $ mkStaticMethod' "fromData" "fromDataAll" [objT c_QSize, ptrT $ constT ucharT, enumT e_Format] $ objT c_QBitmap
   , just $ mkStaticMethod' "fromImage" "fromImage" [objT c_QImage] $ objT c_QBitmap
-  , just $ mkStaticMethod' "fromImage" "fromImageAll" [objT c_QImage, bitspaceT bs_ImageConversionFlags] $ objT c_QBitmap
+  , just $ mkStaticMethod' "fromImage" "fromImageAll" [objT c_QImage, flagsT fl_ImageConversionFlags] $ objT c_QBitmap
   ]

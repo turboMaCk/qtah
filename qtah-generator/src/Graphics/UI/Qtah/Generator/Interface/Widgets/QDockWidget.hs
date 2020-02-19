@@ -19,11 +19,10 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QDockWidget (
   aModule,
   c_QDockWidget,
   e_DockWidgetFeature,
-  bs_DockWidgetFeatures,
+  fl_DockWidgetFeatures,
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportBitspace, ExportClass, ExportEnum),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -34,20 +33,22 @@ import Foreign.Hoppy.Generator.Spec (
   mkConstMethod,
   mkCtor,
   mkProp,
+  np,
   )
-import Foreign.Hoppy.Generator.Types (bitspaceT, boolT, enumT, objT, ptrT)
+import Foreign.Hoppy.Generator.Types (boolT, enumT, objT, ptrT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
+import Graphics.UI.Qtah.Generator.Flags (flagsT)
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (
   e_DockWidgetArea,
-  bs_DockWidgetAreas,
+  fl_DockWidgetAreas,
   )
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
-  c_ListenerBool,
-  c_ListenerDockWidgetArea,
-  c_ListenerDockWidgetAreas,
-  c_ListenerQDockWidgetFeatures,
+  listenerBool,
+  listenerDockWidgetArea,
+  listenerDockWidgetAreas,
+  listenerQDockWidgetFeatures,
   )
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QAction (c_QAction)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QWidget (c_QWidget)
@@ -59,49 +60,48 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QDockWidget"] $
-  map QtExport
-  [ ExportClass c_QDockWidget
-  , ExportEnum e_DockWidgetFeature
-  , ExportBitspace bs_DockWidgetFeatures
-  ] ++
-  map QtExportSignal signals
+  qtExport c_QDockWidget :
+  map QtExportSignal signals ++
+  [ qtExport e_DockWidgetFeature
+  , qtExport fl_DockWidgetFeatures
+  ]
 
 c_QDockWidget =
   addReqIncludes [includeStd "QDockWidget"] $
   classSetEntityPrefix "" $
   makeClass (ident "QDockWidget") Nothing [c_QWidget] $
   collect
-  [ just $ mkCtor "new" []
+  [ just $ mkCtor "new" np
   , just $ mkCtor "newWithParent" [ptrT $ objT c_QWidget]
   , just $ mkCtor "newWithText" [objT c_QString]
   , just $ mkCtor "newWithTextAndParent" [objT c_QString, ptrT $ objT c_QWidget]
     -- TODO Ctor with Qt::WindowFlags.
-  , just $ mkProp "allowedAreas" $ bitspaceT bs_DockWidgetAreas
+  , just $ mkProp "allowedAreas" $ flagsT fl_DockWidgetAreas
   , just $ mkConstMethod "isAreaAllowed" [enumT e_DockWidgetArea] boolT
-  , just $ mkProp "features" $ bitspaceT bs_DockWidgetFeatures
+  , just $ mkProp "features" $ flagsT fl_DockWidgetFeatures
   , just $ mkBoolIsProp "floating"
   , test (qtVersion >= [4, 3]) $ mkProp "titleBarWidget" $ ptrT $ objT c_QWidget
-  , just $ mkConstMethod "toggleViewAction" [] $ ptrT $ objT c_QAction
+  , just $ mkConstMethod "toggleViewAction" np $ ptrT $ objT c_QAction
   , just $ mkProp "widget" $ ptrT $ objT c_QWidget
   ]
 
 signals =
   collect
-  [ just $ makeSignal c_QDockWidget "allowedAreasChanged" c_ListenerDockWidgetAreas
+  [ just $ makeSignal c_QDockWidget "allowedAreasChanged" listenerDockWidgetAreas
   , test (qtVersion >= [4, 3]) $
-    makeSignal c_QDockWidget "dockLocationChanged" c_ListenerDockWidgetArea
-  , just $ makeSignal c_QDockWidget "featuresChanged" c_ListenerQDockWidgetFeatures
-  , just $ makeSignal c_QDockWidget "topLevelChanged" c_ListenerBool
-  , just $ makeSignal c_QDockWidget "visibilityChanged" c_ListenerBool
+    makeSignal c_QDockWidget "dockLocationChanged" listenerDockWidgetArea
+  , just $ makeSignal c_QDockWidget "featuresChanged" listenerQDockWidgetFeatures
+  , just $ makeSignal c_QDockWidget "topLevelChanged" listenerBool
+  , just $ makeSignal c_QDockWidget "visibilityChanged" listenerBool
   ]
 
-(e_DockWidgetFeature, bs_DockWidgetFeatures) =
-  makeQtEnumBitspace (ident1 "QDockWidget" "DockWidgetFeature") "DockWidgetFeatures"
+(e_DockWidgetFeature, fl_DockWidgetFeatures) =
+  makeQtEnumAndFlags (ident1 "QDockWidget" "DockWidgetFeature") "DockWidgetFeatures"
   [includeStd "QDockWidget"]
-  [ (0x0, ["no", "dock", "widget", "features"])
-  , (0x1, ["dock", "widget", "closable"])
-  , (0x2, ["dock", "widget", "movable"])
-  , (0x4, ["dock", "widget", "floatable"])
-  , (0x7, ["all", "dock", "widget", "features"])  -- Deprecated
-  , (0x8, ["dock", "widget", "vertical", "title", "bar"])
+  [ "NoDockWidgetFeatures"
+  , "DockWidgetClosable"
+  , "DockWidgetMovable"
+  , "DockWidgetFloatable"
+  , "AllDockWidgetFeatures"  -- Deprecated
+  , "DockWidgetVerticalTitleBar"
   ]

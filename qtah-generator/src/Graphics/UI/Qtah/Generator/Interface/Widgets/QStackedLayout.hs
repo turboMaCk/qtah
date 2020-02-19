@@ -20,7 +20,6 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QStackedLayout (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass, ExportEnum),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -31,11 +30,12 @@ import Foreign.Hoppy.Generator.Spec (
   mkCtor,
   mkMethod,
   mkProp,
+  np,
   )
 import Foreign.Hoppy.Generator.Types (enumT, intT, objT, ptrT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
-import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (c_ListenerInt)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
+import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (listenerInt)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QLayout (c_QLayout)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QWidget (c_QWidget)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
@@ -48,10 +48,10 @@ aModule =
   makeQtModule ["Widgets", "QStackedLayout"] $
   collect $
   concat
-  [ [ just $ QtExport $ ExportClass c_QStackedLayout
+  [ [ just $ qtExport c_QStackedLayout
     ]
   , map (just . QtExportSignal) signals
-  , [ test (qtVersion >= [4, 4]) $ QtExport $ ExportEnum e_StackingMode
+  , [ test (qtVersion >= [4, 4]) $ qtExport e_StackingMode
     ]
   ]
 
@@ -60,11 +60,11 @@ c_QStackedLayout =
   classSetEntityPrefix "" $
   makeClass (ident "QStackedLayout") Nothing [c_QLayout] $
   collect
-  [ just $ mkCtor "new" []
+  [ just $ mkCtor "new" np
   , just $ mkCtor "newWithParent" [ptrT $ objT c_QWidget]
   , just $ mkCtor "newWithLayout" [ptrT $ objT c_QLayout]
   , just $ mkMethod "addWidget" [ptrT $ objT c_QWidget] intT
-  , just $ mkConstMethod "count" [] intT
+  , just $ mkConstMethod "count" np intT
   , just $ mkProp "currentIndex" intT
   , just $ mkProp "currentWidget" $ ptrT $ objT c_QWidget
   , just $ mkMethod "insertWidget" [intT, ptrT $ objT c_QWidget] intT
@@ -73,12 +73,12 @@ c_QStackedLayout =
   ]
 
 signals =
-  [ makeSignal c_QStackedLayout "currentChanged" c_ListenerInt
-  , makeSignal c_QStackedLayout "widgetRemoved" c_ListenerInt
+  [ makeSignal c_QStackedLayout "currentChanged" listenerInt
+  , makeSignal c_QStackedLayout "widgetRemoved" listenerInt
   ]
 
 e_StackingMode =
   makeQtEnum (ident1 "QStackedLayout" "StackingMode") [includeStd "QStackedLayout"]
-  [ (0, ["stack", "one"])
-  , (1, ["stack", "all"])
+  [ "StackOne"
+  , "StackAll"
   ]

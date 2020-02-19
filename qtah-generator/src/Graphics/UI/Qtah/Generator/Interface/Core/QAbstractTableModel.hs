@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QAbstractTableModel (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -37,7 +36,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Core", "QAbstractTableModel"]
-  [ QtExport $ ExportClass c_QAbstractTableModel ]
+  [ qtExport c_QAbstractTableModel ]
 
 c_QAbstractTableModel =
   addReqIncludes [includeStd "QAbstractTableModel"] $

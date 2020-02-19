@@ -22,7 +22,6 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QVariant (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportEnum, ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   classSetConversionToGc,
@@ -35,6 +34,7 @@ import Foreign.Hoppy.Generator.Spec (
   mkCtor,
   mkMethod,
   mkMethod',
+  np,
   )
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Assignable, Comparable, Copyable, Equatable),
@@ -54,7 +54,7 @@ import Foreign.Hoppy.Generator.Types (
   voidT,
   )
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.QByteArray (c_QByteArray)
 import Graphics.UI.Qtah.Generator.Interface.Core.QChar (c_QChar)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Core.QList (c_QListQVariant)
@@ -74,8 +74,8 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Core", "QVariant"]
-  [ QtExport $ ExportClass c_QVariant
-  , QtExport $ ExportEnum e_Type
+  [ qtExport c_QVariant
+  , qtExport e_Type
   ]
 
 -- TODO Many more data types needed here.
@@ -91,7 +91,7 @@ c_QVariant =
   classSetEntityPrefix "" $
   makeClass (ident "QVariant") Nothing [] $
   collect
-  [ just $ mkCtor "new" []
+  [ just $ mkCtor "new" np
   , just $ mkCtor "newWithBool" [boolT]
   , just $ mkCtor "newWithByteArray" [objT c_QByteArray]
   , just $ mkCtor "newWithChar" [objT c_QChar]
@@ -115,10 +115,10 @@ c_QVariant =
   , just $ mkCtor "newWithUInt" [uintT]
   , just $ mkCtor "newWithULongLong" [ullongT]
   , just $ mkConstMethod "canConvert" [enumT e_Type] boolT
-  , just $ mkMethod "clear" [] voidT
+  , just $ mkMethod "clear" np voidT
   , just $ mkMethod "convert" [enumT e_Type] boolT
-  , just $ mkConstMethod "isNull" [] boolT
-  , just $ mkConstMethod "isValid" [] boolT
+  , just $ mkConstMethod "isNull" np boolT
+  , just $ mkConstMethod "isValid" np boolT
   , just $ mkMethod' "setValue" "setToBool" [boolT] voidT
   , just $ mkMethod' "setValue" "setToChar" [objT c_QChar] voidT
   , just $ mkMethod' "setValue" "setToDouble" [doubleT] voidT
@@ -137,84 +137,84 @@ c_QVariant =
   , just $ mkMethod' "setValue" "setToUInt" [uintT] voidT
   , just $ mkMethod' "setValue" "setToULongLong" [ullongT] voidT
   , test (qtVersion >= [4, 8]) $ mkMethod' "setValue" "swap" [refT $ objT c_QVariant] voidT
-  , just $ mkConstMethod "toBool" [] boolT
-  , just $ mkConstMethod "toByteArray" [] (objT c_QByteArray)
-  , just $ mkConstMethod "toChar" [] $ objT c_QChar
-  , just $ mkConstMethod "toDouble" [] doubleT
-  , test (qtVersion >= [4, 6]) $ mkConstMethod "toFloat" [] floatT
-  , just $ mkConstMethod "toInt" [] intT
-  , just $ mkConstMethod "toLongLong" [] llongT
-  , just $ mkConstMethod "toPoint" [] $ objT c_QPoint
-  , just $ mkConstMethod "toPointF" [] $ objT c_QPointF
-  , just $ mkConstMethod "toRect" [] $ objT c_QRect
-  , just $ mkConstMethod "toRectF" [] $ objT c_QRectF
-  , just $ mkConstMethod "toSize" [] $ objT c_QSize
-  , just $ mkConstMethod "toSizeF" [] $ objT c_QSizeF
-  , just $ mkConstMethod "toList" [] $ objT c_QListQVariant
-  , just $ mkConstMethod "toStringList" [] $ objT c_QStringList
-  , just $ mkConstMethod "toString" [] $ objT c_QString
-  , just $ mkConstMethod "toUInt" [] uintT
-  , just $ mkConstMethod "toULongLong" [] ullongT
+  , just $ mkConstMethod "toBool" np boolT
+  , just $ mkConstMethod "toByteArray" np (objT c_QByteArray)
+  , just $ mkConstMethod "toChar" np $ objT c_QChar
+  , just $ mkConstMethod "toDouble" np doubleT
+  , test (qtVersion >= [4, 6]) $ mkConstMethod "toFloat" np floatT
+  , just $ mkConstMethod "toInt" np intT
+  , just $ mkConstMethod "toLongLong" np llongT
+  , just $ mkConstMethod "toPoint" np $ objT c_QPoint
+  , just $ mkConstMethod "toPointF" np $ objT c_QPointF
+  , just $ mkConstMethod "toRect" np $ objT c_QRect
+  , just $ mkConstMethod "toRectF" np $ objT c_QRectF
+  , just $ mkConstMethod "toSize" np $ objT c_QSize
+  , just $ mkConstMethod "toSizeF" np $ objT c_QSizeF
+  , just $ mkConstMethod "toList" np $ objT c_QListQVariant
+  , just $ mkConstMethod "toStringList" np $ objT c_QStringList
+  , just $ mkConstMethod "toString" np $ objT c_QString
+  , just $ mkConstMethod "toUInt" np uintT
+  , just $ mkConstMethod "toULongLong" np ullongT
   , -- Have to rename this, because "type" is reserved in Haskell.
-    just $ mkConstMethod' "type" "getType" [] $ enumT e_Type
-  , just $ mkConstMethod "userType" [] intT
+    just $ mkConstMethod' "type" "getType" np $ enumT e_Type
+  , just $ mkConstMethod "userType" np intT
   ]
 
 e_Type =
   makeQtEnum (ident1 "QVariant" "Type") [includeStd "QVariant"]
-  [ (0, ["invalid"])
-  , (13, ["bit", "array"])
-  , (73, ["bitmap"])
-  , (1, ["bool"])
-  , (66, ["brush"])
-  , (12, ["byte", "array"])
-  , (7, ["char"])
-  , (67, ["color"])
-  , (74, ["cursor"])
-  , (14, ["date"])
-  , (16, ["date", "time"])
-  , (6, ["double"])
-  , (29, ["easing", "curve"])
-  , (64, ["font"])
-  , (28, ["hash"])
-  , (69, ["icon"])
-  , (70, ["image"])
-  , (2, ["int"])
-  , (76, ["key", "sequence"])
-  , (23, ["line"])
-  , (24, ["line", "f"])
-  , (9, ["list"])
-  , (18, ["locale"])
-  , (4, ["long", "long"])
-  , (8, ["map"])
-  , (80, ["matrix"])
-  , (81, ["transform"])
-  , (82, ["matrix", "4x4"])
-  , (68, ["palette"])
-  , (77, ["pen"])
-  , (65, ["pixmap"])
-  , (25, ["point"])
+  [ "Invalid"
+  , "BitArray"
+  , "Bitmap"
+  , "Bool"
+  , "Brush"
+  , "ByteArray"
+  , "Char"
+  , "Color"
+  , "Cursor"
+  , "Date"
+  , "DateTime"
+  , "Double"
+  , "EasingCurve"
+  , "Font"
+  , "Hash"
+  , "Icon"
+  , "Image"
+  , "Int"
+  , "KeySequence"
+  , "Line"
+  , "LineF"
+  , "List"
+  , "Locale"
+  , "LongLong"
+  , "Map"
+  , "Matrix"
+  , "Transform"
+  , "Matrix4x4"
+  , "Palette"
+  , "Pen"
+  , "Pixmap"
+  , "Point"
     -- PointArray omitted -- same value as Polygon.
-  , (26, ["point", "f"])
-  , (71, ["polygon"])
-  , (86, ["quaternion"])
-  , (19, ["rect"])
-  , (20, ["rect", "f"])
-  , (27, ["reg", "exp"])
-  , (72, ["region"])
-  , (21, ["size"])
-  , (22, ["size", "f"])
-  , (75, ["size", "policy"])
-  , (10, ["string"])
-  , (11, ["string", "list"])
-  , (79, ["text", "format"])
-  , (78, ["text", "length"])
-  , (15, ["time"])
-  , (3, ["u", "int"])
-  , (5, ["u", "long", "long"])
-  , (17, ["url"])
-  , (83, ["vector", "2d"])
-  , (84, ["vector", "3d"])
-  , (85, ["vector", "4d"])
-  , (127, ["user", "type"])
+  , "PointF"
+  , "Polygon"
+  , "Quaternion"
+  , "Rect"
+  , "RectF"
+  , "RegExp"
+  , "Region"
+  , "Size"
+  , "SizeF"
+  , "SizePolicy"
+  , "String"
+  , "StringList"
+  , "TextFormat"
+  , "TextLength"
+  , "Time"
+  , "UInt"
+  , "ULongLong"
+  , "Url"
+  , "Vector2D"
+  , "Vector3D"
+  , "Vector4D"
+  , "UserType"
   ]

@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QMessageLogger (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -29,10 +28,11 @@ import Foreign.Hoppy.Generator.Spec (
   makeClass,
   mkConstMethod',
   mkCtor,
+  np,
   )
 import Foreign.Hoppy.Generator.Types (charT, intT, constT, objT, ptrT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModuleWithMinVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.QDebug (c_QDebug)
 import Graphics.UI.Qtah.Generator.Types
@@ -42,7 +42,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModuleWithMinVersion ["Core", "QMessageLogger"] [5, 0] $
-  [QtExport $ ExportClass c_QMessageLogger]
+  [qtExport c_QMessageLogger]
 
 c_QMessageLogger =
   addReqIncludes [ includeStd "QMessageLogger" ] $
@@ -50,15 +50,15 @@ c_QMessageLogger =
   makeClass (ident "QMessageLogger") Nothing [] $
   collect
   [ -- TODO QStrings instead of const char*.
-    just $ mkCtor "new" []
+    just $ mkCtor "new" np
   , just $ mkCtor "newWithContext" [ptrT $ constT $ charT, intT, ptrT $ constT $ charT]
   , just $ mkCtor "newWithContextAndCategory" [ptrT $ constT charT, intT, ptrT $ constT charT, ptrT $ constT charT]
 
     -- The following methods also have overloads that take format strings with
     -- variadic arguments.  We omit those as Qtah doesn't support varargs.
 
-  , just $ mkConstMethod' "critical" "critical" [] $ objT c_QDebug
-  , just $ mkConstMethod' "debug" "debug" [] $ objT c_QDebug
-  , test (qtVersion >= [5, 5]) $ mkConstMethod' "info" "info" [] $ objT c_QDebug
-  , test (qtVersion >= [5, 3]) $ mkConstMethod' "warning" "warning" [] $ objT c_QDebug
+  , just $ mkConstMethod' "critical" "critical" np $ objT c_QDebug
+  , just $ mkConstMethod' "debug" "debug" np $ objT c_QDebug
+  , test (qtVersion >= [5, 5]) $ mkConstMethod' "info" "info" np $ objT c_QDebug
+  , test (qtVersion >= [5, 3]) $ mkConstMethod' "warning" "warning" np $ objT c_QDebug
   ]

@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QLatin1String (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   Operator (OpArray, OpNe, OpLt, OpLe, OpEq, OpGt, OpGe),
   classSetConversionToGc,
   addReqIncludes,
@@ -33,6 +32,7 @@ import Foreign.Hoppy.Generator.Spec (
   mkConstMethod',
   mkCtor,
   mkMethod,
+  np,
   operatorPreferredExtName',
   )
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
@@ -41,7 +41,7 @@ import Foreign.Hoppy.Generator.Spec.ClassFeature (
   )
 import Foreign.Hoppy.Generator.Types (toGcT, charT, intT, boolT, voidT, enumT, constT, objT, ptrT, refT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Graphics.UI.Qtah.Generator.Interface.Core.QByteArray (c_QByteArray)
 import Graphics.UI.Qtah.Generator.Interface.Core.QLatin1Char (c_QLatin1Char)
@@ -56,7 +56,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Core", "QLatin1String"] $
-  [QtExport $ ExportClass c_QLatin1String]
+  [qtExport c_QLatin1String]
 
 c_QLatin1String =
   addReqIncludes [ includeStd "QLatin1String" ] $
@@ -65,26 +65,26 @@ c_QLatin1String =
   classSetEntityPrefix "" $
   makeClass (ident "QLatin1String") Nothing [] $
   collect
-  [ test (qtVersion >= [5, 6]) $ mkCtor "new" []
+  [ test (qtVersion >= [5, 6]) $ mkCtor "new" np
   , just $ mkCtor "newWithCharPtr" [ptrT $ constT charT]
   , test (qtVersion >= [5, 10]) $ mkCtor "newWithCharPtrRange" [ptrT $ constT charT, ptrT $ constT charT]
   , just $ mkCtor "newWithCharPtrAndSize" [ptrT $ constT charT, intT]
   , just $ mkCtor "newWithByteArray" [refT $ constT $ objT c_QByteArray]
   , test (qtVersion >= [5, 8]) $ mkConstMethod' "at" "at" [intT] $ toGcT $ objT c_QLatin1Char
-  , test (qtVersion >= [5, 10]) $ mkConstMethod "back" [] $ toGcT $ objT c_QLatin1Char
+  , test (qtVersion >= [5, 10]) $ mkConstMethod "back" np $ toGcT $ objT c_QLatin1Char
   , test (qtVersion >= [5, 10]) $ mkMethod "chop" [intT] voidT
   , test (qtVersion >= [5, 10]) $ mkConstMethod "chopped" [intT] $ objT c_QLatin1String
-  , just $ mkConstMethod' "data" "dataString" [] $ ptrT $ constT charT
-  , test (qtVersion >= [5, 10]) $ mkConstMethod "front" [] $ toGcT $ objT c_QLatin1Char
-  , test (qtVersion >= [5, 10]) $ mkConstMethod "isEmpty" [] boolT
-  , test (qtVersion >= [5, 10]) $ mkConstMethod "isNull" [] boolT
-  , just $ mkConstMethod "latin1" [] $ ptrT $ constT charT
+  , just $ mkConstMethod' "data" "dataString" np $ ptrT $ constT charT
+  , test (qtVersion >= [5, 10]) $ mkConstMethod "front" np $ toGcT $ objT c_QLatin1Char
+  , test (qtVersion >= [5, 10]) $ mkConstMethod "isEmpty" np boolT
+  , test (qtVersion >= [5, 10]) $ mkConstMethod "isNull" np boolT
+  , just $ mkConstMethod "latin1" np $ ptrT $ constT charT
   , test (qtVersion >= [5, 8]) $ mkConstMethod "left" [intT] $ objT c_QLatin1String
   , test (qtVersion >= [5, 8]) $ mkConstMethod' "mid" "mid" [intT] $ objT c_QLatin1String
   , test (qtVersion >= [5, 8]) $ mkConstMethod' "mid" "midWithLength" [intT, intT] $ objT c_QLatin1String
   , test (qtVersion >= [5, 8]) $ mkConstMethod "right" [intT] $ objT c_QLatin1String
-  , just $ mkConstMethod "size" [] intT
-  , test (qtVersion >= [5, 10]) $ mkConstMethod "trimmed" [] $ objT c_QLatin1String
+  , just $ mkConstMethod "size" np intT
+  , test (qtVersion >= [5, 10]) $ mkConstMethod "trimmed" np $ objT c_QLatin1String
   , test (qtVersion >= [5, 10]) $ mkMethod "truncate" [intT] voidT
   --, test (qtVersion >= [5, 10]) $ mkConstMethod' "endsWith" "endsWithStringView" [objT c_QStringView] boolT
   --, test (qtVersion >= [5, 10]) $ mkConstMethod' "endsWith" "endsWithStringViewWithCase" [objT c_QStringView, enumT e_CaseSensitivity] boolT

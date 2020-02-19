@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QLineEdit (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportEnum, ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -35,19 +34,21 @@ import Foreign.Hoppy.Generator.Spec (
   mkMethod,
   mkMethod',
   mkProp,
+  np,
   )
-import Foreign.Hoppy.Generator.Types (bitspaceT, boolT, constT, enumT, intT, objT, ptrT, voidT)
+import Foreign.Hoppy.Generator.Types (boolT, constT, enumT, intT, objT, ptrT, voidT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
+import Graphics.UI.Qtah.Generator.Flags (flagsT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QMargins (c_QMargins)
 import Graphics.UI.Qtah.Generator.Interface.Core.QPoint (c_QPoint)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
-import Graphics.UI.Qtah.Generator.Interface.Core.Types (bs_Alignment, e_CursorMoveStyle)
+import Graphics.UI.Qtah.Generator.Interface.Core.Types (fl_Alignment, e_CursorMoveStyle)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QValidator (c_QValidator)
 import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
-  c_Listener,
-  c_ListenerIntInt,
-  c_ListenerQString,
+  listener,
+  listenerIntInt,
+  listenerQString,
   )
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QMenu (c_QMenu)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QWidget (c_QWidget)
@@ -59,26 +60,26 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QLineEdit"] $
-  QtExport (ExportClass c_QLineEdit) :
+  qtExport c_QLineEdit :
   map QtExportSignal signals ++
-  [ QtExport $ ExportEnum e_EchoMode ]
+  [ qtExport e_EchoMode ]
 
 c_QLineEdit =
   addReqIncludes [includeStd "QLineEdit"] $
   classSetEntityPrefix "" $
   makeClass (ident "QLineEdit") Nothing [c_QWidget] $
   collect
-  [ just $ mkCtor "new" []
+  [ just $ mkCtor "new" np
   , just $ mkCtor "newWithParent" [ptrT $ objT c_QWidget]
   , just $ mkCtor "newWithText" [objT c_QString]
   , just $ mkCtor "newWithTextAndParent" [objT c_QString, ptrT $ objT c_QWidget]
-  , just $ mkProp "alignment" $ bitspaceT bs_Alignment
-  , just $ mkMethod "backspace" [] voidT
-  , just $ mkMethod "clear" [] voidT
+  , just $ mkProp "alignment" $ flagsT fl_Alignment
+  , just $ mkMethod "backspace" np voidT
+  , just $ mkMethod "clear" np voidT
   , test (qtVersion >= [5, 2]) $ mkBoolIsProp "clearButtonEnabled"
     -- TODO completer
-  , just $ mkConstMethod "copy" [] voidT
-  , just $ mkMethod "createStandardContextMenu" [] $ ptrT $ objT c_QMenu
+  , just $ mkConstMethod "copy" np voidT
+  , just $ mkMethod "createStandardContextMenu" np $ ptrT $ objT c_QMenu
   , just $ mkMethod "cursorBackward" [boolT, intT] voidT
   , just $ mkMethod "cursorForward" [boolT, intT] voidT
   , just $ mkProp "cursorMoveStyle" $ enumT e_CursorMoveStyle
@@ -86,52 +87,52 @@ c_QLineEdit =
   , just $ mkMethod "cursorPositionAt" [objT c_QPoint] intT
   , just $ mkMethod "cursorWordBackward" [boolT] voidT
   , just $ mkMethod "cursorWordForward" [boolT] voidT
-  , just $ mkMethod "cut" [] voidT
-  , just $ mkMethod "del" [] voidT
-  , just $ mkMethod "deselect" [] voidT
-  , just $ mkConstMethod "displayText" [] $ objT c_QString
+  , just $ mkMethod "cut" np voidT
+  , just $ mkMethod "del" np voidT
+  , just $ mkMethod "deselect" np voidT
+  , just $ mkConstMethod "displayText" np $ objT c_QString
   , just $ mkProp "dragEnabled" boolT
   , just $ mkProp "echoMode" $ enumT e_EchoMode
   , just $ mkMethod "end" [boolT] voidT
   , just $ mkBoolHasProp "frame"
-  , just $ mkConstMethod "hasAcceptableInput" [] boolT
-  , just $ mkConstMethod "hasSelectedText" [] boolT
+  , just $ mkConstMethod "hasAcceptableInput" np boolT
+  , just $ mkConstMethod "hasSelectedText" np boolT
   , just $ mkMethod "home" [boolT] voidT
   , just $ mkProp "inputMask" $ objT c_QString
   , just $ mkMethod "insert" [objT c_QString] voidT
-  , just $ mkConstMethod "isRedoAvailable" [] boolT
-  , just $ mkConstMethod "isUndoAvailable" [] boolT
+  , just $ mkConstMethod "isRedoAvailable" np boolT
+  , just $ mkConstMethod "isUndoAvailable" np boolT
   , just $ mkProp "maxLength" intT
   , just $ mkBoolIsProp "modified"
-  , just $ mkMethod "paste" [] voidT
+  , just $ mkMethod "paste" np voidT
   , just $ mkProp "placeholderText" $ objT c_QString
   , just $ mkBoolIsProp "readOnly"
-  , just $ mkMethod "redo" [] voidT
-  , just $ mkMethod "selectAll" [] voidT
-  , just $ mkConstMethod "selectedText" [] $ objT c_QString
-  , just $ mkConstMethod "selectionStart" [] intT
+  , just $ mkMethod "redo" np voidT
+  , just $ mkMethod "selectAll" np voidT
+  , just $ mkConstMethod "selectedText" np $ objT c_QString
+  , just $ mkConstMethod "selectionStart" np intT
   , just $ mkMethod "setSelection" [intT, intT] voidT
   , just $ mkMethod' "setTextMargins" "setTextMargins" [objT c_QMargins] voidT
   , just $ mkMethod' "setTextMargins" "setTextMarginsRaw" [intT, intT, intT, intT] voidT
   , just $ mkProp "text" $ objT c_QString
-  , just $ mkConstMethod "textMargins" [] $ objT c_QMargins
-  , just $ mkMethod "undo" [] voidT
+  , just $ mkConstMethod "textMargins" np $ objT c_QMargins
+  , just $ mkMethod "undo" np voidT
   , just $ mkProp "validator" $ ptrT $ constT $ objT c_QValidator
   ]
 
 signals =
-  [ makeSignal c_QLineEdit "cursorPositionChanged" c_ListenerIntInt
-  , makeSignal c_QLineEdit "editingFinished" c_Listener
-  , makeSignal c_QLineEdit "returnPressed" c_Listener
-  , makeSignal c_QLineEdit "selectionChanged" c_Listener
-  , makeSignal c_QLineEdit "textEdited" c_ListenerQString
-  , makeSignal c_QLineEdit "textChanged" c_ListenerQString
+  [ makeSignal c_QLineEdit "cursorPositionChanged" listenerIntInt
+  , makeSignal c_QLineEdit "editingFinished" listener
+  , makeSignal c_QLineEdit "returnPressed" listener
+  , makeSignal c_QLineEdit "selectionChanged" listener
+  , makeSignal c_QLineEdit "textEdited" listenerQString
+  , makeSignal c_QLineEdit "textChanged" listenerQString
   ]
 
 e_EchoMode =
   makeQtEnum (ident1 "QLineEdit" "EchoMode") [includeStd "QLineEdit"]
-  [ (0, ["normal"])
-  , (1, ["no", "echo"])
-  , (2, ["password"])
-  , (3, ["password", "echo", "on", "edit"])
+  [ "Normal"
+  , "NoEcho"
+  , "Password"
+  , "PasswordEchoOnEdit"
   ]

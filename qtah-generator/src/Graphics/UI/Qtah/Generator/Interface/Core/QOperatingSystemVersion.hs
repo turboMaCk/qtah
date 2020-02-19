@@ -22,7 +22,6 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QOperatingSystemVersion (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass, ExportEnum),
   addReqIncludes,
   classSetConversionToGc,
   classSetEntityPrefix,
@@ -34,13 +33,15 @@ import Foreign.Hoppy.Generator.Spec (
   mkConstMethod',
   mkStaticMethod,
   mkCtor,
+  np,
   )
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
     ClassFeature (Copyable),
     classAddFeatures,
     )
 import Foreign.Hoppy.Generator.Types (intT, enumT, objT)
-import Foreign.Hoppy.Generator.Version (collect, just)
+import Foreign.Hoppy.Generator.Version (collect, just, test)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModuleWithMinVersion)
 import Graphics.UI.Qtah.Generator.Types
@@ -51,8 +52,8 @@ aModule =
   AQtModule $
   makeQtModuleWithMinVersion ["Core", "QOperatingSystemVersion"] [5, 9] $
   collect
-  [ just $ QtExport $ ExportClass c_QOperatingSystemVersion
-  , just $ QtExport $ ExportEnum e_OSType
+  [ just $ qtExport c_QOperatingSystemVersion
+  , just $ qtExport e_OSType
   ]
 
 c_QOperatingSystemVersion =
@@ -65,24 +66,25 @@ c_QOperatingSystemVersion =
   [ just $ mkCtor "new" [enumT e_OSType, intT]
   , just $ mkCtor "newWithMinor" [enumT e_OSType, intT, intT]
   , just $ mkCtor "newWithMinorAndMicro" [enumT e_OSType, intT, intT, intT]
-  , just $ mkStaticMethod "current" [] $ objT c_QOperatingSystemVersion
-  , just $ mkStaticMethod "currentType" [] $ enumT e_OSType
+  , just $ mkStaticMethod "current" np $ objT c_QOperatingSystemVersion
+  , test (qtVersion >= [5, 10]) $
+    mkStaticMethod "currentType" np $ enumT e_OSType
   -- TODO bool QOperatingSystemVersion::isAnyOfType(std::initializer_list<OSType> types) const
-  , just $ mkConstMethod "majorVersion" [] intT
-  , just $ mkConstMethod "microVersion" [] intT
-  , just $ mkConstMethod "minorVersion" [] intT
-  , just $ mkConstMethod "name" [] $ objT c_QString
-  , just $ mkConstMethod "segmentCount" [] intT
-  , just $ mkConstMethod' "type" "getType" [] $ enumT e_OSType
+  , just $ mkConstMethod "majorVersion" np intT
+  , just $ mkConstMethod "microVersion" np intT
+  , just $ mkConstMethod "minorVersion" np intT
+  , just $ mkConstMethod "name" np $ objT c_QString
+  , just $ mkConstMethod "segmentCount" np intT
+  , just $ mkConstMethod' "type" "getType" np $ enumT e_OSType
   ]
 
 e_OSType =
   makeQtEnum (ident1 "QOperatingSystemVersion" "OSType") [includeStd "QOperatingSystemVersion"]
-  [ (0, ["unknown"])
-  , (1, ["windows"])
-  , (2, ["mac", "o", "s"])
-  , (3, ["i", "o", "s"])
-  , (4, ["tv", "o", "s"])
-  , (5, ["watch", "o", "s"])
-  , (6, ["android"])
+  [ "Unknown"
+  , "Windows"
+  , "MacOS"
+  , "IOS"
+  , "TvOS"
+  , "WatchOS"
+  , "Android"
   ]

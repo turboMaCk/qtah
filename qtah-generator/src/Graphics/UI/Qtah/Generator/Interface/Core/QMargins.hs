@@ -32,7 +32,6 @@ import Foreign.Hoppy.Generator.Spec (
     classHaskellConversionToCppFn,
     classHaskellConversionType
   ),
-  Export (ExportClass),
   Operator (OpAddAssign, OpDivideAssign, OpMultiplyAssign, OpSubtractAssign),
   addReqIncludes,
   classSetEntityPrefix,
@@ -46,6 +45,7 @@ import Foreign.Hoppy.Generator.Spec (
   mkCtor,
   mkMethod',
   mkProp,
+  np,
   operatorPreferredExtName',
   )
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
@@ -54,7 +54,7 @@ import Foreign.Hoppy.Generator.Spec.ClassFeature (
   )
 import Foreign.Hoppy.Generator.Types (boolT, intT, objT, refT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (qreal)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
@@ -69,7 +69,7 @@ import Language.Haskell.Syntax (
 aModule =
   AQtModule $
   makeQtModule ["Core", "QMargins"]
-  [ QtExport $ ExportClass c_QMargins ]
+  [ qtExport c_QMargins ]
 
 c_QMargins =
   addReqIncludes [includeStd "QMargins"] $
@@ -92,10 +92,10 @@ c_QMargins =
   classSetEntityPrefix "" $
   makeClass (ident "QMargins") Nothing [] $
   collect
-  [ just $ mkCtor "newNull" []
+  [ just $ mkCtor "newNull" np
   , just $ mkCtor "new" [intT, intT, intT, intT]
   , just $ mkProp "bottom" intT
-  , just $ mkConstMethod "isNull" [] boolT
+  , just $ mkConstMethod "isNull" np boolT
   , just $ mkProp "left" intT
   , just $ mkProp "right" intT
   , just $ mkProp "top" intT

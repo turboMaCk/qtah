@@ -27,6 +27,7 @@ import Foreign.Hoppy.Generator.Spec (
   makeClass,
   mkConstMethod,
   mkCtor,
+  np,
   )
 import Foreign.Hoppy.Generator.Types (intT, objT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QEvent (c_QEvent)
@@ -49,13 +50,13 @@ c_QEnterEvent =
   classSetEntityPrefix "" $
   makeClass (ident "QEnterEvent") Nothing [c_QEvent]
   [ mkCtor "new" [objT c_QPointF, objT c_QPointF, objT c_QPointF]
-  , mkConstMethod "globalPos" [] $ objT c_QPoint
-  , mkConstMethod "globalX" [] intT
-  , mkConstMethod "globalY" [] intT
-  , mkConstMethod "localPos" [] $ objT c_QPointF
-  , mkConstMethod "pos" [] $ objT c_QPoint
-  , mkConstMethod "screenPos" [] $ objT c_QPointF
-  , mkConstMethod "windowPos" [] $ objT c_QPointF
-  , mkConstMethod "x" [] intT
-  , mkConstMethod "y" [] intT
+  , mkConstMethod "globalPos" np $ objT c_QPoint
+  , mkConstMethod "globalX" np intT
+  , mkConstMethod "globalY" np intT
+  , mkConstMethod "localPos" np $ objT c_QPointF
+  , mkConstMethod "pos" np $ objT c_QPoint
+  , mkConstMethod "screenPos" np $ objT c_QPointF
+  , mkConstMethod "windowPos" np $ objT c_QPointF
+  , mkConstMethod "x" np intT
+  , mkConstMethod "y" np intT
   ]

@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QFileSystemWatcher (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -29,14 +28,15 @@ import Foreign.Hoppy.Generator.Spec (
   makeClass,
   mkConstMethod,
   mkCtor,
-  mkMethod
+  mkMethod,
+  np,
   )
 import Graphics.UI.Qtah.Generator.Interface.Core.QObject (c_QObject)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Graphics.UI.Qtah.Generator.Interface.Core.QStringList (c_QStringList)
 import Foreign.Hoppy.Generator.Types (boolT, constT, objT, ptrT, refT)
 import Foreign.Hoppy.Generator.Version (collect, just)
-import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (c_ListenerQString)
+import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (listenerQString)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModuleWithMinVersion)
 import Graphics.UI.Qtah.Generator.Types
 
@@ -45,7 +45,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModuleWithMinVersion ["Core", "QFileSystemWatcher"] [4, 2] $
-  (QtExport $ ExportClass c_QFileSystemWatcher) :
+  (qtExport c_QFileSystemWatcher) :
   map QtExportSignal signals
 
 c_QFileSystemWatcher =
@@ -53,14 +53,14 @@ c_QFileSystemWatcher =
   classSetEntityPrefix "" $
   makeClass (ident "QFileSystemWatcher") Nothing [c_QObject] $
   collect
-  [ just $ mkCtor "new" []
+  [ just $ mkCtor "new" np
   , just $ mkCtor "newWithParent" [ptrT $ objT c_QObject]
   , just $ mkCtor "newWithPaths" [refT $ constT $ objT c_QStringList]
   , just $ mkCtor "newWithPathsAndParent" [refT $ constT $ objT c_QStringList, ptrT $ objT c_QObject]
   , just $ mkMethod "addPath" [refT $ constT $ objT c_QString] boolT
   , just $ mkMethod "addPaths" [refT $ constT $ objT c_QStringList] $ objT c_QStringList
-  , just $ mkConstMethod "directories" [] $ objT c_QStringList
-  , just $ mkConstMethod "files" [] $ objT c_QStringList
+  , just $ mkConstMethod "directories" np $ objT c_QStringList
+  , just $ mkConstMethod "files" np $ objT c_QStringList
   , just $ mkMethod "removePath" [refT $ constT $ objT c_QString] boolT
   , just $ mkMethod "removePaths" [refT $ constT $ objT c_QStringList] $ objT c_QStringList
   ]
@@ -68,6 +68,6 @@ c_QFileSystemWatcher =
 signals :: [Signal]
 signals =
   collect
-  [ just $ makeSignal c_QFileSystemWatcher "directoryChanged" c_ListenerQString
-  , just $ makeSignal c_QFileSystemWatcher "fileChanged" c_ListenerQString
+  [ just $ makeSignal c_QFileSystemWatcher "directoryChanged" listenerQString
+  , just $ makeSignal c_QFileSystemWatcher "fileChanged" listenerQString
   ]

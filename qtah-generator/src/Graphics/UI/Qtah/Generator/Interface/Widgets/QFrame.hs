@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QFrame (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportEnum, ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -31,6 +30,7 @@ import Foreign.Hoppy.Generator.Spec (
   mkConstMethod,
   mkCtor,
   mkProp,
+  np,
   )
 import Foreign.Hoppy.Generator.Types (enumT, intT, objT, ptrT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QRect (c_QRect)
@@ -43,48 +43,48 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QFrame"]
-  [ QtExport $ ExportClass c_QFrame
-  , QtExport $ ExportEnum e_Shadow
-  , QtExport $ ExportEnum e_Shape
-  , QtExport $ ExportEnum e_StyleMask
+  [ qtExport c_QFrame
+  , qtExport e_Shadow
+  , qtExport e_Shape
+  , qtExport e_StyleMask
   ]
 
 c_QFrame =
   addReqIncludes [includeStd "QFrame"] $
   classSetEntityPrefix "" $
   makeClass (ident "QFrame") Nothing [c_QWidget]
-  [ mkCtor "new" []
+  [ mkCtor "new" np
   , mkCtor "newWithParent" [ptrT $ objT c_QWidget]
     -- TODO QFrame(QWidget*, Qt::WindowFlags)
   , mkProp "frameRect" $ objT c_QRect
   , mkProp "frameShadow" $ enumT e_Shadow
   , mkProp "frameShape" $ enumT e_Shape
   , mkProp "frameStyle" intT
-  , mkConstMethod "frameWidth" [] intT
+  , mkConstMethod "frameWidth" np intT
   , mkProp "lineWidth" intT
   , mkProp "midLineWidth" intT
   ]
 
 e_Shadow =
   makeQtEnum (ident1 "QFrame" "Shadow") [includeStd "QFrame"]
-  [ (0x0010, ["plain"])
-  , (0x0020, ["raised"])
-  , (0x0030, ["sunken"])
+  [ "Plain"
+  , "Raised"
+  , "Sunken"
   ]
 
 e_Shape =
   makeQtEnum (ident1 "QFrame" "Shape") [includeStd "QFrame"]
-  [ (0x0000, ["no", "frame"])
-  , (0x0001, ["box"])
-  , (0x0002, ["panel"])
-  , (0x0003, ["win", "panel"])
-  , (0x0004, ["h", "line"])
-  , (0x0005, ["v", "line"])
-  , (0x0006, ["styled", "panel"])
+  [ "NoFrame"
+  , "Box"
+  , "Panel"
+  , "WinPanel"
+  , "HLine"
+  , "VLine"
+  , "StyledPanel"
   ]
 
 e_StyleMask =
   makeQtEnum (ident1 "QFrame" "StyleMask") [includeStd "QFrame"]
-  [ (0x000f, ["shape", "mask"])
-  , (0x00f0, ["shadow", "mask"])
+  [ "Shape_Mask"
+  , "Shadow_Mask"
   ]

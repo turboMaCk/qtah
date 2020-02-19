@@ -20,7 +20,6 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QComboBox (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -29,7 +28,8 @@ import Foreign.Hoppy.Generator.Spec (
   mkCtor,
   mkMethod,
   mkMethod',
-  mkProp
+  mkProp,
+  np,
   )
 import Foreign.Hoppy.Generator.Types (intT, objT, ptrT, voidT)
 import Foreign.Hoppy.Generator.Version (collect, just)
@@ -37,8 +37,8 @@ import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Graphics.UI.Qtah.Generator.Interface.Core.QVariant (c_QVariant)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QIcon (c_QIcon)
 import Graphics.UI.Qtah.Generator.Interface.Internal.Listener (
-  c_ListenerInt,
-  c_ListenerQString,
+  listenerInt,
+  listenerQString,
   )
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QWidget (c_QWidget)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
@@ -49,7 +49,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QComboBox"] $
-  QtExport (ExportClass c_QComboBox) :
+  qtExport c_QComboBox :
   map QtExportSignal signals
 
 c_QComboBox =
@@ -57,7 +57,7 @@ c_QComboBox =
   classSetEntityPrefix "" $
   makeClass (ident "QComboBox") Nothing [c_QWidget] $
   collect
-  [ just $ mkCtor "new" []
+  [ just $ mkCtor "new" np
   , just $ mkCtor "newWithParent" [ptrT $ objT c_QWidget]
   , just $ mkMethod "addItem" [objT c_QString] voidT
   , just $ mkMethod' "addItem" "addItemWithData" [objT c_QString, objT c_QVariant] voidT
@@ -69,10 +69,10 @@ c_QComboBox =
   ]
 
 signals =
-  [ makeSignal c_QComboBox "activated" c_ListenerInt
-  , makeSignal' c_QComboBox "activated" "activatedString" c_ListenerQString
-  , makeSignal c_QComboBox "currentIndexChanged" c_ListenerInt
-  , makeSignal' c_QComboBox "currentIndexChanged" "currentIndexChangedString" c_ListenerQString
+  [ makeSignal c_QComboBox "activated" listenerInt
+  , makeSignal' c_QComboBox "activated" "activatedString" listenerQString
+  , makeSignal c_QComboBox "currentIndexChanged" listenerInt
+  , makeSignal' c_QComboBox "currentIndexChanged" "currentIndexChangedString" listenerQString
   ]
 
 -- TODO The rest of QComboBox.

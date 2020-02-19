@@ -27,12 +27,14 @@ import Foreign.Hoppy.Generator.Spec (
   includeStd,
   makeClass,
   mkConstMethod,
+  np,
   )
-import Foreign.Hoppy.Generator.Types (bitspaceT, ulongT)
+import Foreign.Hoppy.Generator.Types (ulongT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
+import Graphics.UI.Qtah.Generator.Flags (flagsT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QEvent (c_QEvent)
-import Graphics.UI.Qtah.Generator.Interface.Core.Types (bs_KeyboardModifiers)
+import Graphics.UI.Qtah.Generator.Interface.Core.Types (fl_KeyboardModifiers)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
 import Graphics.UI.Qtah.Generator.Types
 
@@ -49,6 +51,6 @@ c_QInputEvent =
   classSetEntityPrefix "" $
   makeClass (ident "QInputEvent") Nothing [c_QEvent] $
   collect
-  [ just $ mkConstMethod "modifiers" [] $ bitspaceT bs_KeyboardModifiers
-  , test (qtVersion >= [5, 0]) $ mkConstMethod "timestamp" [] ulongT
+  [ just $ mkConstMethod "modifiers" np $ flagsT fl_KeyboardModifiers
+  , test (qtVersion >= [5, 0]) $ mkConstMethod "timestamp" np ulongT
   ]

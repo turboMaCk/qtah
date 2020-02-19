@@ -19,11 +19,10 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QLibrary (
   aModule,
   c_QLibrary,
   e_LoadHint,
-  bs_LoadHints,
+  fl_LoadHints,
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass, ExportBitspace, ExportEnum),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -36,11 +35,13 @@ import Foreign.Hoppy.Generator.Spec (
   mkCtor,
   mkMethod',
   mkMethod,
-  mkProp
+  mkProp,
+  np,
   )
-import Foreign.Hoppy.Generator.Types (charT, intT, boolT, voidT, bitspaceT, constT, objT, ptrT, refT)
+import Foreign.Hoppy.Generator.Types (charT, intT, boolT, voidT, constT, objT, ptrT, refT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
+import Graphics.UI.Qtah.Generator.Flags (flagsT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QObject (c_QObject)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
@@ -53,9 +54,9 @@ aModule =
   AQtModule $
   makeQtModule ["Core", "QLibrary"] $
   collect
-  [ just $ QtExport $ ExportClass c_QLibrary
-  , just $ QtExport $ ExportEnum e_LoadHint
-  , just $ QtExport $ ExportBitspace bs_LoadHints
+  [ just $ qtExport c_QLibrary
+  , just $ qtExport e_LoadHint
+  , just $ qtExport fl_LoadHints
   ]
 
 c_QLibrary =
@@ -63,7 +64,7 @@ c_QLibrary =
   classSetEntityPrefix "" $
   makeClass (ident "QLibrary") Nothing [c_QObject] $
   collect
-  [ just $ mkCtor "new" []
+  [ just $ mkCtor "new" np
   , just $ mkCtor "newWithParent" [ptrT $ objT c_QObject]
   , just $ mkCtor "newWithFilename" [refT $ constT $ objT c_QString]
   , just $ mkCtor "newWithFilenameAndParent" [refT $ constT $ objT c_QString, ptrT $ objT c_QObject]
@@ -71,10 +72,10 @@ c_QLibrary =
   , just $ mkCtor "newWithFilenameAndMajorVersionAndParent" [refT $ constT $ objT c_QString, intT, ptrT $ objT c_QObject]
   , just $ mkCtor "newWithFilenameAndVersion" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString]
   , just $ mkCtor "newWithFilenameAndVersionAndParent" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString, ptrT $ objT c_QObject]
-  , test (qtVersion >= [4, 2]) $ mkConstMethod "errorString" [] $ objT c_QString
+  , test (qtVersion >= [4, 2]) $ mkConstMethod "errorString" np $ objT c_QString
   , just $ mkStaticMethod "isLibrary" [refT $ constT $ objT c_QString] boolT
-  , just $ mkConstMethod "isLoaded" [] boolT
-  , just $ mkMethod "load" [] boolT
+  , just $ mkConstMethod "isLoaded" np boolT
+  , just $ mkMethod "load" np boolT
   , -- TODO Make these functions take QStrings.
     just $ mkMethod' "resolve" "resolve" [ptrT $ constT $ charT] qfunctionpointer
   , just $ mkStaticMethod' "resolve" "resolveStatic" [refT $ constT $ objT c_QString, ptrT $ constT charT] qfunctionpointer
@@ -82,16 +83,16 @@ c_QLibrary =
   , test (qtVersion >= [4, 4]) $ mkStaticMethod' "resolve" "resolveStaticWithVersion" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString, ptrT $ constT charT] qfunctionpointer
   , just $ mkMethod' "setFileNameAndVersion" "setFileNameAndMajorVersion" [refT $ constT $ objT c_QString, intT] voidT
   , test (qtVersion >= [4, 4]) $ mkMethod' "setFileNameAndVersion" "setFileNameAndVersion" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QString] voidT
-  , just $ mkMethod "unload" [] boolT
+  , just $ mkMethod "unload" np boolT
   , just $ mkProp "fileName" $ objT c_QString
-  , just $ mkProp "loadHints" $ bitspaceT bs_LoadHints
+  , just $ mkProp "loadHints" $ flagsT fl_LoadHints
   ]
 
-(e_LoadHint, bs_LoadHints) =
-  makeQtEnumBitspace (ident1 "QLibrary" "LoadHint") "LoadHints" [includeStd "QLibrary"]
-  [ (0x01, ["resolve", "all", "symbols", "hint"])
-  , (0x02, ["export", "external", "symbols", "hint"])
-  , (0x04, ["load", "archive", "member", "hint"])
-  , (0x08, ["prevent", "unload", "hint"])
-  , (0x10, ["deep", "bind", "hint"])
+(e_LoadHint, fl_LoadHints) =
+  makeQtEnumAndFlags (ident1 "QLibrary" "LoadHint") "LoadHints" [includeStd "QLibrary"]
+  [ "ResolveAllSymbolsHint"
+  , "ExportExternalSymbolsHint"
+  , "LoadArchiveMemberHint"
+  , "PreventUnloadHint"
+  , "DeepBindHint"
   ]

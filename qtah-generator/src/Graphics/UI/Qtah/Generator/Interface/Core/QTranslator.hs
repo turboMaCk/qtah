@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QTranslator (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -31,6 +30,7 @@ import Foreign.Hoppy.Generator.Spec (
   mkConstMethod',
   mkCtor,
   mkMethod',
+  np,
   )
 import Foreign.Hoppy.Generator.Types (
   boolT,
@@ -52,7 +52,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Core", "QTranslator"]
-  [ QtExport $ ExportClass c_QTranslator ]
+  [ qtExport c_QTranslator ]
 
 c_QTranslator =
   addReqIncludes [ includeStd "QTranslator" ] $
@@ -60,9 +60,9 @@ c_QTranslator =
   makeClass (ident "QTranslator") Nothing [c_QObject] $
   collect
   [
-    just $ mkCtor "new" []
+    just $ mkCtor "new" np
   , just $ mkCtor "newWithParent" [ptrT $ objT c_QObject]
-  , just $ mkConstMethod "isEmpty" [] boolT
+  , just $ mkConstMethod "isEmpty" np boolT
 
   , just $ mkMethod' "load" "loadWith" [objT c_QString] boolT
   , just $ mkMethod' "load" "loadWithDir" [objT c_QString, objT c_QString] boolT

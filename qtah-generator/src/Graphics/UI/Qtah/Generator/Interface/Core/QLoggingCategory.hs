@@ -22,7 +22,6 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QLoggingCategory (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   Type,
   addReqIncludes,
   classSetEntityPrefix,
@@ -32,12 +31,13 @@ import Foreign.Hoppy.Generator.Spec (
   mkConstMethod,
   mkStaticMethod,
   mkCtor,
-  mkMethod
+  mkMethod,
+  np,
   )
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Foreign.Hoppy.Generator.Types (charT, voidT, boolT, enumT, constT, objT, ptrT, refT, fnT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModuleWithMinVersion)
 import Graphics.UI.Qtah.Generator.Types
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (e_QtMsgType)
@@ -47,7 +47,7 @@ import Graphics.UI.Qtah.Generator.Interface.Core.Types (e_QtMsgType)
 aModule =
   AQtModule $
   makeQtModuleWithMinVersion ["Core", "QLoggingCategory"] [5, 2] $
-  [QtExport $ ExportClass c_QLoggingCategory]
+  [qtExport c_QLoggingCategory]
 
 c_QLoggingCategory =
   addReqIncludes [ includeStd "QLoggingCategory" ] $
@@ -57,14 +57,14 @@ c_QLoggingCategory =
   [ -- TODO QStrings instead of const char*.
     test (qtVersion >= [5, 4]) $ mkCtor "newWithMsgType" [ptrT $ constT charT, enumT e_QtMsgType]
   , just $ mkCtor "new" [ptrT $ constT charT]
-  , just $ mkConstMethod "categoryName" [] $ ptrT $ constT charT
-  , just $ mkStaticMethod "defaultCategory" [] $ ptrT $ objT c_QLoggingCategory
+  , just $ mkConstMethod "categoryName" np $ ptrT $ constT charT
+  , just $ mkStaticMethod "defaultCategory" np $ ptrT $ objT c_QLoggingCategory
   , just $ mkStaticMethod "installFilter" [categoryFilter] categoryFilter
-  , just $ mkConstMethod "isCriticalEnabled" [] boolT
-  , just $ mkConstMethod "isDebugEnabled" [] boolT
+  , just $ mkConstMethod "isCriticalEnabled" np boolT
+  , just $ mkConstMethod "isDebugEnabled" np boolT
   , just $ mkConstMethod "isEnabled" [enumT e_QtMsgType] boolT
-  , test (qtVersion >= [5, 5]) $ mkConstMethod "isInfoEnabled" [] boolT
-  , just $ mkConstMethod "isWarningEnabled" [] boolT
+  , test (qtVersion >= [5, 5]) $ mkConstMethod "isInfoEnabled" np boolT
+  , just $ mkConstMethod "isWarningEnabled" np boolT
   , just $ mkMethod "setEnabled" [enumT e_QtMsgType, boolT] voidT
   , just $ mkStaticMethod "setFilterRules" [refT $ constT $ objT c_QString] voidT
     -- OMIT operator()

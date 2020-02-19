@@ -26,10 +26,6 @@ import Foreign.Hoppy.Generator.Language.Haskell (
   ln,
   sayLn,
   saysLn,
-  toHsCastMethodName,
-  toHsClassEntityName,
-  toHsClassEntityName',
-  toHsDataTypeName,
   )
 import Foreign.Hoppy.Generator.Spec (
   ClassHaskellConversion (
@@ -39,7 +35,6 @@ import Foreign.Hoppy.Generator.Spec (
     classHaskellConversionType
   ),
   Constness (Const, Nonconst),
-  Export (ExportClass),
   addAddendumHaskell,
   addReqIncludes,
   classSetEntityPrefix,
@@ -52,6 +47,13 @@ import Foreign.Hoppy.Generator.Spec (
   mkCtor,
   mkMethod,
   mkMethod',
+  np,
+  )
+import Foreign.Hoppy.Generator.Spec.Class (
+  toHsCastMethodName,
+  toHsClassEntityName,
+  toHsClassEntityName',
+  toHsDataTypeName,
   )
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Assignable, Copyable, Equatable),
@@ -59,7 +61,7 @@ import Foreign.Hoppy.Generator.Spec.ClassFeature (
   )
 import Foreign.Hoppy.Generator.Types (boolT, enumT, intT, objT, voidT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.QChar (c_QChar)
 import Graphics.UI.Qtah.Generator.Interface.Core.QList (c_QListQString)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
@@ -79,7 +81,7 @@ import Language.Haskell.Syntax (
 aModule =
   AQtModule $
   makeQtModule ["Core", "QStringList"]
-  [ QtExport $ ExportClass c_QStringList ]
+  [ qtExport c_QStringList ]
 
 c_QStringList =
   addReqIncludes [includeStd "QStringList"] $
@@ -102,7 +104,7 @@ c_QStringList =
   classSetEntityPrefix "" $
   makeClass (ident "QStringList") Nothing [c_QListQString] $
   collect
-  [ just $ mkCtor "new" []
+  [ just $ mkCtor "new" np
   , -- TODO Regexp methods.
     just $ mkConstMethod' "contains" "containsCase" [objT c_QString, enumT e_CaseSensitivity] boolT
   , just $ mkConstMethod' "filter" "filter" [objT c_QString] $ objT c_QStringList
@@ -110,9 +112,9 @@ c_QStringList =
     objT c_QStringList
   , just $ mkConstMethod' "join" "joinString" [objT c_QString] $ objT c_QString
   , test (qtVersion >= [5, 0]) $ mkConstMethod' "join" "joinChar" [objT c_QChar] $ objT c_QString
-  , test (qtVersion >= [4, 5]) $ mkMethod "removeDuplicates" [] intT
+  , test (qtVersion >= [4, 5]) $ mkMethod "removeDuplicates" np intT
     -- TODO replaceInStrings.  Ownership?
-  , just $ mkMethod' "sort" "sort" [] voidT
+  , just $ mkMethod' "sort" "sort" np voidT
   , test (qtVersion >= [5, 0]) $ mkMethod' "sort" "sortCase" [enumT e_CaseSensitivity] voidT
   ]
 

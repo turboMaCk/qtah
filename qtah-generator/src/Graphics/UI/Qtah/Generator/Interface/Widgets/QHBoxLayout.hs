@@ -20,13 +20,13 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QHBoxLayout (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
   includeStd,
   makeClass,
   mkCtor,
+  np,
   )
 import Foreign.Hoppy.Generator.Types (objT, ptrT)
 import Graphics.UI.Qtah.Generator.Interface.Widgets.QBoxLayout (c_QBoxLayout)
@@ -39,12 +39,12 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QHBoxLayout"]
-  [ QtExport $ ExportClass c_QHBoxLayout ]
+  [ qtExport c_QHBoxLayout ]
 
 c_QHBoxLayout =
   addReqIncludes [includeStd "QHBoxLayout"] $
   classSetEntityPrefix "" $
   makeClass (ident "QHBoxLayout") Nothing [c_QBoxLayout]
-  [ mkCtor "new" []
+  [ mkCtor "new" np
   , mkCtor "newWithParent" [ptrT $ objT c_QWidget]
   ]

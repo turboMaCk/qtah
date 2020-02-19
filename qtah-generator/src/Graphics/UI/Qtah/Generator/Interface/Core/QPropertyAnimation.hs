@@ -21,13 +21,12 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QPropertyAnimation (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
   includeStd,
   makeClass,
-  mkProp
+  mkProp,
   )
 import Graphics.UI.Qtah.Generator.Interface.Core.QVariantAnimation (c_QVariantAnimation)
 import Graphics.UI.Qtah.Generator.Interface.Core.QObject (c_QObject)
@@ -42,7 +41,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModuleWithMinVersion ["Core", "QPropertyAnimation"] [4, 6] $
-  [QtExport $ ExportClass c_QPropertyAnimation]
+  [qtExport c_QPropertyAnimation]
 
 c_QPropertyAnimation =
   addReqIncludes [ includeStd "QPropertyAnimation" ] $

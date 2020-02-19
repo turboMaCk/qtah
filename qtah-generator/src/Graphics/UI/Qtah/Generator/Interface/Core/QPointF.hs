@@ -31,7 +31,6 @@ import Foreign.Hoppy.Generator.Spec (
     classHaskellConversionToCppFn,
     classHaskellConversionType
   ),
-  Export (ExportClass),
   Operator (OpAddAssign, OpDivideAssign, OpMultiplyAssign, OpSubtractAssign),
   addReqIncludes,
   classSetEntityPrefix,
@@ -46,6 +45,7 @@ import Foreign.Hoppy.Generator.Spec (
   mkMethod,
   mkProp,
   mkStaticMethod,
+  np,
   )
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Assignable, Copyable, Equatable),
@@ -53,7 +53,7 @@ import Foreign.Hoppy.Generator.Spec.ClassFeature (
   )
 import Foreign.Hoppy.Generator.Types (boolT, objT, refT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
 import Graphics.UI.Qtah.Generator.Interface.Core.QPoint (c_QPoint)
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (qreal)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
@@ -69,7 +69,7 @@ import Language.Haskell.Syntax (
 aModule =
   AQtModule $
   makeQtModule ["Core", "QPointF"]
-  [ QtExport $ ExportClass c_QPointF ]
+  [ qtExport c_QPointF ]
 
 c_QPointF =
   addReqIncludes [includeStd "QPointF"] $
@@ -91,13 +91,13 @@ c_QPointF =
   classSetEntityPrefix "" $
   makeClass (ident "QPointF") Nothing [] $
   collect
-  [ just $ mkCtor "newNull" []
+  [ just $ mkCtor "newNull" np
   , just $ mkCtor "new" [qreal, qreal]
   , just $ mkCtor "newFromPoint" [objT c_QPoint]
   , test (qtVersion >= [5, 1]) $ mkStaticMethod "dotProduct" [objT c_QPointF, objT c_QPointF] qreal
-  , just $ mkConstMethod "isNull" [] boolT
-  , test (qtVersion >= [4, 6]) $ mkConstMethod "manhattanLength" [] qreal
-  , just $ mkConstMethod "toPoint" [] $ objT c_QPoint
+  , just $ mkConstMethod "isNull" np boolT
+  , test (qtVersion >= [4, 6]) $ mkConstMethod "manhattanLength" np qreal
+  , just $ mkConstMethod "toPoint" np $ objT c_QPoint
   , just $ mkProp "x" qreal
   , just $ mkProp "y" qreal
   , just $ mkMethod OpAddAssign [objT c_QPointF] $ refT $ objT c_QPointF

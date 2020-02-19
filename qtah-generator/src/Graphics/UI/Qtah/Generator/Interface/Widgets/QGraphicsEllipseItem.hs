@@ -21,13 +21,13 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QGraphicsEllipseItem (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
   includeStd,
   makeClass,
   mkCtor,
+  np,
   )
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (qreal)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
@@ -40,13 +40,13 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QGraphicsEllipseItem"]
-  [ QtExport $ ExportClass c_QGraphicsEllipseItem
+  [ qtExport c_QGraphicsEllipseItem
   ]
 
 c_QGraphicsEllipseItem =
   addReqIncludes [includeStd "QGraphicsEllipseItem"] $
   classSetEntityPrefix "" $
   makeClass (ident "QGraphicsEllipseItem") Nothing [c_QAbstractGraphicsShapeItem]
-  [ mkCtor "new" []
+  [ mkCtor "new" np
   , mkCtor "newWithRaw" [qreal, qreal, qreal, qreal]
   ]

@@ -21,13 +21,13 @@ module Graphics.UI.Qtah.Generator.Interface.Widgets.QDateEdit (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
   includeStd,
   makeClass,
   mkCtor,
+  np,
   )
 import Foreign.Hoppy.Generator.Types (objT, ptrT)
 import Foreign.Hoppy.Generator.Version (collect, just)
@@ -44,14 +44,14 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QDateEdit"]
-  [ QtExport $ ExportClass c_QDateEdit ]
+  [ qtExport c_QDateEdit ]
 
 c_QDateEdit =
   addReqIncludes [includeStd "QDateEdit"] $
   classSetEntityPrefix "" $
   makeClass (ident "QDateEdit") Nothing [c_QDateTimeEdit] $
   collect
-  [ just $ mkCtor "new" []
+  [ just $ mkCtor "new" np
   , just $ mkCtor "newWithParent" [ptrT $ objT c_QWidget]
   , just $ mkCtor "newWithDate" [objT c_QDate]
   , just $ mkCtor "newWithDateAndParent" [objT c_QDate, ptrT $ objT c_QWidget]

@@ -19,7 +19,7 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QByteArray (
   aModule,
   c_QByteArray,
   e_Base64Option,
-  bs_Base64Options,
+  fl_Base64Options,
   ) where
 
 import Foreign.Hoppy.Generator.Language.Haskell (
@@ -36,7 +36,6 @@ import Foreign.Hoppy.Generator.Spec (
     classHaskellConversionToCppFn,
     classHaskellConversionType
   ),
-  Export (ExportClass, ExportEnum, ExportBitspace),
   addAddendumHaskell,
   addReqIncludes,
   classSetEntityPrefix,
@@ -50,7 +49,8 @@ import Foreign.Hoppy.Generator.Spec (
   mkConstMethod',
   mkCtor,
   mkMethod,
-  mkMethod'
+  mkMethod',
+  np,
   )
 import Foreign.Hoppy.Generator.Spec.ClassFeature (
   ClassFeature (Assignable, Copyable, Comparable, Equatable),
@@ -59,7 +59,7 @@ import Foreign.Hoppy.Generator.Spec.ClassFeature (
 import Foreign.Hoppy.Generator.Types (ushortT, shortT, uintT, floatT, doubleT, boolT, charT, constT, intT, ptrT, voidT, refT, objT, enumT)
 import Graphics.UI.Qtah.Generator.Interface.Core.Types (e_CaseSensitivity)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
-import Graphics.UI.Qtah.Generator.Flags (qtVersion)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
 import {-# SOURCE #-} Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Graphics.UI.Qtah.Generator.Interface.Imports
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
@@ -77,9 +77,9 @@ aModule =
   AQtModule $
   makeQtModule ["Core", "QByteArray"] $
   collect
-  [ just $ QtExport $ ExportClass c_QByteArray
-  , test (qtVersion >= [5, 2]) $ QtExport $ ExportEnum e_Base64Option
-  , test (qtVersion >= [5, 2]) $ QtExport $ ExportBitspace bs_Base64Options
+  [ just $ qtExport c_QByteArray
+  , test (qtVersion >= [5, 2]) $ qtExport e_Base64Option
+  , test (qtVersion >= [5, 2]) $ qtExport fl_Base64Options
   ]
 
 c_QByteArray :: Class
@@ -91,7 +91,7 @@ c_QByteArray =
   classSetEntityPrefix "" $
   makeClass (ident "QByteArray") Nothing [] $
   collect
-  [ just $ mkCtor "new" []
+  [ just $ mkCtor "new" np
   , just $ mkCtor "newFromData" [ptrT $ constT charT]
   , just $ mkCtor "newFromDataAndSize" [ptrT $ constT charT, intT]
   , just $ mkCtor "newFromRepeatedChar" [intT, charT]
@@ -169,11 +169,11 @@ c_QByteArray =
   , just $ mkMethod' "setNum" "setNumDoubleWithFormatAndPrecision" [doubleT, charT, intT] $ refT $ objT c_QByteArray
 
   , just $ mkConstMethod "at" [intT] charT
-  , test (qtVersion >= [5, 10]) $ mkConstMethod "back" [] charT
+  , test (qtVersion >= [5, 10]) $ mkConstMethod "back" np charT
   -- TODO QByteRef back()
   -- TODO QByteArray::iterator begin()
   -- TODO QByteArray::const_iterator begin() const
-  , just $ mkConstMethod "capacity" [] intT
+  , just $ mkConstMethod "capacity" np intT
   -- QByteArray::const_iterator cbegin() const
   -- QByteArray::const_iterator cend() const
   , just $ mkMethod "chop" [intT] voidT
@@ -183,7 +183,7 @@ c_QByteArray =
   , test (qtVersion >= [5, 12]) $ mkConstMethod' "compare" "compare" [objT c_QByteArray] intT
   , test (qtVersion >= [5, 12]) $ mkConstMethod' "compare" "compareWithCase" [objT c_QByteArray, enumT e_CaseSensitivity] intT
   -- TODO QByteArray::const_iterator constBegin() const
-  , just $ mkConstMethod "constData" [] $ ptrT $ constT charT
+  , just $ mkConstMethod "constData" np $ ptrT $ constT charT
   -- TODO QByteArray::const_iterator constEnd() const
   , just $ mkConstMethod' "contains" "contains" [objT c_QByteArray] boolT
   , just $ mkConstMethod' "contains" "containsPtrConstChar" [ptrT $ constT charT] boolT
@@ -191,12 +191,12 @@ c_QByteArray =
   , just $ mkConstMethod' "count" "countByteArray" [objT c_QByteArray] intT
   , just $ mkConstMethod' "count" "countPtrConstChar" [ptrT $ constT charT] intT
   , just $ mkConstMethod' "count" "countChar" [charT] intT
-  , just $ mkConstMethod' "count" "count" [] intT
+  , just $ mkConstMethod' "count" "count" np intT
   -- TODO QByteArray::const_reverse_iterator crbegin() const
   -- TODO QByteArray::const_reverse_iterator crend() const
-  , just $ mkMethod "clear" [] voidT
-  , just $ mkMethod' "data" "getData" [] $ ptrT charT
-  , just $ mkConstMethod' "data" "getDataConst" [] $ ptrT $ constT charT
+  , just $ mkMethod "clear" np voidT
+  , just $ mkMethod' "data" "getData" np $ ptrT charT
+  , just $ mkConstMethod' "data" "getDataConst" np $ ptrT $ constT charT
   -- TODO QByteArray::iterator end()
   -- TODO QByteArray::const_iterator end() const
   , just $ mkConstMethod' "endsWith" "endsWith" [objT c_QByteArray] boolT
@@ -204,18 +204,18 @@ c_QByteArray =
   , just $ mkConstMethod' "endsWith" "endsWithChar" [charT] boolT
   , just $ mkMethod' "fill" "fill" [charT] $ refT $ objT c_QByteArray
   , just $ mkMethod' "fill" "fillWithSize" [charT, intT] $ refT $ objT c_QByteArray
-  , test (qtVersion >= [5, 10]) $ mkConstMethod "front" [] charT
+  , test (qtVersion >= [5, 10]) $ mkConstMethod "front" np charT
   -- TODO QByteRef front()
-  , just $ mkConstMethod "isEmpty" [] boolT
-  , test (qtVersion >= [5, 12]) $ mkConstMethod "isLower" [] boolT
-  , just $ mkConstMethod "isNull" [] boolT
-  , test (qtVersion >= [5, 12]) $ mkConstMethod "isUpper" [] boolT
+  , just $ mkConstMethod "isEmpty" np boolT
+  , test (qtVersion >= [5, 12]) $ mkConstMethod "isLower" np boolT
+  , just $ mkConstMethod "isNull" np boolT
+  , test (qtVersion >= [5, 12]) $ mkConstMethod "isUpper" np boolT
   , just $ mkConstMethod "left" [intT] $ objT c_QByteArray
   , just $ mkConstMethod' "leftJustified" "leftJustified" [intT] $ objT c_QByteArray
   , just $ mkConstMethod' "leftJustified" "leftJustifiedWithChar" [intT, charT] $ objT c_QByteArray
   , just $ mkConstMethod' "leftJustified" "leftJustifiedWithCharAndTruncate" [intT, charT, boolT] $ objT c_QByteArray
-  , just $ mkConstMethod "length" [] intT
-  , just $ mkConstMethod "size" [] intT
+  , just $ mkConstMethod "length" np intT
+  , just $ mkConstMethod "size" np intT
     -- TODO Lots more methods.
   ]
 
@@ -248,10 +248,10 @@ addAddendum = addAddendumHaskell $ do
     sayLn "len <- size ba"
     sayLn "QtahDBS.packCStringLen (d, len)"
 
-(e_Base64Option, bs_Base64Options) =
-  makeQtEnumBitspace (ident1 "QByteArray" "Base64Option") "Base64Options" [includeStd "QByteArray"]
-  [ (0, ["base64", "encoding"])
- -- , (0, ["keep", "trailing", "equals"])
-  , (1, ["base64", "url", "encoding"])
-  , (2, ["omit", "trailing", "equals"])
+(e_Base64Option, fl_Base64Options) =
+  makeQtEnumAndFlags (ident1 "QByteArray" "Base64Option") "Base64Options" [includeStd "QByteArray"]
+  [ "Base64Encoding"
+  , "KeepTrailingEquals"
+  , "Base64UrlEncoding"
+  , "OmitTrailingEquals"
   ]

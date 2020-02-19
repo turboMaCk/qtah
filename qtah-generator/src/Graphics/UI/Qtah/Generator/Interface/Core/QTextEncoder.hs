@@ -21,7 +21,6 @@ module Graphics.UI.Qtah.Generator.Interface.Core.QTextEncoder (
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
-  Export (ExportClass),
   addReqIncludes,
   classSetEntityPrefix,
   ident,
@@ -32,7 +31,7 @@ import Foreign.Hoppy.Generator.Spec (
   )
 import Foreign.Hoppy.Generator.Types (intT, constT, objT, ptrT, refT)
 import Foreign.Hoppy.Generator.Version (collect, just)
-import Graphics.UI.Qtah.Generator.Interface.Core.QTextCodec (c_QTextCodec) --bs_ConversionFlags)
+import Graphics.UI.Qtah.Generator.Interface.Core.QTextCodec (c_QTextCodec) --fl_ConversionFlags)
 import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
 import Graphics.UI.Qtah.Generator.Interface.Core.QChar (c_QChar)
 import Graphics.UI.Qtah.Generator.Interface.Core.QByteArray (c_QByteArray)
@@ -45,7 +44,7 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Core", "QTextEncoder"] $
-  [QtExport $ ExportClass c_QTextEncoder]
+  [qtExport c_QTextEncoder]
 
 c_QTextEncoder =
   addReqIncludes [ includeStd "QTextEncoder" ] $
@@ -54,7 +53,7 @@ c_QTextEncoder =
   collect
   [
     just $ mkCtor "new" [ptrT $ objT c_QTextCodec]
-  --, test (qtVersion >= [4, 7]) $ mkCtor "newWithConverFlags" [ptrT $ objT c_QTextCodec, bitspaceT bs_ConversionFlags]
+  --, test (qtVersion >= [4, 7]) $ mkCtor "newWithConverFlags" [ptrT $ objT c_QTextCodec, flagsT fl_ConversionFlags]
   --, test (qtVersion >= [5, 10]) $ mkMethod' "fromUnicode" "fromUnicodeWithStringview" [objT c_QStringView] $ objT c_QByteArray
   , just $ mkMethod' "fromUnicode" "fromUnicodeString" [refT $ constT $ objT c_QString] $ objT c_QByteArray
   , just $ mkMethod' "fromUnicode" "fromUnicodeQChar" [ptrT $ constT $ objT c_QChar, intT] $ objT c_QByteArray
