@@ -100,7 +100,7 @@ while read file; do
         *LICENSE*)
             # License files are assumed to be okay.
             true;;
-        stack.yaml)
+        stack.yaml.lock)
             true;;
         *.cabal)
             # Cabal files include a brief copyright statement and specify the

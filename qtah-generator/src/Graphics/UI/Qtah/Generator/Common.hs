@@ -15,6 +15,8 @@
 -- You should have received a copy of the GNU Lesser General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+{-# LANGUAGE CPP #-}
+
 -- | General routines.
 module Graphics.UI.Qtah.Generator.Common (
   splitOn,
@@ -27,6 +29,9 @@ module Graphics.UI.Qtah.Generator.Common (
   upperFirst,
   ) where
 
+#if !MIN_VERSION_base(4,13,0)
+import Control.Monad.Fail (MonadFail)
+#endif
 import Control.Monad.Trans.Maybe (MaybeT (MaybeT), runMaybeT)
 import Data.Char (toLower, toUpper)
 import Data.Foldable (asum)
@@ -62,7 +67,7 @@ fromMaybeM :: Monad m => m a -> Maybe a -> m a
 fromMaybeM = flip maybe return
 
 -- | @maybeFail s x = maybe (fail s) x@
-maybeFail :: Monad m => String -> Maybe a -> m a
+maybeFail :: MonadFail m => String -> Maybe a -> m a
 maybeFail = fromMaybeM . fail
 
 -- | Runs a list of monadic actions until one returns a 'Just' value, then

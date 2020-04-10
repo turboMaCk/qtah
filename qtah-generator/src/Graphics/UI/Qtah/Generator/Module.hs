@@ -15,6 +15,8 @@
 -- You should have received a copy of the GNU Lesser General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+{-# LANGUAGE CPP #-}
+
 module Graphics.UI.Qtah.Generator.Module (
   AModule (..),
   aModuleHoppyModules,
@@ -32,7 +34,9 @@ import Data.Char (toLower)
 import Data.Foldable (forM_)
 import Data.List (find, intersperse, sort)
 import Data.Maybe (isJust)
+#if !MIN_VERSION_base(4,13,0)
 import Data.Monoid (mconcat)
+#endif
 import Foreign.Hoppy.Generator.Language.Cpp (chunkContents, execChunkWriter, sayType)
 import Foreign.Hoppy.Generator.Language.Haskell (
   Generator,

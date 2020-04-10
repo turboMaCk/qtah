@@ -17,6 +17,9 @@
 - Fixed misspelling of QWidget's `windowTitleChanged` signal making this signal
   inoperable.
 
+- Updated to support GHC 8.8.* and 8.10.1.  Some MonadFail and import changes
+  were required.
+
 ## (2019-12-23) *-0.6.0
 
 This release marks the largest API increase in any Qtah release so far: 62 new
