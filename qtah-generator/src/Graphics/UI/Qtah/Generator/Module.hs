@@ -1,6 +1,6 @@
 -- This file is part of Qtah.
 --
--- Copyright 2015-2019 The Qtah Authors.
+-- Copyright 2015-2020 The Qtah Authors.
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU Lesser General Public License as published by
@@ -14,6 +14,8 @@
 --
 -- You should have received a copy of the GNU Lesser General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+{-# LANGUAGE CPP #-}
 
 module Graphics.UI.Qtah.Generator.Module (
   AModule (..),
@@ -32,7 +34,9 @@ import Data.Char (toLower)
 import Data.Foldable (forM_)
 import Data.List (find, intersperse, sort)
 import Data.Maybe (isJust)
+#if !MIN_VERSION_base(4,13,0)
 import Data.Monoid (mconcat)
+#endif
 import Foreign.Hoppy.Generator.Language.Cpp (chunkContents, execChunkWriter, sayType)
 import Foreign.Hoppy.Generator.Language.Haskell (
   Generator,
@@ -116,10 +120,10 @@ import Graphics.UI.Qtah.Generator.Flags (
 import Graphics.UI.Qtah.Generator.Types (
   QtExport (
     QtExport,
+    QtExportClassAndSignals,
     QtExportEvent,
     QtExportFnRenamed,
     QtExportSceneEvent,
-    QtExportSignal,
     QtExportSpecials
   ),
   Signal,
@@ -289,7 +293,9 @@ sayQtExport path qtExport = case qtExport of
     addExport rename
     sayBind rename $ getFnImportName fn
 
-  QtExportSignal sig -> sayExportSignal sig
+  QtExportClassAndSignals cls sigs -> do
+    sayExportClass cls
+    mapM_ sayExportSignal sigs
 
   QtExportEvent cls -> do
     sayExportClass cls

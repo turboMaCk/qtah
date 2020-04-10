@@ -1,6 +1,6 @@
 -- This file is part of Qtah.
 --
--- Copyright 2015-2019 The Qtah Authors.
+-- Copyright 2015-2020 The Qtah Authors.
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU Lesser General Public License as published by
@@ -44,11 +44,11 @@ import Graphics.UI.Qtah.Generator.Types
 
 aModule =
   AQtModule $
-  makeQtModule ["Widgets", "QSplitter"] $
-  (qtExport c_QSplitter) :
-  map QtExportSignal signals
+  makeQtModule ["Widgets", "QSplitter"]
+  [ QtExportClassAndSignals c_QSplitter signals ]
 
-c_QSplitter =
+(c_QSplitter, signals) =
+  makeQtClassAndSignals signalGens $
   addReqIncludes [includeStd "QSplitter"] $
   classSetEntityPrefix "" $
   makeClass (ident "QSplitter") Nothing [c_QFrame]
@@ -77,5 +77,6 @@ c_QSplitter =
   , mkConstMethod "widget" [intT] $ ptrT $ objT c_QWidget
   ]
 
-signals =
-  [ makeSignal c_QSplitter "splitterMoved" listenerIntInt ]
+signalGens :: [SignalGen]
+signalGens =
+  [ makeSignal "splitterMoved" listenerIntInt ]

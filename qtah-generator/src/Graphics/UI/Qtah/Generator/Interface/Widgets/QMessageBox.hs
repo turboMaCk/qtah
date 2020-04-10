@@ -1,6 +1,6 @@
 -- This file is part of Qtah.
 --
--- Copyright 2015-2019 The Qtah Authors.
+-- Copyright 2015-2020 The Qtah Authors.
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU Lesser General Public License as published by
@@ -60,16 +60,16 @@ import Graphics.UI.Qtah.Generator.Types
 
 aModule =
   AQtModule $
-  makeQtModule ["Widgets", "QMessageBox"] $
-  qtExport c_QMessageBox :
-  map QtExportSignal signals ++
-  [ qtExport e_ButtonRole
+  makeQtModule ["Widgets", "QMessageBox"]
+  [ QtExportClassAndSignals c_QMessageBox signals
+  , qtExport e_ButtonRole
   , qtExport e_Icon
   , qtExport e_StandardButton
   , qtExport fl_StandardButtons
   ]
 
-c_QMessageBox =
+(c_QMessageBox, signals) =
+  makeQtClassAndSignals signalGens $
   addReqIncludes [includeStd "QMessageBox"] $
   classSetEntityPrefix "" $
   makeClass (ident "QMessageBox") Nothing [c_QDialog] $
@@ -141,8 +141,9 @@ c_QMessageBox =
     enumT e_StandardButton
   ]
 
-signals =
-  [ makeSignal c_QMessageBox "buttonClicked" listenerPtrQAbstractButton
+signalGens :: [SignalGen]
+signalGens =
+  [ makeSignal "buttonClicked" listenerPtrQAbstractButton
   ]
 
 e_ButtonRole =

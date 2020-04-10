@@ -1,6 +1,6 @@
 -- This file is part of Qtah.
 --
--- Copyright 2015-2019 The Qtah Authors.
+-- Copyright 2015-2020 The Qtah Authors.
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU Lesser General Public License as published by
@@ -15,6 +15,8 @@
 -- You should have received a copy of the GNU Lesser General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+{-# LANGUAGE CPP #-}
+
 -- | General routines.
 module Graphics.UI.Qtah.Generator.Common (
   splitOn,
@@ -24,10 +26,14 @@ module Graphics.UI.Qtah.Generator.Common (
   maybeFail,
   firstM,
   lowerFirst,
+  upperFirst,
   ) where
 
+#if !MIN_VERSION_base(4,13,0)
+import Control.Monad.Fail (MonadFail)
+#endif
 import Control.Monad.Trans.Maybe (MaybeT (MaybeT), runMaybeT)
-import Data.Char (toLower)
+import Data.Char (toLower, toUpper)
 import Data.Foldable (asum)
 import Data.List (findIndex)
 
@@ -61,7 +67,7 @@ fromMaybeM :: Monad m => m a -> Maybe a -> m a
 fromMaybeM = flip maybe return
 
 -- | @maybeFail s x = maybe (fail s) x@
-maybeFail :: Monad m => String -> Maybe a -> m a
+maybeFail :: MonadFail m => String -> Maybe a -> m a
 maybeFail = fromMaybeM . fail
 
 -- | Runs a list of monadic actions until one returns a 'Just' value, then
@@ -73,3 +79,8 @@ firstM = runMaybeT . asum . map MaybeT
 lowerFirst :: String -> String
 lowerFirst "" = ""
 lowerFirst (c:cs) = toLower c : cs
+
+-- | Upper cases the first character of a string, if nonempty.
+upperFirst :: String -> String
+upperFirst "" = ""
+upperFirst (c:cs) = toUpper c : cs

@@ -1,6 +1,6 @@
 -- This file is part of Qtah.
 --
--- Copyright 2015-2019 The Qtah Authors.
+-- Copyright 2015-2020 The Qtah Authors.
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU Lesser General Public License as published by
@@ -58,9 +58,12 @@ import qualified Graphics.UI.Qtah.Generator.Interface.Widgets.QInputDialog as QI
 import qualified Graphics.UI.Qtah.Generator.Interface.Widgets.QLabel as QLabel
 import qualified Graphics.UI.Qtah.Generator.Interface.Widgets.QLayout as QLayout
 import qualified Graphics.UI.Qtah.Generator.Interface.Widgets.QLayoutItem as QLayoutItem
+import qualified Graphics.UI.Qtah.Generator.Interface.Widgets.QLCDNumber as QLCDNumber
 import qualified Graphics.UI.Qtah.Generator.Interface.Widgets.QLineEdit as QLineEdit
 import qualified Graphics.UI.Qtah.Generator.Interface.Widgets.QListView as QListView
 import qualified Graphics.UI.Qtah.Generator.Interface.Widgets.QMainWindow as QMainWindow
+import qualified Graphics.UI.Qtah.Generator.Interface.Widgets.QMdiArea as QMdiArea
+import qualified Graphics.UI.Qtah.Generator.Interface.Widgets.QMdiSubWindow as QMdiSubWindow
 import qualified Graphics.UI.Qtah.Generator.Interface.Widgets.QMenu as QMenu
 import qualified Graphics.UI.Qtah.Generator.Interface.Widgets.QMenuBar as QMenuBar
 import qualified Graphics.UI.Qtah.Generator.Interface.Widgets.QMessageBox as QMessageBox
@@ -138,9 +141,12 @@ modules =
   , QLabel.aModule
   , QLayout.aModule
   , QLayoutItem.aModule
+  , QLCDNumber.aModule
   , QLineEdit.aModule
   , QListView.aModule
   , QMainWindow.aModule
+  , QMdiArea.aModule
+  , QMdiSubWindow.aModule
   , QMenu.aModule
   , QMenuBar.aModule
   , QMessageBox.aModule

@@ -1,6 +1,6 @@
 -- This file is part of Qtah.
 --
--- Copyright 2018-2019 The Qtah Authors.
+-- Copyright 2018-2020 The Qtah Authors.
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU Lesser General Public License as published by
@@ -35,17 +35,18 @@ import Graphics.UI.Qtah.Generator.Types
 
 aModule =
   AQtModule $
-  makeQtModule ["Widgets", "QAbstractItemDelegate"] $
-  qtExport c_QAbstractItemDelegate :
-  map QtExportSignal signals
+  makeQtModule ["Widgets", "QAbstractItemDelegate"]
+  [ QtExportClassAndSignals c_QAbstractItemDelegate signals ]
 
-c_QAbstractItemDelegate =
+(c_QAbstractItemDelegate, signals) =
+  makeQtClassAndSignals signalGens $
   addReqIncludes [includeStd "QAbstractItemDelegate"] $
   classSetEntityPrefix "" $
   makeClass (ident "QAbstractItemDelegate") Nothing [c_QObject]
   [ -- TODO Methods.
   ]
 
-signals =
+signalGens :: [SignalGen]
+signalGens =
   [ -- TODO Signals.
   ]

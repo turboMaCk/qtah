@@ -2,7 +2,7 @@
 
 # This file is part of Qtah.
 #
-# Copyright 2015-2019 The Qtah Authors.
+# Copyright 2015-2020 The Qtah Authors.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published by
@@ -100,7 +100,7 @@ while read file; do
         *LICENSE*)
             # License files are assumed to be okay.
             true;;
-        stack.yaml)
+        stack.yaml.lock)
             true;;
         *.cabal)
             # Cabal files include a brief copyright statement and specify the

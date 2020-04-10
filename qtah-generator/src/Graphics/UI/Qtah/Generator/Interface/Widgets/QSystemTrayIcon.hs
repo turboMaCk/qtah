@@ -1,6 +1,6 @@
 -- This file is part of Qtah.
 --
--- Copyright 2015-2019 The Qtah Authors.
+-- Copyright 2015-2020 The Qtah Authors.
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU Lesser General Public License as published by
@@ -54,14 +54,14 @@ import Graphics.UI.Qtah.Generator.Types
 
 aModule =
   AQtModule $
-  makeQtModuleWithMinVersion ["Widgets", "QSystemTrayIcon"] [4, 2] $
-  qtExport c_QSystemTrayIcon :
-  map QtExportSignal signals ++
-  [ qtExport e_ActivationReason
+  makeQtModuleWithMinVersion ["Widgets", "QSystemTrayIcon"] [4, 2]
+  [ QtExportClassAndSignals c_QSystemTrayIcon signals
+  , qtExport e_ActivationReason
   , qtExport e_MessageIcon
   ]
 
-c_QSystemTrayIcon =
+(c_QSystemTrayIcon, signals) =
+  makeQtClassAndSignals signalGens $
   addReqIncludes [includeStd "QSystemTrayIcon"] $
   classSetEntityPrefix "" $
   makeClass (ident "QSystemTrayIcon") Nothing [c_QObject]
@@ -83,9 +83,10 @@ c_QSystemTrayIcon =
   , mkBoolIsProp "visible"
   ]
 
-signals =
-  [ makeSignal c_QSystemTrayIcon "activated" listenerQSystemTrayIconActivationReason
-  , makeSignal c_QSystemTrayIcon "messageClicked" listener
+signalGens :: [SignalGen]
+signalGens =
+  [ makeSignal "activated" listenerQSystemTrayIconActivationReason
+  , makeSignal "messageClicked" listener
   ]
 
 e_ActivationReason =

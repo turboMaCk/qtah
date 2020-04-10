@@ -1,6 +1,6 @@
 -- This file is part of Qtah.
 --
--- Copyright 2015-2019 The Qtah Authors.
+-- Copyright 2015-2020 The Qtah Authors.
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU Lesser General Public License as published by
@@ -64,13 +64,13 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Core", "QItemSelectionModel"] $
-  [ qtExport c_QItemSelectionModel ] ++
-  map QtExportSignal signals ++
-  [ qtExport e_SelectionFlag
+  [ QtExportClassAndSignals c_QItemSelectionModel signals
+  , qtExport e_SelectionFlag
   , qtExport fl_SelectionFlags
   ]
 
-c_QItemSelectionModel =
+(c_QItemSelectionModel, signals) =
+  makeQtClassAndSignals signalGens $
   addReqIncludes [includeStd "QItemSelectionModel"] $
   classSetEntityPrefix "" $
   makeClass (ident "QItemSelectionModel") Nothing [c_QObject] $
@@ -112,15 +112,14 @@ c_QItemSelectionModel =
   , test (qtVersion >= [5, 5]) $ mkMethod "setModel" [ptrT $ objT c_QAbstractItemModel] voidT
   ]
 
-signals =
+signalGens :: [SignalGen]
+signalGens =
   collect
-  [ just $ makeSignal c_QItemSelectionModel "currentChanged" listenerQModelIndexQModelIndex
-  , just $ makeSignal c_QItemSelectionModel "currentColumnChanged" listenerQModelIndexQModelIndex
-  , just $ makeSignal c_QItemSelectionModel "currentRowChanged" listenerQModelIndexQModelIndex
-  , test (qtVersion >= [5, 5]) $ makeSignal c_QItemSelectionModel "modelChanged"
-    listenerPtrQAbstractItemModel
-  , just $ makeSignal c_QItemSelectionModel "selectionChanged"
-    listenerRefConstQItemSelectionRefConstQItemSelection
+  [ just $ makeSignal "currentChanged" listenerQModelIndexQModelIndex
+  , just $ makeSignal "currentColumnChanged" listenerQModelIndexQModelIndex
+  , just $ makeSignal "currentRowChanged" listenerQModelIndexQModelIndex
+  , test (qtVersion >= [5, 5]) $ makeSignal "modelChanged" listenerPtrQAbstractItemModel
+  , just $ makeSignal "selectionChanged" listenerRefConstQItemSelectionRefConstQItemSelection
   ]
 
 (e_SelectionFlag, fl_SelectionFlags) =

@@ -1,6 +1,6 @@
 -- This file is part of Qtah.
 --
--- Copyright 2015-2019 The Qtah Authors.
+-- Copyright 2015-2020 The Qtah Authors.
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU Lesser General Public License as published by
@@ -44,11 +44,11 @@ import Graphics.UI.Qtah.Generator.Types
 
 aModule =
   AQtModule $
-  makeQtModule ["Widgets", "QStatusBar"] $
-  qtExport c_QStatusBar :
-  map QtExportSignal signals
+  makeQtModule ["Widgets", "QStatusBar"]
+  [ QtExportClassAndSignals c_QStatusBar signals ]
 
-c_QStatusBar =
+(c_QStatusBar, signals) =
+  makeQtClassAndSignals signalGens $
   addReqIncludes [includeStd "QStatusBar"] $
   classSetEntityPrefix "" $
   makeClass (ident "QStatusBar") Nothing [c_QWidget]
@@ -72,6 +72,7 @@ c_QStatusBar =
   , mkBoolIsProp "sizeGripEnabled"
   ]
 
-signals =
-  [ makeSignal c_QStatusBar "messageChanged" listenerQString
+signalGens :: [SignalGen]
+signalGens =
+  [ makeSignal "messageChanged" listenerQString
   ]

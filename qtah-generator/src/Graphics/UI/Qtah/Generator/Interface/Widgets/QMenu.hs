@@ -1,6 +1,6 @@
 -- This file is part of Qtah.
 --
--- Copyright 2015-2019 The Qtah Authors.
+-- Copyright 2015-2020 The Qtah Authors.
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU Lesser General Public License as published by
@@ -51,11 +51,11 @@ import Graphics.UI.Qtah.Generator.Types
 
 aModule =
   AQtModule $
-  makeQtModule ["Widgets", "QMenu"] $
-  qtExport c_QMenu :
-  map QtExportSignal signals
+  makeQtModule ["Widgets", "QMenu"]
+  [ QtExportClassAndSignals c_QMenu signals ]
 
-c_QMenu =
+(c_QMenu, signals) =
+  makeQtClassAndSignals signalGens $
   addReqIncludes [includeStd "QMenu"] $
   classSetEntityPrefix "" $
   makeClass (ident "QMenu") Nothing [c_QWidget] $
@@ -108,9 +108,10 @@ c_QMenu =
   , just $ mkProp "title" $ objT c_QString
   ]
 
-signals =
-  [ makeSignal c_QMenu "aboutToHide" listener
-  , makeSignal c_QMenu "aboutToShow" listener
-  , makeSignal c_QMenu "hovered" listenerPtrQAction
-  , makeSignal c_QMenu "triggered" listenerPtrQAction
+signalGens :: [SignalGen]
+signalGens =
+  [ makeSignal "aboutToHide" listener
+  , makeSignal "aboutToShow" listener
+  , makeSignal "hovered" listenerPtrQAction
+  , makeSignal "triggered" listenerPtrQAction
   ]

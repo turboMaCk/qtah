@@ -1,6 +1,6 @@
 -- This file is part of Qtah.
 --
--- Copyright 2015-2019 The Qtah Authors.
+-- Copyright 2015-2020 The Qtah Authors.
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU Lesser General Public License as published by
@@ -53,17 +53,17 @@ import Graphics.UI.Qtah.Generator.Interface.Core.Types (fl_Alignment)
 
 aModule =
   AQtModule $
-  makeQtModule ["Widgets", "QListView"] $
-  qtExport c_QListView :
-  map QtExportSignal signals ++
-  [ qtExport e_Flow
+  makeQtModule ["Widgets", "QListView"]
+  [ QtExportClassAndSignals c_QListView signals
+  , qtExport e_Flow
   , qtExport e_LayoutMode
   , qtExport e_Movement
   , qtExport e_ResizeMode
   , qtExport e_ViewMode
   ]
 
-c_QListView =
+(c_QListView, signals) =
+  makeQtClassAndSignals signalGens $
   addReqIncludes [includeStd "QListView"] $
   classSetEntityPrefix "" $
   makeClass (ident "QListView") Nothing [c_QAbstractItemView] $
@@ -94,9 +94,10 @@ c_QListView =
   , just $ mkMethod "visualRect" [refT $ constT $ objT c_QModelIndex] $ objT c_QRect
   ]
 
-signals =
+signalGens :: [SignalGen]
+signalGens =
   collect
-  [ test (qtVersion >= [4, 2]) $ makeSignal c_QListView "indexesMoved" listenerRefConstQListQModelIndex
+  [ test (qtVersion >= [4, 2]) $ makeSignal "indexesMoved" listenerRefConstQListQModelIndex
   ]
 
 e_Flow =
@@ -129,5 +130,3 @@ e_ViewMode =
   [ "ListMode"
   , "IconMode"
   ]
-
-

@@ -1,6 +1,6 @@
 -- This file is part of Qtah.
 --
--- Copyright 2015-2019 The Qtah Authors.
+-- Copyright 2015-2020 The Qtah Authors.
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU Lesser General Public License as published by
@@ -52,13 +52,13 @@ import Graphics.UI.Qtah.Generator.Interface.Core.Types (qlonglong)
 aModule =
   AQtModule $
   makeQtModule ["Core", "QIODevice"] $
-  qtExport c_QIODevice :
-  map QtExportSignal signals ++
-  [ qtExport e_OpenModeFlag
+  [ QtExportClassAndSignals c_QIODevice signals
+  , qtExport e_OpenModeFlag
   , qtExport fl_OpenMode
   ]
 
-c_QIODevice =
+(c_QIODevice, signals) =
+  makeQtClassAndSignals signalGens $
   addReqIncludes [ includeStd "QIODevice" ] $
   classSetEntityPrefix "" $
   makeClass (ident "QIODevice") Nothing [c_QObject] $
@@ -126,12 +126,13 @@ c_QIODevice =
     , "ExistingOnly"
     ])
 
-signals =
+signalGens :: [SignalGen]
+signalGens =
   collect $
-  [ just $ makeSignal c_QIODevice "aboutToClose" listener
-  , just $ makeSignal c_QIODevice "bytesWritten" listenerQlonglong
-  , test (qtVersion >= [5, 7]) $ makeSignal c_QIODevice "channelBytesWritten" listenerIntQlonglong
-  , test (qtVersion >= [5, 7]) $ makeSignal c_QIODevice "channelReadyRead" listenerInt
-  , test (qtVersion >= [4, 4]) $ makeSignal c_QIODevice "readChannelFinished" listener
-  , just $ makeSignal c_QIODevice "readyRead" listener
+  [ just $ makeSignal "aboutToClose" listener
+  , just $ makeSignal "bytesWritten" listenerQlonglong
+  , test (qtVersion >= [5, 7]) $ makeSignal "channelBytesWritten" listenerIntQlonglong
+  , test (qtVersion >= [5, 7]) $ makeSignal "channelReadyRead" listenerInt
+  , test (qtVersion >= [4, 4]) $ makeSignal "readChannelFinished" listener
+  , just $ makeSignal "readyRead" listener
   ]
