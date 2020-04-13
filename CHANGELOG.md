@@ -15,7 +15,8 @@
   launch of Qt 5) and were only available for the Symbian platform.
 
 - Fixed misspelling of QWidget's `windowTitleChanged` signal making this signal
-  inoperable.
+  inoperable.  Also fixed the version bounds for this and the
+  `windowIconChanged` signals.
 
 - Updated to support GHC 8.8.* and 8.10.1.  Some MonadFail and import changes
   were required.

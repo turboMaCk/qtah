@@ -346,7 +346,7 @@ signalGens :: [SignalGen]
 signalGens =
   collect
   [ just $ makeSignal "customContextMenuRequested" listenerQPoint
-  , test (qtVersion >= [5, 0]) $ makeSignal "windowIconChanged" listenerRefConstQIcon
+  , test (qtVersion >= [5, 2]) $ makeSignal "windowIconChanged" listenerRefConstQIcon
     -- TODO windowIconTextChanged (>=5.0?  Deprecated by 5.7.)
-  , test (qtVersion >= [5, 0]) $ makeSignal "windowTitleChanged" listenerQString
+  , test (qtVersion >= [5, 2]) $ makeSignal "windowTitleChanged" listenerQString
   ]
