@@ -1,6 +1,6 @@
 # Qtah Changelog
 
-## Unreleased
+## Unreleased - 0.7.0
 
 - Added the ability to emit Qt signals from Haskell code by exposing them as the
   regular methods that they are (issue #40).  These methods' names begin with

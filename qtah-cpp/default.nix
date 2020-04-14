@@ -20,7 +20,7 @@
 }:
 mkDerivation {
   pname = "qtah-cpp";
-  version = "0.6.1";
+  version = "0.7.0";
   src = ./.;
   libraryHaskellDepends = [ base Cabal qtah-generator ];
   librarySystemDepends = [ qt.qtbase ];
