@@ -1,6 +1,6 @@
 -- This file is part of Qtah.
 --
--- Copyright 2015-2019 The Qtah Authors.
+-- Copyright 2015-2020 The Qtah Authors.
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU Lesser General Public License as published by
@@ -47,11 +47,11 @@ import Graphics.UI.Qtah.Generator.Types
 
 aModule =
   AQtModule $
-  makeQtModule ["Widgets", "QDoubleSpinBox"] $
-  qtExport c_QDoubleSpinBox :
-  map QtExportSignal signals
+  makeQtModule ["Widgets", "QDoubleSpinBox"]
+  [ QtExportClassAndSignals c_QDoubleSpinBox signals ]
 
-c_QDoubleSpinBox =
+(c_QDoubleSpinBox, signals) =
+  makeQtClassAndSignals signalGens $
   addReqIncludes [includeStd "QDoubleSpinBox"] $
   classSetEntityPrefix "" $
   makeClass (ident "QDoubleSpinBox") Nothing [c_QAbstractSpinBox]
@@ -70,7 +70,8 @@ c_QDoubleSpinBox =
   , mkConstMethod "valueFromText" [objT c_QString] doubleT
   ]
 
-signals =
-  [ makeSignal' c_QDoubleSpinBox "valueChanged" "valueChangedDouble" listenerDouble
-  , makeSignal' c_QDoubleSpinBox "valueChanged" "valueChangedString" listenerQString
+signalGens :: [SignalGen]
+signalGens =
+  [ makeSignal' "valueChanged" "valueChangedDouble" listenerDouble
+  , makeSignal' "valueChanged" "valueChangedString" listenerQString
   ]

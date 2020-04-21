@@ -1,6 +1,6 @@
 -- This file is part of Qtah.
 --
--- Copyright 2015-2019 The Qtah Authors.
+-- Copyright 2015-2020 The Qtah Authors.
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU Lesser General Public License as published by
@@ -55,16 +55,16 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QAbstractSpinBox"] $
-  qtExport c_QAbstractSpinBox :
-  map QtExportSignal signals ++
   collect
-  [ test (qtVersion >= [4, 2]) $ qtExport e_ButtonSymbols
+  [ just $ QtExportClassAndSignals c_QAbstractSpinBox signals
+  , test (qtVersion >= [4, 2]) $ qtExport e_ButtonSymbols
   , just $ qtExport e_CorrectionMode
   , just $ qtExport e_StepEnabledFlag
   , just $ qtExport fl_StepEnabled
   ]
 
-c_QAbstractSpinBox =
+(c_QAbstractSpinBox, signals) =
+  makeQtClassAndSignals signalGens $
   addReqIncludes [includeStd "QAbstractSpinBox"] $
   classSetEntityPrefix "" $
   makeClass (ident "QAbstractSpinBox") Nothing [c_QWidget] $
@@ -93,8 +93,9 @@ c_QAbstractSpinBox =
   , just $ mkProp "wrapping" boolT
   ]
 
-signals =
-  [ makeSignal c_QAbstractSpinBox "editingFinished" listener
+signalGens :: [SignalGen]
+signalGens =
+  [ makeSignal "editingFinished" listener
   ]
 
 e_ButtonSymbols =

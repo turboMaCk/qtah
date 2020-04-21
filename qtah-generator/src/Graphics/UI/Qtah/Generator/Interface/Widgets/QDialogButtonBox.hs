@@ -1,6 +1,6 @@
 -- This file is part of Qtah.
 --
--- Copyright 2015-2019 The Qtah Authors.
+-- Copyright 2015-2020 The Qtah Authors.
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU Lesser General Public License as published by
@@ -59,16 +59,16 @@ minVersion = [4, 2]
 
 aModule =
   AQtModule $
-  makeQtModuleWithMinVersion ["Widgets", "QDialogButtonBox"] minVersion $
-  (qtExport c_QDialogButtonBox) :
-  map QtExportSignal signals ++
-  [ qtExport e_ButtonLayout
+  makeQtModuleWithMinVersion ["Widgets", "QDialogButtonBox"] minVersion
+  [ QtExportClassAndSignals c_QDialogButtonBox signals
+  , qtExport e_ButtonLayout
   , qtExport e_ButtonRole
   , qtExport e_StandardButton
   , qtExport fl_StandardButtons
   ]
 
-c_QDialogButtonBox =
+(c_QDialogButtonBox, signals) =
+  makeQtClassAndSignals signalGens $
   addReqIncludes [includeStd "QDialogButtonBox"] $
   classSetEntityPrefix "" $
   makeClass (ident "QDialogButtonBox") Nothing [c_QWidget]
@@ -96,11 +96,12 @@ c_QDialogButtonBox =
   , mkProp "standardButtons" $ flagsT fl_StandardButtons
   ]
 
-signals =
-  [ makeSignal c_QDialogButtonBox "accepted" listener
-  , makeSignal c_QDialogButtonBox "clicked" listenerPtrQAbstractButton
-  , makeSignal c_QDialogButtonBox "helpRequested" listener
-  , makeSignal c_QDialogButtonBox "rejected" listener
+signalGens :: [SignalGen]
+signalGens =
+  [ makeSignal "accepted" listener
+  , makeSignal "clicked" listenerPtrQAbstractButton
+  , makeSignal "helpRequested" listener
+  , makeSignal "rejected" listener
   ]
 
 e_ButtonLayout =

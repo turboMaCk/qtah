@@ -1,6 +1,6 @@
 -- This file is part of Qtah.
 --
--- Copyright 2015-2019 The Qtah Authors.
+-- Copyright 2015-2020 The Qtah Authors.
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU Lesser General Public License as published by
@@ -59,14 +59,14 @@ import Graphics.UI.Qtah.Generator.Types
 
 aModule =
   AQtModule $
-  makeQtModule ["Widgets", "QDockWidget"] $
-  qtExport c_QDockWidget :
-  map QtExportSignal signals ++
-  [ qtExport e_DockWidgetFeature
+  makeQtModule ["Widgets", "QDockWidget"]
+  [ QtExportClassAndSignals c_QDockWidget signals
+  , qtExport e_DockWidgetFeature
   , qtExport fl_DockWidgetFeatures
   ]
 
-c_QDockWidget =
+(c_QDockWidget, signals) =
+  makeQtClassAndSignals signalGens $
   addReqIncludes [includeStd "QDockWidget"] $
   classSetEntityPrefix "" $
   makeClass (ident "QDockWidget") Nothing [c_QWidget] $
@@ -85,14 +85,14 @@ c_QDockWidget =
   , just $ mkProp "widget" $ ptrT $ objT c_QWidget
   ]
 
-signals =
+signalGens :: [SignalGen]
+signalGens =
   collect
-  [ just $ makeSignal c_QDockWidget "allowedAreasChanged" listenerDockWidgetAreas
-  , test (qtVersion >= [4, 3]) $
-    makeSignal c_QDockWidget "dockLocationChanged" listenerDockWidgetArea
-  , just $ makeSignal c_QDockWidget "featuresChanged" listenerQDockWidgetFeatures
-  , just $ makeSignal c_QDockWidget "topLevelChanged" listenerBool
-  , just $ makeSignal c_QDockWidget "visibilityChanged" listenerBool
+  [ just $ makeSignal "allowedAreasChanged" listenerDockWidgetAreas
+  , test (qtVersion >= [4, 3]) $ makeSignal "dockLocationChanged" listenerDockWidgetArea
+  , just $ makeSignal "featuresChanged" listenerQDockWidgetFeatures
+  , just $ makeSignal "topLevelChanged" listenerBool
+  , just $ makeSignal "visibilityChanged" listenerBool
   ]
 
 (e_DockWidgetFeature, fl_DockWidgetFeatures) =

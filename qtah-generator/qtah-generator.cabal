@@ -1,12 +1,12 @@
 name: qtah-generator
-version: 0.6.1
+version: 0.7.0
 synopsis: Generator for Qtah Qt bindings
 homepage: http://khumba.net/projects/qtah
 license: LGPL-3
 license-files: LICENSE.GPL, LICENSE.LGPL
 author: Bryan Gardiner <bog@khumba.net>
 maintainer: Bryan Gardiner <bog@khumba.net>
-copyright: Copyright 2015-2019 The Qtah Authors.
+copyright: Copyright 2015-2020 The Qtah Authors.
 category: Graphics
 build-type: Custom
 cabal-version: 1.20
@@ -42,7 +42,7 @@ executable qtah-generator
     , containers >=0.5 && <0.7
     , directory >=1.2 && <1.4
     , filepath >=1.3 && <1.5
-    , hoppy-generator >=0.7 && <0.8
+    , hoppy-generator >=0.7.1 && <0.8
     , hoppy-std >=0.7 && <0.8
     , haskell-src >=1.0 && <1.1
     , mtl >=2.2.1 && <2.3
@@ -246,9 +246,12 @@ executable qtah-generator
     , Graphics.UI.Qtah.Generator.Interface.Widgets.QLabel
     , Graphics.UI.Qtah.Generator.Interface.Widgets.QLayout
     , Graphics.UI.Qtah.Generator.Interface.Widgets.QLayoutItem
+    , Graphics.UI.Qtah.Generator.Interface.Widgets.QLCDNumber
     , Graphics.UI.Qtah.Generator.Interface.Widgets.QLineEdit
     , Graphics.UI.Qtah.Generator.Interface.Widgets.QListView
     , Graphics.UI.Qtah.Generator.Interface.Widgets.QMainWindow
+    , Graphics.UI.Qtah.Generator.Interface.Widgets.QMdiArea
+    , Graphics.UI.Qtah.Generator.Interface.Widgets.QMdiSubWindow
     , Graphics.UI.Qtah.Generator.Interface.Widgets.QMenu
     , Graphics.UI.Qtah.Generator.Interface.Widgets.QMenuBar
     , Graphics.UI.Qtah.Generator.Interface.Widgets.QMessageBox

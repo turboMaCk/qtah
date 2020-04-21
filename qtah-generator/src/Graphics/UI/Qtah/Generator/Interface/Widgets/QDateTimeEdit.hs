@@ -1,6 +1,6 @@
 -- This file is part of Qtah.
 --
--- Copyright 2018-2019 The Qtah Authors.
+-- Copyright 2018-2020 The Qtah Authors.
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU Lesser General Public License as published by
@@ -49,14 +49,14 @@ import Graphics.UI.Qtah.Generator.Types
 
 aModule =
   AQtModule $
-  makeQtModule ["Widgets", "QDateTimeEdit"] $
-  qtExport c_QDateTimeEdit :
-  map QtExportSignal signals ++
-  [ qtExport e_Section
+  makeQtModule ["Widgets", "QDateTimeEdit"]
+  [ QtExportClassAndSignals c_QDateTimeEdit signals
+  , qtExport e_Section
   , qtExport fl_Sections
   ]
 
-c_QDateTimeEdit =
+(c_QDateTimeEdit, signals) =
+  makeQtClassAndSignals signalGens $
   addReqIncludes [includeStd "QDateTimeEdit"] $
   classSetEntityPrefix "" $
   makeClass (ident "QDateTimeEdit") Nothing [c_QAbstractSpinBox] $
@@ -86,8 +86,9 @@ c_QDateTimeEdit =
   -- TODO Other methods.
   ]
 
-signals =
-  [ makeSignal c_QDateTimeEdit "dateChanged" listenerQDate
+signalGens :: [SignalGen]
+signalGens =
+  [ makeSignal "dateChanged" listenerQDate
   -- TODO void dateTimeChanged(const QDateTime &datetime)
   -- TODO void timeChanged(const QTime &time)
   ]

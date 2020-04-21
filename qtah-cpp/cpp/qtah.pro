@@ -1,6 +1,6 @@
 # This file is part of Qtah.
 #
-# Copyright 2015-2019 The Qtah Authors.
+# Copyright 2015-2020 The Qtah Authors.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published by
@@ -21,7 +21,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = qtah
 TEMPLATE = lib
-VERSION = 0.6.1
+VERSION = 0.7.0
 # Doesn't seem to work here: CONFIG += c++11
 QMAKE_CXXFLAGS += -std=c++11
 

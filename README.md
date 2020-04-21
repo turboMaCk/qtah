@@ -5,7 +5,7 @@ traditional imperative interface to a mature GUI toolkit.
 
 Homepage: http://khumba.net/projects/qtah
 
-Copyright 2015-2019 The Qtah Authors.
+Copyright 2015-2020 The Qtah Authors.
 
 A range of successive copyright years may be written as XXXX-YYYY as an
 abbreviation for listing all of the years from XXXX to YYYY inclusive,
@@ -344,8 +344,10 @@ as an example.
 
 #### To add a signal
 
-Declare your signals in a list using `makeSignal` and export them in the
-associated class's module with `QtExportSignal`.  As an example, see
+Declare your signals in a list using `makeSignal` or `makeSignalPrivate`,
+combine them with the class they belong to using `makeQtClassAndSignals`, and
+export them from the associated class's module with `QtExportClassAndSignals`.
+As an example, see
 [QLineEdit](qtah-generator/src/Graphics/UI/Qtah/Generator/Interface/Widgets/QLineEdit.hs).
 
 Use `test`/`collect` as necessary for signals with minimum versions different

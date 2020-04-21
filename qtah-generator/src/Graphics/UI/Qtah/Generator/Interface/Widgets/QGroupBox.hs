@@ -1,6 +1,6 @@
 -- This file is part of Qtah.
 --
--- Copyright 2015-2019 The Qtah Authors.
+-- Copyright 2015-2020 The Qtah Authors.
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU Lesser General Public License as published by
@@ -48,11 +48,11 @@ import Graphics.UI.Qtah.Generator.Types
 
 aModule =
   AQtModule $
-  makeQtModule ["Widgets", "QGroupBox"] $
-  (qtExport c_QGroupBox) :
-  map QtExportSignal signals
+  makeQtModule ["Widgets", "QGroupBox"]
+  [ QtExportClassAndSignals c_QGroupBox signals ]
 
-c_QGroupBox =
+(c_QGroupBox, signals) =
+  makeQtClassAndSignals signalGens $
   addReqIncludes [includeStd "QGroupBox"] $
   classSetEntityPrefix "" $
   makeClass (ident "QGroupBox") Nothing [c_QWidget]
@@ -67,8 +67,9 @@ c_QGroupBox =
   , mkProp "title" $ objT c_QString
   ]
 
-signals =
+signalGens :: [SignalGen]
+signalGens =
   collect
-  [ test (qtVersion >= [4, 2]) $ makeSignal c_QGroupBox "clicked" listenerBool
-  , just $ makeSignal c_QGroupBox "toggled" listenerBool
+  [ test (qtVersion >= [4, 2]) $ makeSignal "clicked" listenerBool
+  , just $ makeSignal "toggled" listenerBool
   ]

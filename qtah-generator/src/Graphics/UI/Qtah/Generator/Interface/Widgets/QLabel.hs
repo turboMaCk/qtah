@@ -1,6 +1,6 @@
 -- This file is part of Qtah.
 --
--- Copyright 2015-2019 The Qtah Authors.
+-- Copyright 2015-2020 The Qtah Authors.
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU Lesser General Public License as published by
@@ -61,11 +61,11 @@ import Graphics.UI.Qtah.Generator.Types
 
 aModule =
   AQtModule $
-  makeQtModule ["Widgets", "QLabel"] $
-  qtExport c_QLabel :
-  map QtExportSignal signals
+  makeQtModule ["Widgets", "QLabel"]
+  [ QtExportClassAndSignals c_QLabel signals ]
 
-c_QLabel =
+(c_QLabel, signals) =
+  makeQtClassAndSignals signalGens $
   addReqIncludes [includeStd "QLabel"] $
   classSetEntityPrefix "" $
   makeClass (ident "QLabel") Nothing [c_QFrame]
@@ -98,7 +98,8 @@ c_QLabel =
   , mkProp "wordWrap" boolT
   ]
 
-signals =
-  [ makeSignal c_QLabel "linkActivated" listenerQString
-  , makeSignal c_QLabel "linkHovered" listenerQString
+signalGens :: [SignalGen]
+signalGens =
+  [ makeSignal "linkActivated" listenerQString
+  , makeSignal "linkHovered" listenerQString
   ]

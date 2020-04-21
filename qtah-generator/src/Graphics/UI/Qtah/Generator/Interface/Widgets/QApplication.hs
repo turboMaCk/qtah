@@ -1,6 +1,6 @@
 -- This file is part of Qtah.
 --
--- Copyright 2015-2019 The Qtah Authors.
+-- Copyright 2015-2020 The Qtah Authors.
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU Lesser General Public License as published by
@@ -64,13 +64,13 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QApplication"] $
-  [ qtExport c_QApplication
-  ] ++ map QtExportSignal signals ++
   collect
-  [ test (qtVersion < [5]) $ qtExport e_Type
+  [ just $ QtExportClassAndSignals c_QApplication signals
+  , test (qtVersion < [5]) $ qtExport e_Type
   ]
 
-c_QApplication =
+(c_QApplication, signals) =
+  makeQtClassAndSignals signalGens $
   addReqIncludes [ includeStd "QApplication"
                  , includeLocal "wrap_qapplication.hpp"
                  ] $
@@ -162,13 +162,12 @@ c_QApplication =
     -- TODO x11ProcessEvent
   ]
 
-signals =
-  [ makeSignal c_QApplication "aboutToReleaseGpuResources" listener
-  , makeSignal c_QApplication "aboutToUseGpuResources" listener
-    -- TODO commitDataRequest
-  , makeSignal c_QApplication "focusChanged" listenerPtrQWidgetPtrQWidget
-  , makeSignal c_QApplication "fontDatabaseChanged" listener
-  , makeSignal c_QApplication "lastWindowClosed" listener
+signalGens :: [SignalGen]
+signalGens =
+  [ -- TODO commitDataRequest
+    makeSignal "focusChanged" listenerPtrQWidgetPtrQWidget
+  , makeSignal "fontDatabaseChanged" listener
+  , makeSignal "lastWindowClosed" listener
     -- TODO quit (static!)
     -- TODO saveStateRequest
   ]

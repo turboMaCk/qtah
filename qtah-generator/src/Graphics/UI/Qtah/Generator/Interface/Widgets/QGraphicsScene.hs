@@ -1,6 +1,6 @@
 -- This file is part of Qtah.
 --
--- Copyright 2015-2019 The Qtah Authors.
+-- Copyright 2015-2020 The Qtah Authors.
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU Lesser General Public License as published by
@@ -41,14 +41,13 @@ import Foreign.Hoppy.Generator.Spec (
 import Foreign.Hoppy.Generator.Types (voidT, objT, ptrT, intT, boolT, enumT)
 import Foreign.Hoppy.Generator.Version (collect, just, test)
 import Graphics.UI.Qtah.Generator.Config (qtVersion)
-import Graphics.UI.Qtah.Generator.Interface.Core.Types (qreal)
+import Graphics.UI.Qtah.Generator.Interface.Core.Types (e_FocusReason, qreal)
 import Graphics.UI.Qtah.Generator.Interface.Core.QEvent (c_QEvent)
 -- import Graphics.UI.Qtah.Generator.Interface.Core.QLineF (c_QLineF)
 import Graphics.UI.Qtah.Generator.Interface.Core.QObject (c_QObject)
 import Graphics.UI.Qtah.Generator.Interface.Core.QPointF (c_QPointF)
 import Graphics.UI.Qtah.Generator.Interface.Core.QRectF (c_QRectF)
 -- import Graphics.UI.Qtah.Generator.Interface.Core.QString (c_QString)
-import Graphics.UI.Qtah.Generator.Interface.Core.Types hiding (aModule)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QBrush (c_QBrush)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QFont (c_QFont)
 import Graphics.UI.Qtah.Generator.Interface.Gui.QPainterPath (c_QPainterPath)

@@ -1,6 +1,6 @@
 -- This file is part of Qtah.
 --
--- Copyright 2015-2019 The Qtah Authors.
+-- Copyright 2015-2020 The Qtah Authors.
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU Lesser General Public License as published by
@@ -53,16 +53,17 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QFileDialog"] $
-  [ qtExport c_QFileDialog
+  [ QtExportClassAndSignals c_QFileDialog signals
   , qtExport e_AcceptMode
   , qtExport e_DialogLabel
   , qtExport e_FileMode
   , qtExport e_Option
   , qtExport fl_Options
   , qtExport e_ViewMode
-  ] ++ map QtExportSignal signals
+  ]
 
-c_QFileDialog =
+(c_QFileDialog, signals) =
+  makeQtClassAndSignals signalGens $
   addReqIncludes [includeStd "QFileDialog"] $
   classSetEntityPrefix "" $
   makeClass (ident "QFileDialog") Nothing [c_QDialog] $
@@ -140,15 +141,16 @@ c_QFileDialog =
   , just $ mkProp "viewMode" $ enumT e_ViewMode
   ]
 
-signals =
+signalGens :: [SignalGen]
+signalGens =
   collect
-  [ just $ makeSignal c_QFileDialog "currentChanged" listenerQString
+  [ just $ makeSignal "currentChanged" listenerQString
     -- TODO currentUrlChanged (>=5.2)
-  , just $ makeSignal c_QFileDialog "directoryEntered" listenerQString
+  , just $ makeSignal "directoryEntered" listenerQString
     -- TODO directoryUrlEntered (>=5.2)
-  , just $ makeSignal c_QFileDialog "fileSelected" listenerQString
+  , just $ makeSignal "fileSelected" listenerQString
     -- TODO filesSelected
-  , test (qtVersion >= [4, 3]) $ makeSignal c_QFileDialog "filterSelected" listenerQString
+  , test (qtVersion >= [4, 3]) $ makeSignal "filterSelected" listenerQString
     -- TODO urlSelected (>=5.2)
     -- TODO urlsSelected (>=5.2)
   ]

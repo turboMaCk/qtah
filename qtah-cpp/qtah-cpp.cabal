@@ -1,12 +1,12 @@
 name: qtah-cpp
-version: 0.6.1
+version: 0.7.0
 synopsis: Qt bindings for Haskell - C++ library
 homepage: http://khumba.net/projects/qtah
 license: LGPL-3
 license-files: LICENSE.GPL, LICENSE.LGPL
 author: Bryan Gardiner <bog@khumba.net>
 maintainer: Bryan Gardiner <bog@khumba.net>
-copyright: Copyright 2015-2019 The Qtah Authors.
+copyright: Copyright 2015-2020 The Qtah Authors.
 category: Graphics
 build-type: Custom
 -- Cabal 1.20 is needed for BuildFlags.buildNumJobs.
@@ -56,7 +56,7 @@ library
   build-depends:
       base >=4 && <5
     , process >=1.2 && <1.7
-    , qtah-generator >=0.6 && <0.7
+    , qtah-generator >=0.7 && <0.8
   ghc-options: -W -fwarn-incomplete-patterns -fwarn-unused-do-bind
 
 custom-setup

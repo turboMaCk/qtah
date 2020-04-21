@@ -1,6 +1,6 @@
 -- This file is part of Qtah.
 --
--- Copyright 2015-2019 The Qtah Authors.
+-- Copyright 2015-2020 The Qtah Authors.
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU Lesser General Public License as published by
@@ -17,6 +17,8 @@
 
 module Graphics.UI.Qtah.Generator.Interface.Widgets.QTabWidget (
   aModule,
+  e_TabPosition,
+  e_TabShape,
   ) where
 
 import Foreign.Hoppy.Generator.Spec (
@@ -50,14 +52,14 @@ import Graphics.UI.Qtah.Generator.Types
 
 aModule =
   AQtModule $
-  makeQtModule ["Widgets", "QTabWidget"] $
-  qtExport c_QTabWidget :
-  map QtExportSignal signals ++
-  [ qtExport e_TabPosition
+  makeQtModule ["Widgets", "QTabWidget"]
+  [ QtExportClassAndSignals c_QTabWidget signals
+  , qtExport e_TabPosition
   , qtExport e_TabShape
   ]
 
-c_QTabWidget =
+(c_QTabWidget, signals) =
+  makeQtClassAndSignals signalGens $
   addReqIncludes [includeStd "QTabWidget"] $
   classSetEntityPrefix "" $
   makeClass (ident "QTabWidget") Nothing [c_QWidget] $
@@ -115,9 +117,10 @@ e_TabShape =
   , "Triangular"
   ]
 
-signals =
-  [ makeSignal c_QTabWidget "currentChanged" listenerInt
-  , makeSignal c_QTabWidget "tabBarClicked" listenerInt
-  , makeSignal c_QTabWidget "tabBarDoubleClicked" listenerInt
-  , makeSignal c_QTabWidget "tabCloseRequested" listenerInt
+signalGens :: [SignalGen]
+signalGens =
+  [ makeSignal "currentChanged" listenerInt
+  , makeSignal "tabBarClicked" listenerInt
+  , makeSignal "tabBarDoubleClicked" listenerInt
+  , makeSignal "tabCloseRequested" listenerInt
   ]

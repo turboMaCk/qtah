@@ -1,6 +1,6 @@
 -- This file is part of Qtah.
 --
--- Copyright 2015-2019 The Qtah Authors.
+-- Copyright 2015-2020 The Qtah Authors.
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU Lesser General Public License as published by
@@ -46,16 +46,13 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QStackedLayout"] $
-  collect $
-  concat
-  [ [ just $ qtExport c_QStackedLayout
-    ]
-  , map (just . QtExportSignal) signals
-  , [ test (qtVersion >= [4, 4]) $ qtExport e_StackingMode
-    ]
+  collect
+  [ just $ QtExportClassAndSignals c_QStackedLayout signals
+  , test (qtVersion >= [4, 4]) $ qtExport e_StackingMode
   ]
 
-c_QStackedLayout =
+(c_QStackedLayout, signals) =
+  makeQtClassAndSignals signalGens $
   addReqIncludes [includeStd "QStackedLayout"] $
   classSetEntityPrefix "" $
   makeClass (ident "QStackedLayout") Nothing [c_QLayout] $
@@ -72,9 +69,10 @@ c_QStackedLayout =
   , just $ mkConstMethod "widget" [intT] $ ptrT $ objT c_QWidget
   ]
 
-signals =
-  [ makeSignal c_QStackedLayout "currentChanged" listenerInt
-  , makeSignal c_QStackedLayout "widgetRemoved" listenerInt
+signalGens :: [SignalGen]
+signalGens =
+  [ makeSignal "currentChanged" listenerInt
+  , makeSignal "widgetRemoved" listenerInt
   ]
 
 e_StackingMode =

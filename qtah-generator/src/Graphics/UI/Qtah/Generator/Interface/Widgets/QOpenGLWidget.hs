@@ -1,6 +1,6 @@
 -- This file is part of Qtah.
 --
--- Copyright 2015-2019 The Qtah Authors.
+-- Copyright 2015-2020 The Qtah Authors.
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU Lesser General Public License as published by
@@ -51,12 +51,13 @@ minVersion = [5, 4]
 aModule =
   AQtModule $
   makeQtModuleWithMinVersion ["Widgets", "QOpenGLWidget"] minVersion $
-  [ qtExport c_QOpenGLWidget ] ++
-  map QtExportSignal signals ++
   collect
-  [ test (qtVersion >= [5, 5]) $ qtExport e_UpdateBehavior ]
+  [ just $ QtExportClassAndSignals c_QOpenGLWidget signals
+  , test (qtVersion >= [5, 5]) $ qtExport e_UpdateBehavior
+  ]
 
-c_QOpenGLWidget =
+(c_QOpenGLWidget, signals) =
+  makeQtClassAndSignals signalGens $
   addReqIncludes [includeStd "QOpenGLWidget"] $
   classSetEntityPrefix "" $
   makeClass (ident "QOpenGLWidget") Nothing [c_QWidget] $
@@ -74,11 +75,12 @@ c_QOpenGLWidget =
   , test (qtVersion >= [5, 5]) $ mkProp "updateBehavior" $ enumT e_UpdateBehavior
   ]
 
-signals =
-  [ makeSignal c_QOpenGLWidget "aboutToCompose" listener
-  , makeSignal c_QOpenGLWidget "aboutToResize" listener
-  , makeSignal c_QOpenGLWidget "frameSwapped" listener
-  , makeSignal c_QOpenGLWidget "resized" listener
+signalGens :: [SignalGen]
+signalGens =
+  [ makeSignal "aboutToCompose" listener
+  , makeSignal "aboutToResize" listener
+  , makeSignal "frameSwapped" listener
+  , makeSignal "resized" listener
   ]
 
 e_UpdateBehavior =

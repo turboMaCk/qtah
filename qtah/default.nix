@@ -1,6 +1,6 @@
 # This file is part of Qtah.
 #
-# Copyright 2015-2019 The Qtah Authors.
+# Copyright 2015-2020 The Qtah Authors.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published by
@@ -21,7 +21,7 @@
 }:
 mkDerivation {
   pname = "qtah";
-  version = "0.6.1";
+  version = "0.7.0";
   src = ./.;
   libraryHaskellDepends = [
     base binary bytestring hoppy-runtime qtah-cpp qtah-generator

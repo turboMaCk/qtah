@@ -1,6 +1,6 @@
 -- This file is part of Qtah.
 --
--- Copyright 2015-2019 The Qtah Authors.
+-- Copyright 2015-2020 The Qtah Authors.
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU Lesser General Public License as published by
@@ -66,9 +66,8 @@ import Graphics.UI.Qtah.Generator.Interface.Core.Types (qlonglong)
 aModule =
   AQtModule $
   makeQtModule ["Core", "QProcess"] $
-  qtExport c_QProcess :
-  map QtExportSignal signals ++
-  [ qtExport e_ExitStatus
+  [ QtExportClassAndSignals c_QProcess signals
+  , qtExport e_ExitStatus
   , qtExport e_InputChannelMode
   , qtExport e_ProcessChannel
   , qtExport e_ProcessChannelMode
@@ -76,7 +75,8 @@ aModule =
   , qtExport e_ProcessState
   ]
 
-c_QProcess =
+(c_QProcess, signals) =
+  makeQtClassAndSignals signalGens $
   addReqIncludes [includeStd "QProcess"] $
   classSetEntityPrefix "" $
   makeClass (ident "QProcess") Nothing [c_QIODevice] $
@@ -197,12 +197,13 @@ e_ProcessState =
   , "Running"
   ]
 
-signals =
+signalGens :: [SignalGen]
+signalGens =
   collect $
-  [ test (qtVersion >= [5, 6]) $ makeSignal c_QProcess "errorOccurred" listenerProcessError
-  , just $ makeSignal c_QProcess "finished" listenerIntExitStatus
-  , just $ makeSignal c_QProcess "readyReadStandardError" listener
-  , just $ makeSignal c_QProcess "readyReadStandardOutput" listener
-  , just $ makeSignal c_QProcess "started" listener
-  , just $ makeSignal c_QProcess "stateChanged" listenerProcessState
+  [ test (qtVersion >= [5, 6]) $ makeSignal "errorOccurred" listenerProcessError
+  , just $ makeSignal "finished" listenerIntExitStatus
+  , just $ makeSignalPrivate "readyReadStandardError" listener
+  , just $ makeSignalPrivate "readyReadStandardOutput" listener
+  , just $ makeSignalPrivate "started" listener
+  , just $ makeSignalPrivate "stateChanged" listenerProcessState
   ]

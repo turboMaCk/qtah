@@ -1,6 +1,6 @@
 -- This file is part of Qtah.
 --
--- Copyright 2015-2019 The Qtah Authors.
+-- Copyright 2015-2020 The Qtah Authors.
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU Lesser General Public License as published by
@@ -91,7 +91,10 @@ import Distribution.Simple.Utils (
   installOrdinaryFile,
   notice,
   )
-#if MIN_VERSION_Cabal(2,2,0)
+#if MIN_VERSION_Cabal(3,2,0)
+-- GHC 8.10.1+:
+import Distribution.Types.Flag (lookupFlagAssignment)
+#elif MIN_VERSION_Cabal(2,2,0)
 import Distribution.Types.GenericPackageDescription (lookupFlagAssignment)
 #endif
 import Distribution.Verbosity (Verbosity, normal)

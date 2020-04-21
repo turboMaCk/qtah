@@ -1,6 +1,6 @@
 -- This file is part of Qtah.
 --
--- Copyright 2015-2019 The Qtah Authors.
+-- Copyright 2015-2020 The Qtah Authors.
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU Lesser General Public License as published by
@@ -47,13 +47,13 @@ import Graphics.UI.Qtah.Generator.Types
 
 aModule =
   AQtModule $
-  makeQtModule ["Core", "QThread"] $
-  qtExport c_QThread :
-  map QtExportSignal signals ++
-  [ qtExport e_Priority
+  makeQtModule ["Core", "QThread"]
+  [ QtExportClassAndSignals c_QThread signals
+  , qtExport e_Priority
   ]
 
-c_QThread =
+(c_QThread, signals) =
+  makeQtClassAndSignals signalGens $
   addReqIncludes [includeStd "QThread"] $
   classSetEntityPrefix "" $
   makeClass (ident "QThread") Nothing [c_QObject] $
@@ -87,9 +87,10 @@ c_QThread =
   , just $ mkStaticMethod "yieldCurrentThread" np voidT
   ]
 
-signals =
-  [ makeSignal c_QThread "finished" listener
-  , makeSignal c_QThread "started" listener
+signalGens :: [SignalGen]
+signalGens =
+  [ makeSignalPrivate "finished" listener
+  , makeSignalPrivate "started" listener
   ]
 
 e_Priority =

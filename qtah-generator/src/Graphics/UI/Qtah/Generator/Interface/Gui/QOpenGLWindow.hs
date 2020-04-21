@@ -1,6 +1,6 @@
 -- This file is part of Qtah.
 --
--- Copyright 2015-2019 The Qtah Authors.
+-- Copyright 2015-2020 The Qtah Authors.
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU Lesser General Public License as published by
@@ -50,11 +50,12 @@ minVersion = [5, 4]
 aModule =
   AQtModule $
   makeQtModuleWithMinVersion ["Gui", "QOpenGLWindow"] minVersion $
-  [ qtExport c_QOpenGLWindow ] ++
-  map QtExportSignal signals ++
-  [ qtExport e_UpdateBehavior ]
+  [ QtExportClassAndSignals c_QOpenGLWindow signals
+  , qtExport e_UpdateBehavior
+  ]
 
-c_QOpenGLWindow =
+(c_QOpenGLWindow, signals) =
+  makeQtClassAndSignals signalGens $
   addReqIncludes [includeStd "QOpenGLWindow"] $
   classSetEntityPrefix "" $
   makeClass (ident "QOpenGLWindow") Nothing [c_QPaintDeviceWindow]
@@ -72,8 +73,9 @@ c_QOpenGLWindow =
   , mkConstMethod "updateBehavior" np $ enumT e_UpdateBehavior
   ]
 
-signals =
-  [ makeSignal c_QOpenGLWindow "frameSwapped" listener
+signalGens :: [SignalGen]
+signalGens =
+  [ makeSignal "frameSwapped" listener
   ]
 
 e_UpdateBehavior =

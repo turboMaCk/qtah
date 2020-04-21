@@ -1,6 +1,6 @@
 -- This file is part of Qtah.
 --
--- Copyright 2015-2019 The Qtah Authors.
+-- Copyright 2015-2020 The Qtah Authors.
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU Lesser General Public License as published by
@@ -55,11 +55,12 @@ import Graphics.UI.Qtah.Generator.Types
 aModule =
   AQtModule $
   makeQtModule ["Widgets", "QAbstractSlider"] $
-  qtExport c_QAbstractSlider :
-  map QtExportSignal signals ++
-  [ qtExport e_SliderAction ]
+  [ QtExportClassAndSignals c_QAbstractSlider signals
+  , qtExport e_SliderAction
+  ]
 
-c_QAbstractSlider =
+(c_QAbstractSlider, signals) =
+  makeQtClassAndSignals signalGens $
   addReqIncludes [includeStd "QAbstractSlider"] $
   classSetEntityPrefix "" $
   makeClass (ident "QAbstractSlider") Nothing [c_QWidget]
@@ -79,13 +80,14 @@ c_QAbstractSlider =
   , mkProp "value" intT
   ]
 
-signals =
-  [ makeSignal c_QAbstractSlider "actionTriggered" listenerQAbstractSliderAction
-  , makeSignal c_QAbstractSlider "rangeChanged" listenerIntInt
-  , makeSignal c_QAbstractSlider "sliderMoved" listenerInt
-  , makeSignal c_QAbstractSlider "sliderPressed" listener
-  , makeSignal c_QAbstractSlider "sliderReleased" listener
-  , makeSignal c_QAbstractSlider "valueChanged" listenerInt
+signalGens :: [SignalGen]
+signalGens =
+  [ makeSignal "actionTriggered" listenerQAbstractSliderAction
+  , makeSignal "rangeChanged" listenerIntInt
+  , makeSignal "sliderMoved" listenerInt
+  , makeSignal "sliderPressed" listener
+  , makeSignal "sliderReleased" listener
+  , makeSignal "valueChanged" listenerInt
   ]
 
 -- This uses 'makeEnum' rather than 'makeQtEnum' in order to use the external
