@@ -9,7 +9,7 @@ maintainer: Bryan Gardiner <bog@khumba.net>
 copyright: Copyright 2015-2020 The Qtah Authors.
 category: Graphics
 build-type: Custom
-cabal-version: 1.20
+cabal-version: 2.0
 description:
   Qtah is a set of Qt bindings for Haskell.  This package contains the Haskell
   side of the bindings, and is what Qt programs should use directly.
@@ -536,6 +536,8 @@ library
     , hoppy-runtime >=0.7 && <0.8
     , qtah-cpp >=0.7 && <0.8
     , qtah-generator >=0.7 && <0.8
+  build-tool-depends:
+      qtah-generator:qtah-generator
   hs-source-dirs: src
   ghc-options: -W -fwarn-incomplete-patterns -fwarn-unused-do-bind
   default-language: Haskell2010

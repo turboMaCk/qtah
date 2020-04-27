@@ -1,6 +1,11 @@
 # Qtah Changelog
 
-## Unreleased - 0.7.0
+## Unreleased
+
+- Nix-style local builds i.e. `cabal v2-build` are now supported (fixes #26).
+  This uses the `build-tool-depends` field which requires Cabal 2.0 or higher.
+
+## (2020-04-13) 0.7.0
 
 - Added the ability to emit Qt signals from Haskell code by exposing them as the
   regular methods that they are (issue #40).  These methods' names begin with
