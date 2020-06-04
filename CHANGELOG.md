@@ -2,15 +2,17 @@
 
 ## Unreleased
 
+- Nix-style local builds i.e. `cabal v2-build` are now supported (fixes #26).
+  This uses the `build-tool-depends` field which requires Cabal 2.0 or higher.
+
+## (2020-06-03) qtah-generator-0.7.1
+
 - Restored compatibility with Qt 5.5 by adding missing version bounds on enum
   values, mostly in the `Qt` namespace (issue #49).  This also adds a couple of
   `Qt:Key_*` constants that were in the code but were commented out for some
   reason.
 
-- Nix-style local builds i.e. `cabal v2-build` are now supported (fixes #26).
-  This uses the `build-tool-depends` field which requires Cabal 2.0 or higher.
-
-## (2020-04-13) 0.7.0
+## (2020-04-13) *-0.7.0
 
 - Added the ability to emit Qt signals from Haskell code by exposing them as the
   regular methods that they are (issue #40).  These methods' names begin with
