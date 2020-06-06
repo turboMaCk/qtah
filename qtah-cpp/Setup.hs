@@ -19,9 +19,9 @@
 {-# LANGUAGE CPP #-}
 
 import Control.Applicative ((<|>))
-import Control.Monad (unless, when)
+import Control.Monad (forM_, unless, when)
 import Data.Char (isDigit)
-import Data.List (isPrefixOf, isSuffixOf)
+import Data.List (intercalate, isPrefixOf, isSuffixOf)
 import Data.Maybe (fromMaybe)
 import Distribution.Package (pkgName, unPackageName)
 import Distribution.PackageDescription (
@@ -45,20 +45,15 @@ import Distribution.Simple.LocalBuildInfo (
   )
 import Distribution.Simple.Program (
   Program,
-  getProgramOutput,
-  lookupProgram,
-  programPath,
   runDbProgram,
   simpleProgram,
   )
--- I don't think Distribution.Simple.Program exported ProgramDb back in
--- Cabal-1.22.5.0, so we import it from the Db submodule:
-import Distribution.Simple.Program.Db (ProgramDb)
 import Distribution.Simple.Setup (
   BuildFlags,
   CleanFlags,
   ConfigFlags,
   CopyDest (CopyTo, NoCopyDest),
+  RegisterFlags,
   buildNumJobs,
   buildVerbosity,
   cleanVerbosity,
@@ -70,6 +65,8 @@ import Distribution.Simple.Setup (
   fromFlagOrDefault,
   installDistPref,
   installVerbosity,
+  regInPlace,
+  regVerbosity,
   )
 import Distribution.Simple.UserHooks (
   UserHooks (
@@ -78,7 +75,8 @@ import Distribution.Simple.UserHooks (
     copyHook,
     hookedPrograms,
     instHook,
-    postConf
+    postConf,
+    regHook
     ),
   )
 #if MIN_VERSION_Cabal(2,0,0)
@@ -98,6 +96,9 @@ import Distribution.Types.Flag (lookupFlagAssignment)
 import Distribution.Types.GenericPackageDescription (lookupFlagAssignment)
 #endif
 import Distribution.Verbosity (Verbosity, normal)
+import Graphics.UI.Qtah.Generator.Config (qmakeArguments, qmakeExecutable, qtVersion)
+import Graphics.UI.Qtah.Generator.Main (generateCpp)
+import Graphics.UI.Qtah.Generator.ListenerGen (generateListenerCpp)
 import System.Directory (
   createDirectoryIfMissing,
   doesDirectoryExist,
@@ -123,7 +124,7 @@ main = defaultMainWithHooks qtahHooks
 
 qtahHooks :: UserHooks
 qtahHooks = simpleUserHooks
-  { hookedPrograms = [bashProgram, generatorProgram, listenerGenProgram, makeProgram]
+  { hookedPrograms = [bashProgram, makeProgram]
   , postConf = \args cf pd lbi -> do generateSources cf lbi
                                      postConf simpleUserHooks args cf pd lbi
   , buildHook = \pd lbi uh bf -> do doBuild lbi bf
@@ -137,6 +138,9 @@ qtahHooks = simpleUserHooks
                                                flagToMaybe $ installDistPref if'
                                     doInstall verbosity pd lbi dest
                                     instHook simpleUserHooks pd lbi uh if'
+  , regHook = \pd lbi uh rf -> do let verbosity = fromFlagOrDefault normal $ regVerbosity rf
+                                  doRegister verbosity lbi rf
+                                  regHook simpleUserHooks pd lbi uh rf
   , cleanHook = \pd z uh cf -> do doClean cf
                                   cleanHook simpleUserHooks pd z uh cf
   }
@@ -144,63 +148,25 @@ qtahHooks = simpleUserHooks
 bashProgram :: Program
 bashProgram = simpleProgram "bash"
 
-generatorProgram :: Program
-generatorProgram = simpleProgram "qtah-generator"
-
-listenerGenProgram :: Program
-listenerGenProgram = simpleProgram "qtah-listener-gen"
-
 makeProgram :: Program
 makeProgram = simpleProgram "make"
-
-findQmake :: ProgramDb -> Verbosity -> IO (FilePath, [String])
-findQmake programDb verbosity = do
-#if MIN_VERSION_Cabal(2,0,0)
-  let dieFn = die' verbosity
-#else
-  let dieFn = die
-#endif
-  generatorConfiguredProgram <-
-    maybe (dieFn $ packageName ++ ": Couldn't find qtah-generator.  Is it installed?") return $
-    lookupProgram generatorProgram programDb
-  output <-
-    lines <$> getProgramOutput verbosity generatorConfiguredProgram ["--qmake-executable"]
-  case output of
-    executable:args -> return (executable, args)
-    [] -> fail $ packageName ++
-          ": Couldn't ask qtah-generator for the location of qmake.  Received no output."
 
 generateSources :: ConfigFlags -> LocalBuildInfo -> IO ()
 generateSources configFlags localBuildInfo = do
   startDir <- getCurrentDirectory
   let cppSourceDir = startDir </> "cpp"
-      programDb = withPrograms localBuildInfo
-      verbosity = fromFlagOrDefault normal $ configVerbosity configFlags
-#if MIN_VERSION_Cabal(2,0,0)
-      dieFn = die' verbosity
-#else
-      dieFn = die
-#endif
 
   -- Parse the Qt version to use from flags and the environment, and export it
   -- to the generator.
   _ <- exportQtVersion configFlags localBuildInfo
 
-  listenerGenPath <- case lookupProgram listenerGenProgram programDb of
-    Nothing ->
-      dieFn $ packageName ++
-      ": Couldn't find qtah-listener-gen.  Is qtah-generator installed and on the path?"
-    Just configuredProgram -> return $ programPath configuredProgram
-
   -- Generate binding source code.
-  runDbProgram verbosity generatorProgram programDb ["--gen-cpp", "cpp"]
-  runDbProgram verbosity bashProgram programDb [listenerGenPath, "--gen-cpp-dir", "cpp"]
+  generateCpp cppSourceDir
+  generateListenerCpp cppSourceDir
 
   -- Run qmake to generate the makefile.
   setCurrentDirectory cppSourceDir
-  (qmakeExecutable, qmakeArguments) <- findQmake programDb verbosity
   callProcess qmakeExecutable $ qmakeArguments ++ ["qtah.pro"]
-
   setCurrentDirectory startDir
 
 doBuild :: LocalBuildInfo -> BuildFlags -> IO ()
@@ -222,10 +188,25 @@ doBuild localBuildInfo buildFlags = do
 
 doInstall :: Verbosity -> PackageDescription -> LocalBuildInfo -> CopyDest -> IO ()
 doInstall verbosity packageDesc localBuildInfo copyDest = do
+  let libDir = libdir $ absoluteInstallDirs packageDesc localBuildInfo copyDest
+      dynlibDir = dynlibdir $ absoluteInstallDirs packageDesc localBuildInfo copyDest
+  installOrRegister verbosity localBuildInfo libDir (Just dynlibDir)
+
+doRegister :: Verbosity -> LocalBuildInfo -> RegisterFlags -> IO ()
+doRegister verbosity localBuildInfo regFlags =
+  when (fromFlagOrDefault False (regInPlace regFlags)) $ do
+    let libDir = buildDir localBuildInfo
+    createDirectoryIfMissing True libDir
+    installOrRegister verbosity localBuildInfo libDir Nothing
+
+installOrRegister :: Verbosity
+                  -> LocalBuildInfo
+                  -> FilePath
+                  -> Maybe FilePath
+                  -> IO ()
+installOrRegister verbosity localBuildInfo libDir maybeDynlibDir = do
   startDir <- getCurrentDirectory
   let cppSourceDir = startDir </> "cpp"
-      libDir = libdir $ absoluteInstallDirs packageDesc localBuildInfo copyDest
-      dynlibDir = dynlibdir $ absoluteInstallDirs packageDesc localBuildInfo copyDest
       programDb = withPrograms localBuildInfo
 
   -- Call the makefile to install the C++ shared library into the package's
@@ -234,9 +215,10 @@ doInstall verbosity packageDesc localBuildInfo copyDest = do
   -- in `dynlibdir`, but when configuring depending packages Cabal searches for libraries
   -- only in `libdir`. Hacking it away right now with this duplication.
   runDbProgram verbosity makeProgram programDb
-    ["-C", cppSourceDir, "install", "INSTALL_ROOT=" ++ dynlibDir]
-  runDbProgram verbosity makeProgram programDb
     ["-C", cppSourceDir, "install", "INSTALL_ROOT=" ++ libDir]
+  forM_ maybeDynlibDir $ \dynlibDir ->
+    runDbProgram verbosity makeProgram programDb
+      ["-C", cppSourceDir, "install", "INSTALL_ROOT=" ++ dynlibDir]
 
   -- Also record what version of Qt we are using, so that qtah can check that
   -- it's using the same version.
@@ -294,7 +276,6 @@ doClean cleanFlags = do
 exportQtVersion :: ConfigFlags -> LocalBuildInfo -> IO String
 exportQtVersion configFlags localBuildInfo = do
   let verbosity = fromFlagOrDefault normal $ configVerbosity configFlags
-      programDb = withPrograms localBuildInfo
 #if MIN_VERSION_Cabal(2,0,0)
       dieFn = die' verbosity
 #else
@@ -376,21 +357,12 @@ exportQtVersion configFlags localBuildInfo = do
     Nothing -> return ()
 
   -- Log a message showing which Qt qtah-generator is actually using.
-  generatorConfiguredProgram <-
-    maybe (dieFn $ packageName ++ ": Couldn't find qtah-generator.  Is it installed?") return $
-    lookupProgram generatorProgram programDb
-  qtVersionOutput <- getProgramOutput verbosity generatorConfiguredProgram ["--qt-version"]
-  qtVersion <- case lines qtVersionOutput of
-    [line] -> return line
-    _ -> dieFn $ concat
-         [packageName, ": Couldn't understand qtah-generator --qt-version output: ",
-          show qtVersionOutput]
-  notice verbosity $
-    concat [packageName, ": Using Qt ", qtVersion, "."]
+  let qtVersionStr = intercalate "." $ map show qtVersion
+  notice verbosity $ concat [packageName, ": Using Qt ", qtVersionStr, "."]
 
   -- Record the selected Qt version in a file for later installation.
   let qtVersionFile = buildDir localBuildInfo </> "qtah-qt-version"
   createDirectoryIfMissing True $ takeDirectory qtVersionFile
-  writeFile qtVersionFile $ unlines [qtVersion]
+  writeFile qtVersionFile $ qtVersionStr ++ "\n"
 
-  return qtVersion
+  return qtVersionStr

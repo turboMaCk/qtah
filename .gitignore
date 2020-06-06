@@ -15,10 +15,13 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+*~
+.qmake.stash
+.stack-work
+dist-newstyle*
+
 /qtah-examples/dist
 /qtah-generator/dist
-/qtah-generator/src/Graphics/UI/Qtah/Generator/Interface/Internal/Listener.hs
-/qtah-generator/src/Graphics/UI/Qtah/Generator/Interface/Internal/Listener.hs-boot
 
 /qtah-cpp/cpp/Makefile
 /qtah-cpp/cpp/b_*
@@ -63,7 +66,3 @@
 /qtah-qt?/src/Graphics/UI/Qtah/Internal/Listener.hs
 /qtah-qt?/src/Graphics/UI/Qtah/Std.hs
 /qtah-qt?/src/Graphics/UI/Qtah/Widgets/Q*
-
-*~
-.qmake.stash
-.stack-work

@@ -25,10 +25,15 @@ module Graphics.UI.Qtah.Generator.Common (
   fromMaybeM,
   maybeFail,
   firstM,
+  -- * String utilities
   lowerFirst,
   upperFirst,
+  -- * File utilities
+  writeFileIfDifferent,
   ) where
 
+import Control.Exception (evaluate)
+import Control.Monad (when)
 #if !MIN_VERSION_base(4,13,0)
 import Control.Monad.Fail (MonadFail)
 #endif
@@ -36,6 +41,8 @@ import Control.Monad.Trans.Maybe (MaybeT (MaybeT), runMaybeT)
 import Data.Char (toLower, toUpper)
 import Data.Foldable (asum)
 import Data.List (findIndex)
+import System.Directory (doesFileExist)
+import System.IO (IOMode (ReadMode), hGetContents, withFile)
 
 -- | Splits a list at elements for which a predicate returns true.  The matching
 -- elements themselves are dropped.
@@ -84,3 +91,19 @@ lowerFirst (c:cs) = toLower c : cs
 upperFirst :: String -> String
 upperFirst "" = ""
 upperFirst (c:cs) = toUpper c : cs
+
+-- | If the file specified does not exist or its contents does not match the
+-- given string, then this writes the string to the file.
+writeFileIfDifferent :: FilePath -> String -> IO ()
+writeFileIfDifferent path newContents = do
+  exists <- doesFileExist path
+  -- We need to read the file strictly, otherwise lazy IO might try to write the
+  -- file while it's still open and locked for reading.
+  doWrite <- if exists
+             then (newContents /=) <$> readStrictly
+             else return True
+  when doWrite $ writeFile path newContents
+  where readStrictly = withFile path ReadMode $ \handle -> do
+            contents <- hGetContents handle
+            _ <- evaluate $ length contents
+            return contents

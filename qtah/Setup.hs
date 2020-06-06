@@ -21,7 +21,7 @@
 import Control.Applicative ((<|>))
 import Control.Monad (unless, when)
 import Data.Char (isDigit)
-import Data.List (isInfixOf, isPrefixOf)
+import Data.List (intercalate, isInfixOf, isPrefixOf)
 import Data.Maybe (fromMaybe)
 import Distribution.InstalledPackageInfo (libraryDirs)
 import Distribution.Package (
@@ -53,16 +53,8 @@ import Distribution.Simple.LocalBuildInfo (
   installedPkgs,
   libdir,
   localPkgDescr,
-  withPrograms,
   )
 import Distribution.Simple.PackageIndex (lookupPackageName)
-import Distribution.Simple.Program (
-  Program,
-  getProgramOutput,
-  lookupProgram,
-  runDbProgram,
-  simpleProgram,
-  )
 import Distribution.Simple.Setup (
   CleanFlags,
   ConfigFlags,
@@ -79,7 +71,6 @@ import Distribution.Simple.Setup (
   )
 import Distribution.Simple.UserHooks (
   UserHooks (
-    hookedPrograms,
     cleanHook,
     copyHook,
     instHook,
@@ -104,6 +95,8 @@ import Distribution.Types.Flag (lookupFlagAssignment)
 import Distribution.Types.GenericPackageDescription (lookupFlagAssignment)
 #endif
 import Distribution.Verbosity (Verbosity, normal)
+import Graphics.UI.Qtah.Generator.Config (qtVersion)
+import Graphics.UI.Qtah.Generator.Main (generateHs)
 import System.Directory (
   createDirectoryIfMissing,
   doesDirectoryExist,
@@ -136,8 +129,7 @@ main = defaultMainWithHooks qtahHooks
 
 qtahHooks :: UserHooks
 qtahHooks = simpleUserHooks
-  { hookedPrograms = [generatorProgram]
-  , postConf = \args cf pd lbi -> do libDir <-
+  { postConf = \args cf pd lbi -> do libDir <-
                                        lookupQtahCppLibDir lbi
 #if MIN_VERSION_Cabal(2,0,0)
                                        (die' $ fromFlagOrDefault normal $ configVerbosity cf)
@@ -203,13 +195,9 @@ addLibDir = do
                               },
           [])
 
-generatorProgram :: Program
-generatorProgram = simpleProgram "qtah-generator"
-
 generateSources :: ConfigFlags -> LocalBuildInfo -> FilePath -> IO ()
 generateSources configFlags localBuildInfo qtahCppLibDir = do
   let verbosity = fromFlagOrDefault normal $ configVerbosity configFlags
-      programDb = withPrograms localBuildInfo
 #if MIN_VERSION_Cabal(2,0,0)
       dieFn = die' verbosity
 #else
@@ -235,7 +223,7 @@ generateSources configFlags localBuildInfo qtahCppLibDir = do
      cppPackageName, " (", qtahCppQtVersion, ").  Please reconfigure one or the other."]
 
   -- Generate binding source code.
-  runDbProgram verbosity generatorProgram programDb ["--gen-hs", "src"]
+  generateHs "src"
 
 doInstall :: Verbosity -> PackageDescription -> LocalBuildInfo -> CopyDest -> IO ()
 doInstall verbosity packageDesc localBuildInfo copyDest = do
@@ -316,7 +304,6 @@ doClean cleanFlags = do
 exportQtVersion :: ConfigFlags -> LocalBuildInfo -> IO String
 exportQtVersion configFlags localBuildInfo = do
   let verbosity = fromFlagOrDefault normal $ configVerbosity configFlags
-      programDb = withPrograms localBuildInfo
 #if MIN_VERSION_Cabal(2,0,0)
       dieFn = die' verbosity
 #else
@@ -398,21 +385,12 @@ exportQtVersion configFlags localBuildInfo = do
     Nothing -> return ()
 
   -- Log a message showing which Qt qtah-generator is actually using.
-  generatorConfiguredProgram <-
-    maybe (dieFn $ packageName ++ ": Couldn't find qtah-generator.  Is it installed?") return $
-    lookupProgram generatorProgram programDb
-  qtVersionOutput <- getProgramOutput verbosity generatorConfiguredProgram ["--qt-version"]
-  qtVersion <- case lines qtVersionOutput of
-    [line] -> return line
-    _ -> dieFn $ concat
-         [packageName, ": Couldn't understand qtah-generator --qt-version output: ",
-          show qtVersionOutput]
-  notice verbosity $
-    concat [packageName, ": Using Qt ", qtVersion, "."]
+  let qtVersionStr = intercalate "." $ map show qtVersion
+  notice verbosity $ concat [packageName, ": Using Qt ", qtVersionStr, "."]
 
   -- Record the selected Qt version in a file for later installation.
   let qtVersionFile = buildDir localBuildInfo </> "qtah-qt-version"
   createDirectoryIfMissing True $ takeDirectory qtVersionFile
-  writeFile qtVersionFile $ unlines [qtVersion]
+  writeFile qtVersionFile $ qtVersionStr ++ "\n"
 
-  return qtVersion
+  return qtVersionStr

@@ -554,8 +554,6 @@ library
     , hoppy-runtime >=0.7 && <0.8
     , qtah-cpp >=0.7 && <0.8
     , qtah-generator >=0.7 && <0.8
-  build-tool-depends:
-      qtah-generator:qtah-generator
   hs-source-dirs: src
   ghc-options: -W -fwarn-incomplete-patterns -fwarn-unused-do-bind
   default-language: Haskell2010
@@ -582,3 +580,4 @@ custom-setup
     , Cabal
     , directory
     , filepath
+    , qtah-generator >=0.7 && <0.8

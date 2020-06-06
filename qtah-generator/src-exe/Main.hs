@@ -15,4 +15,12 @@
 -- You should have received a copy of the GNU Lesser General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-module Graphics.UI.Qtah.Generator.Empty () where
+module Main where
+
+import Graphics.UI.Qtah.Generator.Main (run)
+import System.Environment (getArgs)
+
+main :: IO ()
+main = do
+  args <- getArgs
+  run args

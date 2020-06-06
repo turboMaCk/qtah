@@ -2,8 +2,10 @@
 
 ## Unreleased
 
-- Nix-style local builds i.e. `cabal v2-build` are now supported (fixes #26).
-  This uses the `build-tool-depends` field which requires Cabal 2.0 or higher.
+- Nix-style local builds i.e. `cabal v2-build` are now supported (issue #26),
+  through numerous changes: qtah-generator is now "build-type: Simple" and a
+  library, qtah-listener-gen is ported to Haskell, a missing register hook was
+  added to qtah-cpp.
 
 ## (2020-06-03) qtah-generator-0.7.1
 

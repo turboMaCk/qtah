@@ -22,6 +22,7 @@ mkDerivation {
   pname = "qtah-cpp";
   version = "0.7.0";
   src = ./.;
+  setupHaskellDepends = [ qtah-generator ];
   libraryHaskellDepends = [ base Cabal qtah-generator ];
   librarySystemDepends = [ qt.qtbase ];
   homepage = "http://khumba.net/projects/qtah";

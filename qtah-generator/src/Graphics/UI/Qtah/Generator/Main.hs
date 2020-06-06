@@ -15,11 +15,15 @@
 -- You should have received a copy of the GNU Lesser General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-module Main where
+module Graphics.UI.Qtah.Generator.Main (
+  run,
+  generateCpp,
+  generateHs,
+  ) where
 
 import Control.Monad (when)
 import Data.List (intercalate)
-import Foreign.Hoppy.Generator.Main (run)
+import qualified Foreign.Hoppy.Generator.Main as GeneratorMain (run)
 import Foreign.Hoppy.Generator.Spec (
   Interface,
   Module,
@@ -37,13 +41,7 @@ import qualified Graphics.UI.Qtah.Generator.Interface.Core as Core
 import qualified Graphics.UI.Qtah.Generator.Interface.Gui as Gui
 import qualified Graphics.UI.Qtah.Generator.Interface.Internal as Internal
 import qualified Graphics.UI.Qtah.Generator.Interface.Widgets as Widgets
-import System.Environment (getArgs)
 import System.Exit (exitFailure)
-import System.FilePath (
-  dropTrailingPathSeparator,
-  takeDirectory,
-  takeFileName,
-  )
 import System.IO (hPutStrLn, stderr)
 
 mod_std :: Module
@@ -68,8 +66,19 @@ interfaceResult =
   interfaceAddHaskellModuleBase ["Graphics", "UI", "Qtah"] =<<
   interface "qtah" (concatMap aModuleHoppyModules modules)
 
-main :: IO ()
-main =
+-- | Generates the C++ side of the Qtah bindings, producing files in the given
+-- directory.
+generateCpp :: FilePath -> IO ()
+generateCpp path = run ["--gen-cpp", path]
+
+-- | Generates the Haskell side of the Qtah bindings in the given source
+-- directory.
+generateHs :: FilePath -> IO ()
+generateHs path = run ["--gen-hs", path]
+
+-- | Runs the Qtah generator with the given command line arguments.
+run :: [String] -> IO ()
+run args =
   case interfaceResult of
     Left errorMsg -> do
       putStrLn $ "Error initializing interface: " ++ errorMsg
@@ -81,21 +90,9 @@ main =
           "WARNING: Qtah no longer supports Qt 4.x.  Please upgrade to Qt 5.  Found version " ++
           intercalate "." (map show qtVersion) ++ "."
 
-      args <- getArgs
       case args of
         ["--qt-version"] -> putStrLn $ intercalate "." $ map show qtVersion
         ["--qmake-executable"] -> putStr $ unlines $ qmakeExecutable : qmakeArguments
         _ -> do
-          _ <- run [iface] args
+          _ <- GeneratorMain.run [iface] args
           return ()
-
-findSrcDir :: FilePath -> Maybe FilePath
-findSrcDir = go . dropTrailingPathSeparator
-  where go "" = Nothing
-        go path =
-          let dir = takeDirectory path
-              file = takeFileName path
-          in if file == "src" then Just path
-             else if dir == path
-                  then Nothing  -- Can't go up any more.
-                  else go dir
