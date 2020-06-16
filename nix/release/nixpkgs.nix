@@ -15,27 +15,30 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-{ mkDerivation, base, containers, directory, filepath, haskell-src
-, hoppy-generator, hoppy-std, mtl, stdenv, lib
-, forceParallelBuilding ? false
-}:
-mkDerivation {
-  pname = "qtah-generator";
-  version = "0.7.1";
-  src = ./.;
-  isLibrary = true;
-  isExecutable = true;
-  executableHaskellDepends = [
-    base containers directory filepath haskell-src hoppy-generator
-    hoppy-std mtl
-  ];
-  homepage = "http://khumba.net/projects/qtah";
-  description = "Generator for Qtah Qt bindings";
-  license = stdenv.lib.licenses.lgpl3Plus;
+# Evaluates to Nixpkgs with an overlay from patched (qt5-sources.nix) Qtah
+# sources applied, so that the following packages are available:
+#
+#     qtah-generator
+#     qtah-cpp-qt5
+#     qtah-qt5
+#     qtah-examples
 
-  preConfigure = ''
-    ${if forceParallelBuilding
-     then "configureFlags+=\" --ghc-option=-j$NIX_BUILD_CORES\""
-     else ""}
-  '';
+# Warning, use of import-from-derivation follows.
+
+{ pkgs ? import <nixpkgs> {}
+, overlays ? []
+}:
+
+let
+
+  # Create a patched version of the sources, where qtah-cpp is renamed to
+  # qtah-cpp-qt5, and similarly with qtah (to qtah-qt5).
+  sources = import ./qt5-sources.nix { inherit pkgs; };
+
+  qtahOverlay = import (sources + /nix/overlay.nix);
+
+in import <nixpkgs> {
+  overlays =
+    (map (x: if builtins.isPath x then import x else x) overlays) ++
+    [ qtahOverlay ];
 }

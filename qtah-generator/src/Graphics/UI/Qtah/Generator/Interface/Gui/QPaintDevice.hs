@@ -68,17 +68,18 @@ c_QPaintDevice =
   ]
 
 e_PaintDeviceMetric =
-  makeQtEnum (ident1 "QPaintDevice" "PaintDeviceMetric") [includeStd "QPaintDevice"]
-  [ "PdmWidth"
-  , "PdmHeight"
-  , "PdmWidthMM"
-  , "PdmHeightMM"
-  , "PdmNumColors"
-  , "PdmDepth"
-  , "PdmDpiX"
-  , "PdmDpiY"
-  , "PdmPhysicalDpiX"
-  , "PdmPhysicalDpiY"
-  , "PdmDevicePixelRatio"
-  , "PdmDevicePixelRatioScaled"
+  makeQtEnum (ident1 "QPaintDevice" "PaintDeviceMetric") [includeStd "QPaintDevice"] $
+  collect
+  [ just "PdmWidth"
+  , just "PdmHeight"
+  , just "PdmWidthMM"
+  , just "PdmHeightMM"
+  , just "PdmNumColors"
+  , just "PdmDepth"
+  , just "PdmDpiX"
+  , just "PdmDpiY"
+  , just "PdmPhysicalDpiX"
+  , just "PdmPhysicalDpiY"
+  , just "PdmDevicePixelRatio"
+  , test (qtVersion >= [5, 6]) "PdmDevicePixelRatioScaled"
   ]

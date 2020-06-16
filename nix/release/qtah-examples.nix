@@ -15,27 +15,16 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-{ mkDerivation, base, containers, directory, filepath, haskell-src
-, hoppy-generator, hoppy-std, mtl, stdenv, lib
-, forceParallelBuilding ? false
-}:
-mkDerivation {
-  pname = "qtah-generator";
-  version = "0.7.1";
-  src = ./.;
-  isLibrary = true;
-  isExecutable = true;
-  executableHaskellDepends = [
-    base containers directory filepath haskell-src hoppy-generator
-    hoppy-std mtl
-  ];
-  homepage = "http://khumba.net/projects/qtah";
-  description = "Generator for Qtah Qt bindings";
-  license = stdenv.lib.licenses.lgpl3Plus;
+# Builds a release version of qtah-examples and all other (dependent) packages.
+# The closure of the derivation for this expression contains the source tarballs
+# for all of Qtah:
+#
+# nix-store -r $(nix-store -qR $(nix-store -q --deriver result) | grep -e 'qtah.*source')
 
-  preConfigure = ''
-    ${if forceParallelBuilding
-     then "configureFlags+=\" --ghc-option=-j$NIX_BUILD_CORES\""
-     else ""}
-  '';
-}
+{ pkgs ? import <nixpkgs> {}
+, overlays ? []
+}:
+
+let
+  pkgsWithQtah = import ./nixpkgs.nix { inherit pkgs overlay; };
+in pkgsWithQtah.haskellPackages.qtah-examples
