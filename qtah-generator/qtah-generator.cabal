@@ -171,6 +171,7 @@ executable qtah-generator
     , Graphics.UI.Qtah.Generator.Interface.Gui.QDropEvent
     , Graphics.UI.Qtah.Generator.Interface.Gui.QEnterEvent
     , Graphics.UI.Qtah.Generator.Interface.Gui.QExposeEvent
+    , Graphics.UI.Qtah.Generator.Interface.Gui.QFileOpenEvent
     , Graphics.UI.Qtah.Generator.Interface.Gui.QFocusEvent
     , Graphics.UI.Qtah.Generator.Interface.Gui.QFont
     , Graphics.UI.Qtah.Generator.Interface.Gui.QFontDatabase

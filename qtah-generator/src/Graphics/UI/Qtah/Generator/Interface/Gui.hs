@@ -33,6 +33,7 @@ import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QDragMoveEvent as QDra
 import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QDropEvent as QDropEvent
 import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QEnterEvent as QEnterEvent
 import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QExposeEvent as QExposeEvent
+import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QFileOpenEvent as QFileOpenEvent
 import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QFocusEvent as QFocusEvent
 import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QFont as QFont
 import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QFontDatabase as QFontDatabase
@@ -88,6 +89,7 @@ modules =
   , QDropEvent.aModule
   , QEnterEvent.aModule
   , QExposeEvent.aModule
+  , QFileOpenEvent.aModule
   , QFocusEvent.aModule
   , QFont.aModule
   , QFontDatabase.aModule
