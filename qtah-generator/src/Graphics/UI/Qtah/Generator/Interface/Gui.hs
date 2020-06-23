@@ -28,6 +28,7 @@ import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QContextMenuEvent as Q
 import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QCursor as QCursor
 import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QDoubleValidator as QDoubleValidator
 import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QDragEnterEvent as QDragEnterEvent
+import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QDragLeaveEvent as QDragLeaveEvent
 import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QDragMoveEvent as QDragMoveEvent
 import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QDropEvent as QDropEvent
 import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QEnterEvent as QEnterEvent
@@ -82,6 +83,7 @@ modules =
   , QCursor.aModule
   , QDoubleValidator.aModule
   , QDragEnterEvent.aModule
+  , QDragLeaveEvent.aModule
   , QDragMoveEvent.aModule
   , QDropEvent.aModule
   , QEnterEvent.aModule

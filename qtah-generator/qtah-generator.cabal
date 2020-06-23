@@ -166,6 +166,7 @@ executable qtah-generator
     , Graphics.UI.Qtah.Generator.Interface.Gui.QCursor
     , Graphics.UI.Qtah.Generator.Interface.Gui.QDoubleValidator
     , Graphics.UI.Qtah.Generator.Interface.Gui.QDragEnterEvent
+    , Graphics.UI.Qtah.Generator.Interface.Gui.QDragLeaveEvent
     , Graphics.UI.Qtah.Generator.Interface.Gui.QDragMoveEvent
     , Graphics.UI.Qtah.Generator.Interface.Gui.QDropEvent
     , Graphics.UI.Qtah.Generator.Interface.Gui.QEnterEvent
