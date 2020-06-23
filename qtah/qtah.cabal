@@ -85,6 +85,7 @@ library
     , Graphics.UI.Qtah.Core.QMetaObject
     , Graphics.UI.Qtah.Core.QMetaObject.Connection
     , Graphics.UI.Qtah.Core.QMetaProperty
+    , Graphics.UI.Qtah.Core.QMimeData
     , Graphics.UI.Qtah.Core.QModelIndex
     , Graphics.UI.Qtah.Core.QObject
     , Graphics.UI.Qtah.Core.QOperatingSystemVersion
@@ -334,6 +335,7 @@ library
     , Graphics.UI.Qtah.Generated.Core.QMetaObject
     , Graphics.UI.Qtah.Generated.Core.QMetaObject.Connection
     , Graphics.UI.Qtah.Generated.Core.QMetaProperty
+    , Graphics.UI.Qtah.Generated.Core.QMimeData
     , Graphics.UI.Qtah.Generated.Core.QModelIndex
     , Graphics.UI.Qtah.Generated.Core.QObject
     , Graphics.UI.Qtah.Generated.Core.QOperatingSystemVersion

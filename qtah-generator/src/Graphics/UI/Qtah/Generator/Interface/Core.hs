@@ -62,6 +62,7 @@ import qualified Graphics.UI.Qtah.Generator.Interface.Core.QMetaMethod as QMetaM
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QMetaObject as QMetaObject
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QMetaObject.Connection as QMetaObjectConnection
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QMetaProperty as QMetaProperty
+import qualified Graphics.UI.Qtah.Generator.Interface.Core.QMimeData as QMimeData
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QModelIndex as QModelIndex
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QObject as QObject
 import qualified Graphics.UI.Qtah.Generator.Interface.Core.QOperatingSystemVersion as QOperatingSystemVersion
@@ -165,6 +166,7 @@ modules =
     , QMetaObject.aModule
     , QMetaObjectConnection.aModule
     , QMetaProperty.aModule
+    , QMimeData.aModule
     , QModelIndex.aModule
     , QObject.aModule
     , QOperatingSystemVersion.aModule
