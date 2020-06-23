@@ -175,6 +175,7 @@ library
     , Graphics.UI.Qtah.Gui.QHideEvent
     , Graphics.UI.Qtah.Gui.QHoverEvent
     , Graphics.UI.Qtah.Gui.QIcon
+    , Graphics.UI.Qtah.Gui.QIconDragEvent
     , Graphics.UI.Qtah.Gui.QImage
     , Graphics.UI.Qtah.Gui.QInputEvent
     , Graphics.UI.Qtah.Gui.QIntValidator
@@ -428,6 +429,7 @@ library
     , Graphics.UI.Qtah.Generated.Gui.QHideEvent
     , Graphics.UI.Qtah.Generated.Gui.QHoverEvent
     , Graphics.UI.Qtah.Generated.Gui.QIcon
+    , Graphics.UI.Qtah.Generated.Gui.QIconDragEvent
     , Graphics.UI.Qtah.Generated.Gui.QImage
     , Graphics.UI.Qtah.Generated.Gui.QInputEvent
     , Graphics.UI.Qtah.Generated.Gui.QIntValidator

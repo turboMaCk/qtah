@@ -42,6 +42,7 @@ import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QHelpEvent as QHelpEve
 import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QHideEvent as QHideEvent
 import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QHoverEvent as QHoverEvent
 import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QIcon as QIcon
+import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QIconDragEvent as QIconDragEvent
 import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QImage as QImage
 import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QInputEvent as QInputEvent
 import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QIntValidator as QIntValidator
@@ -99,6 +100,7 @@ modules =
   , QHideEvent.aModule
   , QHoverEvent.aModule
   , QIcon.aModule
+  , QIconDragEvent.aModule
   , QImage.aModule
   , QInputEvent.aModule
   , QIntValidator.aModule
