@@ -160,6 +160,7 @@ library
     , Graphics.UI.Qtah.Gui.QContextMenuEvent
     , Graphics.UI.Qtah.Gui.QCursor
     , Graphics.UI.Qtah.Gui.QDoubleValidator
+    , Graphics.UI.Qtah.Gui.QDragEnterEvent
     , Graphics.UI.Qtah.Gui.QDragMoveEvent
     , Graphics.UI.Qtah.Gui.QDropEvent
     , Graphics.UI.Qtah.Gui.QEnterEvent
@@ -409,6 +410,7 @@ library
     , Graphics.UI.Qtah.Generated.Gui.QContextMenuEvent
     , Graphics.UI.Qtah.Generated.Gui.QCursor
     , Graphics.UI.Qtah.Generated.Gui.QDoubleValidator
+    , Graphics.UI.Qtah.Generated.Gui.QDragEnterEvent
     , Graphics.UI.Qtah.Generated.Gui.QDragMoveEvent
     , Graphics.UI.Qtah.Generated.Gui.QDropEvent
     , Graphics.UI.Qtah.Generated.Gui.QEnterEvent
