@@ -27,6 +27,7 @@ import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QColor as QColor
 import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QContextMenuEvent as QContextMenuEvent
 import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QCursor as QCursor
 import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QDoubleValidator as QDoubleValidator
+import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QDropEvent as QDropEvent
 import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QEnterEvent as QEnterEvent
 import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QExposeEvent as QExposeEvent
 import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QFocusEvent as QFocusEvent
@@ -78,6 +79,7 @@ modules =
   , QContextMenuEvent.aModule
   , QCursor.aModule
   , QDoubleValidator.aModule
+  , QDropEvent.aModule
   , QEnterEvent.aModule
   , QExposeEvent.aModule
   , QFocusEvent.aModule
