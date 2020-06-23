@@ -171,6 +171,7 @@ library
     , Graphics.UI.Qtah.Gui.QFont
     , Graphics.UI.Qtah.Gui.QFontDatabase
     , Graphics.UI.Qtah.Gui.QGradient
+    , Graphics.UI.Qtah.Gui.QHelpEvent
     , Graphics.UI.Qtah.Gui.QHideEvent
     , Graphics.UI.Qtah.Gui.QHoverEvent
     , Graphics.UI.Qtah.Gui.QIcon
@@ -423,6 +424,7 @@ library
     , Graphics.UI.Qtah.Generated.Gui.QFont
     , Graphics.UI.Qtah.Generated.Gui.QFontDatabase
     , Graphics.UI.Qtah.Generated.Gui.QGradient
+    , Graphics.UI.Qtah.Generated.Gui.QHelpEvent
     , Graphics.UI.Qtah.Generated.Gui.QHideEvent
     , Graphics.UI.Qtah.Generated.Gui.QHoverEvent
     , Graphics.UI.Qtah.Generated.Gui.QIcon
