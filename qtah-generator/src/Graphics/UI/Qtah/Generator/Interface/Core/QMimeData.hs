@@ -68,6 +68,6 @@ c_QMimeData =
   , mkProp "imageData" $ objT c_QVariant
   , mkMethod "removeFormat" [objT c_QString] voidT
   , mkMethod "setData" [objT c_QString, objT c_QByteArray] voidT
-  , mkMethod "setText" [objT c_QString] voidT
+  , mkProp "text" $ objT c_QString
   -- TODO void QMimeData::setUrls(const QList<QUrl> &urls)
   ]
