@@ -54,11 +54,11 @@ c_QDragMoveEvent =
   addReqIncludes [includeStd "QDragMoveEvent"] $
   classSetEntityPrefix "" $
   makeClass (ident "QDragMoveEvent") Nothing [c_QDropEvent]
-  [ mkCtor "new" [refT $ constT $ objT c_QPoint, flagsT fl_DropActions, ptrT $ constT $ objT c_QMimeData, flagsT fl_MouseButtons, flagsT fl_KeyboardModifiers ]
-  , mkCtor "newWithType" [refT $ constT $ objT c_QPoint, flagsT fl_DropActions, ptrT $ constT $ objT c_QMimeData, flagsT fl_MouseButtons, flagsT fl_KeyboardModifiers, enumT e_Type]
+  [ mkCtor "new" [objT c_QPoint, flagsT fl_DropActions, ptrT $ constT $ objT c_QMimeData, flagsT fl_MouseButtons, flagsT fl_KeyboardModifiers ]
+  , mkCtor "newWithType" [objT c_QPoint, flagsT fl_DropActions, ptrT $ constT $ objT c_QMimeData, flagsT fl_MouseButtons, flagsT fl_KeyboardModifiers, enumT e_Type]
   , mkMethod "accept" np voidT
-  , mkMethod' "accept" "acceptWithRect" [refT $ constT $ objT c_QRect] voidT
+  , mkMethod' "accept" "acceptWithRect" [objT c_QRect] voidT
   , mkConstMethod "answerRect" np $ objT c_QRect
   , mkMethod "ignore" np voidT
-  , mkMethod' "ignore" "ignoreWithRect" [refT $ constT $ objT c_QRect] voidT
+  , mkMethod' "ignore" "ignoreWithRect" [objT c_QRect] voidT
   ]
