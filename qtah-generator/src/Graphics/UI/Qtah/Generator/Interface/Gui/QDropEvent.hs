@@ -54,15 +54,15 @@ c_QDropEvent =
   addReqIncludes [includeStd "QDropEvent"] $
   classSetEntityPrefix "" $
   makeClass (ident "QDropEvent") Nothing [c_QEvent]
-  [ mkCtor "new" [ refT $ constT $ objT c_QPointF, flagsT fl_DropActions, ptrT $ constT $ objT c_QMimeData, flagsT fl_MouseButtons, flagsT fl_KeyboardModifiers ]
-  , mkCtor "newWithType" [ refT $ constT $ objT c_QPointF, flagsT fl_DropActions, ptrT $ constT $ objT c_QMimeData, flagsT fl_MouseButtons, flagsT fl_KeyboardModifiers, enumT e_Type]
+  [ mkCtor "new" [ objT c_QPointF, flagsT fl_DropActions, ptrT $ constT $ objT c_QMimeData, flagsT fl_MouseButtons, flagsT fl_KeyboardModifiers ]
+  , mkCtor "newWithType" [ objT c_QPointF, flagsT fl_DropActions, ptrT $ constT $ objT c_QMimeData, flagsT fl_MouseButtons, flagsT fl_KeyboardModifiers, enumT e_Type]
   , mkMethod "acceptProposedAction" np voidT
   , mkProp "dropAction" $ enumT e_DropAction
   , mkConstMethod "keyboardModifiers" np $ flagsT fl_KeyboardModifiers
   , mkConstMethod "mimeData" np $ ptrT $ constT $ objT c_QMimeData
   , mkConstMethod "mouseButtons" np $ flagsT fl_MouseButtons
   , mkConstMethod "pos" np $ objT c_QPoint
-  , mkConstMethod "posF" np $ refT $ constT $ objT c_QPointF
+  , mkConstMethod "posF" np $ objT c_QPointF
   , mkConstMethod "possibleActions" np $ flagsT fl_DropActions
   , mkConstMethod "proposedAction" np $ enumT e_DropAction
   , mkConstMethod "source" np $ ptrT $ objT c_QObject
