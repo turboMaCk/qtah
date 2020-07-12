@@ -47,11 +47,11 @@ c_QHelpEvent =
   addReqIncludes [includeStd "QHelpEvent"] $
   classSetEntityPrefix "" $
   makeClass (ident "QHelpEvent") Nothing [c_QEvent]
-  [ mkCtor "new" [enumT e_Type, refT $ constT $ objT c_QPoint, refT $ constT $ objT c_QPoint]
-  , mkConstMethod "globalPos" np $ refT $ constT $ objT c_QPoint
+  [ mkCtor "new" [enumT e_Type, objT c_QPoint, objT c_QPoint]
+  , mkConstMethod "globalPos" np $ objT c_QPoint
   , mkConstMethod "globalX" np intT
   , mkConstMethod "globalY" np intT
-  , mkConstMethod "pos" np $ refT $ constT $ objT c_QPoint
+  , mkConstMethod "pos" np $ objT c_QPoint
   , mkConstMethod "x" np intT
   , mkConstMethod "y" np intT
   ]
