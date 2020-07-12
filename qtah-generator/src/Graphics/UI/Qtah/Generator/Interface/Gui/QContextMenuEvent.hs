@@ -53,13 +53,13 @@ c_QContextMenuEvent =
   addReqIncludes [includeStd "QContextMenuEvent"] $
   classSetEntityPrefix "" $
   makeClass (ident "QContextMenuEvent") Nothing [c_QInputEvent]
-  [ mkCtor "new" [enumT e_Reason, refT $ constT $ objT c_QPoint]
-  , mkCtor "newWithReasonAndPosAndGlobalPos" [enumT e_Reason, refT $ constT $ objT c_QPoint, refT $ constT $ objT c_QPoint]
-  , mkCtor "newWithReasonAndPosAndGlobalPosAndModifiers" [enumT e_Reason, refT $ constT $ objT c_QPoint, refT $ constT $ objT c_QPoint, flagsT fl_KeyboardModifiers]
-  , mkConstMethod "globalPos" np $ refT $ constT $ objT c_QPoint
+  [ mkCtor "new" [enumT e_Reason, objT c_QPoint]
+  , mkCtor "newWithGlobalPos" [enumT e_Reason, objT c_QPoint, objT c_QPoint]
+  , mkCtor "newWithGlobalPosAndModifiers" [enumT e_Reason, objT c_QPoint, objT c_QPoint, flagsT fl_KeyboardModifiers]
+  , mkConstMethod "globalPos" np $ objT c_QPoint
   , mkConstMethod "globalX" np intT
   , mkConstMethod "globalY" np intT
-  , mkConstMethod "pos" np $ refT $ constT $ objT c_QPoint
+  , mkConstMethod "pos" np $ objT c_QPoint
   , mkConstMethod "reason" np $ enumT e_Reason
   , mkConstMethod "x" np intT
   , mkConstMethod "y" np intT
