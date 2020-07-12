@@ -57,8 +57,8 @@ c_QDragMoveEvent =
   [ mkCtor "new" [refT $ constT $ objT c_QPoint, flagsT fl_DropActions, ptrT $ constT $ objT c_QMimeData, flagsT fl_MouseButtons, flagsT fl_KeyboardModifiers ]
   , mkCtor "newWithType" [refT $ constT $ objT c_QPoint, flagsT fl_DropActions, ptrT $ constT $ objT c_QMimeData, flagsT fl_MouseButtons, flagsT fl_KeyboardModifiers, enumT e_Type]
   , mkMethod "accept" np voidT
-  , mkMethod' "accept" "acceptWithRectangle" [refT $ constT $ objT c_QRect] voidT
+  , mkMethod' "accept" "acceptWithRect" [refT $ constT $ objT c_QRect] voidT
   , mkConstMethod "answerRect" np $ objT c_QRect
   , mkMethod "ignore" np voidT
-  , mkMethod' "ignore" "ignoreWithRectangle" [refT $ constT $ objT c_QRect] voidT
+  , mkMethod' "ignore" "ignoreWithRect" [refT $ constT $ objT c_QRect] voidT
   ]
