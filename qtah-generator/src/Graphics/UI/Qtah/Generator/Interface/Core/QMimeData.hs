@@ -56,18 +56,18 @@ c_QMimeData =
   [ mkCtor "new" np
   , mkMethod "clear" np voidT
   , mkProp "colorData" $ objT c_QVariant
-  , mkConstMethod' "data" "getData" [refT $ constT $ objT c_QString] $ objT c_QByteArray
+  , mkConstMethod' "data" "getData" [objT c_QString] $ objT c_QByteArray
   , mkConstMethod "formats" np $ objT c_QStringList
   , mkConstMethod "hasColor" np boolT
-  , mkConstMethod "hasFormat" [refT $ constT $ objT c_QString] boolT
+  , mkConstMethod "hasFormat" [objT c_QString] boolT
   , mkConstMethod "hasHtml" np boolT
   , mkConstMethod "hasImage" np boolT
   , mkConstMethod "hasText" np boolT
   , mkConstMethod "hasUrls" np boolT
   , mkProp "html" $ objT c_QString
   , mkProp "imageData" $ objT c_QVariant
-  , mkMethod "removeFormat" [refT $ constT $ objT c_QString] voidT
-  , mkMethod "setData" [refT $ constT $ objT c_QString, refT $ constT $ objT c_QByteArray] voidT
-  , mkMethod "setText" [refT $ constT $ objT c_QString] voidT
+  , mkMethod "removeFormat" [objT c_QString] voidT
+  , mkMethod "setData" [objT c_QString, objT c_QByteArray] voidT
+  , mkMethod "setText" [objT c_QString] voidT
   -- TODO void QMimeData::setUrls(const QList<QUrl> &urls)
   ]
