@@ -85,6 +85,7 @@ library
     , Graphics.UI.Qtah.Core.QMetaObject
     , Graphics.UI.Qtah.Core.QMetaObject.Connection
     , Graphics.UI.Qtah.Core.QMetaProperty
+    , Graphics.UI.Qtah.Core.QMimeData
     , Graphics.UI.Qtah.Core.QModelIndex
     , Graphics.UI.Qtah.Core.QObject
     , Graphics.UI.Qtah.Core.QOperatingSystemVersion
@@ -156,17 +157,25 @@ library
     , Graphics.UI.Qtah.Gui.QClipboard
     , Graphics.UI.Qtah.Gui.QCloseEvent
     , Graphics.UI.Qtah.Gui.QColor
+    , Graphics.UI.Qtah.Gui.QContextMenuEvent
     , Graphics.UI.Qtah.Gui.QCursor
     , Graphics.UI.Qtah.Gui.QDoubleValidator
+    , Graphics.UI.Qtah.Gui.QDragEnterEvent
+    , Graphics.UI.Qtah.Gui.QDragLeaveEvent
+    , Graphics.UI.Qtah.Gui.QDragMoveEvent
+    , Graphics.UI.Qtah.Gui.QDropEvent
     , Graphics.UI.Qtah.Gui.QEnterEvent
     , Graphics.UI.Qtah.Gui.QExposeEvent
+    , Graphics.UI.Qtah.Gui.QFileOpenEvent
     , Graphics.UI.Qtah.Gui.QFocusEvent
     , Graphics.UI.Qtah.Gui.QFont
     , Graphics.UI.Qtah.Gui.QFontDatabase
     , Graphics.UI.Qtah.Gui.QGradient
+    , Graphics.UI.Qtah.Gui.QHelpEvent
     , Graphics.UI.Qtah.Gui.QHideEvent
     , Graphics.UI.Qtah.Gui.QHoverEvent
     , Graphics.UI.Qtah.Gui.QIcon
+    , Graphics.UI.Qtah.Gui.QIconDragEvent
     , Graphics.UI.Qtah.Gui.QImage
     , Graphics.UI.Qtah.Gui.QInputEvent
     , Graphics.UI.Qtah.Gui.QIntValidator
@@ -333,6 +342,7 @@ library
     , Graphics.UI.Qtah.Generated.Core.QMetaObject
     , Graphics.UI.Qtah.Generated.Core.QMetaObject.Connection
     , Graphics.UI.Qtah.Generated.Core.QMetaProperty
+    , Graphics.UI.Qtah.Generated.Core.QMimeData
     , Graphics.UI.Qtah.Generated.Core.QModelIndex
     , Graphics.UI.Qtah.Generated.Core.QObject
     , Graphics.UI.Qtah.Generated.Core.QOperatingSystemVersion
@@ -401,17 +411,25 @@ library
     , Graphics.UI.Qtah.Generated.Gui.QClipboard
     , Graphics.UI.Qtah.Generated.Gui.QCloseEvent
     , Graphics.UI.Qtah.Generated.Gui.QColor
+    , Graphics.UI.Qtah.Generated.Gui.QContextMenuEvent
     , Graphics.UI.Qtah.Generated.Gui.QCursor
     , Graphics.UI.Qtah.Generated.Gui.QDoubleValidator
+    , Graphics.UI.Qtah.Generated.Gui.QDragEnterEvent
+    , Graphics.UI.Qtah.Generated.Gui.QDragLeaveEvent
+    , Graphics.UI.Qtah.Generated.Gui.QDragMoveEvent
+    , Graphics.UI.Qtah.Generated.Gui.QDropEvent
     , Graphics.UI.Qtah.Generated.Gui.QEnterEvent
     , Graphics.UI.Qtah.Generated.Gui.QExposeEvent
+    , Graphics.UI.Qtah.Generated.Gui.QFileOpenEvent
     , Graphics.UI.Qtah.Generated.Gui.QFocusEvent
     , Graphics.UI.Qtah.Generated.Gui.QFont
     , Graphics.UI.Qtah.Generated.Gui.QFontDatabase
     , Graphics.UI.Qtah.Generated.Gui.QGradient
+    , Graphics.UI.Qtah.Generated.Gui.QHelpEvent
     , Graphics.UI.Qtah.Generated.Gui.QHideEvent
     , Graphics.UI.Qtah.Generated.Gui.QHoverEvent
     , Graphics.UI.Qtah.Generated.Gui.QIcon
+    , Graphics.UI.Qtah.Generated.Gui.QIconDragEvent
     , Graphics.UI.Qtah.Generated.Gui.QImage
     , Graphics.UI.Qtah.Generated.Gui.QInputEvent
     , Graphics.UI.Qtah.Generated.Gui.QIntValidator

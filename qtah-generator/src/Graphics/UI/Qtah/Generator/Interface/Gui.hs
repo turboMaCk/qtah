@@ -24,17 +24,25 @@ import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QBrush as QBrush
 import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QClipboard as QClipboard
 import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QCloseEvent as QCloseEvent
 import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QColor as QColor
+import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QContextMenuEvent as QContextMenuEvent
 import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QCursor as QCursor
 import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QDoubleValidator as QDoubleValidator
+import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QDragEnterEvent as QDragEnterEvent
+import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QDragLeaveEvent as QDragLeaveEvent
+import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QDragMoveEvent as QDragMoveEvent
+import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QDropEvent as QDropEvent
 import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QEnterEvent as QEnterEvent
 import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QExposeEvent as QExposeEvent
+import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QFileOpenEvent as QFileOpenEvent
 import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QFocusEvent as QFocusEvent
 import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QFont as QFont
 import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QFontDatabase as QFontDatabase
 import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QGradient as QGradient
+import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QHelpEvent as QHelpEvent
 import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QHideEvent as QHideEvent
 import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QHoverEvent as QHoverEvent
 import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QIcon as QIcon
+import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QIconDragEvent as QIconDragEvent
 import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QImage as QImage
 import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QInputEvent as QInputEvent
 import qualified Graphics.UI.Qtah.Generator.Interface.Gui.QIntValidator as QIntValidator
@@ -74,17 +82,25 @@ modules =
   , QClipboard.aModule
   , QCloseEvent.aModule
   , QColor.aModule
+  , QContextMenuEvent.aModule
   , QCursor.aModule
   , QDoubleValidator.aModule
+  , QDragEnterEvent.aModule
+  , QDragLeaveEvent.aModule
+  , QDragMoveEvent.aModule
+  , QDropEvent.aModule
   , QEnterEvent.aModule
   , QExposeEvent.aModule
+  , QFileOpenEvent.aModule
   , QFocusEvent.aModule
   , QFont.aModule
   , QFontDatabase.aModule
   , QGradient.aModule
+  , QHelpEvent.aModule
   , QHideEvent.aModule
   , QHoverEvent.aModule
   , QIcon.aModule
+  , QIconDragEvent.aModule
   , QImage.aModule
   , QInputEvent.aModule
   , QIntValidator.aModule
