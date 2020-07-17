@@ -32,7 +32,7 @@ import Foreign.Hoppy.Generator.Spec (
   mkCtor,
   np,
   )
-import Foreign.Hoppy.Generator.Types (constT, refT, objT, enumT, voidT, ptrT)
+import Foreign.Hoppy.Generator.Types (constT, objT, enumT, voidT, ptrT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QEvent (c_QEvent, e_Type)
 import Graphics.UI.Qtah.Generator.Interface.Core.QPointF (c_QPointF)
 import Graphics.UI.Qtah.Generator.Interface.Core.QPoint (c_QPoint)

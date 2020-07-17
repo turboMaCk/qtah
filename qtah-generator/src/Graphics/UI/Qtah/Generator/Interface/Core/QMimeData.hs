@@ -33,7 +33,7 @@ import Foreign.Hoppy.Generator.Spec (
   mkMethod,
   np,
   )
-import Foreign.Hoppy.Generator.Types (boolT, constT, refT, voidT, objT)
+import Foreign.Hoppy.Generator.Types (boolT, objT, voidT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QObject (c_QObject)
 import Graphics.UI.Qtah.Generator.Interface.Core.QVariant (c_QVariant)
 import Graphics.UI.Qtah.Generator.Interface.Core.QByteArray (c_QByteArray)

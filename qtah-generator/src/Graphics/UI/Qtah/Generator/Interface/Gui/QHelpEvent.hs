@@ -30,7 +30,7 @@ import Foreign.Hoppy.Generator.Spec (
   mkConstMethod,
   np,
   )
-import Foreign.Hoppy.Generator.Types (refT, constT, objT, intT, enumT)
+import Foreign.Hoppy.Generator.Types (enumT, intT, objT)
 import Graphics.UI.Qtah.Generator.Interface.Core.QEvent (c_QEvent, e_Type)
 import Graphics.UI.Qtah.Generator.Interface.Core.QPoint (c_QPoint)
 import Graphics.UI.Qtah.Generator.Module (AModule (AQtModule), makeQtModule)
