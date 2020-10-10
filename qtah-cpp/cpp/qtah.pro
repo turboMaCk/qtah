@@ -25,6 +25,15 @@ VERSION = 0.7.0
 # Doesn't seem to work here: CONFIG += c++11
 QMAKE_CXXFLAGS += -std=c++11
 
+# This flag is enabled by default only on Windows, and we want it disabled.
+# It causes separate debug/ and release/ directories to be created within the
+# build directory, causing us to be unable to find things where we expect
+# (e.g. qtah-qt-version).  See Qtah issue #50, as well as:
+#
+# https://doc.qt.io/qt-5/qmake-variable-reference.html
+# https://bugreports.qt.io/browse/QTCREATORBUG-13807
+CONFIG -= debug_and_release
+
 mac:QMAKE_SONAME_PREFIX = @rpath
 
 SOURCES += \
