@@ -54,6 +54,9 @@ calculateEnumValues args =
     , ""
     , "QT += core gui"
     , "greaterThan(QT_MAJOR_VERSION, 4): QT += widgets"
+      -- Prevent separate debug/ and release/ build directories caused by this
+      -- flag being enabled by default on Windows (see issue #50).
+    , "CONFIG -= debug_and_release"
     , "CONFIG += cmdline"
     , "TARGET = qtahenum"
     , "SOURCES += " ++ sourceFile
