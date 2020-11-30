@@ -58,7 +58,7 @@ import Foreign.Hoppy.Generator.Spec (
   conversionSpecCppConversionType,
   conversionSpecHaskell,
   conversionSpecHaskellHsArgType,
-  evaluatedEnumType,
+  evaluatedEnumNumericType,
   evaluatedEnumValueMap,
   getAddendum,
   getPrimaryExtName,
@@ -74,6 +74,7 @@ import Foreign.Hoppy.Generator.Spec (
   makeIdPart,
   modifyAddendum,
   modifyReqs,
+  numType,
   sayExportCpp,
   sayExportHaskell,
   setAddendum,
@@ -167,7 +168,8 @@ makeConversion flags =
         cpp =
           (makeConversionSpecCpp identifierStr (return $ Enum.enumReqs enum))
           { conversionSpecCppConversionType =
-              Just . evaluatedEnumType <$> Enum.cppGetEvaluatedEnumData (Enum.enumExtName enum)
+              Just . numType . evaluatedEnumNumericType <$>
+              Enum.cppGetEvaluatedEnumData (Enum.enumExtName enum)
 
           , conversionSpecCppConversionToCppExpr = Just $ \fromVar maybeToVar -> case maybeToVar of
               Just toVar ->
@@ -175,7 +177,9 @@ makeConversion flags =
               Nothing -> LC.says [identifierStr, "("] >> fromVar >> LC.say ")"
 
           , conversionSpecCppConversionFromCppExpr = Just $ \fromVar maybeToVar -> do
-              t <- evaluatedEnumType <$> Enum.cppGetEvaluatedEnumData (Enum.enumExtName enum)
+              t <-
+                numType . evaluatedEnumNumericType <$>
+                Enum.cppGetEvaluatedEnumData (Enum.enumExtName enum)
               forM_ maybeToVar $ \toVar -> do
                 LC.sayType Nothing t
                 LC.say " "
@@ -194,7 +198,8 @@ makeConversion flags =
           (makeConversionSpecHaskell
              (HsTyCon . UnQual . HsIdent <$> LH.toHsTypeName Nonconst extName)
              (Just $ do evaluatedData <- Enum.hsGetEvaluatedEnumData $ Enum.enumExtName enum
-                        LH.cppTypeToHsTypeAndUse LH.HsCSide $ evaluatedEnumType evaluatedData)
+                        LH.cppTypeToHsTypeAndUse LH.HsCSide $
+                          numType $ evaluatedEnumNumericType evaluatedData)
              (CustomConversion $ do
                 LH.addImports $ mconcat [hsImport1 "Prelude" "(.)",
                                          importForFlags,
@@ -233,7 +238,8 @@ sayHsExport mode flags =
           enum = flagsEnum flags
       enumTypeName <- Enum.toHsEnumTypeName enum
       enumData <- Enum.hsGetEvaluatedEnumData $ Enum.enumExtName enum
-      numericType <- LH.cppTypeToHsTypeAndUse LH.HsCSide $ evaluatedEnumType enumData
+      numericType <-
+        LH.cppTypeToHsTypeAndUse LH.HsCSide $ numType $ evaluatedEnumNumericType enumData
       let numericTypeStr = LH.prettyPrint numericType
 
       -- Emit the newtype wrapper.
@@ -326,7 +332,8 @@ sayHsExport mode flags =
           enum = flagsEnum flags
       enumTypeName <- Enum.toHsEnumTypeName enum
       enumData <- Enum.hsGetEvaluatedEnumData $ Enum.enumExtName enum
-      numericType <- LH.cppTypeToHsTypeAndUse LH.HsCSide $ evaluatedEnumType enumData
+      numericType <-
+        LH.cppTypeToHsTypeAndUse LH.HsCSide $ numType $ evaluatedEnumNumericType enumData
       let numericTypeStr = LH.prettyPrint numericType
 
       LH.addImports $ mconcat [importForBits, importForFlags, importForPrelude]
