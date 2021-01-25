@@ -14,7 +14,7 @@ development, at the risk of nondeterministic results (see
 
 This file is part of Qtah.
 
-Copyright 2015-2020 The Qtah Authors.
+Copyright 2015-2021 The Qtah Authors.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
