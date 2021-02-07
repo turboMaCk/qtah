@@ -1,5 +1,5 @@
 name: qtah
-version: 0.7.0
+version: 0.8.0
 synopsis: Qt bindings for Haskell
 homepage: http://khumba.net/projects/qtah
 license: LGPL-3
@@ -552,8 +552,8 @@ library
     , binary >=0.7 && <0.9
     , bytestring >=0.10 && <0.11
     , hoppy-runtime >=0.8 && <0.9
-    , qtah-cpp >=0.7 && <0.8
-    , qtah-generator >=0.7 && <0.8
+    , qtah-cpp >=0.8 && <0.9
+    , qtah-generator >=0.8 && <0.9
   hs-source-dirs: src
   ghc-options: -W -fwarn-incomplete-patterns -fwarn-unused-do-bind
   default-language: Haskell2010
@@ -580,4 +580,4 @@ custom-setup
     , Cabal
     , directory
     , filepath
-    , qtah-generator >=0.7 && <0.8
+    , qtah-generator >=0.8 && <0.9
