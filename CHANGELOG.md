@@ -2,10 +2,14 @@
 
 ## Unreleased
 
+## (2021-02-06) *-0.8.0
+
 - Nix-style local builds i.e. `cabal v2-build` are now supported (issue #26),
   through numerous changes: qtah-generator is now "build-type: Simple" and a
   library, qtah-listener-gen is ported to Haskell, a missing register hook was
   added to qtah-cpp.
+
+- Added 9 new classes thanks to @juliagoda.
 
 ## (2020-06-03) qtah-generator-0.7.1
 
