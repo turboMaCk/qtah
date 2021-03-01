@@ -22,6 +22,7 @@ mkDerivation {
   pname = "qtah-cpp";
   version = "0.8.0";
   src = ./.;
+  buildDepends = [ qt.wrapQtAppsHook ];
   setupHaskellDepends = [ qtah-generator ];
   libraryHaskellDepends = [ base Cabal qtah-generator ];
   librarySystemDepends = [ qt.qtbase ];

@@ -26,5 +26,5 @@
 }:
 
 let
-  pkgsWithQtah = import ./nixpkgs.nix { inherit pkgs overlay; };
+  pkgsWithQtah = import ./nixpkgs.nix { inherit pkgs overlays; };
 in pkgsWithQtah.haskellPackages.qtah-examples
